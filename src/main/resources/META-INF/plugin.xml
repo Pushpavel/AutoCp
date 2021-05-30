@@ -8,12 +8,7 @@
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <applicationService serviceImplementation="com.github.pushpavel.autocp.services.MyApplicationService"/>
-        <projectService serviceImplementation="com.github.pushpavel.autocp.services.MyProjectService"/>
+        <testFramework implementation="run.AutoCpFramework"/>
+        <configurationType implementation="config.AutoCpConfigType"/>
     </extensions>
-
-    <applicationListeners>
-        <listener class="com.github.pushpavel.autocp.listeners.MyProjectManagerListener"
-                  topic="com.intellij.openapi.project.ProjectManagerListener"/>
-    </applicationListeners>
 </idea-plugin>
