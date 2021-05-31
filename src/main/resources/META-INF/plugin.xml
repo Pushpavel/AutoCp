@@ -1,14 +1,19 @@
 <idea-plugin>
     <id>com.github.pushpavel.autocp</id>
-    <name>autoCP</name>
+    <name>AutoCP</name>
     <vendor>pushpavel</vendor>
 
     <!-- Product and plugin compatibility requirements -->
     <!-- https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
     <depends>com.intellij.modules.platform</depends>
-
     <extensions defaultExtensionNs="com.intellij">
-        <testFramework implementation="run.AutoCpFramework"/>
         <configurationType implementation="config.AutoCpConfigType"/>
+        <runConfigurationProducer implementation="config.AutoCpConfigProducer"/>
+        <fileEditorProvider implementation="ui.AutoCpFileEditorProvider"/>
     </extensions>
+    <actions>
+        <action id="dev.pushpavel.autoCP.actions.GatherProblemsAction" class="actions.GatherProblemsAction"
+                text="Gather Problems"
+                description="Gathers problems parsed by competitive companion browser extension"/>
+    </actions>
 </idea-plugin>

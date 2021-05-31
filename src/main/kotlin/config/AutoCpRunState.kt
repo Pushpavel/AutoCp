@@ -1,4 +1,4 @@
-package run
+package config
 
 import com.intellij.execution.DefaultExecutionResult
 import com.intellij.execution.ExecutionResult
