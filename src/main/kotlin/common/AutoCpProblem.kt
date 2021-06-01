@@ -12,17 +12,21 @@ data class AutoCpProblem(
         data.group,
         data.batch.id,
         data.batch.size,
-        data.tests.map { TestCase(it) }
+        data.tests.mapIndexed { index, it -> TestCase(it, index) }
     )
 }
 
 data class TestCase(
     val input: String,
-    val output: String
+    val output: String,
+    val index: Int,
 ) {
-    constructor(data: TestJson) : this(
+    constructor(data: TestJson, index: Int) : this(
         data.input,
-        data.output
+        data.output,
+        index
     )
+
+    fun getName() = "Test Case #$index"
 }
 

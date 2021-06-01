@@ -1,43 +1,39 @@
 package config
 
-import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory
+import com.intellij.ide.macro.MacrosDialog
 import com.intellij.openapi.options.SettingsEditor
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.ui.TextComponentAccessor
-import com.intellij.openapi.ui.TextFieldWithBrowseButton
-import com.intellij.openapi.util.Factory
-import com.intellij.structuralsearch.plugin.ui.TextFieldWithAutoCompletionWithBrowseButton
-import com.intellij.ui.TextFieldWithAutoCompletion
+import com.intellij.ui.components.fields.ExtendableTextField
+import com.intellij.ui.layout.CCFlags
 import com.intellij.ui.layout.panel
 import org.jetbrains.annotations.NotNull
-import org.jetbrains.annotations.Nullable
 import javax.swing.JComponent
 
 class AutoCpConfigSettingsEditor(private val project: @NotNull Project) : SettingsEditor<AutoCpConfig>() {
 
-    val solutionFileChooser = TextFieldWithBrowseButton()
+    val solutionFileChooser = ExtendableTextField()
+    val runCommandField = ExtendableTextField()
     override fun resetEditorFrom(s: AutoCpConfig) {
-        solutionFileChooser.text = solutionFileChooser.text
+        solutionFileChooser.text = s.problemName
+        runCommandField.text = s.runCommand
     }
 
     override fun applyEditorTo(s: AutoCpConfig) {
-        s.solutionFilePath = solutionFileChooser.text
+        s.problemName = solutionFileChooser.text
+        s.runCommand = runCommandField.text
     }
 
     override fun createEditor(): JComponent {
-        val fileChooserDescriptor = FileChooserDescriptorFactory.createSingleFileDescriptor("cpp")
-
-        solutionFileChooser.addBrowseFolderListener(
-            "Select Solution File",
-            "Select the file containing the source code",
-            project,
-            fileChooserDescriptor
-        )
+        MacrosDialog.addTextFieldExtension(runCommandField)
 
         return panel {
-            row {
-                label("Solution File:")
+            row("Solution Name:") {
                 solutionFileChooser()
+                    .comment("This must match with solution file name without extension")
+                    .constraints(CCFlags.growX)
+            }
+            row("Run Command:") {
+                runCommandField().constraints(CCFlags.growX)
             }
         }
     }

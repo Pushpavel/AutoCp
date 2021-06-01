@@ -6,20 +6,20 @@ import com.intellij.execution.runners.ExecutionEnvironment
 import com.intellij.openapi.options.SettingsEditor
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.JDOMExternalizerUtil
-import common.Constants
 import org.jdom.Element
 
 class AutoCpConfig(project: Project, factory: ConfigurationFactory, name: String) :
     LocatableConfigurationBase<RunProfileState>(project, factory, name) {
-
     companion object {
-        private const val SOLUTION_FILE_PATH = "solutionFilePath"
+        private const val PROBLEM_NAME = "problemName"
+        private const val RUN_COMMAND = "runCommand"
     }
 
-    var solutionFilePath: String = ""
+    var problemName: String = ""
+    var runCommand: String = ""
 
     override fun getState(executor: Executor, environment: ExecutionEnvironment): RunProfileState? {
-        if (solutionFilePath.isEmpty())
+        if (problemName.isEmpty() && runCommand.isEmpty())
             return null
         return AutoCpRunState(this)
     }
@@ -29,17 +29,21 @@ class AutoCpConfig(project: Project, factory: ConfigurationFactory, name: String
     }
 
     override fun suggestedName(): String? {
-        if (solutionFilePath.isEmpty())
+        if (problemName.isEmpty())
             return null
-        return solutionFilePath
+        return problemName
     }
 
     override fun writeExternal(element: Element) {
-        JDOMExternalizerUtil.writeField(element, SOLUTION_FILE_PATH, solutionFilePath)
+        JDOMExternalizerUtil.writeField(element, PROBLEM_NAME, problemName)
+        JDOMExternalizerUtil.writeField(element, RUN_COMMAND, runCommand)
+        super.writeExternal(element)
     }
 
     override fun readExternal(element: Element) {
-        solutionFilePath = JDOMExternalizerUtil.readField(element, SOLUTION_FILE_PATH, "")
+        super.readExternal(element)
+        problemName = JDOMExternalizerUtil.readField(element, PROBLEM_NAME, "")
+        runCommand = JDOMExternalizerUtil.readField(element, RUN_COMMAND, "")
     }
 
 }
