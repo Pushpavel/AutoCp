@@ -10,6 +10,7 @@
         <configurationType implementation="config.AutoCpConfigType"/>
         <runConfigurationProducer implementation="config.AutoCpConfigProducer"/>
         <fileEditorProvider implementation="ui.AutoCpFileEditorProvider"/>
+        <notificationGroup id="AutoCp Notification Group" displayType="BALLOON" key="autocp.notification.group"/>
     </extensions>
     <actions>
         <action id="dev.pushpavel.autoCP.actions.GatherProblemsAction" class="actions.GatherProblemsAction"

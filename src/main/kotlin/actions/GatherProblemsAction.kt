@@ -1,23 +1,72 @@
 package actions
 
+import com.google.gson.Gson
+import com.intellij.notification.Notification
+import com.intellij.notification.NotificationType
+import com.intellij.notification.Notifications
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
-import com.intellij.openapi.actionSystem.CommonDataKeys
-import com.intellij.openapi.ui.Messages
+import com.intellij.openapi.components.service
+import com.intellij.openapi.project.DumbAware
+import com.intellij.openapi.project.Project
+import com.intellij.openapi.ui.DialogWrapper
+import common.AutoCpProblem
+import common.runUI
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import org.jetbrains.concurrency.runAsync
+import services.AutoCpFilesService
+import services.GatherProblemsService
+import ui.GatherProblemsDialogUI
 
 
-class GatherProblemsAction : AnAction() {
+class GatherProblemsAction : AnAction(), DumbAware {
+
+    private val gatherService = service<GatherProblemsService>()
+    private val ui = GatherProblemsDialogUI()
+
+
     override fun actionPerformed(event: AnActionEvent) {
-        // Using the event, create and show a dialog
-        val currentProject = event.project
-        val dlgMsg = StringBuffer(event.presentation.text.toString() + " selected!")
-        val dlgTitle = event.presentation.description
-        // If an element is selected in the editor, add info about it.
-        val nav = event.getData(CommonDataKeys.NAVIGATABLE)
-        if (nav != null)
-            dlgMsg.append(java.lang.String.format("\nSelected Element: %s", nav.toString()))
+        val problems = gatherProblems(event.project)
+        if (problems != null)
+            processProblems(event.project, problems)
+    }
 
-        Messages.showMessageDialog(currentProject, dlgMsg.toString(), dlgTitle, Messages.getInformationIcon())
+    private fun gatherProblems(project: Project?): List<AutoCpProblem>? {
+        val dialog = ui.getGatheringDialog(project)
+        var problems: List<AutoCpProblem>? = null
+
+        runAsync {
+            problems = gatherService.gatherProblems() // blocking code
+            runUI {
+                ui.closeDialog(dialog)
+            }
+        }
+
+        dialog.show() // blocking code
+        return problems
+    }
+
+    private fun processProblems(project: Project?, problems: List<AutoCpProblem>) {
+        val dialog = ui.getGenerateFilesDialog(project, problems)
+        if (dialog.show() != DialogWrapper.OK_EXIT_CODE)
+            return
+
+        val service = project?.service<AutoCpFilesService>()
+
+        problems.forEach {
+            service?.createAutoCpFile("cpp", it)
+        }
+
+        Notifications.Bus.notify(
+            Notification(
+                "AutoCp Notification Group",
+                "Generated solution files",
+                problems[0].group + " files generated",
+                NotificationType.INFORMATION
+            )
+        )
     }
 
 

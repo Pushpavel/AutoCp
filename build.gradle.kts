@@ -28,6 +28,8 @@ repositories {
 }
 dependencies {
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.17.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:1.5.0")
 }
 
 // Configure gradle-intellij-plugin plugin.
@@ -41,6 +43,7 @@ intellij {
 
     // Plugin Dependencies. Uses `platformPlugins` property from the gradle.properties file.
     plugins.set(properties("platformPlugins").split(',').map(String::trim).filter(String::isNotEmpty))
+
 }
 
 // Configure gradle-changelog-plugin plugin.
@@ -64,6 +67,11 @@ detekt {
 }
 
 tasks {
+
+    runIde {
+        autoReloadPlugins.set(true)
+    }
+
     // Set the compatibility versions to 1.8
     withType<JavaCompile> {
         sourceCompatibility = "1.8"

@@ -18,7 +18,7 @@ class AutoCpFileEditorProvider : FileEditorProvider {
         return project.service<AutoCpFilesService>().getAutoCpFile(file.nameWithoutExtension) != null //    TODO : Check file extension
     }
 
-    override fun createEditor(project: Project, file: VirtualFile) = AutoCpFileEditor()
+    override fun createEditor(project: Project, file: VirtualFile) = AutoCpFileEditor(project,file)
 
     override fun getEditorTypeId() = EDITOR_TYPE_ID
 
