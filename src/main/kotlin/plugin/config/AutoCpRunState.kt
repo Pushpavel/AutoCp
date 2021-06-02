@@ -1,4 +1,4 @@
-package config
+package plugin.config
 
 import com.intellij.execution.DefaultExecutionResult
 import com.intellij.execution.ExecutionResult

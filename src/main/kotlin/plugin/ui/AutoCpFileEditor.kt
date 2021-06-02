@@ -1,4 +1,4 @@
-package ui
+package plugin.ui
 
 import com.intellij.diff.util.FileEditorBase
 import com.intellij.openapi.project.Project

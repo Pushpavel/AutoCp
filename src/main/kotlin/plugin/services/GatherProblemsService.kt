@@ -1,8 +1,7 @@
-package services
+package plugin.services
 
 import com.google.gson.Gson
 import com.intellij.openapi.components.Service
-import com.intellij.openapi.project.Project
 import common.AutoCpProblem
 import common.ProblemJson
 

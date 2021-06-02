@@ -1,13 +1,11 @@
-package ui
+package plugin.ui
 
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.DialogBuilder
 import com.intellij.openapi.ui.DialogWrapper
-import com.intellij.ui.components.JBList
 import com.intellij.ui.layout.panel
 import com.intellij.ui.treeStructure.Tree
 import common.AutoCpProblem
-import java.awt.Dialog
 import javax.swing.tree.DefaultMutableTreeNode
 import javax.swing.tree.DefaultTreeModel
 

@@ -1,6 +1,5 @@
-package actions
+package plugin.actions
 
-import com.google.gson.Gson
 import com.intellij.notification.Notification
 import com.intellij.notification.NotificationType
 import com.intellij.notification.Notifications
@@ -12,13 +11,10 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.DialogWrapper
 import common.AutoCpProblem
 import common.runUI
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
 import org.jetbrains.concurrency.runAsync
-import services.AutoCpFilesService
-import services.GatherProblemsService
-import ui.GatherProblemsDialogUI
+import plugin.services.AutoCpFilesService
+import plugin.services.GatherProblemsService
+import plugin.ui.GatherProblemsDialogUI
 
 
 class GatherProblemsAction : AnAction(), DumbAware {

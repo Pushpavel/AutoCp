@@ -1,4 +1,4 @@
-package config
+package plugin.config
 
 import com.intellij.execution.actions.ConfigurationContext
 import com.intellij.execution.actions.LazyRunConfigurationProducer

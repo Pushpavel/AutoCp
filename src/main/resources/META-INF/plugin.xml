@@ -7,13 +7,13 @@
     <!-- https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
     <depends>com.intellij.modules.platform</depends>
     <extensions defaultExtensionNs="com.intellij">
-        <configurationType implementation="config.AutoCpConfigType"/>
-        <runConfigurationProducer implementation="config.AutoCpConfigProducer"/>
-        <fileEditorProvider implementation="ui.AutoCpFileEditorProvider"/>
+        <configurationType implementation="plugin.config.AutoCpConfigType"/>
+        <runConfigurationProducer implementation="plugin.config.AutoCpConfigProducer"/>
+        <fileEditorProvider implementation="plugin.ui.AutoCpFileEditorProvider"/>
         <notificationGroup id="AutoCp Notification Group" displayType="BALLOON" key="autocp.notification.group"/>
     </extensions>
     <actions>
-        <action id="dev.pushpavel.autoCP.actions.GatherProblemsAction" class="actions.GatherProblemsAction"
+        <action id="dev.pushpavel.autoCP.plugin.actions.GatherProblemsAction" class="plugin.actions.GatherProblemsAction"
                 text="Gather Problems"
                 description="Gathers problems parsed by competitive companion browser extension"/>
     </actions>

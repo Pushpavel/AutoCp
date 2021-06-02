@@ -68,10 +68,6 @@ detekt {
 
 tasks {
 
-    runIde {
-        autoReloadPlugins.set(true)
-    }
-
     // Set the compatibility versions to 1.8
     withType<JavaCompile> {
         sourceCompatibility = "1.8"

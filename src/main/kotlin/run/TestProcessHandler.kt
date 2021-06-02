@@ -1,17 +1,12 @@
 package run
 
-import com.intellij.execution.process.NopProcessHandler
 import com.intellij.execution.process.ProcessHandler
 import com.intellij.execution.process.ProcessOutputTypes
-import com.intellij.execution.testframework.sm.ServiceMessageBuilder
-import com.intellij.execution.testframework.sm.runner.GeneralTestEventsProcessor
 import com.intellij.openapi.components.service
-import config.AutoCpConfig
+import plugin.config.AutoCpConfig
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.jetbrains.concurrency.runAsync
-import services.AutoCpFilesService
+import plugin.services.AutoCpFilesService
 import java.io.OutputStream
 
 class TestProcessHandler(config: AutoCpConfig) : ProcessHandler() {

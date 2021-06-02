@@ -1,11 +1,11 @@
-package ui
+package plugin.ui
 
 import com.intellij.openapi.components.service
 import com.intellij.openapi.fileEditor.FileEditorPolicy
 import com.intellij.openapi.fileEditor.FileEditorProvider
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
-import services.AutoCpFilesService
+import plugin.services.AutoCpFilesService
 
 class AutoCpFileEditorProvider : FileEditorProvider {
     companion object {

@@ -1,4 +1,4 @@
-package services
+package plugin.services
 
 import com.google.common.io.Files
 import com.google.gson.Gson

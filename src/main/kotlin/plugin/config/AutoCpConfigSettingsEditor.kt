@@ -1,4 +1,4 @@
-package config
+package plugin.config
 
 import com.intellij.ide.macro.MacrosDialog
 import com.intellij.openapi.options.SettingsEditor
