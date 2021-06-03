@@ -7,25 +7,26 @@ import com.intellij.openapi.options.SettingsEditor
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.JDOMExternalizerUtil
 import org.jdom.Element
+import plugin.ui.ConfigEditor
 
 class AutoCpConfig(project: Project, factory: ConfigurationFactory, name: String) :
     LocatableConfigurationBase<RunProfileState>(project, factory, name) {
     companion object {
         private const val PROBLEM_NAME = "problemName"
-        private const val RUN_COMMAND = "runCommand"
+        private const val EXEC_PATH = "execPath"
     }
 
     var problemName: String = ""
-    var runCommand: String = ""
+    var executablePath: String = ""
 
     override fun getState(executor: Executor, environment: ExecutionEnvironment): RunProfileState? {
-        if (problemName.isEmpty() && runCommand.isEmpty())
+        if (problemName.isEmpty() && executablePath.isEmpty())
             return null
         return AutoCpRunState(this)
     }
 
     override fun getConfigurationEditor(): SettingsEditor<out RunConfiguration> {
-        return AutoCpConfigSettingsEditor(project)
+        return ConfigEditor(project)
     }
 
     override fun suggestedName(): String? {
@@ -36,14 +37,14 @@ class AutoCpConfig(project: Project, factory: ConfigurationFactory, name: String
 
     override fun writeExternal(element: Element) {
         JDOMExternalizerUtil.writeField(element, PROBLEM_NAME, problemName)
-        JDOMExternalizerUtil.writeField(element, RUN_COMMAND, runCommand)
+        JDOMExternalizerUtil.writeField(element, EXEC_PATH, executablePath)
         super.writeExternal(element)
     }
 
     override fun readExternal(element: Element) {
         super.readExternal(element)
         problemName = JDOMExternalizerUtil.readField(element, PROBLEM_NAME, "")
-        runCommand = JDOMExternalizerUtil.readField(element, RUN_COMMAND, "")
+        executablePath = JDOMExternalizerUtil.readField(element, EXEC_PATH, "")
     }
 
 }
