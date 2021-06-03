@@ -7,7 +7,7 @@ import com.intellij.openapi.options.SettingsEditor
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.JDOMExternalizerUtil
 import org.jdom.Element
-import plugin.ui.ConfigEditor
+import plugin.ui.RunConfigSettings
 
 class AutoCpConfig(project: Project, factory: ConfigurationFactory, name: String) :
     LocatableConfigurationBase<RunProfileState>(project, factory, name) {
@@ -26,7 +26,7 @@ class AutoCpConfig(project: Project, factory: ConfigurationFactory, name: String
     }
 
     override fun getConfigurationEditor(): SettingsEditor<out RunConfiguration> {
-        return ConfigEditor(project)
+        return RunConfigSettings(project)
     }
 
     override fun suggestedName(): String? {

@@ -26,7 +26,7 @@ class ProblemExecutor(
             return
         }
 
-        val spec = TestGroupSpec.fromProblem(problem)
+        val spec = TestGroupSpec.fromProblem(problem, config.executablePath)
         val group = TestGroupExecutor(spec, reporter)
 
         Disposer.register(this, group)

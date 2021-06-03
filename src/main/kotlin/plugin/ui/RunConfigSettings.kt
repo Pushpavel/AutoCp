@@ -14,7 +14,7 @@ import plugin.config.AutoCpConfig
 import java.nio.file.Path
 import javax.swing.JComponent
 
-class ConfigEditor(private val project: @NotNull Project) : SettingsEditor<AutoCpConfig>() {
+class RunConfigSettings(private val project: @NotNull Project) : SettingsEditor<AutoCpConfig>() {
 
     val problemNameField = ExtendableTextField()
     val executableField = ExtendableTextField()
@@ -41,7 +41,6 @@ class ConfigEditor(private val project: @NotNull Project) : SettingsEditor<AutoC
             val preselectPath = Path.of(executableField.text.ifEmpty { project.basePath })
 
             val selectedFile = VfsUtil.findFile(preselectPath, true)
-            print("{${selectedFile?.path}} path checked\n")
             FileChooser.chooseFile(fileDescriptor, project, selectedFile) {
                 executableField.text = it.path
             }
