@@ -14,10 +14,12 @@ interface TestListener {
     fun testFinished(testSpec: TestSpec)
 
     // test events
-    fun testFailed(testSpec: TestSpec, errorMessage: String)
+    fun testPassed(testSpec: TestSpec)
+    fun testFailed(testSpec: TestSpec, resultCode: ResultCode)
     fun testOutput(testSpec: TestSpec, output: String)
     fun testError(testSpec: TestSpec, errorOutput: String)
 
     // logging
+    fun logOutput(message: String)
     fun logError(message: String)
 }

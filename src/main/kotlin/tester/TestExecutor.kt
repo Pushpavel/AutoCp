@@ -1,10 +1,10 @@
 package tester
 
 import com.intellij.openapi.util.Disposer
-import tester.diff.DiffMarker
 import tester.process.ProcessLike
 import tester.result.ProgramResult
 import tester.result.TestListener
+import tester.result.ResultCode
 import tester.spec.TestSpec
 
 class TestExecutor(private val spec: TestSpec, private val listener: TestListener) : ProcessLike {
@@ -23,37 +23,22 @@ class TestExecutor(private val spec: TestSpec, private val listener: TestListene
     }
 
     private fun processResult(result: ProgramResult) {
+        listener.testOutput(spec, result.output)
+
         if (result.error.isNotEmpty()) {
-            if (result.output.isNotEmpty())
-                listener.testOutput(spec, result.output)
             listener.testError(spec, result.error)
-            listener.testFailed(spec, "Program Crashed")
+            listener.testFailed(spec, ResultCode.PROGRAM_CRASH)
             return
         }
-        val marker = DiffMarker(result.output, spec.expectedOutput)
 
-        if (marker.segments.size > 1 || (marker.segments.size == 1 && marker.segments[0].markType == DiffMarker.DiffType.DIFFERENT)) {
-            listener.testFailed(spec, "Not Expected Output")
-            listener.testOutput(spec, "Your Solution Output:\n")
+        val expectedOutput = spec.expectedOutput.trim()
+        val actualOutput = result.output.trim()
 
-            marker.forEachString1Segment { segment, type ->
-                when (type) {
-                    DiffMarker.DiffType.IDENTICAL -> listener.testOutput(spec, segment)
-                    DiffMarker.DiffType.DIFFERENT -> listener.testError(spec, segment)
-                }
-            }
-
-            listener.testOutput(spec, "\nExpected Output:\n")
-
-            marker.forEachString2Segment { segment, type ->
-                when (type) {
-                    DiffMarker.DiffType.IDENTICAL -> listener.testOutput(spec, segment)
-                    DiffMarker.DiffType.DIFFERENT -> listener.testError(spec, segment)
-                }
-            }
-
+        if (actualOutput != expectedOutput) {
+            listener.testError(spec, "\n\nExpected Output:\n$expectedOutput")
+            listener.testFailed(spec, ResultCode.WRONG_ANSWER)
         } else
-            listener.testOutput(spec, result.output)
+            listener.testPassed(spec)
     }
 
     override fun dispose() {

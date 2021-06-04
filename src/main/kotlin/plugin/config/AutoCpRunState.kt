@@ -15,8 +15,6 @@ import tester.process.ProcessLikeHandler
 class AutoCpRunState(private val config: AutoCpConfig) : RunProfileState {
 
     override fun execute(executor: Executor, runner: ProgramRunner<*>): ExecutionResult {
-        System.setProperty("idea.smrunner.debug", "true") // TODO: remove after developing
-
         // prepare testing process
         val processHandler = ProcessLikeHandler(null)
         val processLike = ProblemExecutor(config, processHandler)

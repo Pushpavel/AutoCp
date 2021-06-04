@@ -3,9 +3,11 @@ package tester.run
 import com.intellij.execution.process.ProcessHandler
 import com.intellij.execution.process.ProcessOutputTypes
 import com.intellij.execution.testframework.sm.ServiceMessageBuilder
+import tester.format.presentableString
 import tester.spec.TestGroupSpec
 import tester.spec.TestSpec
 import tester.result.TestListener
+import tester.result.ResultCode
 
 class TestReporter(private val processHandler: ProcessHandler) : TestListener {
 
@@ -25,18 +27,32 @@ class TestReporter(private val processHandler: ProcessHandler) : TestListener {
         ServiceMessageBuilder
             .testStarted(testSpec.name)
             .apply()
+
+        testOutput(
+            testSpec,
+            "${"___".repeat(15)}\n" +
+                    "${testSpec.name}\n" +
+                    "${"___".repeat(15)}\n" +
+                    "\n"
+        )
     }
 
     override fun testFinished(testSpec: TestSpec) {
         ServiceMessageBuilder
             .testFinished(testSpec.name)
             .apply()
+        logOutput("\n\n")
     }
 
-    override fun testFailed(testSpec: TestSpec, errorMessage: String) {
+
+    override fun testPassed(testSpec: TestSpec) {
+        testOutput(testSpec, ResultCode.CORRECT_ANSWER.presentableString() + "\n")
+    }
+
+    override fun testFailed(testSpec: TestSpec, resultCode: ResultCode) {
         ServiceMessageBuilder
             .testFailed(testSpec.name)
-            .addAttribute("message", errorMessage)
+            .addAttribute("message", "\n" + resultCode.presentableString())
             .apply()
     }
 
@@ -56,6 +72,9 @@ class TestReporter(private val processHandler: ProcessHandler) : TestListener {
 
     override fun logError(message: String) =
         processHandler.notifyTextAvailable(message + "\n", ProcessOutputTypes.STDERR)
+
+    override fun logOutput(message: String) =
+        processHandler.notifyTextAvailable(message + "\n", ProcessOutputTypes.STDOUT)
 
     private fun ServiceMessageBuilder.apply() {
         processHandler.notifyTextAvailable(
