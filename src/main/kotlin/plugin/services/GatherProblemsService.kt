@@ -2,8 +2,8 @@ package plugin.services
 
 import com.google.gson.Gson
 import com.intellij.openapi.components.Service
-import common.AutoCpProblem
 import common.ProblemJson
+import files.ProblemSpec
 
 @Service
 class GatherProblemsService {
@@ -15,30 +15,29 @@ class GatherProblemsService {
 
     private var server: SimpleHttpPostServer? = null
 
-    fun gatherProblems(): List<AutoCpProblem>? {
+    fun gatherProblems(): List<ProblemSpec>? {
         if (server != null)
             return null
-        val problems = ArrayList<AutoCpProblem>()
+        val problems = ArrayList<ProblemSpec>()
         var parsingBatchId: String? = null
 
         server = SimpleHttpPostServer(CPH_PORT)
 
         server?.let {
             for (res in it.responses) {
-                print("Got Response !\n")
                 val json = gson.fromJson(res, ProblemJson::class.java)
 
                 if (parsingBatchId != null && json.batch.id != parsingBatchId)
                     continue
 
-                val problem = AutoCpProblem(json)
+                val problem = ProblemSpec(json)
 
                 problems.add(problem)
 
-                parsingBatchId = problem.batchId
+                parsingBatchId = json.batch.id
 
                 // parsed all problems of the batch
-                if (problem.batchLength == problems.size) {
+                if (json.batch.size == problems.size) {
                     stopGathering()
                     return problems
                 }
@@ -48,12 +47,12 @@ class GatherProblemsService {
         return null
     }
 
-    fun stopGathering() {
+    private fun stopGathering() {
         server?.dispose()
         server = null
     }
 
-    fun isGathering() {
-        return isGathering()
+    fun isGathering(): Boolean {
+        return server != null
     }
 }

@@ -1,6 +1,5 @@
 package plugin.services
 
-import com.google.common.io.Files
 import com.google.gson.Gson
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.project.Project
@@ -8,6 +7,7 @@ import common.AutoCpProblem
 import java.io.File
 import java.nio.file.Paths
 
+@Deprecated("use ProblemSpecManager")
 @Service
 class AutoCpFilesService(private val project: Project) {
 
@@ -28,22 +28,5 @@ class AutoCpFilesService(private val project: Project) {
 
         if (!file.exists()) return null
         return file
-    }
-
-    fun createAutoCpFile(extension: String, problem: AutoCpProblem): Boolean {
-        val basePath = project.basePath ?: return false
-        val path = Paths.get(basePath, ".autocp", "${problem.name}.autocp")
-        val solutionPath = Paths.get(basePath, problem.group, "${problem.name}.$extension")
-
-
-        val file = path.toFile()
-        Files.createParentDirs(file)
-        file.createNewFile()
-        file.writeText(gson.toJson(problem))
-
-        val solutionFile = solutionPath.toFile()
-        Files.createParentDirs(solutionFile)
-        solutionFile.createNewFile()
-        return true
     }
 }

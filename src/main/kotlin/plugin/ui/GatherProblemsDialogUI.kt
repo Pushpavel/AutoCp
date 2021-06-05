@@ -5,7 +5,7 @@ import com.intellij.openapi.ui.DialogBuilder
 import com.intellij.openapi.ui.DialogWrapper
 import com.intellij.ui.layout.panel
 import com.intellij.ui.treeStructure.Tree
-import common.AutoCpProblem
+import files.ProblemSpec
 import javax.swing.tree.DefaultMutableTreeNode
 import javax.swing.tree.DefaultTreeModel
 
@@ -29,7 +29,8 @@ class GatherProblemsDialogUI {
         return dialog
     }
 
-    fun getGenerateFilesDialog(project: Project?, problems: List<AutoCpProblem>): DialogBuilder {
+    fun getGenerateFilesDialog(project: Project?, problems: List<ProblemSpec>): DialogBuilder {
+        // fixme: dialog size is not appropriate
         val dialog = DialogBuilder(project)
         dialog.setTitle("Generate Solution Files")
         val rootNode = DefaultMutableTreeNode(problems[0].group)

@@ -6,7 +6,7 @@ data class ProblemJson(
     val url: String,
     val memoryLimit: Int,
     val timeLimit: Int,
-    val tests: List<TestJson>,
+    val tests: ArrayList<TestJson>,
     val batch: BatchJson
 )
 
