@@ -41,12 +41,12 @@ class TestReporter(private val processHandler: ProcessHandler) : TestListener {
         ServiceMessageBuilder
             .testFinished(testSpec.name)
             .apply()
-        logOutput("\n\n")
+        logOutput("\n")
     }
 
 
     override fun testPassed(testSpec: TestSpec) {
-        testOutput(testSpec, ResultCode.CORRECT_ANSWER.presentableString() + "\n")
+        testOutput(testSpec, "\n" + ResultCode.CORRECT_ANSWER.presentableString() + "\n")
     }
 
     override fun testFailed(testSpec: TestSpec, resultCode: ResultCode) {
