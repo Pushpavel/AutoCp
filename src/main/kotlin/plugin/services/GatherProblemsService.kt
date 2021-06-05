@@ -2,7 +2,6 @@ package plugin.services
 
 import com.google.gson.Gson
 import com.intellij.openapi.components.Service
-import common.ProblemJson
 import files.ProblemSpec
 
 @Service

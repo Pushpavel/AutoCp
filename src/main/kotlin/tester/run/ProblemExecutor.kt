@@ -3,8 +3,8 @@ package tester.run
 import com.intellij.execution.process.ProcessHandler
 import com.intellij.openapi.components.service
 import com.intellij.openapi.util.Disposer
+import files.ProblemSpecManager
 import plugin.config.AutoCpConfig
-import plugin.services.AutoCpFilesService
 import tester.spec.TestGroupSpec
 import tester.TestGroupExecutor
 import tester.process.ProcessLike
@@ -14,24 +14,24 @@ class ProblemExecutor(
     private val processHandler: ProcessHandler
 ) : ProcessLike {
 
-    private fun getProblem() = config.project.service<AutoCpFilesService>().getAutoCp(config.problemName)
+    private fun getProblemSpec() = config.project.service<ProblemSpecManager>().findSpec(config.solutionFilePath)
 
     override fun start() {
         val reporter = TestReporter(processHandler)
-        val problem = getProblem()
+        val problemSpec = getProblemSpec()
 
-        if (problem == null) {
-            reporter.logError("Problem ${config.problemName}: Does not correspond to a valid .autocp file in {ProjectRoot}/.autocp folder")
+        if (problemSpec == null) {
+            reporter.logError("Solution File ${config.solutionFilePath}: Does not correspond to a valid .autocp file in {ProjectRoot}/.autocp folder")
             processHandler.destroyProcess()
             return
         }
 
-        val spec = TestGroupSpec.fromProblem(problem, config.executablePath)
-        val group = TestGroupExecutor(spec, reporter)
+        val group = TestGroupSpec.fromProblem(problemSpec, config.executablePath)
+        val groupExecutor = TestGroupExecutor(group, reporter)
 
-        Disposer.register(this, group)
+        Disposer.register(this, groupExecutor)
 
-        group.start() // blocking
+        groupExecutor.start() // blocking
         processHandler.destroyProcess()
     }
 

@@ -4,7 +4,7 @@ object Constants {
     const val FrameworkName = "autoCP"
     const val FrameworkId = "autoCP"
     const val Description = "Run tests with autoCP"
-    val SupportedSolutionFileExtensions = arrayOf("cpp", "c", "java", "py")
+    val SupportedSolutionFileExtensions = listOf("cpp", "c", "java", "py")
 
     // problem spec file
     const val SPEC_FOLDER = ".autocp"

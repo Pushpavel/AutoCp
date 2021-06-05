@@ -1,5 +1,6 @@
 package plugin.config
 
+import com.google.common.io.Files
 import com.intellij.execution.Executor
 import com.intellij.execution.configurations.*
 import com.intellij.execution.runners.ExecutionEnvironment
@@ -12,15 +13,15 @@ import plugin.ui.RunConfigSettings
 class AutoCpConfig(project: Project, factory: ConfigurationFactory, name: String) :
     LocatableConfigurationBase<RunProfileState>(project, factory, name) {
     companion object {
-        private const val PROBLEM_NAME = "problemName"
+        private const val SOLUTION_FILE_PATH = "solutionFilePath"
         private const val EXEC_PATH = "execPath"
     }
 
-    var problemName: String = ""
+    var solutionFilePath: String = ""
     var executablePath: String = ""
 
     override fun getState(executor: Executor, environment: ExecutionEnvironment): RunProfileState? {
-        if (problemName.isEmpty() && executablePath.isEmpty())
+        if (solutionFilePath.isEmpty() && executablePath.isEmpty())
             return null
         return AutoCpRunState(this)
     }
@@ -30,20 +31,20 @@ class AutoCpConfig(project: Project, factory: ConfigurationFactory, name: String
     }
 
     override fun suggestedName(): String? {
-        if (problemName.isEmpty())
+        if (solutionFilePath.isEmpty())
             return null
-        return problemName
+        return Files.getNameWithoutExtension(solutionFilePath)
     }
 
     override fun writeExternal(element: Element) {
-        JDOMExternalizerUtil.writeField(element, PROBLEM_NAME, problemName)
+        JDOMExternalizerUtil.writeField(element, SOLUTION_FILE_PATH, solutionFilePath)
         JDOMExternalizerUtil.writeField(element, EXEC_PATH, executablePath)
         super.writeExternal(element)
     }
 
     override fun readExternal(element: Element) {
         super.readExternal(element)
-        problemName = JDOMExternalizerUtil.readField(element, PROBLEM_NAME, "")
+        solutionFilePath = JDOMExternalizerUtil.readField(element, SOLUTION_FILE_PATH, "")
         executablePath = JDOMExternalizerUtil.readField(element, EXEC_PATH, "")
     }
 

@@ -1,7 +1,7 @@
 package files
 
-import common.ProblemJson
-import common.TestJson
+import plugin.services.ProblemJson
+import plugin.services.TestJson
 import java.io.File
 
 data class ProblemSpec(

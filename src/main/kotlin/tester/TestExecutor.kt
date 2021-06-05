@@ -15,7 +15,12 @@ class TestExecutor(private val spec: TestSpec, private val listener: TestListene
 
         Disposer.register(this, executor)
 
-        val result = executor.execute()
+
+        val result = try {
+            executor.execute()
+        } catch (e: Exception) {
+            ProgramResult("", e.localizedMessage)
+        }
 
         processResult(result)
 

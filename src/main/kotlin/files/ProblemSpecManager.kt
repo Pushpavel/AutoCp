@@ -2,20 +2,13 @@ package files
 
 import com.google.gson.Gson
 import com.intellij.openapi.components.Service
-import com.intellij.openapi.editor.Document
-import com.intellij.openapi.fileEditor.FileDocumentManager
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.vfs.LocalFileSystem
-import com.jetbrains.rd.util.string.printToString
 import common.Constants.SPEC_EXTENSION
 import common.Constants.SPEC_FOLDER
-import common.ProblemJson
-import org.jetbrains.annotations.Nullable
 import java.io.File
 import java.io.FileFilter
 import java.nio.file.Path
 import java.nio.file.Paths
-import kotlin.random.Random
 
 @Service
 class ProblemSpecManager(private val project: Project) {

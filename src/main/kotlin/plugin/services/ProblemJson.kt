@@ -1,4 +1,4 @@
-package common
+package plugin.services
 
 data class ProblemJson(
     val name: String,

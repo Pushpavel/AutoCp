@@ -1,6 +1,6 @@
 package tester.spec
 
-import common.AutoCpProblem
+import files.ProblemSpec
 import tester.run.ProgramExecutorFactory
 
 class TestGroupSpec(
@@ -19,13 +19,13 @@ class TestGroupSpec(
 
     companion object {
 
-        fun fromProblem(problem: AutoCpProblem, executablePath: String): TestGroupSpec {
+        fun fromProblem(problem: ProblemSpec, executablePath: String): TestGroupSpec {
 
             val programFactory = ProgramExecutorFactory(executablePath)
 
             return TestGroupSpec(
                 problem.name,
-                problem.tests.map { TestSpec.fromTestCase(it) },
+                problem.testcases.map { TestSpec.fromTestCase(it) },
                 emptyList(),
                 programFactory
             )

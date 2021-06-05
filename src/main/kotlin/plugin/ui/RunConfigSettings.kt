@@ -9,6 +9,7 @@ import com.intellij.openapi.vfs.VfsUtil
 import com.intellij.ui.components.fields.ExtendableTextField
 import com.intellij.ui.layout.CCFlags
 import com.intellij.ui.layout.panel
+import common.Constants
 import org.jetbrains.annotations.NotNull
 import plugin.config.AutoCpConfig
 import java.nio.file.Path
@@ -16,43 +17,32 @@ import javax.swing.JComponent
 
 class RunConfigSettings(private val project: @NotNull Project) : SettingsEditor<AutoCpConfig>() {
 
-    val problemNameField = ExtendableTextField()
+    val solutionFileField = ExtendableTextField()
     val executableField = ExtendableTextField()
 
     override fun resetEditorFrom(s: AutoCpConfig) {
-        problemNameField.text = s.problemName
+        solutionFileField.text = s.solutionFilePath
         executableField.text = s.executablePath
     }
 
     override fun applyEditorTo(s: AutoCpConfig) {
-        s.problemName = problemNameField.text
+        s.solutionFilePath = solutionFileField.text
         s.executablePath = executableField.text
     }
 
     override fun createEditor(): JComponent {
         // add macro support
         MacrosDialog.addTextFieldExtension(executableField)
-        MacrosDialog.addTextFieldExtension(problemNameField)
+        MacrosDialog.addTextFieldExtension(solutionFileField)
 
         // browse button for executable field
-        val fileDescriptor = FileChooserDescriptorFactory.createSingleFileDescriptor("exe")
-        executableField.addBrowseExtension({
-
-            val preselectPath = Path.of(executableField.text.ifEmpty { project.basePath })
-
-            val selectedFile = VfsUtil.findFile(preselectPath, true)
-            FileChooser.chooseFile(fileDescriptor, project, selectedFile) {
-                executableField.text = it.path
-            }
-
-        }, this)
-
+        executableField.addBrowseButton(listOf("exe"))
+        solutionFileField.addBrowseButton(Constants.SupportedSolutionFileExtensions)
 
         // ui layout
         return panel {
-            row("Problem Name:") {
-                problemNameField()
-                    .comment("This must match with solution file name without extension")
+            row("Solution File:") {
+                solutionFileField()
                     .constraints(CCFlags.growX)
             }
             row("Executable:") {
@@ -60,5 +50,19 @@ class RunConfigSettings(private val project: @NotNull Project) : SettingsEditor<
                     .constraints(CCFlags.growX)
             }
         }
+    }
+
+    private fun ExtendableTextField.addBrowseButton(extensions: List<String>) {
+        val solutionFileDescriptor = FileChooserDescriptorFactory
+            .createSingleFileDescriptor()
+            .withFileFilter { it.extension in extensions }
+
+        this.addBrowseExtension({
+            val preselectPath = Path.of(this.text.ifEmpty { project.basePath })
+            val selectedFile = VfsUtil.findFile(preselectPath, true)
+            FileChooser.chooseFile(solutionFileDescriptor, project, selectedFile) {
+                this.text = it.path
+            }
+        }, this@RunConfigSettings)
     }
 }

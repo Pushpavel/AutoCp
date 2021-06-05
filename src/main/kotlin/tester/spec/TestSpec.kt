@@ -1,6 +1,6 @@
 package tester.spec
 
-import common.TestCase
+import files.TestcaseSpec
 
 class TestSpec(
     name: String,
@@ -8,7 +8,7 @@ class TestSpec(
     val expectedOutput: String
 ) : BaseSpec(name, null) {
     companion object {
-        fun fromTestCase(testcase: TestCase) = TestSpec(
+        fun fromTestCase(testcase: TestcaseSpec) = TestSpec(
             testcase.getName(),
             testcase.input,
             testcase.output
