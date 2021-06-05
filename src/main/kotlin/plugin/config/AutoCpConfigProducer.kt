@@ -21,8 +21,6 @@ class AutoCpConfigProducer : LazyRunConfigurationProducer<AutoCpConfig>() {
         return false
     }
 
-    override fun getConfigurationFactory(): ConfigurationFactory {
-        return AutoCpConfigType.factory
-    }
+    override fun getConfigurationFactory() = AutoCpConfigType.factory
 
 }

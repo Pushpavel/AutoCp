@@ -11,6 +11,9 @@
         <runConfigurationProducer implementation="plugin.config.AutoCpConfigProducer"/>
         <fileEditorProvider implementation="files.editor.ProblemSpecFileEditorProvider"/>
         <notificationGroup id="AutoCp Notification Group" displayType="BALLOON" key="autocp.notification.group"/>
+        <applicationConfigurable parentId="tools" instance="plugin.settings.AutoCpConfigurable"
+                                 id="plugin.settings.AutoCpConfigurable"
+                                 displayName="AutoCp"/>
     </extensions>
     <actions>
         <action id="dev.pushpavel.autoCP.plugin.actions.GatherProblemsAction"
