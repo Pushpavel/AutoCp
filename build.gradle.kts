@@ -30,6 +30,7 @@ dependencies {
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.17.1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:1.5.0")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:1.5.10")
 }
 
 // Configure gradle-intellij-plugin plugin.
