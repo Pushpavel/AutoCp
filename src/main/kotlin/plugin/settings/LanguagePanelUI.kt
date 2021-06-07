@@ -1,7 +1,9 @@
 package plugin.settings
 
 import com.intellij.ide.macro.MacrosDialog
+import com.intellij.openapi.util.Ref
 import com.intellij.ui.components.fields.ExtendableTextField
+import com.intellij.ui.layout.LCFlags
 import com.intellij.ui.layout.panel
 import javax.swing.text.PlainDocument
 
@@ -10,7 +12,7 @@ class LanguagePanelUI(model: Model) {
     private val extensionField = ExtendableTextField(1).apply { document = model.extensionDoc }
     private val buildCommandField = ExtendableTextField().apply { document = model.buildCommandDoc }
 
-    val component = panel {
+    val component = panel(LCFlags.fillX) {
         MacrosDialog.addTextFieldExtension(buildCommandField)
         row {
             row("Name:") { nameField() }
@@ -23,26 +25,28 @@ class LanguagePanelUI(model: Model) {
         internal val nameDoc = PlainDocument()
         internal val extensionDoc = PlainDocument()
         internal val buildCommandDoc = PlainDocument()
-        private var index: Int? = null
+        private var itemRef: Ref<SolutionLanguage?> = Ref()
 
-        fun replaceModel(data: SolutionLanguage?, index: Int?) {
+        fun applyItem(item: SolutionLanguage?) {
             // replace text fields
-            nameDoc.replace(0, nameDoc.length, data?.name ?: "", null)
-            extensionDoc.replace(0, extensionDoc.length, data?.extension ?: "", null)
-            buildCommandDoc.replace(0, buildCommandDoc.length, data?.buildCommand ?: "", null)
+            nameDoc.replace(0, nameDoc.length, item?.name ?: "", null)
+            extensionDoc.replace(0, extensionDoc.length, item?.extension ?: "", null)
+            buildCommandDoc.replace(0, buildCommandDoc.length, item?.buildCommand ?: "", null)
 
-            this.index = index
+            setCorrespondingItem(item)
         }
 
-        fun getModel(): SolutionLanguage {
+        fun createItemValue(): SolutionLanguage {
             return SolutionLanguage(
                 nameDoc.getText(0, nameDoc.length),
                 extensionDoc.getText(0, extensionDoc.length),
-                buildCommandDoc.getText(0, buildCommandDoc.length),
+                buildCommandDoc.getText(0, buildCommandDoc.length)
             )
         }
 
-        fun getIndex(): Int? = index
+        fun setCorrespondingItem(item: SolutionLanguage?) = this.itemRef.set(item)
+
+        fun getCorrespondingItem(): SolutionLanguage? = this.itemRef.get()
     }
 
 }

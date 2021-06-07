@@ -10,11 +10,8 @@ import com.intellij.util.xmlb.XmlSerializerUtil
 @Service
 class AutoCpSettings : PersistentStateComponent<AutoCpSettings> {
     var preferredLanguage: String? = "cpp"
-    var solutionLanguages = mutableListOf(
-        SolutionLanguage("cpp", "g++", ".cpp"),
-        SolutionLanguage("java", "javac", ".java")
-    )
-    var selectedIndex: Int = 0
+    var solutionLanguages: MutableList<SolutionLanguage> = ArrayList()
+    var selectedIndex: Int? = 0
 
     override fun getState() = this
 
