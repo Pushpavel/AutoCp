@@ -2,6 +2,8 @@ package plugin.settings
 
 import com.intellij.ide.macro.MacrosDialog
 import com.intellij.openapi.util.Ref
+import com.intellij.ui.components.fields.ExpandableSupport
+import com.intellij.ui.components.fields.ExpandableTextField
 import com.intellij.ui.components.fields.ExtendableTextField
 import com.intellij.ui.layout.LCFlags
 import com.intellij.ui.layout.panel
@@ -11,7 +13,7 @@ class LanguagePanelUI(model: Model) {
 
     private val nameField = ExtendableTextField(10).apply { document = model.nameDoc }
     private val extensionField = ExtendableTextField(1).apply { document = model.extensionDoc }
-    private val buildCommandField = ExtendableTextField().apply { document = model.buildCommandDoc }
+    private val buildCommandField = ExtendableTextField(50).apply { document = model.buildCommandDoc }
 
     val component = panel(LCFlags.fillX) {
 
@@ -19,16 +21,24 @@ class LanguagePanelUI(model: Model) {
         MacrosDialog.addTextFieldExtension(buildCommandField)
 
         // ui & layout
-        row("Name:") {
-            nameField()
+        blockRow {
+            row("Name:") {
+                nameField()
+            }
+            row("Extension:") {
+                extensionField()
+            }.largeGapAfter()
+            row("Build Command:") {
+                buildCommandField(pushX)
+            }
+        }
+        row {
             model.nameErrorComponent()
         }
-        row("Extension:") {
-            extensionField()
+        row {
             model.extensionErrorComponent()
-        }.largeGapAfter()
-        row("Build Command:") {
-            buildCommandField(pushX)
+        }
+        row {
             model.buildCommandErrorComponent()
         }
     }
