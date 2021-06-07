@@ -21,19 +21,21 @@ class AutoCpSettings : PersistentStateComponent<AutoCpSettings> {
         val instance = service<AutoCpSettings>()
 
         val DUPLICATE_NAME_REGEX = Regex("^(.*)_([0-9]+)\$")
+        val INPUT_PATH_KEY = "@input@"
+        val OUTPUT_PATH_KEY = "@output@"
 
         fun getSolutionLanguageTemplate(): SolutionLanguage {
             return SolutionLanguage(
-                "lang",
-                "extension",
-                "command"
+                "C++",
+                "cpp",
+                "g++ $INPUT_PATH_KEY -o $OUTPUT_PATH_KEY"
             )
         }
 
         fun getDefaultSolutionLanguages(): MutableList<SolutionLanguage> {
             return mutableListOf(
-                SolutionLanguage("C++", "cpp", "g++ !input_file! -o !output_file! "),
-                SolutionLanguage("java", "java", "javac !input_file! --output !output_file! ")
+                SolutionLanguage("C++", "cpp", "g++ $INPUT_PATH_KEY -o $OUTPUT_PATH_KEY "),
+                SolutionLanguage("java", "java", "javac $INPUT_PATH_KEY --output $OUTPUT_PATH_KEY ")
             )
         }
     }

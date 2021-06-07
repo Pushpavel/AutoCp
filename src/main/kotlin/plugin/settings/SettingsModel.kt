@@ -6,7 +6,7 @@ import kotlin.math.max
 
 class SettingsModel : CollectionComboBoxModel<SolutionLanguage>() {
 
-    val languagePanelModel = LanguagePanelUI.Model()
+    val languagePanelModel = LanguagePanelUI.Model(LanguagePanelValidator(this))
     val sideListSelectionModel = SingleSelectionModel()
 
     init {
@@ -56,7 +56,7 @@ class SettingsModel : CollectionComboBoxModel<SolutionLanguage>() {
         return "${prefix}_$maxNumberSuffix"
     }
 
-    private fun isUniqueName(name: String) = items.all { it.name != name }
+    fun isUniqueName(name: String) = items.all { it.name != name }
 
     fun applyLanguagePanelModelToListModel() {
         // return if languagePanel didn't already correspond to any item in the list
@@ -65,9 +65,10 @@ class SettingsModel : CollectionComboBoxModel<SolutionLanguage>() {
 
         // applying the new item value to the item
         if (index != -1) {
-            val value = languagePanelModel.createItemValue()
-            setElementAt(value, index)
-            languagePanelModel.setCorrespondingItem(value)
+            languagePanelModel.createItemValue()?.let {
+                setElementAt(it, index)
+                languagePanelModel.setCorrespondingItem(it)
+            }
         }
     }
 
