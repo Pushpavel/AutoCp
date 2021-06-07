@@ -2,7 +2,6 @@ package plugin.settings
 
 import com.intellij.openapi.options.Configurable
 import com.intellij.openapi.ui.DialogPanel
-import com.jetbrains.rd.framework.base.deepClonePolymorphic
 
 class AutoCpConfigurable : Configurable {
     private var ui: AutoCpSettingsUI? = null

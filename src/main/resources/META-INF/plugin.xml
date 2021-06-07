@@ -10,9 +10,9 @@
         <configurationType implementation="plugin.config.AutoCpConfigType"/>
         <runConfigurationProducer implementation="plugin.config.AutoCpConfigProducer"/>
         <fileEditorProvider implementation="files.editor.ProblemSpecFileEditorProvider"/>
-        <notificationGroup id="AutoCp Notification Group" displayType="BALLOON" />
-        <applicationConfigurable parentId="tools" instance="plugin.settings.AutoCpConfigurable"
-                                 id="plugin.settings.AutoCpConfigurable"
+        <notificationGroup id="AutoCp Notification Group" displayType="BALLOON"/>
+        <applicationConfigurable instance="plugin.settings.SettingsConfigurable"
+                                 id="plugin.settings.SettingsConfigurable"
                                  displayName="AutoCp"/>
     </extensions>
     <actions>
