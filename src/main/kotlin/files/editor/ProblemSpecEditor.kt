@@ -11,9 +11,8 @@ import common.Constants
 import files.ProblemSpec
 import files.editor.ui.ProblemSpecPanel
 
-class ProblemSpecEditor(
-    private val solutionFile: VirtualFile, specFile: VirtualFile
-) : FileEditorBase(), DocumentListener {
+class ProblemSpecEditor(private val solutionFile: VirtualFile, specFile: VirtualFile) : FileEditorBase(),
+    DocumentListener {
 
     private val gson = Gson()
     private var specDoc = FileDocumentManager.getInstance().getDocument(specFile)

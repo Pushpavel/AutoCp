@@ -8,7 +8,8 @@ data class ProblemSpec(
     var name: String,
     val group: String,
     val solutionFiles: ArrayList<String>,
-    val testcases: ArrayList<TestcaseSpec>,
+    var testcases: MutableList<TestcaseSpec>,
+    var selectedIndex: Int?
 ) {
 
     @Transient
@@ -19,10 +20,12 @@ data class ProblemSpec(
         data.group,
         ArrayList(),
         data.tests.mapIndexed { index, it -> TestcaseSpec(index, it) } as ArrayList<TestcaseSpec>,
+        null
     )
 }
 
 data class TestcaseSpec(
+    @Deprecated("do not store index here")
     val index: Int,
     val input: String,
     val output: String,

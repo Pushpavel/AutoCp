@@ -44,7 +44,7 @@ class LanguagePanelUI(model: Model) {
     }
 
 
-    class Model(val validator: Validator) {
+    class Model(private val validator: Validator) {
         internal val nameDoc = PlainDocument()
         internal val extensionDoc = PlainDocument()
         internal val buildCommandDoc = PlainDocument()
@@ -66,7 +66,7 @@ class LanguagePanelUI(model: Model) {
         }
 
         fun createItemValue(): SolutionLanguage? {
-            val item = itemRef.get() ?: return null
+            val item = getCorrespondingItem() ?: return null
 
             var name = nameDoc.getText(0, nameDoc.length)
             var extension = extensionDoc.getText(0, extensionDoc.length)

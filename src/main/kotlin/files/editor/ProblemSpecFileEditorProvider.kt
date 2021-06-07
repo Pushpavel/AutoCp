@@ -30,8 +30,7 @@ class ProblemSpecFileEditorProvider : FileEditorProvider {
     override fun createEditor(project: Project, file: VirtualFile): FileEditor {
         val specFile = project.service<ProblemSpecManager>().findSpec(file.path)?.file
         val specVirtualFile = specFile?.let { LocalFileSystem.getInstance().findFileByIoFile(it) }
-
-        return ProblemSpecEditor(file, specVirtualFile!!)
+        return SpecEditor(specVirtualFile!!)
     }
 
     override fun getEditorTypeId() = EDITOR_TYPE_ID
