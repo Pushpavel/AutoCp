@@ -14,7 +14,7 @@ class SettingsUI : JBPanel<SettingsUI>(BorderLayout()) {
 
     private val mainPanelContent by lazy { LanguagePanelUI(model.languagePanelModel) }
 
-    private val mainPanel = JBPanelWithEmptyText().withEmptyText("This is an Empty Text")
+    private val mainPanel = JBPanelWithEmptyText().withEmptyText("Create a New Solution Language")
 
     private val sideList = JBList(model)
         .also {
@@ -38,6 +38,9 @@ class SettingsUI : JBPanel<SettingsUI>(BorderLayout()) {
         .let {
             ToolbarDecorator
                 .createDecorator(it)
+                .setAddAction {
+                    model.duplicateOrAddItem()
+                }
                 .createPanel()
         }
 

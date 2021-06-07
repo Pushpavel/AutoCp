@@ -10,7 +10,7 @@ import com.intellij.util.xmlb.XmlSerializerUtil
 @Service
 class AutoCpSettings : PersistentStateComponent<AutoCpSettings> {
     var preferredLanguage: String? = "cpp"
-    var solutionLanguages: MutableList<SolutionLanguage> = ArrayList()
+    var solutionLanguages: MutableList<SolutionLanguage> = getDefaultSolutionLanguages()
     var selectedIndex: Int? = 0
 
     override fun getState() = this
@@ -19,5 +19,22 @@ class AutoCpSettings : PersistentStateComponent<AutoCpSettings> {
 
     companion object {
         val instance = service<AutoCpSettings>()
+
+        val DUPLICATE_NAME_REGEX = Regex("^(.*)_([0-9]+)\$")
+
+        fun getSolutionLanguageTemplate(): SolutionLanguage {
+            return SolutionLanguage(
+                "lang",
+                "extension",
+                "command"
+            )
+        }
+
+        fun getDefaultSolutionLanguages(): MutableList<SolutionLanguage> {
+            return mutableListOf(
+                SolutionLanguage("C++", "cpp", "g++ !input_file! -o !output_file! "),
+                SolutionLanguage("java", "java", "javac !input_file! --output !output_file! ")
+            )
+        }
     }
 }

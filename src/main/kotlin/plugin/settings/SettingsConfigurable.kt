@@ -15,17 +15,11 @@ class SettingsConfigurable : Configurable {
         // saving changes in language model to list model
         model.applyLanguagePanelModelToListModel()
 
+
         return (model.selected?.name != settings.preferredLanguage) // Preferred Language
-                || model.sideListSelectionModel.minSelectionIndex != settings.selectedIndex // side-list selected index
-                || model.items.zip(settings.solutionLanguages)
-            .any {
-                print(
-                    "(${it.first.name}:${it.second.name})\n" +
-                            "(${it.first.extension},${it.second.extension})\n" +
-                            "(${it.first.buildCommand},${it.second.buildCommand})\n\n"
-                )
-                !it.first.equals(it.second)
-            } //  list items
+                || model.sideListSelectionModel.minSelectionIndex.takeIf { it != -1 } != settings.selectedIndex // side-list selected index
+                || model.items.zip(settings.solutionLanguages).any { !it.first.equals(it.second) } //  list items
+
     }
 
     override fun apply() {
