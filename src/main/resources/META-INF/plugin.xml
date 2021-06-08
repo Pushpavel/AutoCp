@@ -14,6 +14,7 @@
         <applicationConfigurable instance="plugin.settings.SettingsConfigurable"
                                  id="plugin.settings.SettingsConfigurable"
                                  displayName="AutoCp"/>
+        <toolWindow factoryClass="tool.ToolFactory" id="AutoCp" icon="AllIcons.General.Modified"/>
     </extensions>
     <actions>
         <action id="dev.pushpavel.autoCP.plugin.actions.GatherProblemsAction"
