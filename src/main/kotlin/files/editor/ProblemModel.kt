@@ -3,7 +3,6 @@ package files.editor
 import com.intellij.ui.CollectionListModel
 import com.intellij.ui.SingleSelectionModel
 import files.TestcaseSpec
-import javax.swing.event.ListDataListener
 
 class ProblemModel : CollectionListModel<TestcaseSpec>() {
 

@@ -53,7 +53,6 @@ changelog {
     version = properties("pluginVersion")
     groups = emptyList()
 }
-
 // Configure detekt plugin.
 // Read more: https://detekt.github.io/detekt/kotlindsl.html
 detekt {
@@ -69,17 +68,42 @@ detekt {
 
 tasks {
 
-    // Set the compatibility versions to 1.8
+    runIde {
+        // workaround for https://stackoverflow.com/questions/60027717/intellij-idea-vm-options
+        jvmArgs(
+            "--illegal-access=deny",
+            "--add-opens=java.desktop/sun.awt=ALL-UNNAMED",
+            "--add-opens=java.desktop/java.awt=ALL-UNNAMED",
+            "--add-opens=java.base/java.lang=ALL-UNNAMED",
+            "--add-opens=java.desktop/javax.swing=ALL-UNNAMED",
+            "--add-opens=java.desktop/javax.swing.plaf.basic=ALL-UNNAMED",
+            "--add-opens=java.desktop/sun.font=ALL-UNNAMED",
+            "--add-opens=java.desktop/sun.swing=ALL-UNNAMED",
+
+            "--add-opens=java.desktop/java.awt.event=ALL-UNNAMED",
+            "--add-opens=java.base/java.util=ALL-UNNAMED",
+            "--add-opens=java.desktop/sun.awt.windows=ALL-UNNAMED",
+            "--add-opens=java.desktop/javax.swing.text.html=ALL-UNNAMED",
+            "--add-opens=java.base/sun.nio.ch=ALL-UNNAMED",
+
+            "--add-exports",
+            "java.base/jdk.internal.vm=ALL-UNNAMED",
+            "--add-exports",
+            "java.desktop/sun.java2d=ALL-UNNAMED"
+        )
+    }
+
+    // Set the compatibility versions to 11
     withType<JavaCompile> {
-        sourceCompatibility = "1.8"
-        targetCompatibility = "1.8"
+        sourceCompatibility = properties("javaVersion")
+        targetCompatibility = properties("javaVersion")
     }
     withType<KotlinCompile> {
-        kotlinOptions.jvmTarget = "1.8"
+        kotlinOptions.jvmTarget = properties("javaVersion")
     }
 
     withType<Detekt> {
-        jvmTarget = "1.8"
+        jvmTarget = properties("javaVersion")
     }
 
     patchPluginXml {
