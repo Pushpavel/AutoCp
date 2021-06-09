@@ -1,36 +1,56 @@
 package ui
 
-import com.intellij.ui.CollectionListModel
-import com.intellij.ui.SingleSelectionModel
-import javax.swing.JComponent
-import javax.swing.ListSelectionModel
 
-abstract class AbstractPopListAdapter<T> {
-    val namesListModel = CollectionListModel<String>()
-    val selectionModel = SingleSelectionModel()
+abstract class AbstractPopListAdapter<T> : PopListAdapter<T> {
+    private val listeners = ArrayList<PopListAdapter.Listener<T>>()
 
-    val internalList = ArrayList<T>()
+    protected abstract fun submitListImpl(list: List<T>): Boolean
+    protected abstract fun addItemImpl(index: Int, item: T): Boolean
+    protected abstract fun removeItemImpl(index: Int): T?
+    protected abstract fun updateItemImpl(index: Int, item: T): Boolean
+    protected abstract fun selectItemImpl(index: Int): Boolean
 
-    fun submitList(list: Iterable<T>) {
-
+    override fun submitList(list: List<T>): Boolean {
+        return submitListImpl(list)
     }
 
-    fun addItem(index: Int, item: T) {
-        val adapter = getItemAdapter()
-        val itemName = adapter.getItemName(item)
-        namesListModel.add(index, itemName)
+    override fun addItem(index: Int, item: T): Boolean {
+        return addItemImpl(index, item).also {
+            if (it) fireAddEvent(index, item)
+        }
     }
 
-    fun removeItem(index: Int) {
-        namesListModel.remove(index)
+    override fun removeItem(index: Int): T? {
+        return removeItemImpl(index).also {
+            if (it != null) fireRemoveEvent(index, it)
+        }
     }
 
-    abstract fun createNameListView(
-        listModel: CollectionListModel<String>,
-        selectionModel: ListSelectionModel
-    ): JComponent
+    override fun updateItem(index: Int, item: T): Boolean {
+        return updateItemImpl(index, item).also {
+            if (it) fireUpdateEvent(index, item)
+        }
+    }
 
-    abstract fun createItemHolderPanel(): JComponent
+    override fun selectItem(index: Int): Boolean {
+        return selectItemImpl(index).also {
+            if (it)
+                fireSelectEvent(index, getItems()[index])
+        }
+    }
 
-    abstract fun getItemAdapter(): ItemAdapter<T>
+    private fun fireAddEvent(index: Int, item: T) = listeners.forEach { it.add(index, item) }
+
+    private fun fireRemoveEvent(index: Int, item: T) = listeners.forEach { it.remove(index, item) }
+    private fun fireUpdateEvent(index: Int, item: T) = listeners.forEach { it.update(index, item) }
+    private fun fireSelectEvent(selection: Int, item: T?) = listeners.forEach { it.select(selection, item) }
+
+
+    override fun addListEventsListener(listener: PopListAdapter.Listener<T>) {
+        listeners.add(listener)
+    }
+
+    override fun removeListEventsListener(listener: PopListAdapter.Listener<T>) {
+        listeners.remove(listener)
+    }
 }
