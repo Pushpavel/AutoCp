@@ -9,11 +9,9 @@ import com.intellij.ui.content.ContentFactory
 
 class ToolFactory : ToolWindowFactory, DumbAware {
     override fun createToolWindowContent(project: Project, toolWindow: ToolWindow) {
-
-        val panel = ProblemViewer()
+        val panel = ProblemPanel().component
         val contentFactory = ContentFactory.SERVICE.getInstance()
         val content = contentFactory.createContent(panel, "ATM", false)
         toolWindow.contentManager.addContent(content)
     }
-
 }
