@@ -9,6 +9,7 @@ import com.intellij.ui.components.JBList
 import com.intellij.ui.components.JBPanelWithEmptyText
 import files.TestcaseSpec
 import ui.poplist.PopList
+import ui.poplist.PopListModel
 import java.awt.BorderLayout
 import javax.swing.BorderFactory
 import javax.swing.JComponent
@@ -16,7 +17,7 @@ import javax.swing.JList
 import javax.swing.ListModel
 import javax.swing.border.EmptyBorder
 
-class TestcasesPanel(model: ListModel<TestcaseSpec>) : PopList<TestcaseSpec>(true, 0.25F, model) {
+class TestcasesPanel(model: PopListModel<TestcaseSpec>) : PopList<TestcaseSpec>(true, 0.25F, model) {
 
     override val listComponent = JBList<TestcaseSpec>()
 

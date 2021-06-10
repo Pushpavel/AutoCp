@@ -1,25 +1,27 @@
 package ui.poplist
 
 import com.intellij.ui.OnePixelSplitter
-import com.intellij.ui.SingleSelectionModel
 import javax.swing.event.ListSelectionListener
 
-class PopListImpl<T>(private val adapter: PopList<T>, vertical: Boolean, proportion: Float) :
-    OnePixelSplitter(vertical, proportion) {
+class PopListImpl<T>(
+    private val adapter: PopList<T>,
+    private val popModel: PopListModel<T>,
+    vertical: Boolean,
+    proportion: Float
+) : OnePixelSplitter(vertical, proportion) {
 
-    private var selectModel = SingleSelectionModel()
     private var itemViewCorrespondingIndex = -1
 
     private val selectionListener = ListSelectionListener {
 
-        val index = selectModel.minSelectionIndex
+        val index = popModel.selectionModel.minSelectionIndex
         when (index) {
             itemViewCorrespondingIndex -> return@ListSelectionListener
             -1 -> detachItemView()
             else -> {
                 if (itemViewCorrespondingIndex == -1)
                     attachItemView()
-                adapter.itemView.updateView(adapter.listModel.getElementAt(index))
+                adapter.itemView.updateView(popModel.listModel.getElementAt(index))
             }
         }
         itemViewCorrespondingIndex = index
@@ -36,10 +38,10 @@ class PopListImpl<T>(private val adapter: PopList<T>, vertical: Boolean, proport
         firstComponent = adapter.listContainer
         secondComponent = adapter.itemContainer
         adapter.listComponent.apply {
-            selectionModel = selectModel
-            model = adapter.listModel
+            selectionModel = popModel.selectionModel
+            model = popModel.listModel
         }
-        selectModel.addListSelectionListener(selectionListener)
+        popModel.selectionModel.addListSelectionListener(selectionListener)
     }
 
 }

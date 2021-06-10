@@ -8,16 +8,17 @@ import com.intellij.ui.content.ContentFactory
 import files.ProblemSpec
 import files.TestcaseSpec
 import tool.base.ContentAdapter
+import ui.poplist.PopListModel
 
 class ProblemViewer : ContentAdapter<ProblemSpec>(), FileEditorManagerListener {
 
-    val model = CollectionListModel<TestcaseSpec>()
+    val model = PopListModel<TestcaseSpec>()
     private val panel = TestcasesPanel(model)
 
     private val emptyContent = contentFactory.createContent(JBLabel("Content empty!"), "Problem", false)
 
     override fun createContentForData(data: ProblemSpec, contentFactory: ContentFactory): Content {
-        model.replaceAll(data.testcases)
+        model.listModel.replaceAll(data.testcases)
         return contentFactory.createContent(panel.component, data.name, false)
     }
 
