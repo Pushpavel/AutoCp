@@ -16,14 +16,7 @@ import javax.swing.JList
 import javax.swing.ListModel
 import javax.swing.border.EmptyBorder
 
-class ProblemPanel : PopList<TestcaseSpec>(
-    true, 0.25F, CollectionListModel(
-        TestcaseSpec(0, "1 0 11", "11 1 1 1 11 "),
-        TestcaseSpec(1, "1 0 11", "11 1 1 1 11 "),
-        TestcaseSpec(2, "1 0 11", "11 1 1 1 11 "),
-        TestcaseSpec(3, "1 0 11", "11 1 1 1 11 "),
-    )
-) {
+class TestcasesPanel(model: ListModel<TestcaseSpec>) : PopList<TestcaseSpec>(true, 0.25F, model) {
 
     override val listComponent = JBList<TestcaseSpec>()
 

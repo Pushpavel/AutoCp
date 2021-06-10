@@ -2,7 +2,10 @@ package files
 
 import com.google.gson.Gson
 import com.intellij.openapi.components.Service
+import com.intellij.openapi.fileEditor.FileDocumentManager
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.vfs.LocalFileSystem
+import com.intellij.openapi.vfs.VirtualFile
 import common.Constants.SPEC_EXTENSION
 import common.Constants.SPEC_FOLDER
 import java.io.File
@@ -28,7 +31,7 @@ class ProblemSpecManager(private val project: Project) {
             if (file.exists()) {
                 val jsonString = file.readText()
                 val problem = gson.fromJson(jsonString, ProblemSpec::class.java)
-                problem.file = file
+                problem.specFilePath = file.path
                 val solutionPaths = problem.solutionFiles.map { Path.of(it) }
 
                 if (solutionPaths.any { Path.of(solutionFilePath).equals(it) })
@@ -39,13 +42,22 @@ class ProblemSpecManager(private val project: Project) {
         return null
     }
 
+    fun getSpecVirtualFile(spec: ProblemSpec): VirtualFile? {
+        return spec.specFilePath?.let {
+            kotlin.runCatching {
+                LocalFileSystem.getInstance().findFileByPath(it)
+            }.getOrNull()
+        }
+    }
+
+
     fun createSpec(spec: ProblemSpec) {
         val specDir = Paths.get(project.basePath!!, SPEC_FOLDER).toFile()
 
         if (!specDir.exists())
             specDir.mkdir()
 
-        val json = gson.toJson(spec)
+        val json = specToString(spec)
 
         val path = Paths.get(specDir.path, "${spec.name}.${json.hashCode()}.$SPEC_EXTENSION")
         val file = path.toFile()
@@ -55,6 +67,9 @@ class ProblemSpecManager(private val project: Project) {
         spec.solutionFiles.add(solutionFilePath)
         file.writeText(gson.toJson(spec))
     }
+
+
+    fun specToString(spec: ProblemSpec): String = gson.toJson(spec)
 
     // todo: migrate to more appropriate place
     // todo: support different extensions

@@ -9,7 +9,6 @@
     <extensions defaultExtensionNs="com.intellij">
         <configurationType implementation="plugin.config.AutoCpConfigType"/>
         <runConfigurationProducer implementation="plugin.config.AutoCpConfigProducer"/>
-        <fileEditorProvider implementation="files.editor.ProblemSpecFileEditorProvider"/>
         <notificationGroup id="AutoCp Notification Group" displayType="BALLOON"/>
         <applicationConfigurable instance="plugin.settings.SettingsConfigurable"
                                  id="plugin.settings.SettingsConfigurable"

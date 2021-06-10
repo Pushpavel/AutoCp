@@ -13,7 +13,11 @@ data class ProblemSpec(
 ) {
 
     @Transient
+    @Deprecated("use specFilePath")
     lateinit var file: File
+
+    @Transient
+    var specFilePath: String? = null
 
     constructor(data: ProblemJson) : this(
         data.name,
