@@ -53,7 +53,7 @@ abstract class AbstractAutoCpImpl(project: Project) : AutoCp {
                     .let { data ->
                         Pair(
                             ProblemSpec(data[0], data[1]),
-                            ProblemState(it[ProblemSpecs.selectedIndex])
+                            ProblemState(problemId, it[ProblemSpecs.selectedIndex])
                         )
                     }
             }

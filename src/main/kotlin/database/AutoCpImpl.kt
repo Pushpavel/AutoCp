@@ -46,12 +46,22 @@ class AutoCpImpl(project: Project) : AbstractAutoCpImpl(project) {
         TODO("Not yet implemented")
     }
 
-    override fun updateTestcaseSpec(spec: TestcaseSpec) {
-        TODO("Not yet implemented")
+    override fun updateTestcaseSpecs(specs: List<TestcaseSpec>) {
+        transaction(instance) {
+            specs.forEach { spec ->
+                TestcaseSpecs.update({ TestcaseSpecs.id eq spec.id }) {
+                    it[name] = spec.name
+                }
+            }
+        }
     }
 
     override fun updateProblemState(state: ProblemState) {
-        TODO("Not yet implemented")
+        transaction(instance) {
+            ProblemSpecs.update({ ProblemSpecs.problemId eq state.problemId }) {
+                it[this.selectedIndex] = state.selectedIndex
+            }
+        }
     }
 
 }

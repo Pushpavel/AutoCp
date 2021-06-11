@@ -18,7 +18,7 @@ interface AutoCp {
 
     fun addTestcaseSpec(spec: TestcaseSpec)
 
-    fun updateTestcaseSpec(spec: TestcaseSpec)
+    fun updateTestcaseSpecs(specs: List<TestcaseSpec>)
     fun updateProblemState(state: ProblemState)
 
 }
