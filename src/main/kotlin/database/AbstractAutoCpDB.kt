@@ -17,7 +17,7 @@ abstract class AbstractAutoCpDB(project: Project) : AutoCp {
     init {
         // initializing Tables
         transaction(instance) {
-            SchemaUtils.create(ProblemSpecs, TestcaseSpecs, SolutionSpecs, inBatch = true)
+            SchemaUtils.create(ProblemSpecs, TestcaseSpecs, SolutionSpecs)
         }
     }
 
