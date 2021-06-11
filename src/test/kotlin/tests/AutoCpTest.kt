@@ -6,6 +6,7 @@ import database.models.ProblemSpec
 import database.models.ProblemState
 import database.models.TestcaseSpec
 import database.utils.encodedJoin
+import org.junit.Ignore
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.BeforeEach
@@ -80,6 +81,7 @@ abstract class AutoCpTest {
             }
         }
     }
+
 
     abstract fun getInstance(tempDir: Path): AutoCp
 }

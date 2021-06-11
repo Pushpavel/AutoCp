@@ -4,6 +4,7 @@ import plugin.services.ProblemJson
 import plugin.services.TestJson
 import java.io.File
 
+@Deprecated("use database.models.ProblemSpec")
 data class ProblemSpec(
     var name: String,
     val group: String,
@@ -28,6 +29,7 @@ data class ProblemSpec(
     )
 }
 
+@Deprecated("use database.models.TestcaseSpec")
 data class TestcaseSpec(
     @Deprecated("do not store index here")
     val index: Int,

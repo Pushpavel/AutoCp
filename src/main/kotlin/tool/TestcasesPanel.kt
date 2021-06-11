@@ -1,20 +1,15 @@
 package tool
 
 import com.intellij.openapi.actionSystem.ActionToolbarPosition
-import com.intellij.ui.CollectionListModel
-import com.intellij.ui.SingleSelectionModel
 import com.intellij.ui.ToolbarDecorator
 import com.intellij.ui.components.JBLabel
 import com.intellij.ui.components.JBList
 import com.intellij.ui.components.JBPanelWithEmptyText
-import files.TestcaseSpec
+import database.models.TestcaseSpec
 import ui.poplist.PopList
 import ui.poplist.PopListModel
 import java.awt.BorderLayout
 import javax.swing.BorderFactory
-import javax.swing.JComponent
-import javax.swing.JList
-import javax.swing.ListModel
 import javax.swing.border.EmptyBorder
 
 class TestcasesPanel(model: PopListModel<TestcaseSpec>) : PopList<TestcaseSpec>(true, 0.25F, model) {
@@ -34,7 +29,7 @@ class TestcasesPanel(model: PopListModel<TestcaseSpec>) : PopList<TestcaseSpec>(
         override val component = JBLabel("Item view")
 
         override fun updateView(item: TestcaseSpec) {
-            component.text = item.getName()
+            component.text = item.name
         }
 
     }

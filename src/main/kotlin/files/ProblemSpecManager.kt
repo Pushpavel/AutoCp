@@ -2,7 +2,6 @@ package files
 
 import com.google.gson.Gson
 import com.intellij.openapi.components.Service
-import com.intellij.openapi.fileEditor.FileDocumentManager
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.LocalFileSystem
 import com.intellij.openapi.vfs.VirtualFile
@@ -14,6 +13,7 @@ import java.nio.file.Path
 import java.nio.file.Paths
 
 @Service
+@Deprecated("use database.AutoCpDB")
 class ProblemSpecManager(private val project: Project) {
 
     private val gson by lazy { Gson() }
