@@ -6,7 +6,8 @@ import database.models.ProblemSpec
 import database.models.ProblemState
 import database.models.TestcaseSpec
 import database.utils.encodedJoin
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -25,7 +26,7 @@ abstract class AutoCpTest {
         problemData = ProblemData(
             ProblemSpec("super", "groupName"),
             ProblemState(-1),
-            listOf(TestcaseSpec("Testcase #1"))
+            listOf(TestcaseSpec("Testcase #1", "Input", "Output"))
         )
     }
 
@@ -38,7 +39,12 @@ abstract class AutoCpTest {
         assertNotNull(data)
         assertEquals(problemData.spec, data!!.spec)
         assertEquals(problemData.state.selectedIndex, data.state.selectedIndex)
-        assertEquals(problemData.testcases[0].name, data.testcases[0].name)
+
+        // comparing testcases ignoring id
+        problemData.testcases.zip(data.testcases).forEach { (first, second) ->
+            val firstLike = first.copy(id = second.id)
+            assertEquals(firstLike, second)
+        }
     }
 
     @Nested
@@ -62,11 +68,16 @@ abstract class AutoCpTest {
         @Test
         fun updateTestcaseSpecs() {
             val data = database.getProblemData(solutionPath)!!
-            val dataUpdate = TestcaseSpec(data.testcases[0].id, "ChangedName")
+            val dataUpdate = problemData.testcases[0].copy(id = data.testcases[0].id, name = "ChangedName")
             database.updateTestcaseSpecs(listOf(dataUpdate))
             val changedData = database.getProblemData(solutionPath)
             assertNotNull(changedData)
-            assertEquals(changedData!!.testcases, listOf(dataUpdate))
+
+            // comparing testcases ignoring id and changedName
+            problemData.testcases.zip(changedData!!.testcases).forEach { (first, second) ->
+                val firstLike = first.copy(id = second.id, name = "ChangedName")
+                assertEquals(firstLike, second)
+            }
         }
     }
 

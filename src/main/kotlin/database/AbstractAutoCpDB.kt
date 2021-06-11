@@ -10,7 +10,7 @@ import database.utils.encodedJoin
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 
-abstract class AbstractAutoCpImpl(project: Project) : AutoCp {
+abstract class AbstractAutoCpDB(project: Project) : AutoCp {
 
     final override val instance = Database.connect("jdbc:sqlite:${project.basePath}/.autocp", "org.sqlite.JDBC")
 
@@ -33,16 +33,11 @@ abstract class AbstractAutoCpImpl(project: Project) : AutoCp {
         TestcaseSpecs.batchInsert(testcaseSpecs) { spec ->
             this[TestcaseSpecs.problemId] = problemId
             this[TestcaseSpecs.name] = spec.name
+            this[TestcaseSpecs.input] = spec.input
+            this[TestcaseSpecs.output] = spec.output
         }
     }
 
-    protected fun getProblemIdOfSolution(solutionPath: String): String? {
-        return SolutionSpecs.select { SolutionSpecs.solutionPath eq solutionPath }
-            .firstOrNull()
-            ?.let {
-                it[SolutionSpecs.problemId]
-            }
-    }
 
     protected fun getProblemSpecAndState(problemId: String): Pair<ProblemSpec, ProblemState>? {
         return ProblemSpecs.select { ProblemSpecs.problemId eq problemId }
@@ -57,11 +52,5 @@ abstract class AbstractAutoCpImpl(project: Project) : AutoCp {
                         )
                     }
             }
-    }
-
-    protected fun getTestcases(problemId: String): List<TestcaseSpec> {
-        return TestcaseSpecs.select { TestcaseSpecs.problemId eq problemId }.map {
-            TestcaseSpec(it[TestcaseSpecs.id].value, it[TestcaseSpecs.name])
-        }
     }
 }

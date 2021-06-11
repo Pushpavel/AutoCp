@@ -7,13 +7,12 @@ import database.models.ProblemSpec
 import database.models.ProblemState
 import database.models.TestcaseSpec
 import database.tables.*
-import database.utils.encodedJoin
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.lang.IllegalStateException
 
 @Service
-class AutoCpImpl(project: Project) : AbstractAutoCpImpl(project) {
+class AutoCpDB(project: Project) : AbstractAutoCpDB(project) {
 
 
     override fun addProblemData(data: ProblemData) {
@@ -25,20 +24,17 @@ class AutoCpImpl(project: Project) : AbstractAutoCpImpl(project) {
 
     override fun getProblemData(solutionPath: String): ProblemData? {
         return transaction(instance) {
-            val id = getProblemIdOfSolution(solutionPath) ?: return@transaction null
+            val id = SolutionSpecs.withSolutionPath(solutionPath) ?: return@transaction null
             val pair = getProblemSpecAndState(id)
                 ?: throw IllegalStateException("Problem Associated with $solutionPath is probably deleted")
-            val testcases = getTestcases(id)
+            val testcases = TestcaseSpecs.withProblemId(id)
             return@transaction ProblemData(pair.first, pair.second, testcases)
         }
     }
 
     override fun associateSolutionWithProblem(problemSpec: ProblemSpec, solutionPath: String) {
         transaction(instance) {
-            SolutionSpecs.insert {
-                it[this.solutionPath] = solutionPath
-                it[this.problemId] = encodedJoin(problemSpec.name, problemSpec.group)
-            }
+            SolutionSpecs.insertModel(problemSpec, solutionPath)
         }
     }
 
