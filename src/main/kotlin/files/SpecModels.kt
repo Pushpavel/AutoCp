@@ -1,7 +1,7 @@
 package files
 
-import plugin.services.ProblemJson
-import plugin.services.TestJson
+import gather.models.ProblemJson
+import gather.models.TestJson
 import java.io.File
 
 @Deprecated("use database.models.ProblemSpec")

@@ -9,7 +9,7 @@ import com.intellij.util.xmlb.XmlSerializerUtil
 )
 @Service
 data class AutoCpSettings(
-    var preferredLanguage: String? = "cpp",
+    var preferredLanguage: String? = "C++",
     var solutionLanguages: MutableList<SolutionLanguage> = getDefaultSolutionLanguages(),
     var selectedIndex: Int? = 0,
 ) : PersistentStateComponent<AutoCpSettings> {

@@ -32,7 +32,7 @@ class AutoCpDB(project: Project) : AbstractAutoCpDB(project) {
         }
     }
 
-    override fun associateSolutionWithProblem(problemSpec: ProblemSpec, solutionPath: String) {
+    override fun associateSolutionWithProblem(solutionPath: String, problemSpec: ProblemSpec) {
         transaction(instance) {
             SolutionSpecs.insertModel(problemSpec, solutionPath)
         }

@@ -6,7 +6,6 @@ import database.models.ProblemSpec
 import database.models.ProblemState
 import database.models.TestcaseSpec
 import database.utils.encodedJoin
-import org.junit.Ignore
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.BeforeEach
@@ -35,7 +34,7 @@ abstract class AutoCpTest {
     fun basicSetupOperations() {
         database.addProblemData(problemData)
         val solutionPath = "C:\\path\\to\\solution.cpp"
-        database.associateSolutionWithProblem(problemData.spec, solutionPath)
+        database.associateSolutionWithProblem(solutionPath, problemData.spec)
         val data = database.getProblemData(solutionPath)
         assertNotNull(data)
         assertEquals(problemData.spec, data!!.spec)
@@ -56,7 +55,7 @@ abstract class AutoCpTest {
         fun setUp() {
             database.addProblemData(problemData)
             solutionPath = "C:\\path\\to\\solution.cpp"
-            database.associateSolutionWithProblem(problemData.spec, solutionPath)
+            database.associateSolutionWithProblem(solutionPath, problemData.spec)
         }
 
         @Test

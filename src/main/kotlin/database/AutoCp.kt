@@ -14,7 +14,7 @@ interface AutoCp {
     fun addProblemData(data: ProblemData)
     fun getProblemData(solutionPath: String): ProblemData?
 
-    fun associateSolutionWithProblem(problemSpec: ProblemSpec, solutionPath: String)
+    fun associateSolutionWithProblem(solutionPath: String, problemSpec: ProblemSpec)
 
     fun addTestcaseSpec(spec: TestcaseSpec)
 

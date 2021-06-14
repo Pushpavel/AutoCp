@@ -16,8 +16,8 @@
         <toolWindow factoryClass="tool.ToolFactory" id="AutoCp" icon="AllIcons.General.Modified"/>
     </extensions>
     <actions>
-        <action id="dev.pushpavel.autoCP.plugin.actions.GatherProblemsAction"
-                class="plugin.actions.GatherProblemsAction"
+        <action id="dev.pushpavel.autoCP.gather.GatherProblemsAction"
+                class="gather.GatherProblemsAction"
                 text="Gather Problems"
                 description="Gathers problems parsed by competitive companion browser extension"/>
     </actions>
