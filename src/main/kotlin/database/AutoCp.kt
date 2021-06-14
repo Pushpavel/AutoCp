@@ -8,6 +8,7 @@ import org.jetbrains.exposed.sql.Database
 
 interface AutoCp {
 
+    @Deprecated("this is not necessary")
     val instance: Database
 
     // ProblemData

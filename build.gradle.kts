@@ -12,7 +12,8 @@ plugins {
     id("org.jetbrains.intellij") version "1.0"
     // gradle-changelog-plugin - read more: https://github.com/JetBrains/gradle-changelog-plugin
     id("org.jetbrains.changelog") version "1.1.2"
-    // detekt linter - read more: https://detekt.github.io/detekt/gradle.html
+
+    id("com.squareup.sqldelight") version "1.5.0"
 }
 
 group = properties("pluginGroup")
@@ -21,6 +22,7 @@ version = properties("pluginVersion")
 repositories {
     mavenCentral()
 }
+
 dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:1.5.0")
@@ -35,9 +37,20 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.2")
     testImplementation("io.mockk:mockk:1.11.0")
 
+    implementation("com.squareup.sqldelight:sqlite-driver:1.5.0")
 
     configurations.forEach {
         it.exclude("org.slf4j", "slf4j-api")
+    }
+}
+
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath("com.squareup.sqldelight:gradle-plugin:1.5.0")
     }
 }
 
@@ -60,6 +73,12 @@ intellij {
 changelog {
     version = properties("pluginVersion")
     groups = emptyList()
+}
+
+sqldelight {
+    database("AutoCpDatabase") {
+        packageName = "dev.pushpavel.autocp.database"
+    }
 }
 
 tasks {

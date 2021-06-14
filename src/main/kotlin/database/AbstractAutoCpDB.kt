@@ -10,6 +10,7 @@ import database.utils.encodedJoin
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 
+@Deprecated("use AcpDatabase")
 abstract class AbstractAutoCpDB(project: Project) : AutoCp {
 
     final override val instance = Database.connect("jdbc:sqlite:${project.basePath}/.autocp", "org.sqlite.JDBC")

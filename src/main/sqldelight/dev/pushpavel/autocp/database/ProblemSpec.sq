@@ -1,0 +1,5 @@
+CREATE TABLE ProblemSpecs(
+    name TEXT NOT NULL,
+    problemGroup TEXT NOT NULL,
+    PRIMARY KEY(name,problemGroup)
+);

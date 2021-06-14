@@ -12,6 +12,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import java.lang.IllegalStateException
 
 @Service
+@Deprecated("use AcpDatabase")
 class AutoCpDB(project: Project) : AbstractAutoCpDB(project) {
 
 
