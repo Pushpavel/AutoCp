@@ -1,9 +1,9 @@
 package gather.models
 
-import database.models.ProblemSpec
+import database.models.ProblemInfo
 import database.models.TestcaseSpec
 
 data class GatheredProblem(
-    val spec: ProblemSpec,
+    val info: ProblemInfo,
     val testcases: List<TestcaseSpec>
 )

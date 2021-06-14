@@ -2,8 +2,8 @@ package database
 
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.project.Project
-import database.models.ProblemData
 import database.models.ProblemSpec
+import database.models.ProblemInfo
 import database.models.ProblemState
 import database.models.TestcaseSpec
 import database.tables.*
@@ -16,26 +16,26 @@ import java.lang.IllegalStateException
 class AutoCpDB(project: Project) : AbstractAutoCpDB(project) {
 
 
-    override fun addProblemData(data: ProblemData) {
+    override fun addProblemData(spec: ProblemSpec) {
         transaction(instance) {
-            val id = addProblemSpecAndState(data.spec, data.state)
-            addTestcase(id, data.testcases)
+            val id = addProblemSpecAndState(spec.info, spec.state)
+            addTestcase(id, spec.testcases)
         }
     }
 
-    override fun getProblemData(solutionPath: String): ProblemData? {
+    override fun getProblemData(solutionPath: String): ProblemSpec? {
         return transaction(instance) {
             val id = SolutionSpecs.withSolutionPath(solutionPath) ?: return@transaction null
             val pair = getProblemSpecAndState(id)
                 ?: throw IllegalStateException("Problem Associated with $solutionPath is probably deleted")
             val testcases = TestcaseSpecs.withProblemId(id)
-            return@transaction ProblemData(pair.first, pair.second, testcases)
+            return@transaction ProblemSpec(pair.first, pair.second, testcases)
         }
     }
 
-    override fun associateSolutionWithProblem(solutionPath: String, problemSpec: ProblemSpec) {
+    override fun associateSolutionWithProblem(solutionPath: String, problemInfo: ProblemInfo) {
         transaction(instance) {
-            SolutionSpecs.insertModel(problemSpec, solutionPath)
+            SolutionSpecs.insertModel(problemInfo, solutionPath)
         }
     }
 

@@ -1,6 +1,7 @@
 package database.models
 
 data class ProblemSpec(
-    val name: String,
-    val group: String
+    val info: ProblemInfo,
+    val state: ProblemState,
+    val testcases: List<TestcaseSpec>
 )

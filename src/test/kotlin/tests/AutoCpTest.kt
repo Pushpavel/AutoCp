@@ -1,8 +1,8 @@
 package tests
 
 import database.AutoCp
-import database.models.ProblemData
 import database.models.ProblemSpec
+import database.models.ProblemInfo
 import database.models.ProblemState
 import database.models.TestcaseSpec
 import database.utils.encodedJoin
@@ -17,14 +17,14 @@ import java.nio.file.Path
 abstract class AutoCpTest {
 
     private lateinit var database: AutoCp
-    private lateinit var problemData: ProblemData
+    private lateinit var problemSpec: ProblemSpec
     private val problemId = encodedJoin("super", "groupName")
 
     @BeforeEach
     fun setUp(@TempDir tempDir: Path) {
         database = getInstance(tempDir)
-        problemData = ProblemData(
-            ProblemSpec("super", "groupName"),
+        problemSpec = ProblemSpec(
+            ProblemInfo("super", "groupName"),
             ProblemState(-1),
             listOf(TestcaseSpec("Testcase #1", "Input", "Output"))
         )
@@ -32,16 +32,16 @@ abstract class AutoCpTest {
 
     @Test
     fun basicSetupOperations() {
-        database.addProblemData(problemData)
+        database.addProblemData(problemSpec)
         val solutionPath = "C:\\path\\to\\solution.cpp"
-        database.associateSolutionWithProblem(solutionPath, problemData.spec)
+        database.associateSolutionWithProblem(solutionPath, problemSpec.info)
         val data = database.getProblemData(solutionPath)
         assertNotNull(data)
-        assertEquals(problemData.spec, data!!.spec)
-        assertEquals(problemData.state.selectedIndex, data.state.selectedIndex)
+        assertEquals(problemSpec.info, data!!.info)
+        assertEquals(problemSpec.state.selectedIndex, data.state.selectedIndex)
 
         // comparing testcases ignoring id
-        problemData.testcases.zip(data.testcases).forEach { (first, second) ->
+        problemSpec.testcases.zip(data.testcases).forEach { (first, second) ->
             val firstLike = first.copy(id = second.id)
             assertEquals(firstLike, second)
         }
@@ -53,9 +53,9 @@ abstract class AutoCpTest {
 
         @BeforeEach
         fun setUp() {
-            database.addProblemData(problemData)
+            database.addProblemData(problemSpec)
             solutionPath = "C:\\path\\to\\solution.cpp"
-            database.associateSolutionWithProblem(solutionPath, problemData.spec)
+            database.associateSolutionWithProblem(solutionPath, problemSpec.info)
         }
 
         @Test
@@ -68,13 +68,13 @@ abstract class AutoCpTest {
         @Test
         fun updateTestcaseSpecs() {
             val data = database.getProblemData(solutionPath)!!
-            val dataUpdate = problemData.testcases[0].copy(id = data.testcases[0].id, name = "ChangedName")
+            val dataUpdate = problemSpec.testcases[0].copy(id = data.testcases[0].id, name = "ChangedName")
             database.updateTestcaseSpecs(listOf(dataUpdate))
             val changedData = database.getProblemData(solutionPath)
             assertNotNull(changedData)
 
             // comparing testcases ignoring id and changedName
-            problemData.testcases.zip(changedData!!.testcases).forEach { (first, second) ->
+            problemSpec.testcases.zip(changedData!!.testcases).forEach { (first, second) ->
                 val firstLike = first.copy(id = second.id, name = "ChangedName")
                 assertEquals(firstLike, second)
             }

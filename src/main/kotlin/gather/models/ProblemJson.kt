@@ -1,6 +1,6 @@
 package gather.models
 
-import database.models.ProblemSpec
+import database.models.ProblemInfo
 
 data class ProblemJson(
     val name: String,
@@ -13,7 +13,7 @@ data class ProblemJson(
 ) {
 
     fun toGatheredProblem(): GatheredProblem {
-        val spec = ProblemSpec(name, group)
+        val spec = ProblemInfo(name, group)
         val testcases = tests.mapIndexed { index, testJson ->
             testJson.toTestcaseSpec("Testcase #$index")
         }

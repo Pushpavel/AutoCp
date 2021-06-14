@@ -1,7 +1,7 @@
 package database
 
 import com.intellij.openapi.project.Project
-import database.models.ProblemSpec
+import database.models.ProblemInfo
 import database.models.ProblemState
 import database.models.TestcaseSpec
 import database.tables.*
@@ -23,9 +23,9 @@ abstract class AbstractAutoCpDB(project: Project) : AutoCp {
     }
 
 
-    protected fun addProblemSpecAndState(spec: ProblemSpec, state: ProblemState): String {
+    protected fun addProblemSpecAndState(info: ProblemInfo, state: ProblemState): String {
         return ProblemSpecs.insert {
-            it[problemId] = encodedJoin(spec.name, spec.group)
+            it[problemId] = encodedJoin(info.name, info.group)
             it[selectedIndex] = state.selectedIndex
         }[ProblemSpecs.problemId]
     }
@@ -40,7 +40,7 @@ abstract class AbstractAutoCpDB(project: Project) : AutoCp {
     }
 
 
-    protected fun getProblemSpecAndState(problemId: String): Pair<ProblemSpec, ProblemState>? {
+    protected fun getProblemSpecAndState(problemId: String): Pair<ProblemInfo, ProblemState>? {
         return ProblemSpecs.select { ProblemSpecs.problemId eq problemId }
             .firstOrNull()
             ?.let {
@@ -48,7 +48,7 @@ abstract class AbstractAutoCpDB(project: Project) : AutoCp {
                     .decodedSplit()
                     .let { data ->
                         Pair(
-                            ProblemSpec(data[0], data[1]),
+                            ProblemInfo(data[0], data[1]),
                             ProblemState(problemId, it[ProblemSpecs.selectedIndex])
                         )
                     }

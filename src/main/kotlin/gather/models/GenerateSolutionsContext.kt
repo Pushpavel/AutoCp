@@ -1,10 +1,10 @@
 package gather.models
 
-import database.models.ProblemSpec
+import database.models.ProblemInfo
 import plugin.settings.SolutionLanguage
 
 data class GenerateSolutionsContext(
-    val problems: List<ProblemSpec>,
+    val problems: List<ProblemInfo>,
     val lang: SolutionLanguage,
 
     )
