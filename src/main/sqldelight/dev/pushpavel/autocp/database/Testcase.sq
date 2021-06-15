@@ -1,5 +1,6 @@
 CREATE TABLE Testcase (
     name TEXT NOT NULL,
+    listIndex INTEGER NOT NULL,
     input TEXT NOT NULL,
     output TEXT NOT NULL,
     problemName TEXT NOT NULL,
@@ -14,7 +15,8 @@ insertTestcase:
 
 getTestcases:
     SELECT * FROM Testcase
-    WHERE problemName = ? AND problemGroup = ?;
+    WHERE problemName = ? AND problemGroup = ?
+    ORDER BY listIndex;
 
 updateTestcase:
     REPLACE

@@ -2,8 +2,10 @@ package database
 
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.project.Project
+import com.intellij.util.containers.OrderedSet
 import database.diff.TestcaseDiff
 import database.models.ProblemSpec
+import dev.pushpavel.autocp.database.Problem
 import dev.pushpavel.autocp.database.ProblemInfo
 import dev.pushpavel.autocp.database.ProblemState
 import dev.pushpavel.autocp.database.Testcase
@@ -33,6 +35,7 @@ class AcpDatabase(project: Project) : AbstractAcpDatabase(project) {
         )
     }
 
+
     override fun getProblemSpec(solutionPath: String) = runCatching {
         val relation = relateQ.getProblemSolution(solutionPath).executeAsOne()
         val info = infoQ.getProblemInfo(relation.problemName, relation.problemGroup).executeAsOne()
@@ -47,10 +50,12 @@ class AcpDatabase(project: Project) : AbstractAcpDatabase(project) {
         stateQ.updateProblemState(state)
     }
 
+
     override fun updateTestcases(info: ProblemInfo, testcases: List<Testcase>) = runCatching {
         val prevTestcases = testQ.getTestcases(info.name, info.problemGroup).executeAsList()
         testcaseDiff.applyUpdates(prevTestcases, testcases)
     }
+
 
     override fun updateTestcase(testcase: Testcase) = runCatching {
         testQ.updateTestcase(testcase)
@@ -62,5 +67,25 @@ class AcpDatabase(project: Project) : AbstractAcpDatabase(project) {
 
     override fun removeTestcase(testcase: Testcase) = runCatching {
         testQ.removeTestcase(testcase.name, testcase.problemName, testcase.problemGroup)
+    }
+
+    override fun associateSolutionToProblem(solutionPath: String, problem: Problem): Result<Unit> {
+        TODO("Not yet implemented")
+    }
+
+    override fun updateProblemState(selectedIndex: Int): Result<Unit> {
+        TODO("Not yet implemented")
+    }
+
+    override fun updateTestcases(problem: Problem, testcases: OrderedSet<Unit>): Result<Unit> {
+        TODO("Not yet implemented")
+    }
+
+    override fun insertProblems(problems: List<Problem>): Result<Unit> {
+        TODO("Not yet implemented")
+    }
+
+    override fun getProblem(solutionPath: String): Result<Problem> {
+        TODO("Not yet implemented")
     }
 }

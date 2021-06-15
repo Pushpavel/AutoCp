@@ -1,0 +1,15 @@
+import com.intellij.util.containers.OrderedSet;
+import database.models.Testcase;
+
+CREATE TABLE Problem (
+    name TEXT NOT NULL,
+    groupName TEXT NOT NULL,
+    testcases TEXT AS OrderedSet<Testcase> NOT NULL,
+    selectedIndex INTEGER NOT NULL DEFAULT -1,
+    PRIMARY KEY(name,groupName)
+);
+
+
+insertProblem:
+    INSERT INTO Problem
+    VALUES ?;

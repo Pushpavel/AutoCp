@@ -9,9 +9,16 @@ import kotlin.io.path.pathString
 abstract class AbstractAcpDatabase(project: Project) : IAutoCp {
     private val dbPath = project.basePath?.let { Paths.get(it, ".autocp").pathString } ?: ""
     protected val db: AutoCpDatabase
+
+    @Deprecated("use ProblemQueries")
     protected val infoQ: ProblemInfoQueries
+
+    @Deprecated("use ProblemQueries")
     protected val stateQ: ProblemStateQueries
+
+    @Deprecated("use ProblemQueries")
     protected val testQ: TestcaseQueries
+
     protected val relateQ: SolutionProblemQueries
     private val driver = JdbcSqliteDriver(JdbcSqliteDriver.IN_MEMORY + dbPath)
 

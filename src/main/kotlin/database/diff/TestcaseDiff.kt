@@ -3,6 +3,7 @@ package database.diff
 import dev.pushpavel.autocp.database.Testcase
 import dev.pushpavel.autocp.database.TestcaseQueries
 
+@Deprecated("unused")
 class TestcaseDiff(testQ: TestcaseQueries) : BaseDiff<Testcase>() {
 
     private val updater = Updater(testQ)
