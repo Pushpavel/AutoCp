@@ -5,6 +5,7 @@ import com.squareup.sqldelight.sqlite.driver.JdbcSqliteDriver
 import database.utils.TestcaseColumnAdapter
 import dev.pushpavel.autocp.database.*
 import java.nio.file.Paths
+import java.util.*
 import kotlin.io.path.pathString
 
 abstract class AbstractAcpDatabase(project: Project) : IAutoCp {
@@ -15,9 +16,14 @@ abstract class AbstractAcpDatabase(project: Project) : IAutoCp {
     protected val problemQ: ProblemQueries
     protected val relateQ: SolutionProblemQueries
 
-    private val driver = JdbcSqliteDriver(JdbcSqliteDriver.IN_MEMORY + dbPath)
+    private val driver = JdbcSqliteDriver((JdbcSqliteDriver.IN_MEMORY + dbPath), Properties())
 
     init {
+        // workaround for https://stackoverflow.com/questions/43529832/trying-to-connect-to-a-sqlite-database-keep-getting-no-suitable-driver-found
+        Class.forName("org.sqlite.JDBC")
+
+        db = AutoCpDatabase(driver, Problem.Adapter(TestcaseColumnAdapter()))
+
         val version = getVersion()
 
         if (version == 0) {
@@ -30,7 +36,6 @@ abstract class AbstractAcpDatabase(project: Project) : IAutoCp {
                 setVersion(schemaVer)
             }
         }
-        db = AutoCpDatabase(driver, Problem.Adapter(TestcaseColumnAdapter()))
 
         problemQ = db.problemQueries
         relateQ = db.solutionProblemQueries
