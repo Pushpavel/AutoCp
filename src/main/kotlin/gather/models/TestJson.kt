@@ -1,10 +1,10 @@
 package gather.models
 
-import database.models.TestcaseSpec
+import database.models.Testcase
 
 data class TestJson(
     val input: String,
     val output: String,
 ) {
-    fun toTestcaseSpec(name: String) = TestcaseSpec(name, input, output)
+    fun toTestcase(name: String) = Testcase(name, input, output)
 }

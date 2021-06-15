@@ -1,7 +1,9 @@
 package gather.models
 
+import dev.pushpavel.autocp.database.Problem
+
 data class ProblemGatheredEvent(
-    val gatheredProblem: GatheredProblem,
+    val problem: Problem,
     val gathered: Int,
     val total: Int,
 )

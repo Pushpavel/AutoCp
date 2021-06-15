@@ -35,7 +35,7 @@ class GatheringReporterDialog(project: Project, parentScope: CoroutineScope) : A
 
         job = parentScope.launch {
             for (event in eventsChannel) {
-                headerLabel.text = "Gathering problems from \"${event.gatheredProblem.info.group}\""
+                headerLabel.text = "Gathering problems from \"${event.problem.groupName}\""
                 statusLabel.text = "(${event.gathered}/${event.total})"
             }
         }

@@ -1,6 +1,7 @@
 package gather.models
 
-import database.models.ProblemInfo
+import com.intellij.util.containers.OrderedSet
+import dev.pushpavel.autocp.database.Problem
 
 data class ProblemJson(
     val name: String,
@@ -12,13 +13,13 @@ data class ProblemJson(
     val batch: BatchJson
 ) {
 
-    fun toGatheredProblem(): GatheredProblem {
-        val spec = ProblemInfo(name, group)
+    fun toProblem(): Problem {
+
         val testcases = tests.mapIndexed { index, testJson ->
-            testJson.toTestcaseSpec("Testcase #$index")
+            testJson.toTestcase("Testcase #$index")
         }
 
-        return GatheredProblem(spec, testcases)
+        return Problem(name, group, OrderedSet(testcases), -1)
     }
 
 }

@@ -8,9 +8,7 @@ import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.application.invokeLater
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.DumbAware
-import database.AutoCpDB
-import database.models.OldProblemSpec
-import database.models.ProblemState
+import database.AcpDatabase
 import gather.server.createServer
 import gather.server.getResponsesAsync
 import gather.ui.GatheringReporterDialog
@@ -52,12 +50,11 @@ class GatherProblemsAction : AnAction(), DumbAware {
                 }
             } ?: return@launch
 
-            val service = project.service<AutoCpDB>()
+            val service = project.service<AcpDatabase>()
 
-            for (it in problems)
-                service.addProblemData(OldProblemSpec(it.info, ProblemState(), it.testcases))
+            service.insertProblems(problems).getOrThrow()
 
-            val dialog = GenerateSolutionsDialog(project, problems.map { it.info })
+            val dialog = GenerateSolutionsDialog(project, problems)
             val result = dialog.getResult() ?: return@launch
 
             generateSolutionFiles(project, result)
@@ -66,10 +63,11 @@ class GatherProblemsAction : AnAction(), DumbAware {
                 Notification(
                     "AutoCp Notification Group",
                     "Generated solution files",
-                    result.problems[0].group + " files generated",
+                    result.problems[0].groupName + " files generated",
                     NotificationType.INFORMATION
                 )
             )
+
         }
     }
 

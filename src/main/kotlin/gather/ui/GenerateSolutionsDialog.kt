@@ -6,7 +6,7 @@ import com.intellij.openapi.ui.DialogWrapper
 import com.intellij.ui.CollectionComboBoxModel
 import com.intellij.ui.layout.panel
 import com.intellij.ui.treeStructure.Tree
-import database.models.ProblemInfo
+import dev.pushpavel.autocp.database.Problem
 import gather.models.GenerateSolutionsContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -15,7 +15,7 @@ import javax.swing.tree.DefaultMutableTreeNode
 import javax.swing.tree.DefaultTreeModel
 import javax.swing.tree.TreeModel
 
-class GenerateSolutionsDialog(project: Project, private val problems: List<ProblemInfo>) :
+class GenerateSolutionsDialog(project: Project, private val problems: List<Problem>) :
     DialogWrapper(project, false) {
 
     private val settings = project.service<AutoCpSettings>()
@@ -39,7 +39,7 @@ class GenerateSolutionsDialog(project: Project, private val problems: List<Probl
 
 
     private fun createProblemsTreeModel(): TreeModel {
-        val rootNode = DefaultMutableTreeNode(problems[0].group)
+        val rootNode = DefaultMutableTreeNode(problems[0].groupName)
 
         for (it in problems) {
             val node = DefaultMutableTreeNode(it.name)
