@@ -52,17 +52,17 @@ abstract class IAutoCpTest {
         assertArrayEquals(problemSpec.testcases.toTypedArray(), data.testcases.toTypedArray())
     }
 
-//    @Nested
-//    inner class MutationOperations {
-//        lateinit var solutionPath: String
-//
-//        @BeforeEach
-//        fun setUp() {
-//            database.insertProblemSpecs(listOf(problemSpec))
-//            solutionPath = "C:\\path\\to\\solution.cpp"
-//            database.associateSolutionToProblem(solutionPath, problemSpec.info)
-//        }
-//
+    @Nested
+    inner class MutationOperations {
+        lateinit var solutionPath: String
+
+        @BeforeEach
+        fun setUp() {
+            database.insertProblemSpecs(listOf(problemSpec))
+            solutionPath = "C:\\path\\to\\solution.cpp"
+            database.associateSolutionToProblem(solutionPath, problemSpec.info)
+        }
+
 //        @Test
 //        fun updateProblemState() {
 //            database.updateProblemState(ProblemState(problemId, 34))
@@ -84,7 +84,7 @@ abstract class IAutoCpTest {
 //                assertEquals(firstLike, second)
 //            }
 //        }
-//    }
+    }
 
 
     abstract fun getInstance(): IAutoCp
