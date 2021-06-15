@@ -18,7 +18,6 @@ abstract class IAutoCpTest {
 
     private lateinit var database: IAutoCp
     private lateinit var problemSpec: ProblemSpec
-    private val problemId = encodedJoin("super", "groupName")
 
     @BeforeEach
     fun setUp() {
@@ -63,27 +62,26 @@ abstract class IAutoCpTest {
             database.associateSolutionToProblem(solutionPath, problemSpec.info)
         }
 
-//        @Test
-//        fun updateProblemState() {
-//            database.updateProblemState(ProblemState(problemId, 34))
-//            val data = database.getProblemData(solutionPath)!!
-//            assertEquals(34, data.state.selectedIndex)
-//        }
-//
-//        @Test
-//        fun updateTestcaseSpecs() {
-//            val data = database.getProblemData(solutionPath)!!
-//            val dataUpdate = problemSpec.testcases[0].copy(id = data.testcases[0].id, name = "ChangedName")
-//            database.updateTestcaseSpecs(listOf(dataUpdate))
-//            val changedData = database.getProblemData(solutionPath)
-//            assertNotNull(changedData)
-//
-//            // comparing testcases ignoring id and changedName
-//            problemSpec.testcases.zip(changedData!!.testcases).forEach { (first, second) ->
-//                val firstLike = first.copy(id = second.id, name = "ChangedName")
-//                assertEquals(firstLike, second)
-//            }
-//        }
+        @Test
+        fun updateProblemState() {
+            val updatedProblemState = problemSpec.state.copy(selectedIndex = 34)
+            database.updateProblemState(updatedProblemState)
+            val data = database.getProblemSpec(solutionPath).getOrThrow()
+            assertEquals(updatedProblemState, data.state)
+        }
+
+        @Test
+        fun updateTestcaseSpecs() {
+            val data = database.getProblemSpec(solutionPath).getOrThrow()
+            val updatedTestcase = data.testcases[0].copy(name = "ChangedName", output = "output changed")
+
+            database.updateTestcases(listOf(updatedTestcase))
+
+            val changedData = database.getProblemSpec(solutionPath).getOrThrow()
+            assertNotNull(changedData)
+
+            assertEquals(listOf(updatedTestcase), changedData.testcases)
+        }
     }
 
 

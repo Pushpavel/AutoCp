@@ -15,3 +15,12 @@ insertTestcase:
 getTestcases:
     SELECT * FROM Testcase
     WHERE problemName = ? AND problemGroup = ?;
+
+updateTestcase:
+    REPLACE
+    INTO Testcase
+    VALUES ?;
+
+removeTestcase:
+    DELETE FROM Testcase
+    WHERE name = ? AND problemName = ? AND problemGroup = ?;

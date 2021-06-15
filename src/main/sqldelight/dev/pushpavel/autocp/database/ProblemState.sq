@@ -15,3 +15,7 @@ insertProblemState:
 getProblemState:
     SELECT * FROM ProblemState
     WHERE problemName = ? AND problemGroup = ?;
+
+updateProblemState:
+    REPLACE INTO ProblemState
+    VALUES ?;
