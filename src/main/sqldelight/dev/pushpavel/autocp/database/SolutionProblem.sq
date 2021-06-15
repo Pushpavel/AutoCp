@@ -2,7 +2,7 @@ CREATE TABLE SolutionProblem (
     solutionPath TEXT NOT NULL,
     problemName TEXT NOT NULL,
     problemGroup TEXT NOT NULL,
-    FOREIGN KEY(problemName,problemGroup) REFERENCES ProblemInfo(name,problemGroup),
+    FOREIGN KEY(problemName,problemGroup) REFERENCES Problem(name,groupName),
     PRIMARY KEY(solutionPath)
 );
 

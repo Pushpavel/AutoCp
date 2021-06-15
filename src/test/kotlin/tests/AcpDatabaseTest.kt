@@ -14,8 +14,6 @@ class AcpDatabaseTest : IAutoCpTest() {
     override fun getInstance(): IAutoCp {
         val projectMock = mockk<Project>()
         every { projectMock.basePath } returns null
-
-
         return AcpDatabase(projectMock)
     }
 }

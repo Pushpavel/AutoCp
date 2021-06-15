@@ -5,7 +5,7 @@ CREATE TABLE Problem (
     name TEXT NOT NULL,
     groupName TEXT NOT NULL,
     testcases TEXT AS OrderedSet<Testcase> NOT NULL,
-    selectedIndex INTEGER NOT NULL DEFAULT -1,
+    selectedTestcaseIndex INTEGER NOT NULL,
     PRIMARY KEY(name,groupName)
 );
 
@@ -13,3 +13,17 @@ CREATE TABLE Problem (
 insertProblem:
     INSERT INTO Problem
     VALUES ?;
+
+getProblem:
+    SELECT * FROM Problem
+    WHERE name = ? AND groupName = ?;
+
+updateProblemState:
+    UPDATE Problem
+    SET selectedTestcaseIndex = ?
+    WHERE name = ? AND groupName = ?;
+
+updateTestcases:
+    UPDATE Problem
+    SET testcases = ?
+    WHERE name = ? AND groupName = ?;

@@ -2,24 +2,19 @@ package database
 
 import com.intellij.openapi.project.Project
 import com.squareup.sqldelight.sqlite.driver.JdbcSqliteDriver
+import database.utils.TestcaseColumnAdapter
 import dev.pushpavel.autocp.database.*
 import java.nio.file.Paths
 import kotlin.io.path.pathString
 
 abstract class AbstractAcpDatabase(project: Project) : IAutoCp {
     private val dbPath = project.basePath?.let { Paths.get(it, ".autocp").pathString } ?: ""
+
     protected val db: AutoCpDatabase
 
-    @Deprecated("use ProblemQueries")
-    protected val infoQ: ProblemInfoQueries
-
-    @Deprecated("use ProblemQueries")
-    protected val stateQ: ProblemStateQueries
-
-    @Deprecated("use ProblemQueries")
-    protected val testQ: TestcaseQueries
-
+    protected val problemQ: ProblemQueries
     protected val relateQ: SolutionProblemQueries
+
     private val driver = JdbcSqliteDriver(JdbcSqliteDriver.IN_MEMORY + dbPath)
 
     init {
@@ -35,11 +30,9 @@ abstract class AbstractAcpDatabase(project: Project) : IAutoCp {
                 setVersion(schemaVer)
             }
         }
-        db = AutoCpDatabase(driver)
+        db = AutoCpDatabase(driver, Problem.Adapter(TestcaseColumnAdapter()))
 
-        infoQ = db.problemInfoQueries
-        stateQ = db.problemStateQueries
-        testQ = db.testcaseQueries
+        problemQ = db.problemQueries
         relateQ = db.solutionProblemQueries
     }
 

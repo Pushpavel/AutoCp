@@ -1,6 +1,5 @@
 package database.models
 
-import dev.pushpavel.autocp.database.Testcase
 
 @Deprecated("after migration use Testcase")
 data class TestcaseSpec(
@@ -22,12 +21,4 @@ data class TestcaseSpec(
         ""
     ) // constructor for creating new instances to be added to db
 
-
-    @Deprecated(
-        "use this till this data class is migrated to Testcase", ReplaceWith(
-            "Testcase(name, input, output, problemName, problemGroup)",
-            "dev.pushpavel.autocp.database.Testcase"
-        )
-    )
-    fun toTestcase() = Testcase(name, input, output, problemName, problemGroup)
 }

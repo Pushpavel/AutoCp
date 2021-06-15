@@ -1,23 +1,18 @@
 package tests
 
+import com.intellij.util.containers.OrderedSet
 import database.IAutoCp
-import database.models.ProblemSpec
-import database.utils.encodedJoin
-import dev.pushpavel.autocp.database.ProblemInfo
-import dev.pushpavel.autocp.database.ProblemState
-import dev.pushpavel.autocp.database.Testcase
+import database.models.Testcase
+import dev.pushpavel.autocp.database.Problem
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.io.TempDir
-import java.nio.file.Path
 
 abstract class IAutoCpTest {
 
     private lateinit var database: IAutoCp
-    private lateinit var problemSpec: ProblemSpec
+    private lateinit var problem: Problem
 
     @BeforeEach
     fun setUp() {
@@ -29,125 +24,73 @@ abstract class IAutoCpTest {
 
     @Test
     fun basicSetupOperations() {
-
-        problemSpec = ProblemSpec(
-            ProblemInfo("name", "group"),
-            ProblemState(-1, "name", "group"),
-            listOf(
-                Testcase("Testcase #1", "Input", "Output", "name", "group"),
-            )
+        problem = Problem(
+            "name",
+            "group",
+            OrderedSet(listOf(Testcase("Testcase #1", "Input", "Output"))),
+            -1
         )
 
-        database.insertProblemSpecs(listOf(problemSpec))
+        database.insertProblems(listOf(problem))
         val solutionPath = "C:\\path\\to\\solution.cpp"
-        database.associateSolutionToProblem(solutionPath, problemSpec.info)
-        val data = database.getProblemSpec(solutionPath).getOrThrow()
+        database.associateSolutionToProblem(solutionPath, problem)
+        val data = database.getProblem(solutionPath).getOrThrow()
         assertNotNull(data)
-        assertEquals(problemSpec.info, data.info)
-        assertEquals(problemSpec.state.selectedIndex, data.state.selectedIndex)
+        assertEquals(problem, data)
 
         // comparing testcases ignoring id
-        assertArrayEquals(problemSpec.testcases.toTypedArray(), data.testcases.toTypedArray())
+        assertArrayEquals(problem.testcases.toTypedArray(), data.testcases.toTypedArray())
     }
 
     @Test
     fun updateProblemState() {
-        problemSpec = ProblemSpec(
-            ProblemInfo("name", "group"),
-            ProblemState(-1, "name", "group"),
-            listOf()
-        )
+        problem = Problem("name", "group", OrderedSet(), -1)
 
-        database.insertProblemSpecs(listOf(problemSpec))
+        database.insertProblems(listOf(problem))
         val solutionPath = "C:\\path\\to\\solution.cpp"
-        database.associateSolutionToProblem(solutionPath, problemSpec.info)
+        database.associateSolutionToProblem(solutionPath, problem)
+        database.updateProblemState(problem, 34)
+        val data = database.getProblem(solutionPath).getOrThrow()
 
-        val updatedProblemState = problemSpec.state.copy(selectedIndex = 34)
-        database.updateProblemState(updatedProblemState)
-        val data = database.getProblemSpec(solutionPath).getOrThrow()
-        assertEquals(updatedProblemState, data.state)
+        assertEquals(problem.copy(selectedTestcaseIndex = 34), data)
     }
 
-
-    @Nested
-    inner class UpdateTestcaseSpecs {
-        private lateinit var solutionPath: String
-        private lateinit var solutionPath2: String
-        private lateinit var problemSpec2: ProblemSpec
-
-        @BeforeEach
-        fun setUp() {
-            problemSpec = ProblemSpec(
-                ProblemInfo("name", "group"),
-                ProblemState(-1, "name", "group"),
+    @Test
+    fun updateTestcases() {
+        problem = Problem(
+            "name",
+            "group",
+            OrderedSet(
                 listOf(
-                    Testcase("Testcase #1", "Input 1", "Output 1", "name", "group"),
-                    Testcase("Testcase #2", "Input 2", "Output 2", "name", "group"),
-                    Testcase("Testcase #3", "Input 3", "Output 3", "name", "group"),
+                    Testcase("Testcase #1", "Input 1", "Output 1"),
+                    Testcase("Testcase #2", "Input 2", "Output 2"),
+                    Testcase("Testcase #3", "Input 3", "Output 3"),
                 )
+            ),
+            -1
+        )
+        val problem2 = problem.copy(name = "name2")
+
+        // initializing database
+        database.insertProblems(listOf(problem, problem2))
+        val solutionPath = "C:\\path\\to\\solution.cpp"
+        val solutionPath2 = "C:\\path\\to\\second\\solution.cpp"
+        database.associateSolutionToProblem(solutionPath, problem)
+        database.associateSolutionToProblem(solutionPath2, problem2)
+
+        // removed 3rd testcase & changed 1st test case
+        val updatedTestcases = OrderedSet(
+            listOf(
+                Testcase("Testcase #Changed", "Input Changed", "Output 1"),
+                Testcase("Testcase #2", "Input 2", "Output 2"),
             )
-            // exactly equal to problemSpec except problemName
-            problemSpec2 = ProblemSpec(
-                ProblemInfo("name2", "group"),
-                ProblemState(-1, "name2", "group"),
-                listOf(
-                    Testcase("Testcase #1", "Input 1", "Output 1", "name2", "group"),
-                    Testcase("Testcase #2", "Input 2", "Output 2", "name2", "group"),
-                )
-            )
+        )
 
-            database.insertProblemSpecs(listOf(problemSpec, problemSpec2))
-            solutionPath = "C:\\path\\to\\solution.cpp"
-            solutionPath2 = "C:\\path\\to\\second\\solution.cpp"
-            database.associateSolutionToProblem(solutionPath, problemSpec.info)
-            database.associateSolutionToProblem(solutionPath2, problemSpec2.info)
-        }
+        database.updateTestcases(problem, updatedTestcases)
 
-        @Test
-        fun `non key updates`() {
-            val data = database.getProblemSpec(solutionPath).getOrThrow()
+        val data = database.getProblem(solutionPath).getOrThrow()
 
-            // changing only outputs of testcases
-            val updatedTestcases = data.testcases.mapIndexed { index, it ->
-                it.copy(output = "output changed $index")
-            }
-
-            database.updateTestcases(problemSpec.info, updatedTestcases)
-
-            checkTestcases(updatedTestcases)
-        }
-
-        @Test
-        fun `key updates should remove and add the testcase`() {
-            val data = database.getProblemSpec(solutionPath).getOrThrow()
-
-            val updatedTestcases = data.testcases.toMutableList()
-            updatedTestcases[1] = updatedTestcases[1].copy(name = "Test case nameChange")
-
-            database.updateTestcases(problemSpec.info, updatedTestcases)
-
-            checkTestcases(updatedTestcases)
-        }
-
-
-        @Test
-        fun `adding and removing testcases`() {
-            val data = database.getProblemSpec(solutionPath).getOrThrow()
-
-            val updatedTestcases = data.testcases.toMutableList()
-            updatedTestcases.removeAt(0)
-            updatedTestcases.add(
-                Testcase("New Testcase", "new input", "new output", "name", "group")
-            )
-            checkTestcases(updatedTestcases)
-        }
-
-        private fun checkTestcases(testcases: List<Testcase>) {
-            val changedData = database.getProblemSpec(solutionPath).getOrThrow()
-            assertNotNull(changedData)
-
-            assertEquals(testcases, changedData.testcases)
-        }
+        assertEquals(updatedTestcases, data.testcases)
     }
 
 
