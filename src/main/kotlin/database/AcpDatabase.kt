@@ -2,6 +2,7 @@ package database
 
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.project.Project
+import database.diff.TestcaseDiff
 import database.models.ProblemSpec
 import dev.pushpavel.autocp.database.ProblemInfo
 import dev.pushpavel.autocp.database.ProblemState
@@ -10,6 +11,8 @@ import dev.pushpavel.autocp.database.Testcase
 
 @Service
 class AcpDatabase(project: Project) : AbstractAcpDatabase(project) {
+
+    private val testcaseDiff = TestcaseDiff(testQ)
 
     override fun insertProblemSpecs(specs: List<ProblemSpec>) = runCatching {
         db.transaction {
@@ -44,8 +47,9 @@ class AcpDatabase(project: Project) : AbstractAcpDatabase(project) {
         stateQ.updateProblemState(state)
     }
 
-    override fun updateTestcases(testcases: List<Testcase>) = runCatching {
-        TODO("Not yet implemented")
+    override fun updateTestcases(info: ProblemInfo, testcases: List<Testcase>) = runCatching {
+        val prevTestcases = testQ.getTestcases(info.name, info.problemGroup).executeAsList()
+        testcaseDiff.applyUpdates(prevTestcases, testcases)
     }
 
     override fun updateTestcase(testcase: Testcase) = runCatching {
