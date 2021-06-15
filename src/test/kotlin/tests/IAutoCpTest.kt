@@ -21,8 +21,8 @@ abstract class IAutoCpTest {
     private val problemId = encodedJoin("super", "groupName")
 
     @BeforeEach
-    fun setUp(@TempDir tempDir: Path) {
-        database = getInstance(tempDir)
+    fun setUp() {
+        database = getInstance()
         val name = "super"
         val group = "groupName"
 
@@ -38,14 +38,14 @@ abstract class IAutoCpTest {
     @AfterEach
     fun teardown() = database.close()
 
-//    @Test
+    @Test
     fun basicSetupOperations() {
         database.insertProblemSpecs(listOf(problemSpec))
         val solutionPath = "C:\\path\\to\\solution.cpp"
         database.associateSolutionToProblem(solutionPath, problemSpec.info)
         val data = database.getProblemSpec(solutionPath).getOrThrow()
         assertNotNull(data)
-        assertEquals(problemSpec.info, data!!.info)
+        assertEquals(problemSpec.info, data.info)
         assertEquals(problemSpec.state.selectedIndex, data.state.selectedIndex)
 
         // comparing testcases ignoring id
@@ -87,5 +87,5 @@ abstract class IAutoCpTest {
 //    }
 
 
-    abstract fun getInstance(tempDir: Path): IAutoCp
+    abstract fun getInstance(): IAutoCp
 }
