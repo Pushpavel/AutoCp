@@ -4,7 +4,7 @@ import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
 import database.AutoCpDB
-import database.models.ProblemSpec
+import database.models.OldProblemSpec
 import database.models.ProblemState
 import database.models.TestcaseSpec
 import tool.base.CollectionListListener
@@ -14,7 +14,7 @@ import ui.poplist.PopListModel
 class SpecFileAdapter(
     project: Project,
     private val viewer: ProblemViewer
-) : FileFollowedContent<ProblemSpec>(viewer) {
+) : FileFollowedContent<OldProblemSpec>(viewer) {
 
     private val db = project.service<AutoCpDB>()
     private var problemId: String? = null
@@ -31,7 +31,7 @@ class SpecFileAdapter(
         }
     }
 
-    override fun onFileFollowed(file: VirtualFile, spec: ProblemSpec) {
+    override fun onFileFollowed(file: VirtualFile, spec: OldProblemSpec) {
         problemId = spec.state.problemId
 
         viewer.model.apply {
@@ -40,7 +40,7 @@ class SpecFileAdapter(
         }
     }
 
-    override fun onFileUnfollowed(file: VirtualFile, spec: ProblemSpec) {
+    override fun onFileUnfollowed(file: VirtualFile, spec: OldProblemSpec) {
         problemId = null
 
         viewer.model.apply {

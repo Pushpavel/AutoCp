@@ -1,7 +1,7 @@
 package tests
 
 import database.AutoCp
-import database.models.ProblemSpec
+import database.models.OldProblemSpec
 import database.models.ProblemInfo
 import database.models.ProblemState
 import database.models.TestcaseSpec
@@ -17,13 +17,13 @@ import java.nio.file.Path
 abstract class AutoCpTest {
 
     private lateinit var database: AutoCp
-    private lateinit var problemSpec: ProblemSpec
+    private lateinit var problemSpec: OldProblemSpec
     private val problemId = encodedJoin("super", "groupName")
 
     @BeforeEach
     fun setUp(@TempDir tempDir: Path) {
         database = getInstance(tempDir)
-        problemSpec = ProblemSpec(
+        problemSpec = OldProblemSpec(
             ProblemInfo("super", "groupName"),
             ProblemState(-1),
             listOf(TestcaseSpec("Testcase #1", "Input", "Output"))

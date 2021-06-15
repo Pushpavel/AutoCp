@@ -9,7 +9,7 @@ import com.intellij.openapi.application.invokeLater
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.DumbAware
 import database.AutoCpDB
-import database.models.ProblemSpec
+import database.models.OldProblemSpec
 import database.models.ProblemState
 import gather.server.createServer
 import gather.server.getResponsesAsync
@@ -55,7 +55,7 @@ class GatherProblemsAction : AnAction(), DumbAware {
             val service = project.service<AutoCpDB>()
 
             for (it in problems)
-                service.addProblemData(ProblemSpec(it.info, ProblemState(), it.testcases))
+                service.addProblemData(OldProblemSpec(it.info, ProblemState(), it.testcases))
 
             val dialog = GenerateSolutionsDialog(project, problems.map { it.info })
             val result = dialog.getResult() ?: return@launch

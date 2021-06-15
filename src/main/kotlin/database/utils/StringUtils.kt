@@ -11,6 +11,7 @@ private const val DELIMITER_CHAR = '|'
 private const val ESCAPE_STRING = "~"
 private const val ESCAPE_CHAR = '~'
 
+@Deprecated("unused")
 fun encodedJoin(vararg strings: String): String {
 
     return strings.joinToString(DELIMITER_STRING) {
@@ -19,6 +20,7 @@ fun encodedJoin(vararg strings: String): String {
     }
 }
 
+@Deprecated("unused")
 fun String.decodedSplit(): List<String> {
     val result = ArrayList<String>()
     var segmentStart = 0
@@ -42,6 +44,7 @@ fun String.decodedSplit(): List<String> {
     return result
 }
 
+@Deprecated("unused")
 private fun unescapeString(string: String) = string
     .replace(ESCAPE_STRING + ESCAPE_STRING, ESCAPE_STRING)
     .replace(ESCAPE_STRING + DELIMITER_STRING, DELIMITER_STRING)

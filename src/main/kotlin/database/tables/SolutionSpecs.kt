@@ -6,6 +6,7 @@ import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 
+@Deprecated("exposed library will be removed soon")
 object SolutionSpecs : Table() {
     val solutionPath = text("solutionPath").uniqueIndex()
     val problemId = text("problemId").references(ProblemSpecs.problemId)

@@ -1,5 +1,0 @@
-CREATE TABLE Problem(
-    name TEXT NOT NULL,
-    problemGroup TEXT NOT NULL,
-    PRIMARY KEY(name,problemGroup)
-);

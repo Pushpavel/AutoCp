@@ -5,7 +5,7 @@ import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.select
 
-
+@Deprecated("exposed library will be removed soon")
 object TestcaseSpecs : IntIdTable() {
     val name = varchar("name", 100)
     val input = text("input")
@@ -20,7 +20,9 @@ object TestcaseSpecs : IntIdTable() {
                 it[id].value,
                 it[name],
                 it[input],
-                it[output]
+                it[output],
+                "",
+                ""
             )
         }
     }

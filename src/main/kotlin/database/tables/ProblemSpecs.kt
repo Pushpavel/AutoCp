@@ -2,7 +2,7 @@ package database.tables
 
 import org.jetbrains.exposed.sql.Table
 
-
+@Deprecated("exposed library will be removed soon")
 object ProblemSpecs : Table() {
 
     val problemId = text("problemId").uniqueIndex()

@@ -1,0 +1,13 @@
+CREATE TABLE ProblemInfo(
+    name TEXT NOT NULL,
+    problemGroup TEXT NOT NULL,
+    PRIMARY KEY(name,problemGroup)
+);
+
+insertProblemSpec:
+    INSERT INTO ProblemInfo
+    VALUES  ?;
+
+getProblem:
+    SELECT * FROM ProblemInfo
+    WHERE ProblemInfo.name = ? AND ProblemInfo.problemGroup = ?;
