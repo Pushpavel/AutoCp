@@ -4,10 +4,10 @@ CREATE TABLE ProblemInfo(
     PRIMARY KEY(name,problemGroup)
 );
 
-insertProblemSpec:
+insertProblemInfo:
     INSERT INTO ProblemInfo
     VALUES  ?;
 
-getProblem:
+getProblemInfo:
     SELECT * FROM ProblemInfo
     WHERE ProblemInfo.name = ? AND ProblemInfo.problemGroup = ?;

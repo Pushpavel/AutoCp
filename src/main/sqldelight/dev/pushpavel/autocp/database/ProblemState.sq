@@ -7,3 +7,11 @@ CREATE TABLE ProblemState (
     FOREIGN KEY(problemName,problemGroup) REFERENCES ProblemInfo(name,problemGroup),
     PRIMARY KEY(problemName,problemGroup)
 );
+
+insertProblemState:
+    INSERT INTO ProblemState
+    VALUES ?;
+
+getProblemState:
+    SELECT * FROM ProblemState
+    WHERE problemName = ? AND problemGroup = ?;

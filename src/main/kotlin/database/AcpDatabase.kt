@@ -3,33 +3,40 @@ package database
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.project.Project
 import com.squareup.sqldelight.sqlite.driver.JdbcSqliteDriver
-import database.models.ProblemInfo
-import database.models.OldProblemSpec
-import dev.pushpavel.autocp.database.AutoCpDatabase
+import com.squareup.sqldelight.sqlite.driver.JdbcSqliteDriver.Companion.IN_MEMORY
+import database.models.ProblemSpec
+import dev.pushpavel.autocp.database.*
+
 
 @Service
-class AcpDatabase(project: Project) {
+class AcpDatabase(project: Project) : IAutoCp {
 
     private val db: AutoCpDatabase
+    private val infoQ: ProblemInfoQueries
+    private val stateQ: ProblemStateQueries
+    private val testQ: TestcaseQueries
+    private val relateQ: SolutionProblemQueries
+    private val driver = JdbcSqliteDriver("${IN_MEMORY}${project.basePath}/.autocp")
 
     init {
-        val driver = JdbcSqliteDriver("jdbc:sqlite:${project.basePath}/.autocp")
-        db = AutoCpDatabase(driver)
+        db = AutoCpDatabase.invoke(driver)
 
+        infoQ = db.problemInfoQueries
+        stateQ = db.problemStateQueries
+        testQ = db.testcaseQueries
+        relateQ = db.solutionProblemQueries
     }
 
-    fun insertProblemSpecs(specs: List<OldProblemSpec>): Result<Unit> {
+    override fun insertProblemSpecs(specs: List<ProblemSpec>): Result<Unit> {
         try {
-
             db.transaction {
                 for (spec in specs) {
-                    db.problemQueries.insertProblemSpec(spec.toProblem())
-
-                    for (testcaseSpec in spec.testcases)
-                        db.testcaseQueries.insertTestcase(testcaseSpec.toTestcase())
+                    infoQ.insertProblemInfo(spec.info)
+                    stateQ.insertProblemState(spec.state)
+                    for (testcase in spec.testcases)
+                        testQ.insertTestcase(testcase)
                 }
             }
-
         } catch (e: Exception) {
             return Result.failure(e)
         }
@@ -37,13 +44,13 @@ class AcpDatabase(project: Project) {
         return Result.success(Unit)
     }
 
-    fun associateSolutionToProblem(solutionPath: String, problemInfo: ProblemInfo): Result<Unit> {
+    override fun associateSolutionToProblem(solutionPath: String, info: ProblemInfo): Result<Unit> {
         try {
             db.transaction {
-                db.solutionProblemQueries.associateSolutionToProblem(
+                relateQ.associateSolutionToProblem(
                     solutionPath,
-                    problemInfo.name,
-                    problemInfo.group
+                    info.name,
+                    info.problemGroup
                 )
             }
 
@@ -54,18 +61,22 @@ class AcpDatabase(project: Project) {
         return Result.success(Unit)
     }
 
-    fun getProblemSpec(solutionPath: String): Result<Unit> {
+    override fun getProblemSpec(solutionPath: String): Result<ProblemSpec> {
         return try {
-            val spec = db.transaction {
-                val relation = db.solutionProblemQueries.getProblemSolution(solutionPath).executeAsOne()
-                val problem = db.problemQueries.getProblem(relation.problemName, relation.problemGroup).executeAsOne()
+            val spec = db.transactionWithResult<ProblemSpec> {
+                val relation = relateQ.getProblemSolution(solutionPath).executeAsOne()
+                val info = infoQ.getProblemInfo(relation.problemName, relation.problemGroup).executeAsOne()
+                val state = stateQ.getProblemState(relation.problemName, relation.problemGroup).executeAsOne()
                 val testcases = db.testcaseQueries.getTestcases(relation.problemName, relation.problemGroup)
                     .executeAsList()
 
+                ProblemSpec(info, state, testcases)
             }
             return Result.success(spec)
         } catch (e: Exception) {
             Result.failure(e)
         }
     }
+
+    override fun close() = driver.getConnection().close()
 }
