@@ -39,8 +39,11 @@ abstract class AbstractAcpDatabase(project: Project) : IAutoCp {
     override fun close() = driver.getConnection().close()
 
     private fun getVersion(): Int {
-        val sqlCursor = driver.executeQuery(null, "PRAGMA user_version;", 0, null)
-        return sqlCursor.getLong(0)!!.toInt()
+        return driver.executeQuery(null, "PRAGMA user_version;", 0, null).use { cursor ->
+            if (cursor.next())
+                cursor.getLong(0)?.toInt()
+            else null
+        } ?: 0
     }
 
     private fun setVersion(version: Int) {
