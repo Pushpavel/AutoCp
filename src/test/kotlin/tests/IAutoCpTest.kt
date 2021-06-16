@@ -36,7 +36,7 @@ abstract class IAutoCpTest {
         database.associateSolutionToProblem(solutionPath, problem)
         val data = database.getProblem(solutionPath).getOrThrow()
         assertNotNull(data)
-        assertEquals(problem, data)
+        assertEquals(problem, data!!)
 
         // comparing testcases ignoring id
         assertArrayEquals(problem.testcases.toTypedArray(), data.testcases.toTypedArray())
@@ -90,7 +90,7 @@ abstract class IAutoCpTest {
 
         val data = database.getProblem(solutionPath).getOrThrow()
 
-        assertEquals(updatedTestcases, data.testcases)
+        assertEquals(updatedTestcases, data!!.testcases)
     }
 
 

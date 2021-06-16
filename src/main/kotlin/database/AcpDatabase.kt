@@ -4,6 +4,8 @@ import com.intellij.openapi.components.Service
 import com.intellij.openapi.project.Project
 import com.intellij.util.containers.OrderedSet
 import dev.pushpavel.autocp.database.Problem
+import kotlin.io.path.Path
+import kotlin.io.path.pathString
 
 
 @Service
@@ -33,7 +35,8 @@ class AcpDatabase(project: Project) : AbstractAcpDatabase(project) {
     }
 
     override fun getProblem(solutionPath: String) = runCatching {
-        val relation = relateQ.getProblemSolution(solutionPath).executeAsOne()
+        val path = Path(solutionPath)
+        val relation = relateQ.getProblemSolution(path.pathString).executeAsOneOrNull() ?: return@runCatching null
         problemQ.getProblem(relation.problemName, relation.problemGroup).executeAsOne()
     }
 }
