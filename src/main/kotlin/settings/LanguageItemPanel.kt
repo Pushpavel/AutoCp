@@ -16,15 +16,15 @@ class LanguageItemPanel(model: LanguageItemModel) {
         MacrosDialog.addTextFieldExtension(buildCommandField)
 
         // ui & layout
-        blockRow {
-            row("Name:") {
-                nameField()
-            }
-            row("Extension:") {
-                extensionField()
-            }.largeGapAfter()
+        row {
+            row("Name:") { nameField() }
+            row("Extension:") { extensionField() }
             row("Build Command:") {
-                buildCommandField(pushX)
+                buildCommandField(pushX).comment(
+                    "This command will be executed to build the executable of your solution code.<br>" +
+                            "@input@ will be replaced with \"path/to/input/file\" without quotes<br>" +
+                            "@output@ will be replaced with \"path/to/output/file\" without quotes"
+                )
             }
         }
     }
