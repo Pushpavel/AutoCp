@@ -1,5 +1,6 @@
 package plugin.settings
 
+@Deprecated("use LanguageItemValidator")
 class LanguagePanelValidator(private val model: SettingsModel) : LanguagePanelUI.Validator {
 
     override fun validateName(name: String): String? {

@@ -6,21 +6,19 @@ import ui.poplist.PopListModel
 
 class LanguageItemAdapter(popModel: PopListModel<SolutionLanguage>) : ItemView<SolutionLanguage> {
 
-    private val model = LanguageItemModel()
+    private val model = LanguageItemModel(LanguageItemValidator(popModel.listModel))
     private val ui = LanguageItemPanel(model)
     override val component = ui.component
 
     override fun updateView(item: SolutionLanguage) = model.update(item)
 
     init {
-        model.changeByUserListener = { sol ->
-            if (sol != null) {
-                val items = popModel.listModel.items
-                val changedIndex = items.indexOfFirst { it.id == sol.id }
+        model.validChangeByUserListener = { sol ->
+            val items = popModel.listModel.items
+            val changedIndex = items.indexOfFirst { it.id == sol.id }
 
-                if (changedIndex != -1 && !items[changedIndex].equals(sol))
-                    popModel.listModel.setElementAt(sol, changedIndex)
-            }
+            if (changedIndex != -1 && !items[changedIndex].equals(sol))
+                popModel.listModel.setElementAt(sol, changedIndex)
         }
     }
 

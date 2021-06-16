@@ -6,21 +6,23 @@ import javax.swing.event.DocumentListener
 import javax.swing.text.Document
 import javax.swing.text.PlainDocument
 
-class LanguageItemModel {
+class LanguageItemModel(private val validator: Validator) {
     val nameDoc = PlainDocument()
     val extensionDoc = PlainDocument()
     val buildCommandDoc = PlainDocument()
 
-    var changeByUserListener: ((lang: SolutionLanguage?) -> Unit)? = null
-    private var langId: Long? = null
+    var validChangeByUserListener: ((lang: SolutionLanguage) -> Unit)? = null
+    private var solutionLang: SolutionLanguage? = null
     private var notify = true
 
     init {
         val notifier = {
-            if (notify)
-                changeByUserListener?.let { it(createValue()) }
+            val value = createValidValue()
+            if (notify && value != null)
+                validChangeByUserListener?.let { it(value) }
             Unit
         }
+
         nameDoc.onChange(notifier)
         extensionDoc.onChange(notifier)
         buildCommandDoc.onChange(notifier)
@@ -30,7 +32,7 @@ class LanguageItemModel {
         val name = item?.name ?: ""
         val extension = item?.extension ?: ""
         val buildCommand = item?.buildCommand ?: ""
-        langId = item?.id
+        solutionLang = item
 
         notify = false
         if (name != nameDoc.getText())
@@ -42,12 +44,28 @@ class LanguageItemModel {
         notify = true
     }
 
-    private fun createValue(): SolutionLanguage? {
-        val name = nameDoc.getText()
-        val extension = extensionDoc.getText()
-        val buildCommand = buildCommandDoc.getText()
+    private fun createValidValue(): SolutionLanguage? {
+        val item = solutionLang ?: return null
+        var name = nameDoc.getText()
+        var extension = extensionDoc.getText()
+        var buildCommand = buildCommandDoc.getText()
 
-        return langId?.let { SolutionLanguage(name, extension, buildCommand, it) }
+        val nameError = validator.validateName(name)
+        val extensionError = validator.validateExtension(extension)
+        val buildCommandError = validator.validateBuildCommand(buildCommand)
+
+        // ignores dot prefix if present
+        extension = if (extension.elementAtOrNull(0) == '.') extension.substring(1) else extension
+
+        // reset invalid fields
+        if (nameError != null)
+            name = item.name
+        if (extensionError != null)
+            extension = item.extension
+        if (buildCommandError != null)
+            buildCommand = item.buildCommand
+
+        return SolutionLanguage(name, extension, buildCommand, item.id)
     }
 
 
@@ -69,5 +87,11 @@ class LanguageItemModel {
 
             override fun changedUpdate(p0: DocumentEvent?) {}
         })
+    }
+
+    interface Validator {
+        fun validateName(name: String): String?
+        fun validateExtension(extension: String): String?
+        fun validateBuildCommand(buildCommand: String): String?
     }
 }
