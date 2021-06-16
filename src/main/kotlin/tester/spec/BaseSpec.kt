@@ -1,16 +1,16 @@
 package tester.spec
 
-import tester.run.ProgramExecutorFactory
+import tester.run.ExecutableRunnerFactory
 
 open class BaseSpec(
     val name: String,
-    private val programExecutorFactory: ProgramExecutorFactory?,
+    private val executableRunnerFactory: ExecutableRunnerFactory?,
 ) {
     private var parentSpec: BaseSpec? = null
 
-    fun getProgramFactory(): ProgramExecutorFactory {
-        if (programExecutorFactory != null)
-            return programExecutorFactory
+    fun getProgramFactory(): ExecutableRunnerFactory {
+        if (executableRunnerFactory != null)
+            return executableRunnerFactory
 
         val factory = parentSpec?.getProgramFactory()
 
