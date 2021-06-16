@@ -13,7 +13,15 @@ class LanguageItemAdapter(popModel: PopListModel<SolutionLanguage>) : ItemView<S
     override fun updateView(item: SolutionLanguage) = model.update(item)
 
     init {
-        // TODO: listen model changes and update popModel
+        model.changeByUserListener = { sol ->
+            if (sol != null) {
+                val items = popModel.listModel.items
+                val changedIndex = items.indexOfFirst { it.id == sol.id }
+
+                if (changedIndex != -1 && !items[changedIndex].equals(sol))
+                    popModel.listModel.setElementAt(sol, changedIndex)
+            }
+        }
     }
 
 }

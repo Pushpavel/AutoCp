@@ -34,13 +34,13 @@ data class AutoCpSettings(
         const val OUTPUT_PATH_KEY = "@output@"
 
         fun getSolutionLanguageTemplate(): SolutionLanguage {
-            return SolutionLanguage("C++", "cpp", "g++ $INPUT_PATH_KEY -o $OUTPUT_PATH_KEY")
+            return SolutionLanguage("C++", "cpp", "g++ $INPUT_PATH_KEY -o $OUTPUT_PATH_KEY", System.currentTimeMillis())
         }
 
         fun getDefaultSolutionLanguages(): MutableList<SolutionLanguage> {
             return mutableListOf(
-                SolutionLanguage("C++", "cpp", "g++ $INPUT_PATH_KEY -o $OUTPUT_PATH_KEY "),
-                SolutionLanguage("java", "java", "javac $INPUT_PATH_KEY --output $OUTPUT_PATH_KEY ")
+                SolutionLanguage("C++", "cpp", "g++ $INPUT_PATH_KEY -o $OUTPUT_PATH_KEY ", 1),
+                SolutionLanguage("java", "java", "javac $INPUT_PATH_KEY --output $OUTPUT_PATH_KEY ", 2)
             )
         }
     }
