@@ -1,4 +1,4 @@
-package plugin.config
+package config
 
 import com.google.common.io.Files
 import com.intellij.execution.Executor

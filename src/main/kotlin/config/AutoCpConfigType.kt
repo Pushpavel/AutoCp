@@ -1,4 +1,4 @@
-package plugin.config
+package config
 
 import com.intellij.execution.configurations.ConfigurationTypeBase
 import com.intellij.icons.AllIcons

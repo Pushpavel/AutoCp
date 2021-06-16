@@ -1,4 +1,4 @@
-package plugin.config
+package config
 
 import com.intellij.ide.macro.MacrosDialog
 import com.intellij.openapi.fileChooser.FileChooser
@@ -17,7 +17,7 @@ import settings.SolutionLanguage
 import java.nio.file.Path
 import javax.swing.JComponent
 
-class ConfigEditor(private val project: @NotNull Project) : SettingsEditor<AutoCpConfig>() {
+class ConfigEditor(private val project: Project) : SettingsEditor<AutoCpConfig>() {
 
     private val solutionFileField = ExtendableTextField()
     private val solutionLangModel = CollectionComboBoxModel<SolutionLanguage>()

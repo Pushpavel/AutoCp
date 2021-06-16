@@ -7,8 +7,8 @@
     <!-- https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
     <depends>com.intellij.modules.platform</depends>
     <extensions defaultExtensionNs="com.intellij">
-        <configurationType implementation="plugin.config.AutoCpConfigType"/>
-        <runConfigurationProducer implementation="plugin.config.AutoCpConfigProducer"/>
+        <configurationType implementation="config.AutoCpConfigType"/>
+        <runConfigurationProducer implementation="config.AutoCpConfigProducer"/>
         <notificationGroup id="AutoCp Notification Group" displayType="BALLOON"/>
         <applicationConfigurable instance="settings.SettingsConfigurable"
                                  id="settings.SettingsConfigurable"

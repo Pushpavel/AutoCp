@@ -5,7 +5,7 @@ import com.intellij.openapi.components.service
 import com.intellij.openapi.util.Disposer
 import database.AcpDatabase
 import dev.pushpavel.autocp.database.Problem
-import plugin.config.AutoCpConfig
+import config.AutoCpConfig
 import tester.spec.TestGroupSpec
 import tester.TestGroupExecutor
 import tester.process.ProcessLike

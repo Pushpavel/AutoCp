@@ -2,7 +2,7 @@ package tester.run
 
 import com.intellij.execution.configurations.GeneralCommandLine
 import dev.pushpavel.autocp.database.Problem
-import plugin.config.AutoCpConfig
+import config.AutoCpConfig
 import settings.AutoCpSettings
 import java.nio.file.Files
 import java.nio.file.Paths
