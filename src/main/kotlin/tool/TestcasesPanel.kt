@@ -25,13 +25,6 @@ class TestcasesPanel(model: PopListModel<Testcase>) : PopList<Testcase>(true, 0.
 
     override val itemContainer = JBPanelWithEmptyText(BorderLayout()).withEmptyText("Create Test case")
 
-    override val itemView = object : ItemView<Testcase> {
-        override val component = JBLabel("Item view")
-
-        override fun updateView(item: Testcase) {
-            component.text = item.name
-        }
-
-    }
+    override val itemView = TestcaseUI(TestcaseModel())
 
 }
