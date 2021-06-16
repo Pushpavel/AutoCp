@@ -4,6 +4,7 @@ import com.intellij.ui.CollectionComboBoxModel
 import com.intellij.ui.SingleSelectionModel
 import kotlin.math.max
 
+@Deprecated("PopListModel might be enough")
 class SettingsModel : CollectionComboBoxModel<SolutionLanguage>() {
 
     val languagePanelModel = LanguagePanelUI.Model(LanguagePanelValidator(this))

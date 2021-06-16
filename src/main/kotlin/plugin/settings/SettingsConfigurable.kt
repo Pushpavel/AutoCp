@@ -2,6 +2,7 @@ package plugin.settings
 
 import com.intellij.openapi.options.Configurable
 
+@Deprecated("replaced by settings.SettingsConfigurable")
 class SettingsConfigurable : Configurable {
 
     var ui: SettingsUI? = null

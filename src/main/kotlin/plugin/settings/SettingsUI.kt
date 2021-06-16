@@ -8,6 +8,7 @@ import com.intellij.ui.components.JBPanelWithEmptyText
 import com.intellij.ui.layout.panel
 import java.awt.BorderLayout
 
+@Deprecated("replaced by settings.SettingsUI")
 class SettingsUI : JBPanel<SettingsUI>(BorderLayout()) {
 
     val model = SettingsModel()

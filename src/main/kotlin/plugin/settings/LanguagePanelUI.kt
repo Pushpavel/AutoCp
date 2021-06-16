@@ -9,6 +9,7 @@ import com.intellij.ui.layout.LCFlags
 import com.intellij.ui.layout.panel
 import javax.swing.text.PlainDocument
 
+@Deprecated("replaced by settings.LanguageItemPanel")
 class LanguagePanelUI(model: Model) {
 
     private val nameField = ExtendableTextField(10).apply { document = model.nameDoc }

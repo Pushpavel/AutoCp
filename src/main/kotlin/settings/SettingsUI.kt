@@ -1,0 +1,4 @@
+package settings
+
+class SettingsUI {
+}
