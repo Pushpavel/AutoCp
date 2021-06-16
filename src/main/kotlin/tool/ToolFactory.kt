@@ -3,6 +3,7 @@ package tool
 import com.intellij.openapi.fileEditor.FileEditorManager
 import com.intellij.openapi.fileEditor.FileEditorManagerEvent
 import com.intellij.openapi.fileEditor.FileEditorManagerListener
+import com.intellij.openapi.options.ShowSettingsUtil
 import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.wm.ToolWindow
@@ -13,6 +14,11 @@ import com.intellij.ui.content.Content
 class ToolFactory : ToolWindowFactory, DumbAware {
 
     override fun createToolWindowContent(project: Project, toolWindow: ToolWindow) {
+
+//        use this for developing settings ui
+//        ShowSettingsUtil.getInstance().showSettingsDialog(project, "AutoCp")
+
+
         val viewer = ProblemViewer()
         var oldContent: Content? = null
 

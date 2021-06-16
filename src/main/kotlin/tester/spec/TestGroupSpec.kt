@@ -1,7 +1,6 @@
 package tester.spec
 
 import dev.pushpavel.autocp.database.Problem
-import files.ProblemSpec
 import tester.run.ExecutableRunnerFactory
 
 class TestGroupSpec(
@@ -19,20 +18,6 @@ class TestGroupSpec(
     }
 
     companion object {
-
-        @Deprecated("use fromProblem with Problem as arg")
-        fun fromProblem(problem: ProblemSpec, executablePath: String): TestGroupSpec {
-
-            val programFactory = ExecutableRunnerFactory(executablePath)
-
-            return TestGroupSpec(
-                problem.name,
-                problem.testcases.map { TestSpec.fromTestCase(it) },
-                emptyList(),
-                programFactory
-            )
-        }
-
         fun fromProblem(problem: Problem, executablePath: String): TestGroupSpec {
             val programFactory = ExecutableRunnerFactory(executablePath)
 
