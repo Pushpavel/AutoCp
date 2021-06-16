@@ -7,7 +7,9 @@ import java.awt.BorderLayout
 
 class SettingsUI(model: SettingsUIModel) : JBPanel<SettingsUI>(BorderLayout()) {
 
-    val preferredLangBox = ComboBox(model.preferredLangModel)
+    val preferredLangBox = ComboBox(model.preferredLangModel).apply {
+        renderer = SolutionLanguage.cellRenderer()
+    }
 
     init {
         add(panel {

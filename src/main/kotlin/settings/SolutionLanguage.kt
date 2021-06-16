@@ -1,5 +1,7 @@
 package settings
 
+import ui.StringCellRenderer
+
 data class SolutionLanguage(
     var name: String = "",
     var extension: String = "",
@@ -11,5 +13,11 @@ data class SolutionLanguage(
         return buildCommand
             .replace(AutoCpSettings.INPUT_PATH_KEY, inputPath)
             .replace(AutoCpSettings.OUTPUT_PATH_KEY, outputPath)
+    }
+
+    companion object {
+        fun cellRenderer(): StringCellRenderer<SolutionLanguage> {
+            return StringCellRenderer { it.name }
+        }
     }
 }

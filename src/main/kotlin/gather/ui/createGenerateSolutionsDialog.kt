@@ -5,6 +5,7 @@ import com.intellij.openapi.ui.DialogBuilder
 import com.intellij.ui.components.JBPanelWithEmptyText
 import com.intellij.ui.layout.panel
 import com.intellij.ui.treeStructure.Tree
+import settings.SolutionLanguage
 import java.awt.BorderLayout
 
 fun createGenerateSolutionsDialog(model: GenerateSolutionsDialogModel): DialogBuilder {
@@ -22,7 +23,9 @@ fun createGenerateSolutionsDialog(model: GenerateSolutionsDialogModel): DialogBu
                 .withEmptyText("Add at least one solution language in settings").apply {
                     if (model.isValid) {
 
-                        val comboBoxComponent = ComboBox(model.langModel)
+                        val comboBoxComponent = ComboBox(model.langModel).apply {
+                            renderer = SolutionLanguage.cellRenderer()
+                        }
 
                         val ui = panel {
                             blockRow { Tree(model.treeModel)() }

@@ -10,6 +10,7 @@ import com.intellij.openapi.vfs.VfsUtil
 import com.intellij.ui.CollectionComboBoxModel
 import com.intellij.ui.components.fields.ExtendableTextField
 import com.intellij.ui.layout.CCFlags
+import com.intellij.ui.layout.listCellRenderer
 import com.intellij.ui.layout.panel
 import org.jetbrains.annotations.NotNull
 import settings.AutoCpSettings
@@ -54,7 +55,9 @@ class ConfigEditor(private val project: Project) : SettingsEditor<AutoCpConfig>(
                     .constraints(CCFlags.growX)
             }
             row("Solution Language:") {
-                ComboBox(solutionLangModel)()
+                ComboBox(solutionLangModel).apply {
+                    renderer = SolutionLanguage.cellRenderer()
+                }()
             }
         }
     }
