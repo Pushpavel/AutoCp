@@ -9,7 +9,9 @@ import com.intellij.util.xmlb.XmlSerializerUtil
 )
 @Service
 data class AutoCpSettings(
-    var preferredLanguage: String? = "C++", // TODO: make it private and access only by PreferredLang get/set
+    // TODO: make it private and access only by PreferredLang get/set
+    // TODO: store id instead of name
+    var preferredLanguage: String? = "C++",
     var solutionLanguages: MutableList<SolutionLanguage> = getDefaultSolutionLanguages(),
     var selectedIndex: Int? = 0, // TODO: Store -1 instead of null
 ) : PersistentStateComponent<AutoCpSettings> {
@@ -20,6 +22,11 @@ data class AutoCpSettings(
             null
         else
             solutionLanguages.find { it.name == lang.name }?.name
+    }
+
+    fun getLangWithId(id: Long?): SolutionLanguage? {
+        if (id == null) return null
+        return solutionLanguages.find { it.id == id }
     }
 
     override fun getState() = this

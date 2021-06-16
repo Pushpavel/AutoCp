@@ -1,43 +1,51 @@
-package plugin.ui
+package plugin.config
 
 import com.intellij.ide.macro.MacrosDialog
 import com.intellij.openapi.fileChooser.FileChooser
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory
 import com.intellij.openapi.options.SettingsEditor
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.ui.ComboBox
 import com.intellij.openapi.vfs.VfsUtil
+import com.intellij.ui.CollectionComboBoxModel
 import com.intellij.ui.components.fields.ExtendableTextField
 import com.intellij.ui.layout.CCFlags
 import com.intellij.ui.layout.panel
-import common.Constants
 import org.jetbrains.annotations.NotNull
-import plugin.config.AutoCpConfig
+import settings.AutoCpSettings
+import settings.SolutionLanguage
 import java.nio.file.Path
 import javax.swing.JComponent
 
-class RunConfigSettings(private val project: @NotNull Project) : SettingsEditor<AutoCpConfig>() {
+class ConfigEditor(private val project: @NotNull Project) : SettingsEditor<AutoCpConfig>() {
 
-    val solutionFileField = ExtendableTextField()
-    val executableField = ExtendableTextField()
+    private val solutionFileField = ExtendableTextField()
+    private val solutionLangModel = CollectionComboBoxModel<SolutionLanguage>()
 
     override fun resetEditorFrom(s: AutoCpConfig) {
         solutionFileField.text = s.solutionFilePath
-        executableField.text = s.executablePath
+
+        val settings = AutoCpSettings.instance
+        solutionLangModel.replaceAll(settings.solutionLanguages)
+        solutionLangModel.selectedItem = settings.getLangWithId(s.solutionLangId)
     }
 
     override fun applyEditorTo(s: AutoCpConfig) {
         s.solutionFilePath = solutionFileField.text
-        s.executablePath = executableField.text
+
+        val settings = AutoCpSettings.instance
+
+        // verifies if selected lang still exists
+        val selectedLang = settings.getLangWithId(solutionLangModel.selected?.id)
+        s.solutionLangId = selectedLang?.id ?: -1
     }
 
     override fun createEditor(): JComponent {
         // add macro support
-        MacrosDialog.addTextFieldExtension(executableField)
         MacrosDialog.addTextFieldExtension(solutionFileField)
 
         // browse button for executable field
-        executableField.addBrowseButton(listOf("exe"))
-        solutionFileField.addBrowseButton(Constants.SupportedSolutionFileExtensions)
+        solutionFileField.addBrowseButton()
 
         // ui layout
         return panel {
@@ -45,17 +53,15 @@ class RunConfigSettings(private val project: @NotNull Project) : SettingsEditor<
                 solutionFileField()
                     .constraints(CCFlags.growX)
             }
-            row("Executable:") {
-                executableField()
-                    .constraints(CCFlags.growX)
+            row("Solution Language:") {
+                ComboBox(solutionLangModel)()
             }
         }
     }
 
-    private fun ExtendableTextField.addBrowseButton(extensions: List<String>) {
+    private fun ExtendableTextField.addBrowseButton() {
         val solutionFileDescriptor = FileChooserDescriptorFactory
             .createSingleFileDescriptor()
-            .withFileFilter { it.extension in extensions }
 
         this.addBrowseExtension({
             val preselectPath = Path.of(this.text.ifEmpty { project.basePath })
@@ -63,6 +69,6 @@ class RunConfigSettings(private val project: @NotNull Project) : SettingsEditor<
             FileChooser.chooseFile(solutionFileDescriptor, project, selectedFile) {
                 this.text = it.path
             }
-        }, this@RunConfigSettings)
+        }, this@ConfigEditor)
     }
 }
