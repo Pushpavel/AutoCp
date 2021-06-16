@@ -1,6 +1,7 @@
 package ui.poplist
 
 import com.intellij.ui.OnePixelSplitter
+import javax.swing.event.ListSelectionEvent
 import javax.swing.event.ListSelectionListener
 
 class PopListImpl<T>(
@@ -13,7 +14,6 @@ class PopListImpl<T>(
     private var itemViewCorrespondingIndex = -1
 
     private val selectionListener = ListSelectionListener {
-
         val index = popModel.selectionModel.minSelectionIndex
         when (index) {
             itemViewCorrespondingIndex -> return@ListSelectionListener
@@ -41,6 +41,7 @@ class PopListImpl<T>(
             selectionModel = popModel.selectionModel
             model = popModel.listModel
         }
+        selectionListener.valueChanged(null)
         popModel.selectionModel.addListSelectionListener(selectionListener)
     }
 
