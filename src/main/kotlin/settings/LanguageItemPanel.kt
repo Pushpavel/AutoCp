@@ -4,6 +4,7 @@ import com.intellij.ide.macro.MacrosDialog
 import com.intellij.ui.components.fields.ExtendableTextField
 import com.intellij.ui.layout.LCFlags
 import com.intellij.ui.layout.panel
+import plugin.settings.ErrorComponent
 
 class LanguageItemPanel(model: LanguageItemModel) {
 
@@ -26,6 +27,10 @@ class LanguageItemPanel(model: LanguageItemModel) {
                             "@output@ will be replaced with \"path/to/output/file\" without quotes"
                 )
             }
+            blockRow { }
+            row { ErrorComponent(model.nameError)() }
+            row { ErrorComponent(model.extensionError)() }
+            row { ErrorComponent(model.buildCommandError)() }
         }
     }
 

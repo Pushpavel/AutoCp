@@ -51,9 +51,9 @@ class LanguagePanelUI(model: Model) {
         internal val buildCommandDoc = PlainDocument()
 
         // ui shouldn't be here
-        internal val nameErrorComponent = ErrorComponent()
-        internal val extensionErrorComponent = ErrorComponent()
-        internal val buildCommandErrorComponent = ErrorComponent()
+        internal val nameErrorComponent = ErrorComponent(ErrorComponent.Model())
+        internal val extensionErrorComponent = ErrorComponent(ErrorComponent.Model())
+        internal val buildCommandErrorComponent = ErrorComponent(ErrorComponent.Model())
 
         private var itemRef: Ref<SolutionLanguage?> = Ref()
 

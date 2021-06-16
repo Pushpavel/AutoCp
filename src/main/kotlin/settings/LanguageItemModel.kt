@@ -1,5 +1,6 @@
 package settings
 
+import plugin.settings.ErrorComponent
 import plugin.settings.SolutionLanguage
 import javax.swing.event.DocumentEvent
 import javax.swing.event.DocumentListener
@@ -10,6 +11,10 @@ class LanguageItemModel(private val validator: Validator) {
     val nameDoc = PlainDocument()
     val extensionDoc = PlainDocument()
     val buildCommandDoc = PlainDocument()
+
+    val nameError = ErrorComponent.Model()
+    val extensionError = ErrorComponent.Model()
+    val buildCommandError = ErrorComponent.Model()
 
     var validChangeByUserListener: ((lang: SolutionLanguage) -> Unit)? = null
     private var solutionLang: SolutionLanguage? = null
@@ -50,19 +55,19 @@ class LanguageItemModel(private val validator: Validator) {
         var extension = extensionDoc.getText()
         var buildCommand = buildCommandDoc.getText()
 
-        val nameError = validator.validateName(name)
-        val extensionError = validator.validateExtension(extension)
-        val buildCommandError = validator.validateBuildCommand(buildCommand)
+        nameError.errorMessage = validator.validateName(name)
+        extensionError.errorMessage = validator.validateExtension(extension)
+        buildCommandError.errorMessage = validator.validateBuildCommand(buildCommand)
 
         // ignores dot prefix if present
         extension = if (extension.elementAtOrNull(0) == '.') extension.substring(1) else extension
 
         // reset invalid fields
-        if (nameError != null)
+        if (nameError.errorMessage != null)
             name = item.name
-        if (extensionError != null)
+        if (extensionError.errorMessage != null)
             extension = item.extension
-        if (buildCommandError != null)
+        if (buildCommandError.errorMessage != null)
             buildCommand = item.buildCommand
 
         return SolutionLanguage(name, extension, buildCommand, item.id)
