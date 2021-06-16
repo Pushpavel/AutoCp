@@ -77,6 +77,9 @@ class LanguagePanelUI(model: Model) {
             val buildCommandError = validator.validateBuildCommand(buildCommand)
 
 
+            // ignores dot prefix if present
+            extension = if (extension[0] == '.') extension.substring(1) else extension
+
             nameErrorComponent.setErrorMessage(nameError)
             extensionErrorComponent.setErrorMessage(extensionError)
             buildCommandErrorComponent.setErrorMessage(buildCommandError)
