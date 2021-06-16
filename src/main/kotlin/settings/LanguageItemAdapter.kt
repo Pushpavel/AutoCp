@@ -1,6 +1,5 @@
 package settings
 
-import plugin.settings.SolutionLanguage
 import ui.poplist.PopList.ItemView
 import ui.poplist.PopListModel
 

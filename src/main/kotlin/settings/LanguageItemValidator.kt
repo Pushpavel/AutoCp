@@ -1,8 +1,6 @@
 package settings
 
 import com.intellij.ui.CollectionListModel
-import plugin.settings.AutoCpSettings
-import plugin.settings.SolutionLanguage
 
 class LanguageItemValidator(val listModel: CollectionListModel<SolutionLanguage>) : LanguageItemModel.Validator {
 

@@ -1,4 +1,4 @@
-package plugin.settings
+package settings
 
 data class SolutionLanguage(
     var name: String = "",

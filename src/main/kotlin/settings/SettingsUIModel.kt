@@ -1,6 +1,5 @@
 package settings
 
-import plugin.settings.SolutionLanguage
 import settings.base.ComboBoxModelDelegate
 import ui.poplist.PopListModel
 

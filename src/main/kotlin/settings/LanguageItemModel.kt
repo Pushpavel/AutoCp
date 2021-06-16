@@ -1,7 +1,6 @@
 package settings
 
-import plugin.settings.ErrorComponent
-import plugin.settings.SolutionLanguage
+import ui.ErrorComponent
 import javax.swing.event.DocumentEvent
 import javax.swing.event.DocumentListener
 import javax.swing.text.Document

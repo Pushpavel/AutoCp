@@ -4,8 +4,8 @@ import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import com.intellij.ui.CollectionComboBoxModel
 import dev.pushpavel.autocp.database.Problem
-import plugin.settings.AutoCpSettings
-import plugin.settings.SolutionLanguage
+import settings.AutoCpSettings
+import settings.SolutionLanguage
 import javax.swing.tree.DefaultMutableTreeNode
 import javax.swing.tree.DefaultTreeModel
 import javax.swing.tree.TreeModel

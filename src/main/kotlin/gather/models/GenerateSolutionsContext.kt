@@ -1,7 +1,7 @@
 package gather.models
 
 import dev.pushpavel.autocp.database.Problem
-import plugin.settings.SolutionLanguage
+import settings.SolutionLanguage
 
 data class GenerateSolutionsContext(
     val problems: List<Problem>,

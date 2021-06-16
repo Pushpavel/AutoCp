@@ -1,4 +1,4 @@
-package plugin.settings
+package ui
 
 import com.intellij.icons.AllIcons
 import com.intellij.ui.components.JBLabel
@@ -16,15 +16,9 @@ class ErrorComponent(model: Model) : JBPanel<ErrorComponent>() {
         add(textComponent)
         isVisible = false
         model.errorMessageListeners.add { message ->
-            isVisible = message != null
             textComponent.text = message
+            isVisible = message != null
         }
-    }
-
-    @Deprecated("use ErrorComponent.Model")
-    fun setErrorMessage(message: String?) {
-        isVisible = message != null
-        textComponent.text = message
     }
 
     class Model {

@@ -1,4 +1,4 @@
-package plugin.settings
+package settings
 
 import com.intellij.openapi.components.*
 import com.intellij.util.xmlb.XmlSerializerUtil

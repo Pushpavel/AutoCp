@@ -17,7 +17,7 @@ class SettingsUI(model: SettingsUIModel) : JBPanel<SettingsUI>(BorderLayout()) {
         }, BorderLayout.NORTH)
 
         add(
-            LanguagesPanel(model.popListModel).component,
+            LanguagesPopList(model.popListModel).component,
             BorderLayout.CENTER
         )
     }

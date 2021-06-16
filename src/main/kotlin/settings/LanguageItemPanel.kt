@@ -4,7 +4,7 @@ import com.intellij.ide.macro.MacrosDialog
 import com.intellij.ui.components.fields.ExtendableTextField
 import com.intellij.ui.layout.LCFlags
 import com.intellij.ui.layout.panel
-import plugin.settings.ErrorComponent
+import ui.ErrorComponent
 
 class LanguageItemPanel(model: LanguageItemModel) {
 

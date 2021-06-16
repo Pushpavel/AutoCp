@@ -1,7 +1,6 @@
 package settings
 
 import com.intellij.openapi.options.Configurable
-import plugin.settings.AutoCpSettings
 
 class SettingsConfigurable : Configurable {
     var model: SettingsUIModel? = null
