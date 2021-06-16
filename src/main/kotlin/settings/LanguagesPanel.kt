@@ -13,5 +13,5 @@ class LanguagesPanel(popModel: PopListModel<SolutionLanguage>) : PopList<Solutio
     override val listContainer = ToolbarDecorator.createDecorator(listComponent)
         .createPanel()
     override val itemContainer = JBPanelWithEmptyText(BorderLayout()).withEmptyText("Create a New Solution Language")
-    override val itemView = LanguageItemPanel()
+    override val itemView = LanguageItemAdapter(popModel)
 }

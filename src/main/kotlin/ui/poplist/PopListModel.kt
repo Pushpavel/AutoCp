@@ -25,6 +25,10 @@ class PopListModel<T> {
         }
     }
 
+    fun setSelectionIndex(index: Int) {
+        selectionModel.setSelectionInterval(index, index)
+    }
+
     fun addSelectionListener(selectionListener: SelectionListener) {
         selectionListeners.add(selectionListener)
     }

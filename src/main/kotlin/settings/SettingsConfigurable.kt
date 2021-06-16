@@ -1,23 +1,44 @@
 package settings
 
 import com.intellij.openapi.options.Configurable
-import javax.swing.JComponent
+import plugin.settings.AutoCpSettings
 
 class SettingsConfigurable : Configurable {
+    var model: SettingsUIModel? = null
 
-    override fun createComponent(): JComponent? {
-        TODO("Not yet implemented")
+    override fun createComponent(): SettingsUI {
+        val model = SettingsUIModel()
+        this.model = model
+        return SettingsUI(model)
     }
 
     override fun isModified(): Boolean {
-        TODO("Not yet implemented")
+        val settings = AutoCpSettings.instance
+
+        return model?.run {
+            settings.selectedIndex != popListModel.selectionModel.minSelectionIndex
+                    || settings.getPreferredLang() != preferredLangModel.selectedItem
+                    || settings.solutionLanguages != popListModel.listModel.items // TODO: compare individually
+        } ?: false
     }
 
     override fun apply() {
-        TODO("Not yet implemented")
+        val settings = AutoCpSettings.instance
+        model?.run {
+            settings.solutionLanguages = popListModel.listModel.items
+            settings.selectedIndex = popListModel.selectionModel.minSelectionIndex
+            settings.setPreferredLang(preferredLangModel.selectedItem)
+        }
     }
 
-    override fun getDisplayName(): String {
-        TODO("Not yet implemented")
+    override fun reset() {
+        val settings = AutoCpSettings.instance
+        model?.run {
+            popListModel.listModel.replaceAll(settings.solutionLanguages)
+            popListModel.setSelectionIndex(settings.selectedIndex ?: -1) //TODO: remove ?: -1 after refactoring
+            preferredLangModel.selectedItem = settings.getPreferredLang()
+        }
     }
+
+    override fun getDisplayName() = "AutoCp"
 }

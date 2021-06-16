@@ -10,8 +10,8 @@
         <configurationType implementation="plugin.config.AutoCpConfigType"/>
         <runConfigurationProducer implementation="plugin.config.AutoCpConfigProducer"/>
         <notificationGroup id="AutoCp Notification Group" displayType="BALLOON"/>
-        <applicationConfigurable instance="plugin.settings.SettingsConfigurable"
-                                 id="plugin.settings.SettingsConfigurable"
+        <applicationConfigurable instance="settings.SettingsConfigurable"
+                                 id="settings.SettingsConfigurable"
                                  displayName="AutoCp"/>
         <toolWindow factoryClass="tool.ToolFactory" id="AutoCp" icon="AllIcons.General.Modified"/>
     </extensions>
