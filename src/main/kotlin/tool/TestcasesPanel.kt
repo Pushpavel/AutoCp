@@ -5,16 +5,16 @@ import com.intellij.ui.ToolbarDecorator
 import com.intellij.ui.components.JBLabel
 import com.intellij.ui.components.JBList
 import com.intellij.ui.components.JBPanelWithEmptyText
-import database.models.TestcaseSpec
+import database.models.Testcase
 import ui.poplist.PopList
 import ui.poplist.PopListModel
 import java.awt.BorderLayout
 import javax.swing.BorderFactory
 import javax.swing.border.EmptyBorder
 
-class TestcasesPanel(model: PopListModel<TestcaseSpec>) : PopList<TestcaseSpec>(true, 0.25F, model) {
+class TestcasesPanel(model: PopListModel<Testcase>) : PopList<Testcase>(true, 0.25F, model) {
 
-    override val listComponent = JBList<TestcaseSpec>()
+    override val listComponent = JBList<Testcase>()
 
     override val listContainer = ToolbarDecorator.createDecorator(listComponent)
         .setToolbarPosition(ActionToolbarPosition.LEFT)
@@ -25,10 +25,10 @@ class TestcasesPanel(model: PopListModel<TestcaseSpec>) : PopList<TestcaseSpec>(
 
     override val itemContainer = JBPanelWithEmptyText(BorderLayout()).withEmptyText("Create Test case")
 
-    override val itemView = object : ItemView<TestcaseSpec> {
+    override val itemView = object : ItemView<Testcase> {
         override val component = JBLabel("Item view")
 
-        override fun updateView(item: TestcaseSpec) {
+        override fun updateView(item: Testcase) {
             component.text = item.name
         }
 

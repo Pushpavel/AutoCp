@@ -3,10 +3,10 @@ package tool
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
-import database.AutoCpDB
-import database.models.OldProblemSpec
-import database.models.ProblemState
-import database.models.TestcaseSpec
+import com.intellij.util.containers.OrderedSet
+import database.AcpDatabase
+import database.models.Testcase
+import dev.pushpavel.autocp.database.Problem
 import tool.base.CollectionListListener
 import tool.base.FileFollowedContent
 import ui.poplist.PopListModel
@@ -14,25 +14,30 @@ import ui.poplist.PopListModel
 class SpecFileAdapter(
     project: Project,
     private val viewer: ProblemViewer
-) : FileFollowedContent<OldProblemSpec>(viewer) {
+) : FileFollowedContent<Problem>(viewer) {
 
-    private val db = project.service<AutoCpDB>()
-    private var problemId: String? = null
+    private val db = project.service<AcpDatabase>()
+    private var problem: Problem? = null
 
-    override fun getDataForFile(file: VirtualFile) = db.getProblemData(file.path)
+    override fun getDataForFile(file: VirtualFile) = db.getProblem(file.path).getOrNull()
 
-    private val testSpecsListener = object : CollectionListListener<TestcaseSpec>() {
-        override fun onChange(items: List<TestcaseSpec>) = db.updateTestcaseSpecs(items)
-    }
-
-    private val selectionListener = PopListModel.SelectionListener { selectedIndex ->
-        problemId?.let {
-            db.updateProblemState(ProblemState(it, selectedIndex))
+    private val testSpecsListener = object : CollectionListListener<Testcase>() {
+        override fun onChange(items: List<Testcase>) {
+            // Fixme: Testcases must be implicitly used as OrderedSet
+            problem?.let {
+                db.updateTestcases(it, OrderedSet(items))
+            }
         }
     }
 
-    override fun onFileFollowed(file: VirtualFile, spec: OldProblemSpec) {
-        problemId = spec.state.problemId
+    private val selectionListener = PopListModel.SelectionListener { selectedIndex ->
+        problem?.let {
+            db.updateProblemState(it, selectedIndex.toLong())
+        }
+    }
+
+    override fun onFileFollowed(file: VirtualFile, data: Problem) {
+        problem = data
 
         viewer.model.apply {
             listModel.addListDataListener(testSpecsListener)
@@ -40,8 +45,8 @@ class SpecFileAdapter(
         }
     }
 
-    override fun onFileUnfollowed(file: VirtualFile, spec: OldProblemSpec) {
-        problemId = null
+    override fun onFileUnfollowed(file: VirtualFile, data: Problem) {
+        problem = null
 
         viewer.model.apply {
             listModel.removeListDataListener(testSpecsListener)
