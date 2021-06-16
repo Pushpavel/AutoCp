@@ -25,14 +25,14 @@ class SpecFileAdapter(
         override fun onChange(items: List<Testcase>) {
             // Fixme: Testcases must be implicitly used as OrderedSet
             problem?.let {
-                db.updateTestcases(it, OrderedSet(items))
+                db.updateTestcases(it, OrderedSet(items)).getOrThrow()
             }
         }
     }
 
     private val selectionListener = PopListModel.SelectionListener { selectedIndex ->
         problem?.let {
-            db.updateProblemState(it, selectedIndex.toLong())
+            db.updateProblemState(it, selectedIndex.toLong()).getOrThrow()
         }
     }
 
