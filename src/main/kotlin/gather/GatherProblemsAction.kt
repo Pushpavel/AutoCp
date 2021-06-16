@@ -12,7 +12,8 @@ import database.AcpDatabase
 import gather.server.createServer
 import gather.server.getResponsesAsync
 import gather.ui.GatheringReporterDialog
-import gather.ui.GenerateSolutionsDialog
+import gather.ui.GenerateSolutionsDialogModel
+import gather.ui.createGenerateSolutionsDialog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.GlobalScope
@@ -34,39 +35,50 @@ class GatherProblemsAction : AnAction(), DumbAware {
             return
 
         GlobalScope.launch(Dispatchers.Swing) {
-            val project = event.project!!
-            server = createServer(CPH_PORT)
+            runCatching {
 
-            val problems = GatheringReporterDialog(project, this).use { dialog ->
-                // showing modal dialog async
+                val project = event.project!!
+                server = createServer(CPH_PORT)
+
+                val problems = GatheringReporterDialog(project, this).use { dialog ->
+                    // showing modal dialog async
+                    invokeLater {
+                        dialog.show()
+                        server?.close() // close server as dialog closed
+                    }
+
+                    server?.use {
+                        val responsesChannel = getResponsesAsync(it)
+                        gatherProblems(responsesChannel, dialog.eventsChannel)
+                    }
+                } ?: return@launch
+
+                val service = project.service<AcpDatabase>()
+
+                service.insertProblems(problems).getOrThrow()
+                val model = GenerateSolutionsDialogModel(project, problems)
+                val dialog = createGenerateSolutionsDialog(model)
+
                 invokeLater {
-                    dialog.show()
-                    server?.close() // close server as dialog closed
+                    if (!dialog.showAndGet())
+                        return@invokeLater
+
+                    val selectedLang = model.langModel.selected ?: throw Exception("No Solution Language selected")
+
+                    generateSolutionFiles(project, problems, selectedLang)
+
+                    Notifications.Bus.notify(
+                        Notification(
+                            "AutoCp Notification Group",
+                            "Generated solution files",
+                            problems[0].groupName,
+                            NotificationType.INFORMATION
+                        )
+                    )
                 }
-
-                server?.use {
-                    val responsesChannel = getResponsesAsync(it)
-                    gatherProblems(responsesChannel, dialog.eventsChannel)
-                }
-            } ?: return@launch
-
-            val service = project.service<AcpDatabase>()
-
-            service.insertProblems(problems).getOrThrow()
-
-            val dialog = GenerateSolutionsDialog(project, problems)
-            val result = dialog.getResult() ?: return@launch
-
-            generateSolutionFiles(project, result)
-
-            Notifications.Bus.notify(
-                Notification(
-                    "AutoCp Notification Group",
-                    "Generated solution files",
-                    result.problems[0].groupName + " files generated",
-                    NotificationType.INFORMATION
-                )
-            )
+            }.onFailure {
+                it.printStackTrace()
+            }
 
         }
     }
