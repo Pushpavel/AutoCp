@@ -27,7 +27,11 @@ class PopListImpl<T>(
         itemViewCorrespondingIndex = index
     }
 
-    private fun attachItemView(): Any = adapter.itemContainer.add(adapter.itemView.component)
+    private fun attachItemView() {
+        adapter.itemContainer.add(adapter.itemView.component)
+        adapter.itemContainer.updateUI()
+    }
+
     private fun detachItemView() {
         adapter.itemContainer.remove(adapter.itemView.component)
         adapter.itemContainer.updateUI()
