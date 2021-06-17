@@ -16,9 +16,6 @@ class AutoCpConfig(project: Project, factory: ConfigurationFactory, name: String
     }
 
     var solutionFilePath: String = ""
-
-    @Deprecated("should be removed after tester package refactored")
-    var executablePath: String = ""
     var solutionLangId: Long = -1
 
     override fun getState(executor: Executor, environment: ExecutionEnvironment) = AutoCpRunState(this)
@@ -30,6 +27,9 @@ class AutoCpConfig(project: Project, factory: ConfigurationFactory, name: String
             return null
         return Files.getNameWithoutExtension(solutionFilePath)
     }
+
+
+    // SERIALIZATION
 
     override fun writeExternal(element: Element) {
         JDOMExternalizerUtil.writeField(element, SOLUTION_FILE_PATH, solutionFilePath)
