@@ -1,4 +1,5 @@
 # 👨‍💻 AutoCP
+
 > IMPORTANT: This Project is still work in progress, anything may break or not work at any time
 
 [comment]: <> (![Build]&#40;https://github.com/Pushpavel/autoCP/workflows/Build/badge.svg&#41;)
@@ -7,13 +8,12 @@
 
 [comment]: <> ([![Downloads]&#40;https://img.shields.io/jetbrains/plugin/d/PLUGIN_ID.svg&#41;]&#40;https://plugins.jetbrains.com/plugin/PLUGIN_ID&#41;)
 
-<!-- Plugin description -->
 Automated Competitive Programming, so you can focus on solving the problem and improving your skills
-<!-- Plugin description end -->
 
+#### Installation
 
-#### Installation 
 > Note : The below instructions won't work as the plugin is yet to be published
+
 - Using IDE built-in plugin system:
 
   <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>Marketplace</kbd> > <kbd>Search for "autoCP"</kbd> >

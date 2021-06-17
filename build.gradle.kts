@@ -18,6 +18,8 @@ plugins {
 
 group = properties("pluginGroup")
 version = properties("pluginVersion")
+description = properties("pluginDependencies")
+
 // Configure project's dependencies
 repositories {
     mavenCentral()
@@ -78,6 +80,37 @@ tasks {
         useJUnitPlatform()
     }
 
+    // Set the compatibility versions to 11
+    withType<JavaCompile> {
+        sourceCompatibility = properties("javaVersion")
+        targetCompatibility = properties("javaVersion")
+    }
+    withType<KotlinCompile> {
+        kotlinOptions.jvmTarget = properties("javaVersion")
+    }
+
+    patchPluginXml {
+        version.set(properties("pluginVersion"))
+        sinceBuild.set(properties("pluginSinceBuild"))
+        untilBuild.set(properties("pluginUntilBuild"))
+        pluginDescription.set(properties("pluginDescription"))
+        // Get the latest available change notes from the changelog file
+        changeNotes.set(provider { changelog.getLatest().toHTML() })
+    }
+
+    runPluginVerifier {
+        ideVersions.set(properties("pluginVerifierIdeVersions").split(',').map(String::trim).filter(String::isNotEmpty))
+    }
+
+    publishPlugin {
+        dependsOn("patchChangelog")
+        token.set(System.getenv("PUBLISH_TOKEN"))
+        // pluginVersion is based on the SemVer (https://semver.org) and supports pre-release labels, like 2.1.7-alpha.3
+        // Specify pre-release label to publish the plugin in a custom Release Channel automatically. Read more:
+        // https://plugins.jetbrains.com/docs/intellij/deployment.html#specifying-a-release-channel
+        channels.set(listOf(properties("pluginVersion").split('-').getOrElse(1) { "default" }.split('.').first()))
+    }
+
     runIde {
         // workaround for https://stackoverflow.com/questions/60027717/intellij-idea-vm-options
         jvmArgs(
@@ -101,49 +134,5 @@ tasks {
             "--add-exports",
             "java.desktop/sun.java2d=ALL-UNNAMED"
         )
-    }
-
-    // Set the compatibility versions to 11
-    withType<JavaCompile> {
-        sourceCompatibility = properties("javaVersion")
-        targetCompatibility = properties("javaVersion")
-    }
-    withType<KotlinCompile> {
-        kotlinOptions.jvmTarget = properties("javaVersion")
-    }
-
-    patchPluginXml {
-        version.set(properties("pluginVersion"))
-        sinceBuild.set(properties("pluginSinceBuild"))
-        untilBuild.set(properties("pluginUntilBuild"))
-
-        // Extract the <!-- Plugin description --> section from README.md and provide for the plugin's manifest
-        pluginDescription.set(
-            File(projectDir, "README.md").readText().lines().run {
-                val start = "<!-- Plugin description -->"
-                val end = "<!-- Plugin description end -->"
-
-                if (!containsAll(listOf(start, end))) {
-                    throw GradleException("Plugin description section not found in README.md:\n$start ... $end")
-                }
-                subList(indexOf(start) + 1, indexOf(end))
-            }.joinToString("\n").run { markdownToHTML(this) }
-        )
-
-        // Get the latest available change notes from the changelog file
-        changeNotes.set(provider { changelog.getLatest().toHTML() })
-    }
-
-    runPluginVerifier {
-        ideVersions.set(properties("pluginVerifierIdeVersions").split(',').map(String::trim).filter(String::isNotEmpty))
-    }
-
-    publishPlugin {
-        dependsOn("patchChangelog")
-        token.set(System.getenv("PUBLISH_TOKEN"))
-        // pluginVersion is based on the SemVer (https://semver.org) and supports pre-release labels, like 2.1.7-alpha.3
-        // Specify pre-release label to publish the plugin in a custom Release Channel automatically. Read more:
-        // https://plugins.jetbrains.com/docs/intellij/deployment.html#specifying-a-release-channel
-        channels.set(listOf(properties("pluginVersion").split('-').getOrElse(1) { "default" }.split('.').first()))
     }
 }
