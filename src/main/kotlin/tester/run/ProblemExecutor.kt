@@ -39,15 +39,21 @@ class ProblemExecutor(
         // building the executable
         val executableBuilder = ExecutableBuilder(problem, config)
 
-        reporter.logOutput("build command: ${executableBuilder.commandLine.commandLineString}")
+        reporter.logOutput("build: ${executableBuilder.commandLine.commandLineString}")
         val result = executableBuilder.execute()
         reporter.logOutput(result.output)
-        reporter.logError(result.error)
         if (result.error.isNotEmpty()) {
+            reporter.logError(result.error)
             processHandler.destroyProcess()
             return
         }
 
+        // verify whether testcases are present
+        if (problem.testcases.isEmpty()) {
+            reporter.logError("No Testcases found for ${problem.name}.")
+            processHandler.destroyProcess()
+            return
+        }
         // running the executable
         val group = TestGroupSpec.fromProblem(problem, executableBuilder.outputPath)
         val groupExecutor = TestGroupExecutor(group, reporter)
