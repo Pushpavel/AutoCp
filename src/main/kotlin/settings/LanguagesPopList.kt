@@ -9,7 +9,9 @@ import java.awt.BorderLayout
 
 class LanguagesPopList(popModel: PopListModel<SolutionLanguage>) : PopList<SolutionLanguage>(false, 0.25F, popModel) {
     override val listComponent = JBList<SolutionLanguage>().apply { cellRenderer = SolutionLanguage.cellRenderer() }
-    override val listContainer = ToolbarDecorator.createDecorator(listComponent).createPanel()
+    override val listContainer = ToolbarDecorator.createDecorator(listComponent)
+        .setAddAction { popModel.addNewOrDuplicateItem() }
+        .createPanel()
     override val itemContainer = JBPanelWithEmptyText(BorderLayout()).withEmptyText("Create a New Solution Language")
     override val itemView = LanguageItemAdapter(popModel)
 }

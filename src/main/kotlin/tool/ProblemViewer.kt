@@ -11,7 +11,18 @@ import ui.poplist.PopListModel
 
 class ProblemViewer : ContentAdapter<Problem>(), FileEditorManagerListener {
 
-    val model = PopListModel<Testcase>()
+    val model = object : PopListModel<Testcase>() {
+        override val itemNameRegex = Regex("^(.*) #([0-9]+)\$")
+
+        override fun getItemName(item: Testcase) = item.name
+        override fun buildItemName(name: String, suffix: String) = "$name #$suffix"
+
+        override fun createNewItem(from: Testcase?): Testcase {
+            if (from != null)
+                return from.copy(name = nextUniqueName(from.name))
+            return Testcase(name = "Testcase #0", "", "")
+        }
+    }
     private val panel = TestcasesPanel(model)
 
     private val emptyContent = contentFactory.createContent(JBLabel("Content empty!"), "Problem", false)

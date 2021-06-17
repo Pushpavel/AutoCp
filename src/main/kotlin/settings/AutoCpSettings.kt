@@ -36,12 +36,16 @@ data class AutoCpSettings(
 
     companion object {
         val instance = service<AutoCpSettings>()
-        val DUPLICATE_NAME_REGEX = Regex("^(.*)_([0-9]+)\$")
         const val INPUT_PATH_KEY = "@input@"
         const val OUTPUT_PATH_KEY = "@output@"
 
-        fun getSolutionLanguageTemplate(): SolutionLanguage {
-            return SolutionLanguage("C++", "cpp", "g++ $INPUT_PATH_KEY -o $OUTPUT_PATH_KEY", System.currentTimeMillis())
+        fun getSolutionLanguageTemplate(name: String?): SolutionLanguage {
+            return SolutionLanguage(
+                name ?: "C++",
+                "cpp",
+                "g++ $INPUT_PATH_KEY -o $OUTPUT_PATH_KEY",
+                System.currentTimeMillis()
+            )
         }
 
         fun getDefaultSolutionLanguages(): MutableList<SolutionLanguage> {

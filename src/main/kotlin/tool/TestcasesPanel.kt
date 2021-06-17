@@ -21,6 +21,7 @@ class TestcasesPanel(model: PopListModel<Testcase>) : PopList<Testcase>(true, 0.
 
     override val listContainer = ToolbarDecorator.createDecorator(listComponent)
         .setToolbarPosition(ActionToolbarPosition.LEFT)
+        .setAddAction { model.addNewOrDuplicateItem() }
         .createPanel()
         .apply {
             border = BorderFactory.createCompoundBorder(EmptyBorder(16, 16, 0, 16), border)
