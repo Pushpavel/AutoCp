@@ -28,20 +28,12 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:1.5.0")
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.5.10")
 
-    val exposedVersion = "0.32.1"
-    implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")
-    implementation("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
-    implementation("org.xerial:sqlite-jdbc:3.34.0")
-
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.2")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.2")
     testImplementation("io.mockk:mockk:1.11.0")
 
     implementation("com.squareup.sqldelight:sqlite-driver:1.5.0")
 
-    configurations.forEach {
-        it.exclude("org.slf4j", "slf4j-api")
-    }
 }
 
 buildscript {
@@ -65,7 +57,6 @@ intellij {
 
     // Plugin Dependencies. Uses `platformPlugins` property from the gradle.properties file.
     plugins.set(properties("platformPlugins").split(',').map(String::trim).filter(String::isNotEmpty))
-
 }
 
 // Configure gradle-changelog-plugin plugin.
