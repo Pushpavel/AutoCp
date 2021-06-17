@@ -1,4 +1,3 @@
-import org.jetbrains.changelog.markdownToHTML
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 fun properties(key: String) = project.findProperty(key).toString()
@@ -90,11 +89,13 @@ tasks {
     }
 
     patchPluginXml {
+        pluginId.set(properties("pluginGroup"))
         version.set(properties("pluginVersion"))
+        pluginDescription.set(properties("pluginDescription"))
         sinceBuild.set(properties("pluginSinceBuild"))
         untilBuild.set(properties("pluginUntilBuild"))
-        pluginDescription.set(properties("pluginDescription"))
-        // Get the latest available change notes from the changelog file
+
+        // Get the latest available change notes from CHANGELOG.md
         changeNotes.set(provider { changelog.getLatest().toHTML() })
     }
 
