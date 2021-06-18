@@ -1,14 +1,16 @@
-# 👨‍💻 AutoCP
+<div  align="center">
 
-> IMPORTANT: This Project is still work in progress, anything may break or not work at any time
+![](src/main/resources/META-INF/pluginIcon.svg)
 
-[comment]: <> (![Build]&#40;https://github.com/Pushpavel/autoCP/workflows/Build/badge.svg&#41;)
+# AutoCp
 
-[comment]: <> ([![Version]&#40;https://img.shields.io/jetbrains/plugin/v/PLUGIN_ID.svg&#41;]&#40;https://plugins.jetbrains.com/plugin/PLUGIN_ID&#41;)
+_Automates Competitive Programming Stuff, so you can focus on solving the problem and improving your skills_
 
-[comment]: <> ([![Downloads]&#40;https://img.shields.io/jetbrains/plugin/d/PLUGIN_ID.svg&#41;]&#40;https://plugins.jetbrains.com/plugin/PLUGIN_ID&#41;)
+![Build](https://github.com/Pushpavel/autoCP/workflows/Build/badge.svg)
+[![Version](https://img.shields.io/jetbrains/plugin/v/PLUGIN_ID.svg)](https://plugins.jetbrains.com/plugin/PLUGIN_ID)
+[![Downloads](https://img.shields.io/jetbrains/plugin/d/PLUGIN_ID.svg)](https://plugins.jetbrains.com/plugin/PLUGIN_ID)
 
-Automated Competitive Programming, so you can focus on solving the problem and improving your skills
+</div>
 
 #### Installation
 

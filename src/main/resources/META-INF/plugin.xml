@@ -1,6 +1,6 @@
 <idea-plugin>
     <name>AutoCp</name>
-    <vendor email="jpushpavel@gmail.com">pushpavel</vendor>
+    <vendor email="jpushpavel@gmail.com">Pushpavel Janakiraman</vendor>
 
     <!-- Product and plugin compatibility requirements -->
     <!-- https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
