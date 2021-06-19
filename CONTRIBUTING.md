@@ -27,8 +27,11 @@ I actually have no experience in building or managing a community and would love
 something wrong or should have done something differently, or you just want to say Hi 👋. please feel free to get in
 touch
 
-- [jpushpavel@gmail.com](mailto:jpushpavel@gmail.com)
-- [LinkedIn](https://www.linkedin.com/in/pushpavel-janakiraman-926851196/)
+||🦊 <!-- Don't know how to hide Table Header 😅 -->
+| -----   | -----
+| Email | [jpushpavel@gmail.com](mailto:jpushpavel@gmail.com)
+| Twitter| [@pushpave1](https://twitter.com/pushpave1)
+| Github | [Pixel](https://github.com/Pushpavel)
 
 ## Resources
 
