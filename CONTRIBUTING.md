@@ -2,12 +2,12 @@
 
 First off, thanks for taking the time to contribute! Your help is essential for keeping this project great. 🎉🎉🎉
 
-## How can I help?
+### How can I help?
 
 - Writing tutorials or blog posts, improving the documentation.
 - Pull requests are Great and are actively welcomed 😃, it could be simple grammar fixes to adding new features
 
-## Pull Request Guidelines
+### Pull Request Guidelines
 
 > Branch Off from ```dev``` branch to develop features and bug fixes, see [Branches](#Branches).
 
@@ -19,7 +19,7 @@ If you have never created a pull request before, welcome
   dependent upon each other, consider submitting them as separate pull requests.
 - __Write a decent commit message__, please avoid messages like ```update code```😅.
 
-## Branches
+### Branches
 
 We can follow [Github Flow](https://guides.github.com/introduction/flow/) with few modifications
 
@@ -27,7 +27,7 @@ We can follow [Github Flow](https://guides.github.com/introduction/flow/) with f
   to ```main``` marks a release
 - This gives us the ability to make __hot fixes__ and __reliable__ releases
 
-## Friendly Note
+### Friendly Note
 
 Hi, I am [Pushpavel](https://github.com/Pushpavel).
 
@@ -41,12 +41,12 @@ touch
 | Twitter| [@pushpave1](https://twitter.com/pushpave1)
 | Github | [Pixel](https://github.com/Pushpavel)
 
-## Resources
+### Resources
 
 - [How to Contribute to Open Source](https://opensource.guide/how-to-contribute/)
 - [Using Pull Requests](https://help.github.com/articles/about-pull-requests/)
 - [GitHub Help](https://help.github.com)
 
-## License
+### License
 
 By contributing, you agree that your contributions will be licensed under its [Apache License 2.0](LICENSE.md).

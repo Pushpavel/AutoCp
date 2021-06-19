@@ -12,7 +12,7 @@ _Automates Competitive Programming Stuff, so you can focus on solving the proble
 
 </div>
 
-## Installation
+### Installation
 
 > Note : The below instructions won't work as the plugin is yet to be published
 
@@ -26,19 +26,19 @@ _Automates Competitive Programming Stuff, so you can focus on solving the proble
   Download the [latest release](https://github.com/Pushpavel/autoCP/releases/latest) and install it manually using
   <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>⚙️</kbd> > <kbd>Install plugin from disk...</kbd>
 
-## Help? 😀
+### Help? 😀
 
 - If you've noticed a bug or have a feature request,
   consider [opening a new issue](https://github.com/Pushpavel/AutoCp/issues/new).
 - Use [discussions](https://github.com/Pushpavel/AutoCp/discussions) for questions.
 
-## Contributing
+### Contributing
 
 See something that's wrong or unclear?, Pull requests are welcome 😀
 
 Read the [contributing guide](CONTRIBUTING.md) to learn how you can take part in improving ```AutoCp```
 
-## License
+### License
 
 The scripts and documentation in this project are released under the [Apache License 2.0](LICENSE.md)
 
