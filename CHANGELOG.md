@@ -1,6 +1,6 @@
 <!-- Keep a Changelog guide -> https://keepachangelog.com -->
 
-# autoCP Changelog
+# AutoCp Changelog
 
 ## [Unreleased]
 ### Added
