@@ -9,7 +9,7 @@ First off, thanks for taking the time to contribute! Your help is essential for 
 
 ## Pull Request Guidelines
 
-> Develop from ```dev``` branch, see [BRANCHES.md](BRANCHES.md) for more info.
+> Branch Off from ```dev``` branch to develop features and bug fixes, see [Branches](#Branches).
 
 If you have never created a pull request before, welcome
 😺. [Here is a quick tutorial](https://www.youtube.com/watch?v=8lGpZkjnkt4) for you.
@@ -18,6 +18,14 @@ If you have never created a pull request before, welcome
 - __Keep your change as focused as possible__. If there are multiple changes you would like to make that are not
   dependent upon each other, consider submitting them as separate pull requests.
 - __Write a decent commit message__, please avoid messages like ```update code```😅.
+
+## Branches
+
+We can follow [Github Flow](https://guides.github.com/introduction/flow/) with few modifications
+
+- The principles of GitHub Flow apply to the ```dev``` branch instead of the ```main``` branch, and merging ```dev```
+  to ```main``` marks a release
+- This gives us the ability to make __hot fixes__ and __reliable__ releases
 
 ## Friendly Note
 
