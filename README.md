@@ -12,7 +12,7 @@ _Automates Competitive Programming Stuff, so you can focus on solving the proble
 
 </div>
 
-This plugin provides support for creating solution files and testing them in any Jetbrains IDEs.
+This plugin provides support for creating solution files and testing them for competitive programming in any Jetbrains IDEs.
 
 ### Installation
 
