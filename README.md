@@ -12,7 +12,17 @@ _Automates Competitive Programming Stuff, so you can focus on solving the proble
 
 </div>
 
-This plugin provides support for creating solution files and testing them for competitive programming in any Jetbrains IDEs.
+This plugin provides support for creating solution files and testing them for competitive programming in any Jetbrains
+IDEs.
+
+> [Competitive Companion](https://github.com/jmerle/competitive-companion) browser extension is required to parse the problems
+
+### Features
+
+- Create solution Files using [Competitive Companion](https://github.com/jmerle/competitive-companion)
+- Build and run any programming language by customizing the build command in settings
+- Test your solutions against sample testcases, or your own testcases
+- Test results are presented in Test Runner UI built in the IDE.
 
 ### Installation
 
@@ -20,13 +30,23 @@ This plugin provides support for creating solution files and testing them for co
 
 - Using IDE built-in plugin system:
 
-  <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>Marketplace</kbd> > <kbd>Search for "autoCP"</kbd> >
+  <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>Marketplace</kbd> > <kbd>Search for "AutoCp"</kbd> >
   <kbd>Install Plugin</kbd>
 
 - Manually:
 
   Download the [latest release](https://github.com/Pushpavel/autoCP/releases/latest) and install it manually using
   <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>⚙️</kbd> > <kbd>Install plugin from disk...</kbd>
+
+### Quick Start
+
+- Create solution files by <kbd>Tools</kbd> > <kbd>Gather Problems</kbd> and parsing the problem or contest
+  using [Competitive Companion](https://github.com/jmerle/competitive-companion)
+- Program your solution 😎
+- Right-click your solution and run it
+- Open <kbd>View</kbd> > <kbd>Tool Windows</kbd> > <kbd>AutoCp</kbd> to view and edit your testcases
+- Customize Build commands or add new Programming Languages through <kbd>Settings/Preferences</kbd> > <kbd>
+  Tools</kbd> > <kbd>AutoCp</kbd>
 
 ### Help? 😀
 
