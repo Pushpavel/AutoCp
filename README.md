@@ -53,6 +53,17 @@ IDEs.
 
 This file stores the problems and testcases you gathered using <kbd>Gather Problems</kbd> Action.
 
+### File Structure
+
+<kbd>Gather Problems</kbd> Action generates solution files inside a folder named by
+the [group](https://github.com/jmerle/competitive-companion#explanation) that the problem belows to.
+> Moving or renaming files will unlink the solution file to its problem
+
+### Limitations
+
+- Time Limit and Memory Limit is ignored.
+- Strict File Structure
+
 ### Help? 😀
 
 - If you've noticed a bug or have a feature request,
