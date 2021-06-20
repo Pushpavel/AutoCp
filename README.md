@@ -1,3 +1,4 @@
+<!--suppress HtmlDeprecatedAttribute -->
 <div  align="center">
 
 ![](src/main/resources/META-INF/pluginIcon.svg)

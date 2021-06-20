@@ -1,1 +1,1 @@
-rootProject.name = "autoCP"
+rootProject.name = "AutoCp"
