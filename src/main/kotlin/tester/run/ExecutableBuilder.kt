@@ -4,6 +4,7 @@ import com.intellij.execution.configurations.GeneralCommandLine
 import dev.pushpavel.autocp.database.Problem
 import config.AutoCpConfig
 import settings.AutoCpSettings
+import tester.utils.splitCommandString
 import java.nio.file.Files
 import java.nio.file.Paths
 import kotlin.io.path.exists
@@ -23,10 +24,9 @@ class ExecutableBuilder(private val problem: Problem, private val config: AutoCp
             Paths.get(tempDir.pathString, "AutoCp-" + problem.name + "-" + System.currentTimeMillis() + ".exe")
         this.outputPath = outputPath.pathString
         val command = lang.buildCommandString(config.solutionFilePath, outputPath.pathString)
-        val commandList = Regex(""""(\\"|[^"])*?"|[^\s]+""").findAll(command).toList()
-        GeneralCommandLine(commandList.map { it.value.trim('"') })
+        val commandList = splitCommandString(command)
+        GeneralCommandLine(commandList)
     }
-
 
     override fun createProcess(): Process {
         return commandLine.createProcess()

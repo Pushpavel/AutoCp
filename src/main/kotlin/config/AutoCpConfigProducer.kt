@@ -58,8 +58,6 @@ class AutoCpConfigProducer : LazyRunConfigurationProducer<AutoCpConfig>() {
 
     override fun isConfigurationFromContext(configuration: AutoCpConfig, context: ConfigurationContext): Boolean {
         val path = context.location?.virtualFile?.path ?: return false
-        println("{${path == configuration.solutionFilePath}}")
-        println("{${path} == ${configuration.solutionFilePath}}")
         return configuration.solutionFilePath == path
     }
 
