@@ -205,7 +205,7 @@ jobs:
       - name: Fetch Sources
         uses: actions/checkout@v2.3.4
 
-      # Remove old release drafts by using the curl request for the available releases with draft flag
+      # Remove old release drafts by using the curl request for the releases with draft flag and same tag_name
       - name: Remove Old Release Drafts
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -219,12 +219,11 @@ jobs:
       # Create new release draft - which is not publicly visible and requires manual acceptance
       - name: Create Release Draft
         id: createDraft
-        uses: actions/create-release@v1.1.4
+        uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: v${{ needs.build.outputs.version }}
-          release_name: v${{ needs.build.outputs.version }}
+          tag_name: ${{ needs.build.outputs.version }}
           body: ${{ needs.build.outputs.changelog }}
           draft: true
 

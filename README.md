@@ -49,9 +49,14 @@ IDEs.
 - Customize Build commands or add new Programming Languages through <kbd>Settings/Preferences</kbd> > <kbd>
   Tools</kbd> > <kbd>AutoCp</kbd>
 
-### What is ```.autocp``` file at the root of my project
+### Screenshot
 
-This file stores the problems and testcases you gathered using <kbd>Gather Problems</kbd> Action.
+![CLION Screenshot](Screenshot.png)
+
+### Why is there a ```.autocp``` file at the root of my project ?
+
+This file stores the problems and testcases you gathered using <kbd>Gather Problems</kbd> Action. It is very crucial to
+this plugin and should not be touched.
 
 ### File Structure
 
