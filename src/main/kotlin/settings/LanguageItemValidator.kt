@@ -15,11 +15,20 @@ class LanguageItemValidator(val listModel: CollectionListModel<SolutionLanguage>
     override fun validateBuildCommand(buildCommand: String): String? {
         val input = buildCommand.contains(AutoCpSettings.INPUT_PATH_KEY)
         val output = buildCommand.contains(AutoCpSettings.OUTPUT_PATH_KEY)
+        // TODO: check if single quotes are useful so that we can just hardcode double quotes directly on the path
+        val inputDoubleQuotes = buildCommand.contains("\"" + AutoCpSettings.INPUT_PATH_KEY + "\"")
+        val inputSingleQuotes = buildCommand.contains("'" + AutoCpSettings.INPUT_PATH_KEY + "'")
+        val outputDoubleQuotes = buildCommand.contains("\"" + AutoCpSettings.OUTPUT_PATH_KEY + "\"")
+        val outputSingleQuotes = buildCommand.contains("'" + AutoCpSettings.OUTPUT_PATH_KEY + "'")
 
         return if (!input)
             "buildCommand: ${AutoCpSettings.INPUT_PATH_KEY} missing"
         else if (!output)
             "buildCommand: ${AutoCpSettings.OUTPUT_PATH_KEY} missing"
+        else if (!inputSingleQuotes && !inputDoubleQuotes)
+            "buildCommand: ${AutoCpSettings.INPUT_PATH_KEY} should be wrapped with single or double quotes"
+        else if (!outputSingleQuotes && !outputDoubleQuotes)
+            "buildCommand: ${AutoCpSettings.INPUT_PATH_KEY} should be wrapped with single or double quotes"
         else
             null
     }

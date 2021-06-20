@@ -43,15 +43,15 @@ data class AutoCpSettings(
             return SolutionLanguage(
                 name ?: "C++",
                 "cpp",
-                "g++ $INPUT_PATH_KEY -o $OUTPUT_PATH_KEY",
+                "g++ $INPUT_PATH_KEY -o \"$OUTPUT_PATH_KEY\"",
                 System.currentTimeMillis()
             )
         }
 
         fun getDefaultSolutionLanguages(): MutableList<SolutionLanguage> {
             return mutableListOf(
-                SolutionLanguage("C++", "cpp", "g++ $INPUT_PATH_KEY -o $OUTPUT_PATH_KEY ", 1),
-                SolutionLanguage("java", "java", "javac $INPUT_PATH_KEY --output $OUTPUT_PATH_KEY ", 2)
+                SolutionLanguage("C++", "cpp", "g++ \"$INPUT_PATH_KEY\" -o \"$OUTPUT_PATH_KEY\" ", 1),
+                SolutionLanguage("java", "java", "javac \"$INPUT_PATH_KEY\" --output \"$OUTPUT_PATH_KEY\" ", 2)
             )
         }
     }
