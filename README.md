@@ -27,8 +27,6 @@ IDEs.
 
 ### Installation
 
-> Note : The below instructions won't work as the plugin is yet to be published
-
 - Using IDE built-in plugin system:
 
   <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>Marketplace</kbd> > <kbd>Search for "AutoCp"</kbd> >
