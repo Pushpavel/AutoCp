@@ -1,5 +1,6 @@
 package tests
 
+import com.google.gson.JsonObject
 import com.intellij.util.containers.OrderedSet
 import database.IAutoCp
 import database.models.Testcase
@@ -28,7 +29,8 @@ abstract class IAutoCpTest {
             "name",
             "group",
             OrderedSet(listOf(Testcase("Testcase #1", "Input", "Output"))),
-            -1
+            -1,
+            JsonObject()
         )
 
         database.insertProblems(listOf(problem))
@@ -44,7 +46,7 @@ abstract class IAutoCpTest {
 
     @Test
     fun updateProblemState() {
-        problem = Problem("name", "group", OrderedSet(), -1)
+        problem = Problem("name", "group", OrderedSet(), -1, JsonObject())
 
         database.insertProblems(listOf(problem))
         val solutionPath = "C:\\path\\to\\solution.cpp"
@@ -67,7 +69,8 @@ abstract class IAutoCpTest {
                     Testcase("Testcase #3", "Input 3", "Output 3"),
                 )
             ),
-            -1
+            -1,
+            JsonObject()
         )
         val problem2 = problem.copy(name = "name2")
 

@@ -2,6 +2,7 @@ package database
 
 import com.intellij.openapi.project.Project
 import com.squareup.sqldelight.sqlite.driver.JdbcSqliteDriver
+import database.utils.DataColumnAdapter
 import database.utils.TestcaseColumnAdapter
 import dev.pushpavel.autocp.database.*
 import java.nio.file.Paths
@@ -22,7 +23,7 @@ abstract class AbstractAcpDatabase(project: Project) : IAutoCp {
         // workaround for https://stackoverflow.com/questions/43529832/trying-to-connect-to-a-sqlite-database-keep-getting-no-suitable-driver-found
         Class.forName("org.sqlite.JDBC")
 
-        db = AutoCpDatabase(driver, Problem.Adapter(TestcaseColumnAdapter()))
+        db = AutoCpDatabase(driver, Problem.Adapter(TestcaseColumnAdapter(), DataColumnAdapter()))
 
         val version = getVersion()
 

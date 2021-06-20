@@ -49,6 +49,10 @@ IDEs.
 - Customize Build commands or add new Programming Languages through <kbd>Settings/Preferences</kbd> > <kbd>
   Tools</kbd> > <kbd>AutoCp</kbd>
 
+### What is ```.autocp``` file at the root of my project
+
+This file stores the problems and testcases you gathered using <kbd>Gather Problems</kbd> Action.
+
 ### Help? 😀
 
 - If you've noticed a bug or have a feature request,
