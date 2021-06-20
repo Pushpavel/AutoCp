@@ -37,9 +37,9 @@ class TestExecutor(private val spec: TestSpec, private val listener: TestListene
         }
 
         val expectedOutput = spec.expectedOutput.trim()
-        val actualOutput = result.output.trim()
+        val actualOutput = result.output.trim().replace("\r", "")
 
-        if (actualOutput != expectedOutput) {
+        if (!actualOutput.contentEquals(expectedOutput)) {
             listener.testError(spec, "\n\nExpected Output:\n$expectedOutput")
             listener.testFailed(spec, ResultCode.WRONG_ANSWER)
         } else
