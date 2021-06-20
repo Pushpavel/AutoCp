@@ -13,14 +13,16 @@
         <applicationConfigurable instance="settings.SettingsConfigurable"
                                  id="settings.SettingsConfigurable"
                                  displayName="AutoCp"/>
-        <toolWindow factoryClass="tool.ToolFactory" id="AutoCp" icon="AllIcons.General.Modified"/>
+        <toolWindow factoryClass="tool.ToolFactory" id="AutoCp" icon="AllIcons.General.Modified" anchor="right"/>
     </extensions>
 
     <actions>
         <action id="dev.pushpavel.autoCP.gather.GatherProblemsAction"
                 class="gather.GatherProblemsAction"
                 text="Gather Problems"
-                description="Gathers problems parsed by competitive companion browser extension"/>
+                description="Gathers problems parsed by competitive companion browser extension">
+            <add-to-group group-id="ToolsMenu" anchor="first"/>
+        </action>
     </actions>
 
 </idea-plugin>
