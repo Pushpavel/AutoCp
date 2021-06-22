@@ -9,8 +9,14 @@ import com.intellij.psi.PsiElement
 import database.AcpDatabase
 import settings.AutoCpSettings
 
+/**
+ * Implementation class for creating [AutoCpConfig] from context
+ */
 class AutoCpConfigProducer : LazyRunConfigurationProducer<AutoCpConfig>() {
 
+    /**
+     * Sets up [AutoCpConfig] if the file in this context is associated with a Problem
+     */
     override fun setupConfigurationFromContext(
         configuration: AutoCpConfig,
         context: ConfigurationContext,
@@ -31,6 +37,10 @@ class AutoCpConfigProducer : LazyRunConfigurationProducer<AutoCpConfig>() {
         return true
     }
 
+    /**
+     * Selecting a language for the [AutoCpConfig] created from Context
+     * based on Preference and extension
+     */
     private fun getSelectedLangId(solutionPath: String): Long {
         val extension = Files.getFileExtension(solutionPath)
         val settings = AutoCpSettings.instance
@@ -56,6 +66,9 @@ class AutoCpConfigProducer : LazyRunConfigurationProducer<AutoCpConfig>() {
         return -1
     }
 
+    /**
+     * Used to reuse existing AutoCpConfig created from this Context
+     */
     override fun isConfigurationFromContext(configuration: AutoCpConfig, context: ConfigurationContext): Boolean {
         val path = context.location?.virtualFile?.path ?: return false
         return configuration.solutionFilePath == path

@@ -10,19 +10,23 @@ import com.intellij.openapi.vfs.VfsUtil
 import com.intellij.ui.CollectionComboBoxModel
 import com.intellij.ui.components.fields.ExtendableTextField
 import com.intellij.ui.layout.CCFlags
-import com.intellij.ui.layout.listCellRenderer
 import com.intellij.ui.layout.panel
-import org.jetbrains.annotations.NotNull
 import settings.AutoCpSettings
 import settings.SolutionLanguage
 import java.nio.file.Path
 import javax.swing.JComponent
 
+/**
+ * UI Editor of [AutoCpConfig] Run Configuration
+ */
 class ConfigEditor(private val project: Project) : SettingsEditor<AutoCpConfig>() {
 
     private val solutionFileField = ExtendableTextField()
     private val solutionLangModel = CollectionComboBoxModel<SolutionLanguage>()
 
+    /**
+     * Settings to UI
+     */
     override fun resetEditorFrom(s: AutoCpConfig) {
         solutionFileField.text = s.solutionFilePath
 
@@ -31,12 +35,15 @@ class ConfigEditor(private val project: Project) : SettingsEditor<AutoCpConfig>(
         solutionLangModel.selectedItem = settings.getLangWithId(s.solutionLangId)
     }
 
+    /**
+     * UI to Settings
+     */
     override fun applyEditorTo(s: AutoCpConfig) {
         s.solutionFilePath = solutionFileField.text
 
         val settings = AutoCpSettings.instance
 
-        // verifies if selected lang still exists
+        // verifies if selected lang exists
         val selectedLang = settings.getLangWithId(solutionLangModel.selected?.id)
         s.solutionLangId = selectedLang?.id ?: -1
     }
@@ -63,6 +70,7 @@ class ConfigEditor(private val project: Project) : SettingsEditor<AutoCpConfig>(
     }
 
     private fun ExtendableTextField.addBrowseButton() {
+        // ensures user can select only one file
         val solutionFileDescriptor = FileChooserDescriptorFactory
             .createSingleFileDescriptor()
 
