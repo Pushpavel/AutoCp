@@ -1,7 +1,7 @@
 package tester.run
 
 import com.intellij.execution.configurations.GeneralCommandLine
-import dev.pushpavel.autocp.database.Problem
+import com.github.pushpavel.autocp.database.Problem
 import config.AutoCpConfig
 import settings.AutoCpSettings
 import tester.utils.splitCommandString

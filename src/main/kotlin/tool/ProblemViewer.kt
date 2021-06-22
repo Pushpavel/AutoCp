@@ -5,7 +5,7 @@ import com.intellij.ui.components.JBLabel
 import com.intellij.ui.content.Content
 import com.intellij.ui.content.ContentFactory
 import database.models.Testcase
-import dev.pushpavel.autocp.database.Problem
+import com.github.pushpavel.autocp.database.Problem
 import tool.base.ContentAdapter
 import ui.poplist.PopListModel
 

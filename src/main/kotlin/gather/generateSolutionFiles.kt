@@ -4,7 +4,7 @@ import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import com.intellij.util.io.exists
 import database.AcpDatabase
-import dev.pushpavel.autocp.database.Problem
+import com.github.pushpavel.autocp.database.Problem
 import settings.SolutionLanguage
 import java.nio.file.Paths
 import kotlin.io.path.pathString

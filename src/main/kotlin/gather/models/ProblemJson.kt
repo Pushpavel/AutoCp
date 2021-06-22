@@ -2,7 +2,7 @@ package gather.models
 
 import com.google.gson.JsonObject
 import com.intellij.util.containers.OrderedSet
-import dev.pushpavel.autocp.database.Problem
+import com.github.pushpavel.autocp.database.Problem
 
 data class ProblemJson(
     val name: String,

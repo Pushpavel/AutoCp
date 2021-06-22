@@ -3,7 +3,7 @@ package database
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.project.Project
 import com.intellij.util.containers.OrderedSet
-import dev.pushpavel.autocp.database.Problem
+import com.github.pushpavel.autocp.database.Problem
 import kotlin.io.path.Path
 import kotlin.io.path.pathString
 

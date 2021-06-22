@@ -83,7 +83,7 @@ changelog {
 
 sqldelight {
     database("AutoCpDatabase") {
-        packageName = "dev.pushpavel.autocp.database"
+        packageName = "com.github.pushpavel.autocp.database"
     }
 }
 

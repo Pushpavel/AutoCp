@@ -2,7 +2,7 @@ package database
 
 import com.intellij.util.containers.OrderedSet
 import database.models.Testcase
-import dev.pushpavel.autocp.database.Problem
+import com.github.pushpavel.autocp.database.Problem
 
 interface IAutoCp : AutoCloseable {
     fun insertProblems(problems: List<Problem>): Result<Unit>

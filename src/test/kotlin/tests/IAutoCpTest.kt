@@ -4,7 +4,7 @@ import com.google.gson.JsonObject
 import com.intellij.util.containers.OrderedSet
 import database.IAutoCp
 import database.models.Testcase
-import dev.pushpavel.autocp.database.Problem
+import com.github.pushpavel.autocp.database.Problem
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach

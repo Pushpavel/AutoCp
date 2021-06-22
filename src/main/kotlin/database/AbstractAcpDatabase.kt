@@ -4,7 +4,7 @@ import com.intellij.openapi.project.Project
 import com.squareup.sqldelight.sqlite.driver.JdbcSqliteDriver
 import database.utils.DataColumnAdapter
 import database.utils.TestcaseColumnAdapter
-import dev.pushpavel.autocp.database.*
+import com.github.pushpavel.autocp.database.*
 import java.nio.file.Paths
 import java.util.*
 import kotlin.io.path.pathString

@@ -1,6 +1,6 @@
 package tester.spec
 
-import dev.pushpavel.autocp.database.Problem
+import com.github.pushpavel.autocp.database.Problem
 import tester.run.ExecutableRunnerFactory
 
 class TestGroupSpec(

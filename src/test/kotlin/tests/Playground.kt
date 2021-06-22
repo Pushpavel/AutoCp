@@ -3,8 +3,8 @@ package tests
 import com.squareup.sqldelight.sqlite.driver.JdbcSqliteDriver
 import database.utils.DataColumnAdapter
 import database.utils.TestcaseColumnAdapter
-import dev.pushpavel.autocp.database.AutoCpDatabase
-import dev.pushpavel.autocp.database.Problem
+import com.github.pushpavel.autocp.database.AutoCpDatabase
+import com.github.pushpavel.autocp.database.Problem
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir

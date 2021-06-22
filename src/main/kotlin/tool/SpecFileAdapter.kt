@@ -6,7 +6,7 @@ import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.util.containers.OrderedSet
 import database.AcpDatabase
 import database.models.Testcase
-import dev.pushpavel.autocp.database.Problem
+import com.github.pushpavel.autocp.database.Problem
 import tool.base.CollectionListListener
 import tool.base.FileFollowedContent
 import ui.poplist.PopListModel

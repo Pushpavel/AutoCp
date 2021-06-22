@@ -3,7 +3,7 @@ package gather.ui
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import com.intellij.ui.CollectionComboBoxModel
-import dev.pushpavel.autocp.database.Problem
+import com.github.pushpavel.autocp.database.Problem
 import settings.AutoCpSettings
 import settings.SolutionLanguage
 import javax.swing.tree.DefaultMutableTreeNode

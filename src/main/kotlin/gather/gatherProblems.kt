@@ -1,7 +1,7 @@
 package gather
 
 import com.google.gson.Gson
-import dev.pushpavel.autocp.database.Problem
+import com.github.pushpavel.autocp.database.Problem
 import gather.models.ProblemGatheredEvent
 import gather.models.ProblemJson
 import kotlinx.coroutines.channels.ReceiveChannel
