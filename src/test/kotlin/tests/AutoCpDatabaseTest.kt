@@ -2,7 +2,7 @@ package tests
 
 import com.google.gson.JsonObject
 import com.intellij.util.containers.OrderedSet
-import database.IAutoCp
+import database.AutoCpDatabase
 import database.models.Testcase
 import com.github.pushpavel.autocp.database.Problem
 import org.junit.jupiter.api.AfterEach
@@ -10,9 +10,9 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-abstract class IAutoCpTest {
+abstract class AutoCpDatabaseTest {
 
-    private lateinit var database: IAutoCp
+    private lateinit var database: AutoCpDatabase
     private lateinit var problem: Problem
 
     @BeforeEach
@@ -97,5 +97,5 @@ abstract class IAutoCpTest {
     }
 
 
-    abstract fun getInstance(): IAutoCp
+    abstract fun getInstance(): AutoCpDatabase
 }

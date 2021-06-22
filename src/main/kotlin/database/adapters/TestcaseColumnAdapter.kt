@@ -1,4 +1,4 @@
-package database.utils
+package database.adapters
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken

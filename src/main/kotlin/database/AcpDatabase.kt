@@ -9,7 +9,7 @@ import kotlin.io.path.pathString
 
 
 @Service
-class AcpDatabase(project: Project) : AbstractAcpDatabase(project) {
+class AcpDatabase(project: Project) : AbstractAutoCpDatabase(project) {
 
     override fun associateSolutionToProblem(solutionPath: String, problem: Problem) = runCatching {
         relateQ.associateSolutionToProblem(

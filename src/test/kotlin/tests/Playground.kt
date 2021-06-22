@@ -1,9 +1,9 @@
 package tests
 
 import com.squareup.sqldelight.sqlite.driver.JdbcSqliteDriver
-import database.utils.DataColumnAdapter
-import database.utils.TestcaseColumnAdapter
-import com.github.pushpavel.autocp.database.AutoCpDatabase
+import database.adapters.DataColumnAdapter
+import database.adapters.TestcaseColumnAdapter
+import com.github.pushpavel.autocp.database.AutoCpDatabaseTransactor
 import com.github.pushpavel.autocp.database.Problem
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
@@ -20,8 +20,8 @@ class Playground {
     fun bug(@TempDir dir: Path) {
         val dbFilePath = Paths.get(dir.pathString, "data.db")
         val driver = JdbcSqliteDriver(JdbcSqliteDriver.IN_MEMORY + dbFilePath.pathString)
-        AutoCpDatabase(driver, Problem.Adapter(TestcaseColumnAdapter(),DataColumnAdapter()))
-        AutoCpDatabase.Schema.create(driver)
+        AutoCpDatabaseTransactor(driver, Problem.Adapter(TestcaseColumnAdapter(),DataColumnAdapter()))
+        AutoCpDatabaseTransactor.Schema.create(driver)
         driver.getConnection().close() // this does not close the file (bug)
         Files.delete(dbFilePath)
     }
