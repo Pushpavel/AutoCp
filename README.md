@@ -1,29 +1,36 @@
 <!--suppress HtmlDeprecatedAttribute -->
 <div  align="center">
 
-![](src/main/resources/META-INF/pluginIcon.svg)
+![plugin Icon](src/main/resources/META-INF/pluginIcon.svg)
 
 # AutoCp
 
 _Automates Competitive Programming Stuff, so you can focus on solving the problem and improving your skills_
 
 ![Build](https://github.com/Pushpavel/autoCP/workflows/Build/badge.svg)
-[![Version](https://img.shields.io/jetbrains/plugin/v/PLUGIN_ID.svg)](https://plugins.jetbrains.com/plugin/PLUGIN_ID)
-[![Downloads](https://img.shields.io/jetbrains/plugin/d/PLUGIN_ID.svg)](https://plugins.jetbrains.com/plugin/PLUGIN_ID)
+[![Version](https://img.shields.io/jetbrains/plugin/v/PLUGIN_ID.svg)](https://plugins.jetbrains.com/plugin/17061-autocp)
+[![Downloads](https://img.shields.io/jetbrains/plugin/d/PLUGIN_ID.svg)](https://plugins.jetbrains.com/plugin/17061-autocp)
 
 </div>
 
-This plugin provides support for creating solution files and testing them for competitive programming in any Jetbrains
-IDEs.
-
 > [Competitive Companion](https://github.com/jmerle/competitive-companion) browser extension is required to parse the problems
+
+<!-- Plugin description -->
+
+Generate and judge your solution files in Programming Contests 😀. [See Docs](https://github.com/Pushpavel/AutoCp)
+
+- Go to <kbd>tools</kbd> > <kbd>Gather Problems</kbd> to generate solution files
+  using [Competitive Companion](https://github.com/jmerle/competitive-companion).
+- Open <kbd>View</kbd> > <kbd>Tool Windows</kbd> > <kbd>AutoCp</kbd> to edit testcases.
 
 ### Features
 
 - Create solution Files using [Competitive Companion](https://github.com/jmerle/competitive-companion)
-- Build and run any programming language by customizing the build command in settings
+- Build and run any programming language by customizing the build command in <kbd>Settings/Preferences</kbd>
 - Test your solutions against sample testcases, or your own testcases
 - Test results are presented in Test Runner UI built in the IDE.
+
+<!-- Plugin description end -->
 
 ### Installation
 
