@@ -1,7 +1,6 @@
-package tester.run
+package tester.execute
 
-import tester.process.ProcessLike
-import tester.result.ProgramResult
+import tester.models.ProgramResult
 
 abstract class ProgramExecutor(private val input: String) : ProcessLike {
     private var process: Process? = null

@@ -1,4 +1,4 @@
-package tester.process
+package tester.execute
 
 import com.intellij.execution.process.NopProcessHandler
 import com.intellij.execution.process.ProcessEvent
@@ -7,8 +7,6 @@ import com.intellij.execution.process.ProcessOutputTypes
 import com.intellij.openapi.util.Disposer
 import com.intellij.openapi.util.Key
 import com.jetbrains.rd.util.printlnError
-import com.jetbrains.rd.util.string.PrettyPrinter
-import com.jetbrains.rd.util.string.print
 
 class ProcessLikeHandler(private var processLike: ProcessLike?) : NopProcessHandler() {
 

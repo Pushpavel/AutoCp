@@ -1,8 +1,7 @@
 package tester.run
 
 import com.intellij.execution.configurations.GeneralCommandLine
-import tester.process.ProcessLike
-import tester.result.ProgramResult
+import tester.execute.ProgramExecutor
 
 class ExecutableRunner(
     private val executablePath: String,

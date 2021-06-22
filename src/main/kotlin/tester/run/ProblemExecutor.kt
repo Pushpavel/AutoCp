@@ -6,9 +6,9 @@ import com.intellij.openapi.util.Disposer
 import database.AcpDatabase
 import com.github.pushpavel.autocp.database.Problem
 import config.AutoCpConfig
-import tester.spec.TestGroupSpec
-import tester.TestGroupExecutor
-import tester.process.ProcessLike
+import tester.models.TestGroupSpec
+import tester.runner.TestExecutionGroup
+import tester.execute.ProcessLike
 import kotlin.IllegalStateException
 import kotlin.io.path.Path
 import kotlin.io.path.exists
@@ -56,7 +56,7 @@ class ProblemExecutor(
         }
         // running the executable
         val group = TestGroupSpec.fromProblem(problem, executableBuilder.outputPath)
-        val groupExecutor = TestGroupExecutor(group, reporter)
+        val groupExecutor = TestExecutionGroup(group, reporter)
 
         Disposer.register(this, groupExecutor)
 

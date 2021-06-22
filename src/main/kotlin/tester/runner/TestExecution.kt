@@ -1,13 +1,12 @@
-package tester
+package tester.runner
 
 import com.intellij.openapi.util.Disposer
-import tester.process.ProcessLike
-import tester.result.ProgramResult
-import tester.result.TestListener
-import tester.result.ResultCode
-import tester.spec.TestSpec
+import tester.execute.ProcessLike
+import tester.models.ProgramResult
+import tester.models.ResultCode
+import tester.models.TestSpec
 
-class TestExecutor(private val spec: TestSpec, private val listener: TestListener) : ProcessLike {
+class TestExecution(private val spec: TestSpec, private val listener: TestListener) : ProcessLike {
     override fun start() {
         listener.testStarted(spec)
 

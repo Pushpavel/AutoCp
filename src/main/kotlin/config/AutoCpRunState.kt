@@ -9,7 +9,7 @@ import com.intellij.execution.testframework.sm.SMTestRunnerConnectionUtil
 import com.intellij.execution.testframework.sm.runner.SMTRunnerConsoleProperties
 import common.Constants
 import tester.run.ProblemExecutor
-import tester.process.ProcessLikeHandler
+import tester.execute.ProcessLikeHandler
 
 
 class AutoCpRunState(private val config: AutoCpConfig) : RunProfileState {

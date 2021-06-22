@@ -1,4 +1,4 @@
-package tester.result
+package tester.models
 
 enum class ResultCode {
     WRONG_ANSWER,

@@ -4,6 +4,7 @@ import com.intellij.execution.configurations.GeneralCommandLine
 import com.github.pushpavel.autocp.database.Problem
 import config.AutoCpConfig
 import settings.AutoCpSettings
+import tester.execute.ProgramExecutor
 import tester.utils.splitCommandString
 import java.nio.file.Files
 import java.nio.file.Paths

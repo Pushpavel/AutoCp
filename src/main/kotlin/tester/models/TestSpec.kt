@@ -1,4 +1,4 @@
-package tester.spec
+package tester.models
 
 import database.models.Testcase
 

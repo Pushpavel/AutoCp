@@ -1,4 +1,4 @@
-package tester.spec
+package tester.models
 
 import com.github.pushpavel.autocp.database.Problem
 import tester.run.ExecutableRunnerFactory

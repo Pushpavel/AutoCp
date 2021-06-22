@@ -1,7 +1,8 @@
-package tester.result
+package tester.runner
 
-import tester.spec.TestGroupSpec
-import tester.spec.TestSpec
+import tester.models.TestGroupSpec
+import tester.models.TestSpec
+import tester.models.ResultCode
 
 interface TestListener {
 

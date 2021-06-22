@@ -1,6 +1,6 @@
 package tester.format
 
-import tester.result.ResultCode
+import tester.models.ResultCode
 
 fun ResultCode.presentableString(): String {
     return when (this) {

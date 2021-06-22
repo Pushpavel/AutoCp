@@ -4,10 +4,10 @@ import com.intellij.execution.process.ProcessHandler
 import com.intellij.execution.process.ProcessOutputTypes
 import com.intellij.execution.testframework.sm.ServiceMessageBuilder
 import tester.format.presentableString
-import tester.spec.TestGroupSpec
-import tester.spec.TestSpec
-import tester.result.TestListener
-import tester.result.ResultCode
+import tester.models.TestGroupSpec
+import tester.models.TestSpec
+import tester.runner.TestListener
+import tester.models.ResultCode
 
 class TestReporter(private val processHandler: ProcessHandler) : TestListener {
 
