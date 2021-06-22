@@ -78,6 +78,7 @@ intellij {
 changelog {
     version = properties("pluginVersion")
     groups = emptyList()
+    headerParserRegex = Regex("""v[0-9]+.[0-9]+.[0-9]+""")
 }
 
 sqldelight {
