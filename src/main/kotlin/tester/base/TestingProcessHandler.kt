@@ -20,11 +20,10 @@ abstract class TestingProcessHandler : NopProcessHandler(), ProcessListener {
         testingProcessJob = GlobalScope.launch {
             val process = createTestingProcess()
 
-            // log any error either through Result<T> or throw clause
-            catch {
-                process.execute().getOrThrow()
-            }.onErr {
-                notifyTextAvailable(it.stackTraceToString(), ProcessOutputTypes.STDERR)
+            try {
+                process.execute()
+            } catch (e: Exception) {
+                notifyTextAvailable(e.stackTraceToString(), ProcessOutputTypes.STDERR)
                 destroyProcess()
             }
         }

@@ -1,10 +1,9 @@
 package tester
 
-import common.errors.TpResult
 import tester.base.BaseTestingProcess
 
 class ProblemTestingProcess : BaseTestingProcess<Unit>() {
-    override suspend fun executeProcess(): TpResult<Unit> {
+    override suspend fun executeProcess() {
         TODO("Not yet implemented")
     }
 }
