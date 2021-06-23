@@ -9,8 +9,11 @@ package common.errors
 
 class Ok<out T>(val value: T) : Result<T>, TpResult<T>
 
-sealed class Err(message: String) : Throwable(message), Result<Nothing>
+sealed class Err : Exception, Result<Nothing> {
+    constructor(message: String) : super(message)
+    constructor(throwable: Throwable) : super(throwable)
 
-sealed interface Result<out T> {
-    fun getOrNull() = if (this is Ok) value else null
+    class Uncaught(throwable: Throwable) : Err(throwable)
 }
+
+sealed interface Result<out T>

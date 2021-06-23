@@ -19,7 +19,4 @@ abstract class BaseTestingProcess<out T> : TestingProcess<T> {
         hasExecuted = true
         return executeProcess()
     }
-
-    override fun hasExecuted() = hasExecuted
-
 }

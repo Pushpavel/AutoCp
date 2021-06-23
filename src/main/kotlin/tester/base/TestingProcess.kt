@@ -1,13 +1,12 @@
 package tester.base
 
-import com.intellij.openapi.Disposable
 import common.errors.Result
 
 /**
- * Control Interface implemented by every layer of the Testing Process.
- * Implementations should not directly implement this interface.but, extend [BaseTestingProcess]
+ * Control interface implemented by every layer of the Testing Process.
+ * This interface is used instead of an actual Process in [TestingProcessHandler].
+ * Implementations should not directly implement this interface. but, extend [BaseTestingProcess]
  */
-interface TestingProcess<out T> : Disposable {
+interface TestingProcess<out T> {
     suspend fun execute(): Result<T>
-    fun hasExecuted(): Boolean
 }
