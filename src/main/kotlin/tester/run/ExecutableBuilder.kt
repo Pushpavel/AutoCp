@@ -11,6 +11,7 @@ import java.nio.file.Paths
 import kotlin.io.path.exists
 import kotlin.io.path.pathString
 
+@Deprecated("use SolutionProcessFactory")
 class ExecutableBuilder(private val problem: Problem, private val config: AutoCpConfig) : ProgramExecutor("") {
 
     lateinit var outputPath: String
