@@ -2,6 +2,7 @@ package tester.execute
 
 import tester.models.ProgramResult
 
+@Deprecated("use ProcessRunner")
 abstract class ProgramExecutor(private val input: String) : ProcessLike {
     private var process: Process? = null
     override fun start() = throw NotImplementedError("use ProgramExecutor.execute() instead of ProgramExecutor.start()")
