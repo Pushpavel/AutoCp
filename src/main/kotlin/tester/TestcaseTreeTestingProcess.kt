@@ -10,7 +10,7 @@ class TestcaseTreeTestingProcess(rootTestNode: TestNode, reporter: Listener) :
 
     override suspend fun executeLeaf(node: TestNode.Leaf): ResultNode.Leaf {
         val process = node.processFactory.createProcess()
-        val result = ProcessRunner.run(process)
+        val result = ProcessRunner.run(process, node.input)
 
         val (verdict, verdictError) = Judge.produceVerdict(node, result)
 

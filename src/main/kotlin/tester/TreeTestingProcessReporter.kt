@@ -16,7 +16,7 @@ class TreeTestingProcessReporter(private val processHandler: ProcessHandler) : T
         testStarted(node.name).apply()
         testStdOut(node.name).addAttribute(
             "out",
-            "\n${"___".repeat(5)}[ ${node.name} ]${"___".repeat(5)}\n"
+            "${"___".repeat(5)}[ ${node.name} ]${"___".repeat(5)}\n"
         ).apply()
     }
 
@@ -38,14 +38,14 @@ class TreeTestingProcessReporter(private val processHandler: ProcessHandler) : T
 
         val verdictString = node.verdict.presentableString()
         when (node.verdict) {
-            ResultCode.CORRECT_ANSWER -> testStdOut(nodeName).addAttribute("out", verdictString).apply()
+            ResultCode.CORRECT_ANSWER -> testStdOut(nodeName).addAttribute("out", "\n" + verdictString + "\n").apply()
             else -> {
                 if (node.verdictError.isNotEmpty())
                     testStdErr(nodeName)
                         .addAttribute("out", node.verdictError)
                         .apply()
 
-                testFailed(nodeName).addAttribute("message", verdictString).apply()
+                testFailed(nodeName).addAttribute("message", verdictString + "\n").apply()
             }
         }
 
