@@ -2,6 +2,7 @@ package tester.models
 
 import database.models.Testcase
 
+@Deprecated("")
 class TestSpec(
     name: String,
     val input: String,

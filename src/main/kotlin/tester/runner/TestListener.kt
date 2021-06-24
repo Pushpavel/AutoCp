@@ -4,6 +4,7 @@ import tester.models.TestGroupSpec
 import tester.models.TestSpec
 import tester.models.ResultCode
 
+@Deprecated("use TreeTestingProcess.Listener")
 interface TestListener {
 
     // testGroup execution

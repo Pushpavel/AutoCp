@@ -2,6 +2,7 @@ package tester.models
 
 import tester.run.ExecutableRunnerFactory
 
+@Deprecated("")
 open class BaseSpec(
     val name: String,
     private val executableRunnerFactory: ExecutableRunnerFactory?,

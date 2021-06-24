@@ -8,6 +8,7 @@ import com.intellij.openapi.util.Disposer
 import com.intellij.openapi.util.Key
 import com.jetbrains.rd.util.printlnError
 
+@Deprecated("use TestingProcessHandler")
 class ProcessLikeHandler(private var processLike: ProcessLike?) : NopProcessHandler() {
 
     init {

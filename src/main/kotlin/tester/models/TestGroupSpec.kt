@@ -3,6 +3,7 @@ package tester.models
 import com.github.pushpavel.autocp.database.Problem
 import tester.run.ExecutableRunnerFactory
 
+@Deprecated("")
 class TestGroupSpec(
     name: String,
     val testSpecs: List<TestSpec>,

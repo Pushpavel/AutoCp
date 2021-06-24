@@ -4,6 +4,7 @@ import com.intellij.openapi.util.Disposer
 import tester.execute.ProcessLike
 import tester.models.TestGroupSpec
 
+@Deprecated("")
 class TestExecutionGroup(private val spec: TestGroupSpec, private val listener: TestListener) : ProcessLike {
 
     override fun start() {

@@ -14,6 +14,7 @@ import kotlin.io.path.Path
 import kotlin.io.path.exists
 import kotlin.io.path.pathString
 
+@Deprecated("use ProcessRunner object")
 class ProblemExecutor(
     private val config: AutoCpConfig,
     private val processHandler: ProcessHandler

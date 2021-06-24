@@ -6,6 +6,7 @@ import tester.models.ProgramResult
 import tester.models.ResultCode
 import tester.models.TestSpec
 
+@Deprecated("")
 class TestExecution(private val spec: TestSpec, private val listener: TestListener) : ProcessLike {
     override fun start() {
         listener.testStarted(spec)

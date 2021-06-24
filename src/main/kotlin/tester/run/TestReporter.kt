@@ -9,6 +9,7 @@ import tester.models.TestSpec
 import tester.runner.TestListener
 import tester.models.ResultCode
 
+@Deprecated("use TreeTestingProcessReporter")
 class TestReporter(private val processHandler: ProcessHandler) : TestListener {
 
     override fun testGroupStarted(testGroupSpec: TestGroupSpec) {
