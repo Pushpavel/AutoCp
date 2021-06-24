@@ -16,9 +16,7 @@ class TreeTestingProcessReporter(private val processHandler: ProcessHandler) : T
         testStarted(node.name).apply()
         testStdOut(node.name).addAttribute(
             "out",
-            "___".repeat(15) + "\n" +
-                    node.name + "\n" +
-                    "___".repeat(15) + "\n"
+            "\n${"___".repeat(5)}[ ${node.name} ]${"___".repeat(5)}\n"
         ).apply()
     }
 
@@ -41,10 +39,19 @@ class TreeTestingProcessReporter(private val processHandler: ProcessHandler) : T
         val verdictString = node.verdict.presentableString()
         when (node.verdict) {
             ResultCode.CORRECT_ANSWER -> testStdOut(nodeName).addAttribute("out", verdictString).apply()
-            else -> testFailed(nodeName).addAttribute("message", verdictString).apply()
+            else -> {
+                if (node.verdictError.isNotEmpty())
+                    testStdErr(nodeName)
+                        .addAttribute("out", node.verdictError)
+                        .apply()
+
+                testFailed(nodeName).addAttribute("message", verdictString).apply()
+            }
         }
 
-        testFinished(nodeName).apply()
+        testFinished(nodeName)
+            .addAttribute("duration", node.executionTime.toString())
+            .apply()
     }
 
     override fun groupStart(node: TestNode.Group) {

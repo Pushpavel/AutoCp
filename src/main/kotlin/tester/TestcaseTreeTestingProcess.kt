@@ -1,7 +1,6 @@
 package tester
 
 import tester.base.ProcessRunner
-import tester.models.ResultCode
 import tester.tree.ResultNode
 import tester.tree.TestNode
 import tester.tree.TreeTestingProcess
@@ -13,9 +12,9 @@ class TestcaseTreeTestingProcess(rootTestNode: TestNode, reporter: Listener) :
         val process = node.processFactory.createProcess()
         val result = ProcessRunner.run(process)
 
-        // todo: produce verdict
+        val (verdict, verdictError) = Judge.produceVerdict(node, result)
 
-        return ResultNode.Leaf(node, ResultCode.CORRECT_ANSWER, result.output, result.error, result.executionTime)
+        return ResultNode.Leaf(node, verdict, verdictError, result.output, result.error, result.executionTime)
     }
 
     override suspend fun executeGroup(node: TestNode.Group): ResultNode.Group {

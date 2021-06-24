@@ -9,6 +9,7 @@ sealed interface ResultNode {
     data class Leaf(
         override val sourceNode: TestNode.Leaf,
         val verdict: ResultCode,
+        val verdictError: String,
         val output: String,
         val error: String,
         val executionTime: Long
