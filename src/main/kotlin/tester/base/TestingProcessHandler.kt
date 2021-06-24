@@ -14,7 +14,7 @@ abstract class TestingProcessHandler : NopProcessHandler(), ProcessListener {
 
     private var testingProcessJob: Job? = null
 
-    abstract fun createTestingProcess(): TestingProcess<Unit>
+    abstract fun createTestingProcess(): TestingProcess
 
     override fun startNotified(event: ProcessEvent) {
         testingProcessJob = GlobalScope.launch {
