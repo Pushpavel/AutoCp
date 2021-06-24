@@ -33,6 +33,7 @@ abstract class TestingProcessHandler : NopProcessHandler() {
             } catch (e: Exception) {
                 // Last hope for logging any errors in the testing Process
                 notifyTextAvailable(e.stackTraceToString(), ProcessOutputTypes.STDERR)
+            } finally {
                 destroyProcess()
             }
         }

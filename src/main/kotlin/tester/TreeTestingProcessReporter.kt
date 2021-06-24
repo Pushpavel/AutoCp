@@ -26,7 +26,10 @@ class TreeTestingProcessReporter(private val processHandler: ProcessHandler) : T
         val nodeName = node.sourceNode.name
         if (node.output.isNotEmpty())
             testStdOut(nodeName)
-                .addAttribute("out", node.output + "\n")
+                .addAttribute("out", node.output.let {
+                    if (it.endsWith('\n')) it
+                    else it + '\n'
+                })
                 .apply()
 
         if (node.error.isNotEmpty())
