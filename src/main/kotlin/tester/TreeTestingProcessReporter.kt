@@ -3,6 +3,7 @@ package tester
 import com.intellij.execution.process.ProcessHandler
 import com.intellij.execution.process.ProcessOutputTypes
 import com.intellij.execution.testframework.sm.ServiceMessageBuilder
+import common.errors.Err
 import tester.tree.ResultNode
 import tester.tree.TestNode
 import tester.tree.TreeTestingProcess
@@ -22,6 +23,10 @@ class TreeTestingProcessReporter(private val processHandler: ProcessHandler) : T
     }
 
     override fun groupFinish(node: ResultNode.Group) {
+        TODO("Not yet implemented")
+    }
+
+    override fun testingProcessStartErrored(error: Err) {
         TODO("Not yet implemented")
     }
 

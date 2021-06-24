@@ -1,6 +1,7 @@
 package tester.tree
 
 import tester.base.BaseTestingProcess
+import tester.base.TestingProcess
 
 abstract class TreeTestingProcess(private val rootTestNode: TestNode, private val listener: Listener) :
     BaseTestingProcess() {
@@ -30,7 +31,7 @@ abstract class TreeTestingProcess(private val rootTestNode: TestNode, private va
     abstract suspend fun executeGroup(node: TestNode.Group): ResultNode.Group
 
 
-    interface Listener {
+    interface Listener : TestingProcess.Listener {
         fun leafStart(node: TestNode.Leaf)
         fun leafFinish(node: ResultNode.Leaf)
         fun groupStart(node: TestNode.Group)
