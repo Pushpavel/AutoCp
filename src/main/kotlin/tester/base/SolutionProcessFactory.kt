@@ -33,9 +33,8 @@ class SolutionProcessFactory(private val executablePath: String) {
             val command = lang.buildCommandString(config.solutionFilePath, outputPath.pathString)
             val commandList = splitCommandString(command)
             val buildProcess = GeneralCommandLine(commandList).createProcess()
-            val processRunner = ProcessRunner<ProcessRunner.CapturedResults>()
 
-            val results = processRunner.run(buildProcess)
+            val results = ProcessRunner.run(buildProcess)
 
             if (results.error.isNotEmpty())
                 throw BuildErr(results.error)

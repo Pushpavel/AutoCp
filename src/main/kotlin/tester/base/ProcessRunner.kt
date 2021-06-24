@@ -5,7 +5,7 @@ import common.errors.Err
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class ProcessRunner<T> {
+object ProcessRunner {
 
     suspend fun run(process: Process, input: String = "") = withContext(Dispatchers.IO) {
         val result: CapturedResults
