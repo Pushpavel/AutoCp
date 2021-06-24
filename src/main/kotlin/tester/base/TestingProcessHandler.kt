@@ -11,13 +11,21 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import tester.TestcaseTreeTestingProcess
 
-abstract class TestingProcessHandler : NopProcessHandler(), ProcessListener {
+/**
+ * Implementation of ProcessHandler that handles [TestingProcess] which is not an actual [Process]
+ */
+abstract class TestingProcessHandler : NopProcessHandler() {
 
     private var testingProcessJob: Job? = null
 
     abstract suspend fun createTestingProcess(): TestcaseTreeTestingProcess?
 
-    override fun startNotified(event: ProcessEvent) {
+    override fun startNotify() {
+        if (isStartNotified) return
+
+        super.startNotify()
+
+        // launch the testing Process
         testingProcessJob = GlobalScope.launch {
             try {
                 val process = createTestingProcess()
@@ -30,11 +38,16 @@ abstract class TestingProcessHandler : NopProcessHandler(), ProcessListener {
         }
     }
 
-    override fun processTerminated(event: ProcessEvent) {
-        testingProcessJob?.cancel()
+    override fun destroyProcessImpl() {
+        // notifyProcessTerminated on successfully cancelling testingProcessJob
+        testingProcessJob?.let {
+            it.cancel()
+
+            GlobalScope.launch {
+                it.join()
+                notifyProcessTerminated(0)
+            }
+
+        } ?: notifyProcessTerminated(0)
     }
-
-    // ignored
-    override fun onTextAvailable(event: ProcessEvent, outputType: Key<*>) = Unit
-
 }

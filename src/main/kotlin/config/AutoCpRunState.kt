@@ -8,18 +8,14 @@ import com.intellij.execution.runners.ProgramRunner
 import com.intellij.execution.testframework.sm.SMTestRunnerConnectionUtil
 import com.intellij.execution.testframework.sm.runner.SMTRunnerConsoleProperties
 import common.Constants
-import tester.run.ProblemExecutor
-import tester.execute.ProcessLikeHandler
+import tester.AutoCpTestingProcessHandler
 
 
 class AutoCpRunState(private val config: AutoCpConfig) : RunProfileState {
 
     override fun execute(executor: Executor, runner: ProgramRunner<*>): ExecutionResult {
         // prepare testing process
-        val processHandler = ProcessLikeHandler(null)
-        val processLike = ProblemExecutor(config, processHandler)
-
-        processHandler.attachProcessLike(processLike)
+        val processHandler = AutoCpTestingProcessHandler(config)
 
         // prepare console
         val properties = SMTRunnerConsoleProperties(config, Constants.FrameworkName, executor)
