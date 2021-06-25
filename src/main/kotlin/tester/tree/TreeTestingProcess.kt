@@ -7,8 +7,7 @@ abstract class TreeTestingProcess(private val rootTestNode: TestNode, protected 
     BaseTestingProcess() {
 
     override suspend fun executeProcess() {
-        val rootResultNode = processNode(rootTestNode)
-        // todo: do something with the result
+        processNode(rootTestNode)
     }
 
     protected suspend fun processNode(node: TestNode): ResultNode =
