@@ -63,7 +63,16 @@ class TreeTestingProcessReporter(private val processHandler: ProcessHandler) : T
     }
 
     override fun testingProcessStartErrored(error: Err) {
-        // todo: show a node in console to indicate error
+        testsStarted()
+        processHandler.notifyTextAvailable(
+            when (error) {
+                is Err.InternalErr -> "This was not supposed to happen, please file an issue (https://github.com/Pushpavel/AutoCp/issues/new)\n"
+                is Err.TesterErr.BuildErr -> "Building the Solution File Failed\n"
+                is Err.TesterErr.SolutionFileErr -> "There were issues with the Solution File\n"
+            } + "\n", ProcessOutputTypes.STDERR
+        )
+
+        processHandler.notifyTextAvailable(error.stackTraceToString(), ProcessOutputTypes.STDERR)
     }
 
     override fun testingProcessError(message: String) {
