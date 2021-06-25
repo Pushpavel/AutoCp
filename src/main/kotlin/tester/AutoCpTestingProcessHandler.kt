@@ -4,8 +4,10 @@ import com.github.pushpavel.autocp.database.Problem
 import com.intellij.openapi.components.service
 import common.errors.Err
 import common.errors.Err.TesterErr.SolutionFileErr
+import common.errors.mapToErr
 import config.AutoCpConfig
 import database.AcpDatabase
+import kotlinx.coroutines.CancellationException
 import tester.base.SolutionProcessFactory
 import tester.base.TestingProcessHandler
 import tester.tree.TestNode
@@ -13,7 +15,7 @@ import kotlin.io.path.Path
 import kotlin.io.path.exists
 import kotlin.io.path.pathString
 
-class AutoCpTestingProcessHandler(val config: AutoCpConfig) : TestingProcessHandler() {
+class AutoCpTestingProcessHandler(private val config: AutoCpConfig) : TestingProcessHandler() {
 
     private val reporter = TreeTestingProcessReporter(this)
 
@@ -30,11 +32,7 @@ class AutoCpTestingProcessHandler(val config: AutoCpConfig) : TestingProcessHand
         // create a TestingProcess from the Problem and Test Tree
         return@runCatching TestcaseTreeTestingProcess(rootNode, reporter)
     }.onFailure {
-        val error = when (it) {
-            is Err -> it
-            else -> Err.InternalErr(it.stackTraceToString())
-        }
-        reporter.testingProcessStartErrored(error)
+        reporter.testingProcessStartErrored(it.mapToErr())
     }.getOrNull()
 
     private fun getValidProblem(): Problem {

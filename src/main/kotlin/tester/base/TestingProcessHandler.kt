@@ -1,11 +1,9 @@
 package tester.base
 
 import com.intellij.execution.process.NopProcessHandler
-import com.intellij.execution.process.ProcessEvent
-import com.intellij.execution.process.ProcessListener
 import com.intellij.execution.process.ProcessOutputTypes
-import com.intellij.openapi.util.Key
-import common.errors.*
+import common.errors.Err
+import common.errors.presentableString
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -31,6 +29,8 @@ abstract class TestingProcessHandler : NopProcessHandler() {
                 val process = createTestingProcess()
                 process?.execute()
             } catch (e: Exception) {
+                if (e is Err)
+                    notifyTextAvailable(e.presentableString() + "\n", ProcessOutputTypes.STDERR)
                 // Last hope for logging any errors in the testing Process
                 notifyTextAvailable(e.stackTraceToString(), ProcessOutputTypes.STDERR)
             } finally {
@@ -45,6 +45,7 @@ abstract class TestingProcessHandler : NopProcessHandler() {
             it.cancel()
 
             GlobalScope.launch {
+                // ignoring exceptions as it will be handled within the job itself
                 it.join()
                 notifyProcessTerminated(0)
             }

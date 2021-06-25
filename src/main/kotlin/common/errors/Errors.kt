@@ -5,5 +5,6 @@ sealed class Err(message: String) : Exception(message) {
     sealed class TesterErr(message: String) : Err(message) {
         class SolutionFileErr(message: String) : TesterErr(message)
         class BuildErr(message: String) : TesterErr(message)
+        object Cancelled : TesterErr("")
     }
 }

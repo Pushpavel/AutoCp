@@ -1,9 +1,9 @@
 package tester.base
 
+import com.intellij.openapi.diagnostic.getOrLogException
 import com.jetbrains.rd.util.measureTimeMillis
 import common.errors.Err
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 
 object ProcessRunner {
 
@@ -13,9 +13,16 @@ object ProcessRunner {
         if (!process.isAlive)
             throw Err.InternalErr("ProcessRunner<T>.run: Dead Process provided as argument")
 
+//        launch {
+//            // poll coroutine for cancellation or process.destroy
+//            while (isActive) delay(10)
+//
+//            process.destroy()
+//        }
+
         try {
             setInput(process, input)
-            val executionTime = captureExecutionTime(process)
+            val executionTime = captureExecutionTimeBlocking(process)
             val (output, error) = getOutputAndError(process)
             result = CapturedResults(output, error, executionTime)
         } finally {
@@ -25,10 +32,16 @@ object ProcessRunner {
         return@withContext result
     }
 
-    private suspend fun captureExecutionTime(process: Process): Long = withContext(Dispatchers.IO) {
-        return@withContext measureTimeMillis {
+    private suspend fun captureExecutionTimeBlocking(process: Process) = coroutineScope {
+        measureTimeMillis {
             //ignoring InterruptedException
-            runCatching { process.waitFor() }
+            runCatching {
+                launch {
+                    while (this.isActive && process.isAlive) delay(1)
+                    process.destroy()
+                }
+
+            }
         }
     }
 

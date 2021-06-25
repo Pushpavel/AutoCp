@@ -5,6 +5,7 @@ import com.intellij.execution.process.ProcessOutputTypes
 import com.intellij.execution.testframework.sm.ServiceMessageBuilder
 import com.intellij.execution.testframework.sm.ServiceMessageBuilder.*
 import common.errors.Err
+import common.errors.presentableString
 import tester.judge.Verdict
 import tester.judge.Verdict.Companion.presentableString
 import tester.tree.ResultNode
@@ -38,7 +39,7 @@ class TreeTestingProcessReporter(private val processHandler: ProcessHandler) : T
 
         val verdictString = node.verdict.presentableString()
         when (node.verdict) {
-            Verdict.CORRECT_ANSWER -> testStdOut(nodeName).addAttribute("out", "\n" + verdictString + "\n").apply()
+            Verdict.CORRECT_ANSWER -> testStdOut(nodeName).addAttribute("out", "\n" + verdictString + "\n\n").apply()
             else -> {
                 if (node.verdictError.isNotEmpty())
                     testStdErr(nodeName)
@@ -65,11 +66,7 @@ class TreeTestingProcessReporter(private val processHandler: ProcessHandler) : T
     override fun testingProcessStartErrored(error: Err) {
         testsStarted()
         processHandler.notifyTextAvailable(
-            when (error) {
-                is Err.InternalErr -> "This was not supposed to happen, please file an issue (https://github.com/Pushpavel/AutoCp/issues/new)\n"
-                is Err.TesterErr.BuildErr -> "Building the Solution File Failed\n"
-                is Err.TesterErr.SolutionFileErr -> "There were issues with the Solution File\n"
-            } + "\n", ProcessOutputTypes.STDERR
+            error.presentableString() + "\n", ProcessOutputTypes.STDERR
         )
 
         processHandler.notifyTextAvailable(error.stackTraceToString(), ProcessOutputTypes.STDERR)
@@ -80,7 +77,6 @@ class TreeTestingProcessReporter(private val processHandler: ProcessHandler) : T
     }
 
     private fun ServiceMessageBuilder.apply() {
-        println(this.toString() + "\n")
         processHandler.notifyTextAvailable(
             this.toString() + "\n", ProcessOutputTypes.STDOUT
         )
