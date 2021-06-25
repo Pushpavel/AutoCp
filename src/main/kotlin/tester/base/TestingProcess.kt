@@ -11,5 +11,6 @@ interface TestingProcess {
 
     interface Listener {
         fun testingProcessStartErrored(error: Err)
+        fun testingProcessError(message: String)
     }
 }

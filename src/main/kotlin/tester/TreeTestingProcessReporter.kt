@@ -66,6 +66,10 @@ class TreeTestingProcessReporter(private val processHandler: ProcessHandler) : T
         // todo: show a node in console to indicate error
     }
 
+    override fun testingProcessError(message: String) {
+        processHandler.notifyTextAvailable(message + "\n", ProcessOutputTypes.STDERR)
+    }
+
     private fun ServiceMessageBuilder.apply() {
         println(this.toString() + "\n")
         processHandler.notifyTextAvailable(

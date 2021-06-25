@@ -19,6 +19,10 @@ class TestcaseTreeTestingProcess(rootTestNode: TestNode, reporter: Listener) :
 
     override suspend fun executeGroup(node: TestNode.Group): ResultNode.Group {
         val children = node.children.map { processNode(it) }
+
+        if (children.isEmpty())
+            listener.testingProcessError(node.name + ": No Testcases Found\n")
+
         return ResultNode.Group(node, children)
     }
 }

@@ -3,7 +3,7 @@ package tester.tree
 import tester.base.BaseTestingProcess
 import tester.base.TestingProcess
 
-abstract class TreeTestingProcess(private val rootTestNode: TestNode, private val listener: Listener) :
+abstract class TreeTestingProcess(private val rootTestNode: TestNode, protected val listener: Listener) :
     BaseTestingProcess() {
 
     override suspend fun executeProcess() {
