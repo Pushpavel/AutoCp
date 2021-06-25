@@ -1,6 +1,6 @@
 package tester.tree
 
-import tester.models.ResultCode
+import tester.judge.Verdict
 
 
 sealed interface ResultNode {
@@ -8,7 +8,7 @@ sealed interface ResultNode {
 
     data class Leaf(
         override val sourceNode: TestNode.Leaf,
-        val verdict: ResultCode,
+        val verdict: Verdict,
         val verdictError: String,
         val output: String,
         val error: String,

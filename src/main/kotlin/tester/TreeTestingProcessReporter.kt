@@ -5,8 +5,8 @@ import com.intellij.execution.process.ProcessOutputTypes
 import com.intellij.execution.testframework.sm.ServiceMessageBuilder
 import com.intellij.execution.testframework.sm.ServiceMessageBuilder.*
 import common.errors.Err
-import tester.format.presentableString
-import tester.models.ResultCode
+import tester.judge.Verdict
+import tester.judge.Verdict.Companion.presentableString
 import tester.tree.ResultNode
 import tester.tree.TestNode
 import tester.tree.TreeTestingProcess
@@ -38,7 +38,7 @@ class TreeTestingProcessReporter(private val processHandler: ProcessHandler) : T
 
         val verdictString = node.verdict.presentableString()
         when (node.verdict) {
-            ResultCode.CORRECT_ANSWER -> testStdOut(nodeName).addAttribute("out", "\n" + verdictString + "\n").apply()
+            Verdict.CORRECT_ANSWER -> testStdOut(nodeName).addAttribute("out", "\n" + verdictString + "\n").apply()
             else -> {
                 if (node.verdictError.isNotEmpty())
                     testStdErr(nodeName)

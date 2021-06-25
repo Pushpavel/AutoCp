@@ -1,6 +1,7 @@
 package tester
 
 import tester.base.ProcessRunner
+import tester.judge.Judge
 import tester.tree.ResultNode
 import tester.tree.TestNode
 import tester.tree.TreeTestingProcess
