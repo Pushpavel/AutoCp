@@ -8,8 +8,8 @@
 _Automates Competitive Programming Stuff, so you can focus on solving the problem and improving your skills_
 
 ![Build](https://github.com/Pushpavel/autoCP/workflows/Build/badge.svg)
-[![Version](https://img.shields.io/jetbrains/plugin/v/PLUGIN_ID.svg)](https://plugins.jetbrains.com/plugin/17061-autocp)
-[![Downloads](https://img.shields.io/jetbrains/plugin/d/PLUGIN_ID.svg)](https://plugins.jetbrains.com/plugin/17061-autocp)
+[![Version](https://img.shields.io/jetbrains/plugin/v/17061.svg)](https://plugins.jetbrains.com/plugin/17061-autocp)
+[![Downloads](https://img.shields.io/jetbrains/plugin/d/17061.svg)](https://plugins.jetbrains.com/plugin/17061-autocp)
 
 </div>
 
@@ -73,6 +73,7 @@ the [group](https://github.com/jmerle/competitive-companion#explanation) that th
 
 - Time Limit and Memory Limit is ignored.
 - Strict File Structure
+- No Debugging through AutoCp
 
 ### Help? 😀
 
