@@ -36,8 +36,9 @@ class SolutionProcessFactory(private val executablePath: String) {
 
             val results = ProcessRunner.run(buildProcess)
 
-            if (results.error.isNotEmpty())
-                throw BuildErr(results.error)
+            results.exceptionOrNull()?.let {
+                throw BuildErr(it.stackTraceToString())
+            }
 
             return SolutionProcessFactory(outputPath.pathString)
         }

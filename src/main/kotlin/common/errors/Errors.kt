@@ -6,5 +6,7 @@ sealed class Err(message: String) : Exception(message) {
         class SolutionFileErr(message: String) : TesterErr(message)
         class BuildErr(message: String) : TesterErr(message)
         object Cancelled : TesterErr("")
+        object TimeoutErr : TesterErr("")
+        class RuntimeErr(message: String) : TesterErr(message)
     }
 }

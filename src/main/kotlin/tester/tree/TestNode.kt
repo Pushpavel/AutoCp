@@ -21,6 +21,7 @@ sealed interface TestNode {
     data class Group(
         override val name: String,
         override val id: String,
+        val timeLimit: Long,
         val children: List<TestNode>,
         override val processFactory: SolutionProcessFactory?
     ) : TestNode

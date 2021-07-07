@@ -3,7 +3,9 @@ package tester.judge
 enum class Verdict {
     CORRECT_ANSWER,
     WRONG_ANSWER,
-    RUNTIME_ERROR;
+    RUNTIME_ERROR,
+    NO_VERDICT,
+    TIME_LIMIT_EXCEEDED;
 
     companion object {
         fun Verdict.presentableString(): String {
@@ -11,6 +13,8 @@ enum class Verdict {
                 CORRECT_ANSWER -> "[+] SUCCESS: CORRECT ANSWER"
                 WRONG_ANSWER -> "[-] FAILURE: WRONG ANSWER"
                 RUNTIME_ERROR -> "[-] FAILURE: RUNTIME ERROR"
+                NO_VERDICT -> "[+/-] UNKNOWN: COULD NOT JUDGE"
+                TIME_LIMIT_EXCEEDED -> "[-] FAILURE: TIME LIMIT EXCEEDED"
             }
         }
     }

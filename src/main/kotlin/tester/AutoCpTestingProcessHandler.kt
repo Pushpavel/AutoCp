@@ -7,6 +7,7 @@ import common.errors.Err.TesterErr.SolutionFileErr
 import common.errors.mapToErr
 import config.AutoCpConfig
 import database.AcpDatabase
+import database.models.getTimeLimit
 import kotlinx.coroutines.CancellationException
 import tester.base.SolutionProcessFactory
 import tester.base.TestingProcessHandler
@@ -53,6 +54,6 @@ class AutoCpTestingProcessHandler(private val config: AutoCpConfig) : TestingPro
         val leafNodes = problem.testcases.map {
             TestNode.Leaf(it.name, it.name, it.input, it.output, processFactory)
         }
-        return TestNode.Group(problem.name, problem.name, leafNodes, processFactory)
+        return TestNode.Group(problem.name, problem.name, problem.getTimeLimit(), leafNodes, processFactory)
     }
 }

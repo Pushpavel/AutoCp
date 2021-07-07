@@ -6,5 +6,7 @@ fun Err.presentableString(): String {
         is Err.TesterErr.BuildErr -> "Building the Solution File Failed\n"
         is Err.TesterErr.SolutionFileErr -> "There were issues with the Solution File\n"
         is Err.TesterErr.Cancelled -> "Testing Execution Cancelled\n"
+        is Err.TesterErr.RuntimeErr -> "Your solution crashed\n"
+        is Err.TesterErr.TimeoutErr -> "Time Limit specified in the problem is exceeded\n"
     }
 }
