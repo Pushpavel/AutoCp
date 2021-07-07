@@ -13,7 +13,7 @@
         <applicationConfigurable instance="settings.SettingsConfigurable"
                                  id="settings.SettingsConfigurable"
                                  displayName="AutoCp"/>
-        <toolWindow factoryClass="tool.ToolFactory" id="AutoCp" icon="AllIcons.General.Modified" anchor="right"/>
+        <toolWindow factoryClass="tool.ToolFactory" id="AutoCp" icon="Icons.LogoIcon" anchor="right"/>
     </extensions>
 
     <actions>

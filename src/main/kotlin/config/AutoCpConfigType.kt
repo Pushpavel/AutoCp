@@ -8,6 +8,7 @@ import com.intellij.icons.AllIcons
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.NotNullLazyValue
 import common.Constants
+import icons.Icons
 
 /**
  * Definition of custom run configuration
@@ -16,7 +17,7 @@ class AutoCpConfigType : ConfigurationTypeBase(
     id = Constants.FrameworkId,
     displayName = Constants.FrameworkName,
     description = Constants.Description,
-    icon = NotNullLazyValue.createValue { AllIcons.General.Modified }
+    icon = NotNullLazyValue.createValue { Icons.LogoIcon }
 ) {
     init {
         factory = AutoCpConfigFactory(this)
