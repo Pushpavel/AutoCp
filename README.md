@@ -71,7 +71,7 @@ the [group](https://github.com/jmerle/competitive-companion#explanation) that th
 
 ### Limitations
 
-- Time Limit and Memory Limit is ignored.
+- Memory Limit is ignored.
 - Strict File Structure
 - No Debugging through AutoCp
 
