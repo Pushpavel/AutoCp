@@ -8,23 +8,23 @@ import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.application.invokeLater
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.DumbAware
+import common.causes
 import database.AcpDatabase
 import gather.server.createServer
 import gather.server.getResponsesAsync
 import gather.ui.GatheringReporterDialog
 import gather.ui.GenerateSolutionsDialogModel
 import gather.ui.createGenerateSolutionsDialog
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import kotlinx.coroutines.swing.Swing
 import java.net.ServerSocket
+import java.net.SocketTimeoutException
 
 
 class GatherProblemsAction : AnAction(), DumbAware {
     companion object {
         private const val CPH_PORT = 27121
+        private const val TIMEOUT = 2000L // 20 seconds
     }
 
     private var server: ServerSocket? = null
@@ -44,12 +44,11 @@ class GatherProblemsAction : AnAction(), DumbAware {
                     // showing modal dialog async
                     invokeLater {
                         dialog.show()
-                        println("server invokeLater ${server != null}")
-                        server?.close() // close server as dialog closed
+                        server?.close() // close server as dialog closes
                     }
 
                     server?.use {
-                        val responsesChannel = getResponsesAsync(it)
+                        val responsesChannel = getResponsesAsync(it, TIMEOUT)
                         gatherProblems(responsesChannel, dialog.eventsChannel)
                     }
                 } ?: return@launch
@@ -77,8 +76,18 @@ class GatherProblemsAction : AnAction(), DumbAware {
                         )
                     )
                 }
-            }.onFailure {
-                it.printStackTrace()
+            }.recoverCatching {
+                if (it.causes().any { ex -> ex is SocketTimeoutException })
+                    Notifications.Bus.notify(
+                        Notification(
+                            "AutoCp Notification Group",
+                            "Gathering problems failed",
+                            "Competitive Companion browser extension taking longer to respond or is not responding",
+                            NotificationType.ERROR
+                        )
+                    )
+                else
+                    it.printStackTrace()
             }
 
         }

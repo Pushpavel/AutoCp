@@ -32,6 +32,5 @@ suspend fun gatherProblems(
         if (json.batch.size == list.size)
             return list
     }
-
     return null
 }

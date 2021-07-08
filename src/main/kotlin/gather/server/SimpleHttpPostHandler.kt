@@ -16,8 +16,9 @@ fun createServer(port: Int) = ServerSocket(port, 50, InetAddress.getByName("loca
 
 @ExperimentalCoroutinesApi
 @Suppress("BlockingMethodInNonBlockingContext")
-fun CoroutineScope.getResponsesAsync(server: ServerSocket) = produce {
+fun CoroutineScope.getResponsesAsync(server: ServerSocket, timeout: Long = Long.MAX_VALUE) = produce {
     try {
+        server.soTimeout = timeout.toInt()
         while (true) {
             withContext(Dispatchers.IO) {
                 server.accept().use {
