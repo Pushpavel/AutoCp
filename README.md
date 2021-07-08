@@ -51,8 +51,7 @@ Generate and judge your solution files in Programming Contests 😀. [See Docs](
 - Program your solution 😎
 - Right-click your solution and run it
 - Open <kbd>View</kbd> > <kbd>Tool Windows</kbd> > <kbd>AutoCp</kbd> to view and edit your testcases
-- Customize Build commands or add new Programming Languages through <kbd>Settings/Preferences</kbd> > <kbd>
-  Tools</kbd> > <kbd>AutoCp</kbd>
+- Customize Build commands or add new Programming Languages through <kbd>Settings / Preferences</kbd> > <kbd>AutoCp</kbd>
 
 ### Screenshot
 
