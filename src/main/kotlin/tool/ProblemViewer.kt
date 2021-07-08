@@ -29,7 +29,9 @@ class ProblemViewer : ContentAdapter<Problem>(), FileEditorManagerListener {
 
     override fun createContentForData(data: Problem, contentFactory: ContentFactory): Content {
         model.listModel.replaceAll(data.testcases)
-        model.setSelectionIndex(data.selectedTestcaseIndex.toInt())
+        model.setSelectionIndex(data.selectedTestcaseIndex.toInt().let {
+            if (it == -1 && data.testcases.isNotEmpty()) 0 else it
+        })
         return contentFactory.createContent(panel.component, data.name, false)
     }
 
