@@ -31,7 +31,7 @@ class GatherProblemsAction : AnAction(), DumbAware {
 
     @ExperimentalCoroutinesApi
     override fun actionPerformed(event: AnActionEvent) {
-        if (server?.isClosed == true)
+        if (isServerActive())
             return
 
         GlobalScope.launch(Dispatchers.Swing) {
@@ -44,6 +44,7 @@ class GatherProblemsAction : AnAction(), DumbAware {
                     // showing modal dialog async
                     invokeLater {
                         dialog.show()
+                        println("server invokeLater ${server != null}")
                         server?.close() // close server as dialog closed
                     }
 
@@ -85,6 +86,10 @@ class GatherProblemsAction : AnAction(), DumbAware {
 
     override fun update(e: AnActionEvent) {
         val project = e.project
-        e.presentation.isEnabledAndVisible = project != null && server?.isClosed != true
+        e.presentation.isEnabledAndVisible = project != null && !isServerActive()
+    }
+
+    private fun isServerActive(): Boolean {
+        return server != null && !server!!.isClosed
     }
 }
