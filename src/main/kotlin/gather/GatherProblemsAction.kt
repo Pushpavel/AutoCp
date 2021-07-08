@@ -24,7 +24,7 @@ import java.net.SocketTimeoutException
 class GatherProblemsAction : AnAction(), DumbAware {
     companion object {
         private const val CPH_PORT = 27121
-        private const val TIMEOUT = 2000L // 20 seconds
+        private const val TIMEOUT = 20000L // 20 seconds
     }
 
     private var server: ServerSocket? = null

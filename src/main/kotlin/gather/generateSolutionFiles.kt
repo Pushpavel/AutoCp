@@ -5,6 +5,8 @@ import com.intellij.openapi.project.Project
 import com.intellij.util.io.exists
 import database.AcpDatabase
 import com.github.pushpavel.autocp.database.Problem
+import com.intellij.ide.projectView.ProjectView
+import com.intellij.openapi.vfs.VirtualFileManager
 import settings.SolutionLanguage
 import java.nio.file.Paths
 import kotlin.io.path.pathString
@@ -25,4 +27,6 @@ fun generateSolutionFiles(project: Project, problems: List<Problem>, lang: Solut
 
         service.associateSolutionToProblem(solutionPath.pathString, it).getOrThrow()
     }
+
+    ProjectView.getInstance(project).refresh()
 }
