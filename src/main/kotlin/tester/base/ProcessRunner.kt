@@ -47,8 +47,8 @@ object ProcessRunner {
     }
 
     private fun CoroutineScope.readOutputAsync(process: Process) = async(Dispatchers.IO) {
-        val output = async { process.inputStream.readText() }
-        val error = async { process.errorStream.readText() }
+        val output = async { process.inputStream.bufferedReader().readText() }
+        val error = async { process.errorStream.bufferedReader().readText() }
 
         awaitAll(output, error).let {
             if (it[1].isNotEmpty())
