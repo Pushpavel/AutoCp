@@ -3,11 +3,16 @@
 # AutoCp Changelog
 
 ## [Unreleased]
+
+### Fixed
+
+- Fix some correct output were declared wrong by AutoCp.
+
 ## [v0.2.1]
 
 ### Fixed
 
--  Fix output of solution execution being blank.  
+- Fix output of solution execution being blank.
 
 ## [v0.2.0]
 
