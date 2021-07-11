@@ -3,6 +3,13 @@
 # AutoCp Changelog
 
 ## [Unreleased]
+## [v0.2.1]
+
+### Fixed
+
+-  Fix output of solution execution being blank.  
+
+## [v0.2.0]
 
 ### Added
 
