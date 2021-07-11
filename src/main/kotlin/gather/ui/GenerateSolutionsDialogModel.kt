@@ -20,9 +20,7 @@ class GenerateSolutionsDialogModel(val project: Project, problems: List<Problem>
     val isValid: Boolean
 
     init {
-        val selectedLang = settings.solutionLanguages.run {
-            find { it.name == settings.preferredLanguage } ?: firstOrNull()
-        }
+        val selectedLang = settings.getPreferredLang() ?: settings.solutionLanguages.firstOrNull()
 
         isValid = problems.isNotEmpty()
 
