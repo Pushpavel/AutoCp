@@ -8,6 +8,9 @@ import ui.poplist.PopListModel
 import javax.swing.BorderFactory
 import javax.swing.BoxLayout
 
+/**
+ * [PopList.ItemView] of a Testcase
+ */
 class TestcaseUI(popModel: PopListModel<Testcase>, private val model: TestcaseModel) : PopList.ItemView<Testcase> {
 
     override val component = JBPanel<JBPanel<*>>().apply {

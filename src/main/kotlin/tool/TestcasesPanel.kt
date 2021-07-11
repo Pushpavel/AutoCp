@@ -13,6 +13,9 @@ import java.awt.BorderLayout
 import javax.swing.BorderFactory
 import javax.swing.border.EmptyBorder
 
+/**
+ * [PopList] of [Testcase]s
+ */
 class TestcasesPanel(model: PopListModel<Testcase>) : PopList<Testcase>(true, 0.25F, model) {
 
     override val listComponent = JBList<Testcase>().apply {

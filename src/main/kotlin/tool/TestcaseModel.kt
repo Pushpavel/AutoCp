@@ -8,6 +8,9 @@ import com.intellij.openapi.editor.event.DocumentListener
 import database.models.Testcase
 import settings.SolutionLanguage
 
+/**
+ * ViewModel for [TestcaseUI]
+ */
 class TestcaseModel {
     val inputDoc = EditorFactory.getInstance().createDocument("")
     val outputDoc = EditorFactory.getInstance().createDocument("")

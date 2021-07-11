@@ -11,6 +11,10 @@ import tool.base.CollectionListListener
 import tool.base.FileFollowedContent
 import ui.poplist.PopListModel
 
+/**
+ * [FileFollowedContent] implementation that also updates viewer when file being
+ * followed changes (i.e) currently selected file changes
+ */
 class SpecFileAdapter(
     project: Project,
     private val viewer: ProblemViewer

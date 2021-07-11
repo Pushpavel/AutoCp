@@ -11,17 +11,17 @@ import com.intellij.openapi.wm.ToolWindowFactory
 import com.intellij.ui.content.Content
 
 
+/**
+ * [ToolWindowFactory] for creating a [ToolWindow] for editing and viewing testcases
+ */
 class ToolFactory : ToolWindowFactory, DumbAware {
 
     override fun createToolWindowContent(project: Project, toolWindow: ToolWindow) {
 
-//        use this for developing settings ui
-//        ShowSettingsUtil.getInstance().showSettingsDialog(project, "AutoCp")
-
-
         val viewer = ProblemViewer()
         var oldContent: Content? = null
 
+        // replacing content of toolWindow on changes
         viewer.setContentListener { newContent ->
             oldContent?.let { content -> toolWindow.contentManager.removeContent(content, false) }
             newContent?.let { content -> toolWindow.contentManager.addContent(content) }
