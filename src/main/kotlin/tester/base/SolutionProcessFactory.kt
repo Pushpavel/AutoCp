@@ -10,6 +10,9 @@ import java.nio.file.Paths
 import kotlin.io.path.exists
 import kotlin.io.path.pathString
 
+/**
+ * Factory Class for creating sub [Process]es of an executable created from buildFromConfig function
+ */
 class SolutionProcessFactory(private val executablePath: String) {
 
     fun createProcess(): Process {
@@ -17,6 +20,9 @@ class SolutionProcessFactory(private val executablePath: String) {
     }
 
     companion object {
+        /**
+         * Creates an Executable from [AutoCpConfig] and returns a factory for creating sub [Process]es of this executable
+         */
         suspend fun buildFromConfig(config: AutoCpConfig): SolutionProcessFactory {
             val settings = AutoCpSettings.instance
             val lang = settings.getLangWithId(config.solutionLangId)

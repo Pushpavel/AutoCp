@@ -6,29 +6,35 @@ import common.errors.Err.TesterErr.*
 import kotlinx.coroutines.*
 import java.io.InputStream
 
+/**
+ * Simplifies execution of an Sub [Process]  by handling its input, output and error streams
+ * this enables to run a process by just calling ProcessRunner.run which returns
+ * the output and errors in CapturedResults Object
+ */
 object ProcessRunner {
 
-    suspend fun run(process: Process, input: String = "", timeLimit: Long = Long.MAX_VALUE) = withContext(Dispatchers.IO) {
+    suspend fun run(process: Process, input: String = "", timeLimit: Long = Long.MAX_VALUE) =
+        withContext(Dispatchers.IO) {
 
-        val result = runCatching {
-            if (!process.isAlive)
-                throw Err.InternalErr("ProcessRunner<T>.run: Dead Process provided as argument")
+            val result = runCatching {
+                if (!process.isAlive)
+                    throw Err.InternalErr("ProcessRunner<T>.run: Dead Process provided as argument")
 
-            setInput(process, input)
-            val deferredOutput = readOutputAsync(process)
-            val executionTime = monitorProcess(process, timeLimit)
-            val output = deferredOutput.awaitAsResult()
+                setInput(process, input)
+                val deferredOutput = readOutputAsync(process)
+                val executionTime = monitorProcess(process, timeLimit)
+                val output = deferredOutput.awaitAsResult()
 
-            CapturedResults(
-                output.getOrDefault(""),
-                executionTime
-            )
+                CapturedResults(
+                    output.getOrDefault(""),
+                    executionTime
+                )
+            }
+
+            process.destroy()
+
+            return@withContext result
         }
-
-        process.destroy()
-
-        return@withContext result
-    }
 
     private fun setInput(process: Process, input: String) {
         process.outputStream.use {
@@ -55,20 +61,6 @@ object ProcessRunner {
                 throw RuntimeErr(it[1])
             it[0]
         }
-    }
-
-    @Suppress("BlockingMethodInNonBlockingContext")
-    private suspend fun InputStream.readText() = coroutineScope {
-        val output = StringBuilder()
-
-        this@readText.bufferedReader().use {
-            while (it.ready()) {
-                output.append(it.read().toChar())
-                ensureActive()
-            }
-        }
-
-        return@coroutineScope output.toString()
     }
 
     data class CapturedResults(
