@@ -4,6 +4,9 @@ import com.intellij.ui.OnePixelSplitter
 import javax.swing.event.ListSelectionEvent
 import javax.swing.event.ListSelectionListener
 
+/**
+ * Implementation Details like selection changes abstracted from [PopList]
+ */
 class PopListImpl<T>(
     private val adapter: PopList<T>,
     private val popModel: PopListModel<T>,

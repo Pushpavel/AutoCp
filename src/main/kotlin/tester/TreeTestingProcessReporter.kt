@@ -12,6 +12,9 @@ import tester.tree.ResultNode
 import tester.tree.TestNode
 import tester.tree.TreeTestingProcess
 
+/**
+ * Class that abstracts formatting and sending output to the console and the TestRunner UI
+ */
 class TreeTestingProcessReporter(private val processHandler: ProcessHandler) : TreeTestingProcess.Listener {
     override fun leafStart(node: TestNode.Leaf) {
         testStarted(node.name).apply()

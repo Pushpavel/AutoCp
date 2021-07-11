@@ -9,6 +9,9 @@ import com.github.pushpavel.autocp.database.Problem
 import tool.base.ContentAdapter
 import ui.poplist.PopListModel
 
+/**
+ * Creates new ToolWindow Content whenever currently selected file changes
+ */
 class ProblemViewer : ContentAdapter<Problem>(), FileEditorManagerListener {
 
     val model = object : PopListModel<Testcase>() {

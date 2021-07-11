@@ -1,5 +1,8 @@
 package tester.judge
 
+/**
+ * Enum for variety of Verdicts that can be presented to the user
+ */
 enum class Verdict {
     CORRECT_ANSWER,
     WRONG_ANSWER,

@@ -16,6 +16,9 @@ import kotlin.io.path.Path
 import kotlin.io.path.exists
 import kotlin.io.path.pathString
 
+/**
+ * [TestingProcessHandler] implementation that creates a [TestcaseTreeTestingProcess] for execution
+ */
 class AutoCpTestingProcessHandler(private val config: AutoCpConfig) : TestingProcessHandler() {
 
     private val reporter = TreeTestingProcessReporter(this)

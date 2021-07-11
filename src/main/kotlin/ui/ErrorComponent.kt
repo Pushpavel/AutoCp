@@ -6,6 +6,9 @@ import com.intellij.ui.components.JBPanel
 import com.intellij.util.ui.JBFont
 import kotlin.properties.Delegates
 
+/**
+ * Error UI with error icon and a message
+ */
 class ErrorComponent(model: Model) : JBPanel<ErrorComponent>() {
 
     private val textComponent = JBLabel()

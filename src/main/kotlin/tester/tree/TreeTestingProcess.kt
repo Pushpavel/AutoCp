@@ -3,6 +3,10 @@ package tester.tree
 import tester.base.BaseTestingProcess
 import tester.base.TestingProcess
 
+/**
+ * [TestingProcess] that provides abstract functions for execution
+ * to take place like a tree traversal
+ */
 abstract class TreeTestingProcess(private val rootTestNode: TestNode, protected val listener: Listener) :
     BaseTestingProcess() {
 

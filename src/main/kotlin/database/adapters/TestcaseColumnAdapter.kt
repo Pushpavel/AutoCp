@@ -6,6 +6,9 @@ import com.intellij.util.containers.OrderedSet
 import com.squareup.sqldelight.ColumnAdapter
 import database.models.Testcase
 
+/**
+ * [ColumnAdapter] for testcases of Problem
+ */
 class TestcaseColumnAdapter : ColumnAdapter<OrderedSet<Testcase>, String> {
     private val gson by lazy { Gson() }
     private val type = object : TypeToken<OrderedSet<Testcase>>() {}.type

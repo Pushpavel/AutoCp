@@ -4,6 +4,8 @@ import tester.base.SolutionProcessFactory
 
 /**
  * Tree Data-structure for defining the Test Tree
+ *
+ * Model classes containing specifications for execution of [TreeTestingProcess]
  */
 sealed interface TestNode {
     val name: String

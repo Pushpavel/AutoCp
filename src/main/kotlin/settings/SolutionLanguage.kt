@@ -2,6 +2,9 @@ package settings
 
 import ui.StringCellRenderer
 
+/**
+ * Model class of settings for a programming language
+ */
 data class SolutionLanguage(
     var name: String = "",
     var extension: String = "",

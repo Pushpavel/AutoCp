@@ -10,7 +10,8 @@ import kotlinx.coroutines.launch
 import tester.TestcaseTreeTestingProcess
 
 /**
- * Implementation of ProcessHandler that handles [TestingProcess] which is not an actual [Process]
+ * [ProcessHandler][com.intellij.execution.process.ProcessHandler] that handles [TestingProcess]
+ * which is not an actual [Process]
  */
 abstract class TestingProcessHandler : NopProcessHandler() {
 

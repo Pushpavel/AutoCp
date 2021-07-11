@@ -4,7 +4,9 @@ import common.errors.Err
 import common.errors.mapToErr
 
 /**
- * This ensures [executeProcess] will be called only once
+ * [TestingProcess] that ensures single execution of this class
+ *
+ * [executeProcess] will be called only once
  */
 abstract class BaseTestingProcess : TestingProcess {
     private var hasExecuted = false

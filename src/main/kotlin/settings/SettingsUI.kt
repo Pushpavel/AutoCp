@@ -5,6 +5,9 @@ import com.intellij.ui.components.JBPanel
 import com.intellij.ui.layout.panel
 import java.awt.BorderLayout
 
+/**
+ * UI for plugin settings
+ */
 class SettingsUI(model: SettingsUIModel) : JBPanel<SettingsUI>(BorderLayout()) {
 
     val preferredLangBox = ComboBox(model.preferredLangModel).apply {

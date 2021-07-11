@@ -3,6 +3,9 @@ package settings
 import settings.base.ComboBoxModelDelegate
 import ui.poplist.PopListModel
 
+/**
+ * ViewModel for [SettingsUI]
+ */
 class SettingsUIModel {
     val popListModel = object : PopListModel<SolutionLanguage>() {
         override val itemNameRegex = Regex("^(.*)_([0-9]+)\$")

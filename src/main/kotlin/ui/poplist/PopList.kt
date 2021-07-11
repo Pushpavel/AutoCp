@@ -3,7 +3,10 @@ package ui.poplist
 import javax.swing.JComponent
 import javax.swing.JList
 
-abstract class PopList<T>(isVertical: Boolean, proportion: Float, val popModel: PopListModel<T>) {
+/**
+ * List along UI of the selected ListItem on the side
+ */
+abstract class PopList<T>(isVertical: Boolean, proportion: Float, private val popModel: PopListModel<T>) {
 
 
     abstract val listComponent: JList<T>

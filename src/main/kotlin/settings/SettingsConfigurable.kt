@@ -2,6 +2,10 @@ package settings
 
 import com.intellij.openapi.options.Configurable
 
+/**
+ * [Configurable] that connects view [SettingsUI] to its viewModel [SettingsUIModel]
+ * and handles saving, resetting and initializing the UI
+ */
 class SettingsConfigurable : Configurable {
     var model: SettingsUIModel? = null
 
