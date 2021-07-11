@@ -3,6 +3,7 @@
 # AutoCp Changelog
 
 ## [Unreleased]
+## [v0.2.2]
 
 ### Fixed
 
