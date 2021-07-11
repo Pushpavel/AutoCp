@@ -9,6 +9,9 @@ import java.nio.file.Paths
 import java.util.*
 import kotlin.io.path.pathString
 
+/**
+ * Manages Setting up and migrating of Database
+ */
 abstract class AbstractAutoCpDatabase(project: Project) : AutoCpDatabase {
     private val dbPath = project.basePath?.let { Paths.get(it, ".autocp").pathString } ?: ""
 
