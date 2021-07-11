@@ -3,6 +3,9 @@ package settings
 import ui.poplist.PopList.ItemView
 import ui.poplist.PopListModel
 
+/**
+ * Adapter for declaring components of [PopList][ui.poplist.PopList]
+ */
 class LanguageItemAdapter(popModel: PopListModel<SolutionLanguage>) : ItemView<SolutionLanguage> {
 
     private val model = LanguageItemModel(LanguageItemValidator(popModel.listModel))
