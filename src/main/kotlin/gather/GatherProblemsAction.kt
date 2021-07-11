@@ -20,7 +20,11 @@ import kotlinx.coroutines.swing.Swing
 import java.net.ServerSocket
 import java.net.SocketTimeoutException
 
-
+/**
+ * [AnAction] that opens a dialog and starts a server waiting for
+ * competitive companion browser extension to parse the problems
+ * and finally opens another dialog for generating solution files
+ */
 class GatherProblemsAction : AnAction(), DumbAware {
     companion object {
         private const val CPH_PORT = 27121

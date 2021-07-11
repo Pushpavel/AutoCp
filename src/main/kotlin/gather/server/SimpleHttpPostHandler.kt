@@ -3,6 +3,7 @@ package gather.server
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.channels.produce
 import kotlinx.coroutines.withContext
 import java.io.BufferedReader
@@ -12,8 +13,15 @@ import java.net.InetAddress
 import java.net.ServerSocket
 import java.net.SocketException
 
+/**
+ *  Creates a server at local host with the given @param port
+ */
 fun createServer(port: Int) = ServerSocket(port, 50, InetAddress.getByName("localhost"))
 
+/**
+ * accepts sockets from server and redirects body
+ * of the response to the returned [ReceiveChannel]
+ */
 @ExperimentalCoroutinesApi
 @Suppress("BlockingMethodInNonBlockingContext")
 fun CoroutineScope.getResponsesAsync(server: ServerSocket, timeout: Long = Long.MAX_VALUE) = produce {

@@ -8,6 +8,9 @@ import com.intellij.ui.treeStructure.Tree
 import settings.SolutionLanguage
 import java.awt.BorderLayout
 
+/**
+ * creates a dialog view and wires it with its viewModel class [GenerateSolutionsDialogModel]
+ */
 fun createGenerateSolutionsDialog(model: GenerateSolutionsDialogModel): DialogBuilder {
 
     val dialog = DialogBuilder(model.project)
