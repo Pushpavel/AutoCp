@@ -4,6 +4,10 @@ import java.awt.Component
 import javax.swing.DefaultListCellRenderer
 import javax.swing.JList
 
+/**
+ * CellRenderer that maps model classes to presentable names in ListViews
+ * through @param textGetter
+ */
 open class StringCellRenderer<out T>(private val textGetter: (T) -> String) : DefaultListCellRenderer() {
     override fun getListCellRendererComponent(
         list: JList<*>?,
