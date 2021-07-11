@@ -7,6 +7,7 @@ import tester.judge.Verdict
 import tester.tree.ResultNode
 import tester.tree.TestNode
 import tester.tree.TreeTestingProcess
+import tester.utils.trimByLines
 
 class TestcaseTreeTestingProcess(rootTestNode: TestNode, reporter: Listener) :
     TreeTestingProcess(rootTestNode, reporter) {
@@ -25,8 +26,8 @@ class TestcaseTreeTestingProcess(rootTestNode: TestNode, reporter: Listener) :
             else
                 Verdict.RUNTIME_ERROR
         } else {
-            val expectedOutput = node.expectedOutput.trim()
-            val actualOutput = result.getOrNull()!!.output.trim().replace("\r", "")
+            val expectedOutput = node.expectedOutput.trimByLines()
+            val actualOutput = result.getOrNull()!!.output.trimByLines()
 
             if (!actualOutput.contentEquals(expectedOutput)) {
                 verdict = Verdict.WRONG_ANSWER
