@@ -10,6 +10,9 @@ import javax.swing.tree.DefaultMutableTreeNode
 import javax.swing.tree.DefaultTreeModel
 import javax.swing.tree.TreeModel
 
+/**
+ * ViewModel for dialog that generates solution files
+ */
 class GenerateSolutionsDialogModel(val project: Project, problems: List<Problem>) {
     private val settings = project.service<AutoCpSettings>()
     val langModel: CollectionComboBoxModel<SolutionLanguage>

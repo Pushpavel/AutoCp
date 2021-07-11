@@ -2,6 +2,11 @@ package tool.base
 
 import com.intellij.openapi.vfs.VirtualFile
 
+/**
+ * Changes followingData in contentAdapter when @property followingFile changes
+ * which leads to creation of a new Content
+ * see: [ContentAdapter]
+ */
 abstract class FileFollowedContent<T>(private val contentAdapter: ContentAdapter<T>) {
 
     private var followingFile: VirtualFile? = null

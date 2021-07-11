@@ -7,10 +7,18 @@ import tester.judge.Verdict
 import tester.tree.ResultNode
 import tester.tree.TestNode
 import tester.tree.TreeTestingProcess
+import tester.utils.trimByLines
 
+/**
+ * [TreeTestingProcess] containing implementation for executing and generating
+ * verdict for each testcases
+ */
 class TestcaseTreeTestingProcess(rootTestNode: TestNode, reporter: Listener) :
     TreeTestingProcess(rootTestNode, reporter) {
 
+    /**
+     * executes and produces verdict for a Testcase
+     */
     override suspend fun executeLeaf(node: TestNode.Leaf, parent: TestNode.Group): ResultNode.Leaf {
         val process = node.processFactory.createProcess()
 
@@ -25,8 +33,8 @@ class TestcaseTreeTestingProcess(rootTestNode: TestNode, reporter: Listener) :
             else
                 Verdict.RUNTIME_ERROR
         } else {
-            val expectedOutput = node.expectedOutput.trim()
-            val actualOutput = result.getOrNull()!!.output.trim().replace("\r", "")
+            val expectedOutput = node.expectedOutput.trimByLines()
+            val actualOutput = result.getOrNull()!!.output.trimByLines()
 
             if (!actualOutput.contentEquals(expectedOutput)) {
                 verdict = Verdict.WRONG_ANSWER
@@ -45,6 +53,9 @@ class TestcaseTreeTestingProcess(rootTestNode: TestNode, reporter: Listener) :
         )
     }
 
+    /**
+     * Executes Testcases of a Group
+     */
     override suspend fun executeGroup(node: TestNode.Group, parent: TestNode.Group?): ResultNode.Group {
         val children = node.children.map { processNode(it, node) }
 

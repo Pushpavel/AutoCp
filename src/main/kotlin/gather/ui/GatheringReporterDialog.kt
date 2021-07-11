@@ -11,6 +11,9 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 
+/**
+ * Gathering process status reporting dialog
+ */
 class GatheringReporterDialog(project: Project, parentScope: CoroutineScope) : AutoCloseable {
 
     private val headerLabel = JBLabel("Open browser and parse problem or contest using competitive companion extension")

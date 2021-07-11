@@ -6,6 +6,9 @@ import javax.swing.event.DocumentListener
 import javax.swing.text.Document
 import javax.swing.text.PlainDocument
 
+/**
+ * ViewModel for [LanguageItemPanel]
+ */
 class LanguageItemModel(private val validator: Validator) {
     val nameDoc = PlainDocument()
     val extensionDoc = PlainDocument()

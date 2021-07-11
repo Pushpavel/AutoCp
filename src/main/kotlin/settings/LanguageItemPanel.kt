@@ -6,6 +6,9 @@ import com.intellij.ui.layout.LCFlags
 import com.intellij.ui.layout.panel
 import ui.ErrorComponent
 
+/**
+ * UI for Editing [SolutionLanguage] settings shown in [LanguagesPopList]
+ */
 class LanguageItemPanel(model: LanguageItemModel) {
 
     private val nameField = ExtendableTextField(10).apply { document = model.nameDoc }

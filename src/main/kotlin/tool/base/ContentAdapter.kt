@@ -3,6 +3,10 @@ package tool.base
 import com.intellij.ui.content.Content
 import com.intellij.ui.content.ContentFactory
 
+/**
+ * Creates a new content on changes to @property followingData
+ * and notifies contentChangeListener
+ */
 abstract class ContentAdapter<T> {
     enum class NullDataPolicy {
         SHOW_EMPTY_CONTENT,

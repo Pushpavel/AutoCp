@@ -3,6 +3,9 @@ package settings
 import com.intellij.openapi.components.*
 import com.intellij.util.xmlb.XmlSerializerUtil
 
+/**
+ * Model class for Settings of the plugin that persists across restarts
+ */
 @State(
     name = "plugin.settings.AppSettingsState",
     storages = [Storage("autoCpPluginSettings.xml")]

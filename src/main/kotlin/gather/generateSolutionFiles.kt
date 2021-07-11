@@ -11,6 +11,9 @@ import settings.SolutionLanguage
 import java.nio.file.Paths
 import kotlin.io.path.pathString
 
+/**
+ * creates files and associates those files with a problem in the db
+ */
 fun generateSolutionFiles(project: Project, problems: List<Problem>, lang: SolutionLanguage) {
     if (problems.isEmpty()) return
     val rootDir = Paths.get(project.basePath!!, problems[0].groupName).toFile()

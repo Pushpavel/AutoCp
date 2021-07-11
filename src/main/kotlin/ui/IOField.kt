@@ -8,6 +8,9 @@ import com.intellij.ui.EditorTextField
 import java.awt.Dimension
 import kotlin.math.min
 
+/**
+ * Text Field UI used in editing Input/Output of Testcases
+ */
 class IOField(labelText: String, document: Document) : LabeledComponent<IOField.Field>() {
 
     init {

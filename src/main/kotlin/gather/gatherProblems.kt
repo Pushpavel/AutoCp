@@ -7,6 +7,10 @@ import gather.models.ProblemJson
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.channels.SendChannel
 
+/**
+ * receives jsonStrings from @param responses and gathers
+ * the [Problem] objects, while notifying updates through @param events channel
+ */
 suspend fun gatherProblems(
     responses: ReceiveChannel<String>,
     events: SendChannel<ProblemGatheredEvent>

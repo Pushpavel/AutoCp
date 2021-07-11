@@ -2,6 +2,9 @@ package settings
 
 import com.intellij.ui.CollectionListModel
 
+/**
+ * Validation logic for UI TextFields in [LanguageItemPanel]
+ */
 class LanguageItemValidator(val listModel: CollectionListModel<SolutionLanguage>) : LanguageItemModel.Validator {
 
     override fun validateName(name: String): String? {

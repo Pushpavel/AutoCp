@@ -4,6 +4,9 @@ import com.intellij.ui.CollectionListModel
 import com.intellij.ui.SingleSelectionModel
 import kotlin.math.max
 
+/**
+ * Base class for ViewModel of [PopList]
+ */
 abstract class PopListModel<T> {
     val listModel = CollectionListModel<T>()
     val selectionModel = SingleSelectionModel()
