@@ -38,7 +38,7 @@ class SettingsConfigurable : Configurable {
         val settings = AutoCpSettings.instance
         model?.run {
             popListModel.listModel.replaceAll(settings.solutionLanguages)
-            popListModel.setSelectionIndex(settings.selectedIndex ?: -1) //TODO: remove ?: -1 after refactoring
+            popListModel.setSelectionIndex(settings.selectedIndex)
             preferredLangModel.selectedItem = settings.getPreferredLang()
         }
     }
