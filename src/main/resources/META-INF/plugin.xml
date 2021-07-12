@@ -5,14 +5,25 @@
     <!-- Product and plugin compatibility requirements -->
     <!-- https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
     <depends>com.intellij.modules.platform</depends>
+    <resource-bundle>messages.autocp</resource-bundle>
 
     <extensions defaultExtensionNs="com.intellij">
         <configurationType implementation="config.AutoCpConfigType"/>
         <runConfigurationProducer implementation="config.AutoCpConfigProducer"/>
-        <notificationGroup id="AutoCp Notification Group" displayType="BALLOON"/>
+        <notificationGroup id="autocp-notifications-group" key="notificationGroup" displayType="BALLOON"/>
+
+        <!--    Settings   -->
         <applicationConfigurable instance="settings.SettingsConfigurable"
-                                 id="settings.SettingsConfigurable"
+                                 id="tools.autocp"
+                                 groupId="tools"
                                  displayName="AutoCp"/>
+
+        <applicationConfigurable instance="settings.langSettings.AutoCpLangSettingsConfigurable"
+                                 id="tools.autocp.languages"
+                                 parentId="tools.autocp"
+                                 displayName="Languages"/>
+
+
         <toolWindow factoryClass="tool.ToolFactory" id="AutoCp" icon="Icons.LogoIcon" anchor="right"/>
         <fileTemplateGroup implementation="lang.FileTemplates"/>
     </extensions>
