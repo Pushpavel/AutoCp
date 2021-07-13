@@ -1,22 +1,27 @@
 package settings.langSettings
 
 import com.intellij.openapi.options.Configurable
+import com.intellij.openapi.project.DumbAware
+import kotlinx.coroutines.MainScope
+import settings.langSettings.ui.LangSettingsView
+import settings.langSettings.ui.LangSettingsViewModel
 import javax.swing.JComponent
 
-class AutoCpLangSettingsConfigurable : Configurable {
-    override fun createComponent(): JComponent? {
-        TODO("Not yet implemented")
+class AutoCpLangSettingsConfigurable : Configurable, DumbAware {
+    override fun createComponent(): JComponent {
+        return LangSettingsView().apply {
+            bindToViewModel(MainScope(), LangSettingsViewModel())
+        }
     }
 
     override fun isModified(): Boolean {
-        TODO("Not yet implemented")
+        return false
     }
 
     override fun apply() {
-        TODO("Not yet implemented")
     }
 
     override fun getDisplayName(): String {
-        TODO("Not yet implemented")
+        return "Where Is This"
     }
 }
