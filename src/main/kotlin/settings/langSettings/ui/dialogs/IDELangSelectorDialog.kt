@@ -36,7 +36,7 @@ class IDELangSelectorDialog : DialogWrapper(false) {
         val dialogPanel = JPanel(BorderLayout())
 
         val list = JBList(languages)
-        list.selectionModel = selectedIndex.toSingleSelectionModel(scope)
+        list.selectionModel = selectedIndex.toSingleSelectionModel(scope, selectedIndex)
         ListSpeedSearch(list) { it.displayName }
 
         val container = JBScrollPane(list)
