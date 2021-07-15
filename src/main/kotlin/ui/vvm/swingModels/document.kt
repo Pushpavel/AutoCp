@@ -23,7 +23,8 @@ fun Flow<String>.toPlainDocument(
     // flow to doc
     scope.launch {
         collect {
-            doc.setText(it)
+            if (doc.getText() != it)
+                doc.setText(it)
         }
     }
 

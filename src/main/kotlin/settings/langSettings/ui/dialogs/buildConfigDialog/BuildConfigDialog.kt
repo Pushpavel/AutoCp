@@ -47,8 +47,6 @@ class BuildConfigDialog(buildConfig: BuildConfig, list: List<BuildConfig>) : Dia
                             "@output@ will be replaced with \"path/to/output/file\" without quotes"
                 )
             }
-            blockRow { }
-
             val nameErrView = ErrorView()
             val buildCommandErrView = ErrorView()
 
