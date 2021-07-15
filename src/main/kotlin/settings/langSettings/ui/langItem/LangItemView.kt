@@ -7,21 +7,22 @@ import kotlinx.coroutines.CoroutineScope
 import settings.langSettings.model.BuildConfig
 import ui.vvm.View
 import ui.vvm.swingModels.toCollectionListModel
+import ui.vvm.swingModels.toSingleSelectionModel
 import java.awt.BorderLayout
 
 class LangItemView : JBPanel<LangItemView>(BorderLayout()), View<LangItemViewModel> {
 
     val list = JBList<BuildConfig>()
 
-    init {
+    override fun CoroutineScope.onViewModelBind(viewModel: LangItemViewModel) {
+        val container = ToolbarDecorator.createDecorator(list).setEditAction {
+            viewModel.editConfig()
+        }.createPanel()
 
-        val container = ToolbarDecorator.createDecorator(list).createPanel()
+        list.model = viewModel.buildConfig.toCollectionListModel(this, viewModel.buildConfigChanges)
+        list.selectionModel = viewModel.selectedConfigIndex.toSingleSelectionModel(this, viewModel.selectedConfigIndex)
 
         add(container, BorderLayout.CENTER)
-    }
-
-    override fun CoroutineScope.onViewModelBind(viewModel: LangItemViewModel) {
-        list.model = viewModel.buildProperties.toCollectionListModel(this, viewModel.buildPropertiesChanges)
     }
 
 }
