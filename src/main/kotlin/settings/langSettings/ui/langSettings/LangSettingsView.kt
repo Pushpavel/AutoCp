@@ -42,7 +42,7 @@ class LangSettingsView : OnePixelSplitter(false, 0.3F), View<LangSettingsViewMod
 
 
         sideList.model = viewModel.languages.toCollectionListModel(this)
-        sideList.selectionModel = viewModel.selectedLangIndex.toSingleSelectionModel(this)
+        sideList.selectionModel = viewModel.selectedLangIndex.toSingleSelectionModel(this, viewModel.selectedLangIndex)
 
         launch {
             viewModel.selectedLangIndex.collect {
