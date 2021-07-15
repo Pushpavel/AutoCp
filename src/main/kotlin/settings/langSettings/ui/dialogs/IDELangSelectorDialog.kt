@@ -1,17 +1,10 @@
-package settings.langSettings.ui.ideLangSelector
+package settings.langSettings.ui.dialogs
 
 import com.intellij.lang.Language
-import com.intellij.openapi.roots.ui.componentsList.components.ScrollablePanel
 import com.intellij.openapi.ui.DialogWrapper
 import com.intellij.ui.ListSpeedSearch
-import com.intellij.ui.SpeedSearchBase
-import com.intellij.ui.SpeedSearchComparator
-import com.intellij.ui.ToolbarDecorator
 import com.intellij.ui.components.JBList
 import com.intellij.ui.components.JBScrollPane
-import com.intellij.ui.speedSearch.SpeedSearch
-import com.intellij.ui.speedSearch.SpeedSearchSupply
-import com.intellij.ui.speedSearch.SpeedSearchUtil
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow

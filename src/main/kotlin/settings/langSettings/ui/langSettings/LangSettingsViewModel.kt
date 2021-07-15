@@ -3,7 +3,7 @@ package settings.langSettings.ui.langSettings
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import settings.langSettings.model.Lang
-import settings.langSettings.ui.ideLangSelector.IDELangSelectorDialog
+import settings.langSettings.ui.dialogs.IDELangSelectorDialog
 import settings.langSettings.ui.langItem.LangItemViewModel
 import ui.vvm.ViewModel
 
