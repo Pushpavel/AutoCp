@@ -21,7 +21,7 @@ class LangItemView : JBPanel<LangItemView>(BorderLayout()), View<LangItemViewMod
     }
 
     override fun CoroutineScope.onViewModelBind(viewModel: LangItemViewModel) {
-        list.model = viewModel.buildProperties.toCollectionListModel(this, viewModel.buildProperties)
+        list.model = viewModel.buildProperties.toCollectionListModel(this, viewModel.buildPropertiesChanges)
     }
 
 }

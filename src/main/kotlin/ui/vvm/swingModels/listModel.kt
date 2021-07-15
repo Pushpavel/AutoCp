@@ -32,7 +32,7 @@ fun <T> Flow<List<T>>.toCollectionListModel(
     // model to sink
     model.addListDataListener(SimpleListDataListener {
         if (!pauseFlow)
-            sink.tryEmit(model.items)
+            scope.launch { sink.emit(model.items) }
     })
 
 

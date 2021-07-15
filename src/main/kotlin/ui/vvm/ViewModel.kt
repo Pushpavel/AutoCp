@@ -1,6 +1,7 @@
 package ui.vvm
 
 import com.intellij.openapi.Disposable
+import com.intellij.openapi.util.Disposer
 import kotlinx.coroutines.*
 
 open class ViewModel : Disposable {
@@ -8,5 +9,12 @@ open class ViewModel : Disposable {
         e.printStackTrace()
     })
 
+
     override fun dispose() = scope.cancel()
+
+    fun <T : ViewModel> T.withParent(parent: Disposable): T {
+        Disposer.register(parent, this)
+        return this
+    }
 }
+

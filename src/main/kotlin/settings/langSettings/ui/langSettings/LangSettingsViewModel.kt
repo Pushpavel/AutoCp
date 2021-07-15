@@ -10,7 +10,7 @@ import ui.vvm.ViewModel
 class LangSettingsViewModel : ViewModel() {
     val selectedLangIndex = MutableStateFlow(-1)
     val languages = MutableStateFlow<List<Lang>>(emptyList())
-    val itemModel = LangItemViewModel(languages, selectedLangIndex)
+    val itemModel = LangItemViewModel(languages, selectedLangIndex).withParent(this)
 
     fun addNewLanguage() {
         val selectedLanguage = IDELangSelectorDialog().showAndGetSelection() ?: return
