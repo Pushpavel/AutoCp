@@ -2,7 +2,6 @@ package settings.langSettings.ui.langSettings
 
 import com.intellij.ui.OnePixelSplitter
 import com.intellij.ui.ToolbarDecorator
-import com.intellij.ui.components.JBLabel
 import com.intellij.ui.components.JBList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.collect
@@ -22,13 +21,11 @@ class LangSettingsView : OnePixelSplitter(false, 0.3F), View<LangSettingsViewMod
 
     init {
 
-        val listContainer = ToolbarDecorator.createDecorator(sideList).createPanel()
 
         val langItemView = LangItemView()
 
         mainContainer = SingleChildContainer("Select a Language", langItemView)
 
-        firstComponent = listContainer
         secondComponent = mainContainer.apply {
             border = BorderFactory.createEmptyBorder(0, 8, 0, 0)
         }
@@ -37,6 +34,13 @@ class LangSettingsView : OnePixelSplitter(false, 0.3F), View<LangSettingsViewMod
 
 
     override fun CoroutineScope.onViewModelBind(viewModel: LangSettingsViewModel) {
+        val listContainer = ToolbarDecorator.createDecorator(sideList)
+            .setAddAction { viewModel.addNewLanguage() }
+            .createPanel()
+
+        firstComponent = listContainer
+
+
         sideList.model = viewModel.languages.toCollectionListModel(this)
         sideList.selectionModel = viewModel.selectedLangIndex.toSingleSelectionModel(this)
 
