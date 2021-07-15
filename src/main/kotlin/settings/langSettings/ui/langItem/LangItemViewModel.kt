@@ -2,7 +2,7 @@ package settings.langSettings.ui.langItem
 
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import settings.langSettings.model.BuildProperties
+import settings.langSettings.model.BuildConfig
 import settings.langSettings.model.Lang
 import ui.vvm.ViewModel
 
@@ -15,7 +15,7 @@ class LangItemViewModel(languages: MutableStateFlow<List<Lang>>, selectedLangInd
             list[index].buildProperties
     }
 
-    val buildPropertiesChanges = MutableSharedFlow<List<BuildProperties>>()
+    val buildPropertiesChanges = MutableSharedFlow<List<BuildConfig>>()
 
     init {
         scope.launch {

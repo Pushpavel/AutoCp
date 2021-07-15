@@ -4,14 +4,14 @@ import com.intellij.ui.ToolbarDecorator
 import com.intellij.ui.components.JBList
 import com.intellij.ui.components.JBPanel
 import kotlinx.coroutines.CoroutineScope
-import settings.langSettings.model.BuildProperties
+import settings.langSettings.model.BuildConfig
 import ui.vvm.View
 import ui.vvm.swingModels.toCollectionListModel
 import java.awt.BorderLayout
 
 class LangItemView : JBPanel<LangItemView>(BorderLayout()), View<LangItemViewModel> {
 
-    val list = JBList<BuildProperties>()
+    val list = JBList<BuildConfig>()
 
     init {
 

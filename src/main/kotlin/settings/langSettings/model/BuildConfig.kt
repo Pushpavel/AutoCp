@@ -1,6 +1,6 @@
 package settings.langSettings.model
 
-data class BuildProperties(
+data class BuildConfig(
     val name: String,
     val buildCommand: String
 )
