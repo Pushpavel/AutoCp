@@ -1,4 +1,4 @@
-package settings.langSettings.ui
+package settings.langSettings.ui.langSettings
 
 import com.intellij.ui.OnePixelSplitter
 import com.intellij.ui.ToolbarDecorator

@@ -1,4 +1,4 @@
-package settings.langSettings.ui
+package settings.langSettings.ui.langSettings
 
 import kotlinx.coroutines.flow.MutableStateFlow
 import settings.langSettings.model.Lang

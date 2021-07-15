@@ -5,8 +5,8 @@ import com.intellij.openapi.project.DumbAware
 import common.isItemsEqual
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
-import settings.langSettings.ui.LangSettingsView
-import settings.langSettings.ui.LangSettingsViewModel
+import settings.langSettings.ui.langSettings.LangSettingsView
+import settings.langSettings.ui.langSettings.LangSettingsViewModel
 import javax.swing.JComponent
 
 class AutoCpLangSettingsConfigurable : Configurable, DumbAware {
