@@ -1,12 +1,10 @@
 package ui.layouts
 
 import com.intellij.ui.components.JBPanelWithEmptyText
+import java.awt.BorderLayout
 import javax.swing.JComponent
 
-/**
- *
- */
-class SingleChildContainer(emptyText: String, private val child: JComponent) : JBPanelWithEmptyText() {
+class SingleChildContainer(emptyText: String, private val child: JComponent) : JBPanelWithEmptyText(BorderLayout()) {
 
     init {
         withEmptyText(emptyText)
@@ -19,7 +17,7 @@ class SingleChildContainer(emptyText: String, private val child: JComponent) : J
     }
 
     private fun attachItemView() {
-        add(child)
+        add(child, BorderLayout.CENTER)
         updateUI()
     }
 

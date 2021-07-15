@@ -8,10 +8,12 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import settings.langSettings.model.Lang
+import settings.langSettings.ui.langItem.LangItemView
 import ui.layouts.SingleChildContainer
 import ui.vvm.View
 import ui.vvm.swingModels.toCollectionListModel
 import ui.vvm.swingModels.toSingleSelectionModel
+import javax.swing.BorderFactory
 
 class LangSettingsView : OnePixelSplitter(false, 0.3F), View<LangSettingsViewModel> {
 
@@ -22,10 +24,14 @@ class LangSettingsView : OnePixelSplitter(false, 0.3F), View<LangSettingsViewMod
 
         val listContainer = ToolbarDecorator.createDecorator(sideList).createPanel()
 
-        mainContainer = SingleChildContainer("Select a Language", JBLabel("Amazing work"))
+        val langItemView = LangItemView()
+
+        mainContainer = SingleChildContainer("Select a Language", langItemView)
 
         firstComponent = listContainer
-        secondComponent = mainContainer
+        secondComponent = mainContainer.apply {
+            border = BorderFactory.createEmptyBorder(0, 8, 0, 0)
+        }
 
     }
 
