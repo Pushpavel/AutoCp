@@ -10,6 +10,7 @@ import settings.langSettings.model.Lang
 import settings.langSettings.ui.langItem.LangItemView
 import ui.layouts.SingleChildContainer
 import ui.vvm.View
+import ui.vvm.bind
 import ui.vvm.swingModels.toCollectionListModel
 import ui.vvm.swingModels.toSingleSelectionModel
 import javax.swing.BorderFactory
@@ -18,22 +19,21 @@ class LangSettingsView : OnePixelSplitter(false, 0.3F), View<LangSettingsViewMod
 
     private val sideList: JBList<Lang> = JBList<Lang>()
     private val mainContainer: SingleChildContainer
+    private val langItemView = LangItemView()
 
     init {
-
-
-        val langItemView = LangItemView()
-
         mainContainer = SingleChildContainer("Select a Language", langItemView)
 
         secondComponent = mainContainer.apply {
             border = BorderFactory.createEmptyBorder(0, 8, 0, 0)
         }
-
     }
 
 
     override fun CoroutineScope.onViewModelBind(viewModel: LangSettingsViewModel) {
+
+        bind(langItemView, viewModel.itemModel)
+
         val listContainer = ToolbarDecorator.createDecorator(sideList)
             .setAddAction { viewModel.addNewLanguage() }
             .createPanel()

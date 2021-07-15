@@ -5,6 +5,7 @@ import com.intellij.openapi.project.DumbAware
 import common.isItemsEqual
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.cancel
 import settings.langSettings.ui.langSettings.LangSettingsView
 import settings.langSettings.ui.langSettings.LangSettingsViewModel
 import javax.swing.JComponent
@@ -34,6 +35,11 @@ class AutoCpLangSettingsConfigurable : Configurable, DumbAware {
     override fun reset() {
         val languages = AutoCpLangSettings.getLanguages()
         model.languages.tryEmit(languages)
+    }
+
+    override fun disposeUIResources() {
+        model.dispose()
+        scope.cancel()
     }
 
     override fun getDisplayName() = "Languages"
