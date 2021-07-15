@@ -24,7 +24,7 @@ class AutoCpLangSettingsConfigurable : Configurable, DumbAware {
 
     override fun isModified(): Boolean {
         val languages = AutoCpLangSettings.getLanguages()
-        return model.languages.value.isItemsEqual(languages)
+        return !model.languages.value.isItemsEqual(languages)
     }
 
     override fun apply() {

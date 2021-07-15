@@ -10,31 +10,33 @@ import kotlinx.coroutines.launch
 import settings.langSettings.model.Lang
 import ui.layouts.SingleChildContainer
 import ui.vvm.View
+import ui.vvm.swingModels.toCollectionListModel
 import ui.vvm.swingModels.toSingleSelectionModel
 
 class LangSettingsView : OnePixelSplitter(false, 0.3F), View<LangSettingsViewModel> {
 
     private val sideList: JBList<Lang> = JBList<Lang>()
-    private val itemContainer: SingleChildContainer
+    private val mainContainer: SingleChildContainer
 
     init {
 
         val listContainer = ToolbarDecorator.createDecorator(sideList).createPanel()
 
-        itemContainer = SingleChildContainer("Select a Language", JBLabel("Amazing work"))
+        mainContainer = SingleChildContainer("Select a Language", JBLabel("Amazing work"))
 
         firstComponent = listContainer
-        secondComponent = itemContainer
+        secondComponent = mainContainer
 
     }
 
 
     override fun CoroutineScope.onViewModelBind(viewModel: LangSettingsViewModel) {
+        sideList.model = viewModel.languages.toCollectionListModel(this)
         sideList.selectionModel = viewModel.selectedLangIndex.toSingleSelectionModel(this)
 
         launch {
             viewModel.selectedLangIndex.collect {
-                itemContainer.setChildVisible(it != -1)
+                mainContainer.setChildVisible(it != -1)
             }
         }
     }
