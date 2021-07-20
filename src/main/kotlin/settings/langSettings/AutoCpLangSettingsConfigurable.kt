@@ -4,6 +4,7 @@ import com.intellij.openapi.options.Configurable
 import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.util.Disposer
 import common.isItemsEqual
+import common.isNotIndex
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
@@ -38,6 +39,9 @@ class AutoCpLangSettingsConfigurable : Configurable, DumbAware {
         val languages = AutoCpLangSettings.getLanguages()
         runBlocking {
             model.languages.emit(languages)
+            if (languages.isNotIndex(model.selectedLangIndex.value) && languages.isNotEmpty()) {
+                model.selectedLangIndex.emit(0)
+            }
         }
     }
 
