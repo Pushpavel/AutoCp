@@ -3,6 +3,7 @@ package settings.langSettings.ui.langItem
 import com.intellij.ui.ToolbarDecorator
 import com.intellij.ui.components.JBList
 import com.intellij.ui.components.JBPanel
+import common.diff.DiffAdapter
 import kotlinx.coroutines.CoroutineScope
 import settings.langSettings.model.BuildConfig
 import ui.vvm.View
@@ -19,7 +20,13 @@ class LangItemView : JBPanel<LangItemView>(BorderLayout()), View<LangItemViewMod
             viewModel.editConfig()
         }.createPanel()
 
-        list.model = viewModel.buildConfig.toCollectionListModel(this, viewModel.buildConfigChanges)
+        list.model = viewModel.buildConfig.toCollectionListModel(
+            this,
+            viewModel.buildConfigChanges,
+            object : DiffAdapter<BuildConfig> {
+                override fun isSame(item1: BuildConfig, item2: BuildConfig) = item1.name == item2.name
+            })
+
         list.selectionModel = viewModel.selectedConfigIndex.toSingleSelectionModel(this, viewModel.selectedConfigIndex)
 
         add(container, BorderLayout.CENTER)

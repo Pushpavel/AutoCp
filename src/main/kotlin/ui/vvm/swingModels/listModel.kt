@@ -1,7 +1,9 @@
 package ui.vvm.swingModels
 
 import com.intellij.ui.CollectionListModel
-import common.isItemsEqual
+import common.diff.DeltaType
+import common.diff.DiffAdapter
+import common.diff.MyersDiff
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -11,9 +13,11 @@ import ui.helpers.SimpleListDataListener
 
 fun <T> Flow<List<T>>.toCollectionListModel(
     scope: CoroutineScope,
-    sink: MutableSharedFlow<List<T>>
+    sink: MutableSharedFlow<List<T>>,
+    adapter: DiffAdapter<T>
 ): CollectionListModel<T> {
     val model = CollectionListModel<T>()
+    val diff = MyersDiff(adapter)
 
     // for batch update
     var pauseFlow = false
@@ -21,11 +25,25 @@ fun <T> Flow<List<T>>.toCollectionListModel(
     // flow to model
     scope.launch {
         collect {
-            if (!it.isItemsEqual(model.items)) {
-                pauseFlow = true
-                model.replaceAll(it)
-                pauseFlow = false
+            pauseFlow = true
+            val deltas = diff.compute(model.items, it)
+            for (delta in deltas) {
+                when (delta.type) {
+                    DeltaType.INSERT -> model.addAll(delta.x, it.subList(delta.y, delta.y + delta.length))
+                    DeltaType.DELETE -> model.removeRange(delta.x, delta.x + delta.length)
+                    DeltaType.UPDATE -> {
+                        var y = delta.y
+                        for (x in delta.x until (delta.x + delta.length)) {
+                            model.setElementAt(it[y]!!, x)
+                            y++
+                        }
+                    }
+                    DeltaType.NULL -> {
+                        // do nothing
+                    }
+                }
             }
+            pauseFlow = false
         }
     }
 

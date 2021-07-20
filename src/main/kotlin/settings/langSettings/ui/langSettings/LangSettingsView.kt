@@ -3,6 +3,7 @@ package settings.langSettings.ui.langSettings
 import com.intellij.ui.OnePixelSplitter
 import com.intellij.ui.ToolbarDecorator
 import com.intellij.ui.components.JBList
+import common.diff.DiffAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -41,7 +42,13 @@ class LangSettingsView : OnePixelSplitter(false, 0.3F), View<LangSettingsViewMod
         firstComponent = listContainer
 
 
-        sideList.model = viewModel.languages.toCollectionListModel(this, viewModel.languages)
+        sideList.model = viewModel.languages.toCollectionListModel(
+            this, viewModel.languages,
+            object : DiffAdapter<Lang> {
+                override fun isSame(item1: Lang, item2: Lang) = item1.langId == item2.langId
+            }
+        )
+
         sideList.selectionModel = viewModel.selectedLangIndex.toSingleSelectionModel(this, viewModel.selectedLangIndex)
 
         launch {
