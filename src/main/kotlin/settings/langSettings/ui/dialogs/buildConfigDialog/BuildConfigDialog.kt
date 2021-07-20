@@ -4,18 +4,18 @@ import com.intellij.ide.macro.MacrosDialog
 import com.intellij.openapi.ui.DialogWrapper
 import com.intellij.ui.components.fields.ExtendableTextField
 import com.intellij.ui.layout.panel
-import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import settings.langSettings.model.BuildConfig
 import ui.ErrorView
+import ui.helpers.mainScope
 import ui.vvm.bind
 import ui.vvm.swingModels.toPlainDocument
 
 class BuildConfigDialog(private val buildConfig: BuildConfig, list: List<BuildConfig>) : DialogWrapper(false) {
 
-    private val scope = MainScope()
+    private val scope = mainScope()
     private val model = BuildConfigViewModel(buildConfig, list)
 
     init {

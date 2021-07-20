@@ -5,13 +5,13 @@ import com.intellij.openapi.ui.DialogWrapper
 import com.intellij.ui.ListSpeedSearch
 import com.intellij.ui.components.JBList
 import com.intellij.ui.components.JBScrollPane
-import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import settings.langSettings.model.Lang
 import ui.StringCellRenderer
+import ui.helpers.mainScope
 import ui.vvm.swingModels.toSingleSelectionModel
 import java.awt.BorderLayout
 import javax.swing.JComponent
@@ -27,7 +27,7 @@ class IDELangSelectorDialog(addedLangList: List<Lang>) : DialogWrapper(false) {
         }
     }
     private val selectedIndex = MutableStateFlow(-1)
-    private val scope = MainScope()
+    private val scope = mainScope()
 
     init {
         title = "Select Programming Language"

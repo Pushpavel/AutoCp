@@ -19,10 +19,7 @@ class ConfigViewModel(solutionPath: String, buildConfigId: Long?) : ViewModel() 
         val file = VirtualFileManager.getInstance().findFileByNioPath(Path(it))
         AutoCpLangSettings.findLangByFile(file)?.buildConfigs ?: listOf()
     }
-
-    val selectedBuildConfigId = MutableStateFlow(buildConfigId)
     val selectedBuildConfigIndex = MutableStateFlow(-1)
-
 
     init {
         scope.launch {

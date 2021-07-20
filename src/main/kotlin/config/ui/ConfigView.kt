@@ -1,6 +1,7 @@
 package config.ui
 
 import com.intellij.ide.macro.MacrosDialog
+import com.intellij.openapi.Disposable
 import com.intellij.openapi.fileChooser.FileChooser
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory
 import com.intellij.openapi.project.Project
@@ -12,7 +13,6 @@ import com.intellij.ui.layout.CCFlags
 import com.intellij.ui.layout.panel
 import common.diff.DiffAdapter
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 import settings.langSettings.model.BuildConfig
 import ui.vvm.View
 import ui.vvm.swingModels.bindSelectionIndex
@@ -21,7 +21,9 @@ import ui.vvm.swingModels.toPlainDocument
 import java.awt.BorderLayout
 import java.nio.file.Path
 
-class ConfigView(private val project: Project) : JBPanel<ConfigView>(BorderLayout()), View<ConfigViewModel> {
+class ConfigView(private val project: Project, private val parentDisposable: Disposable) :
+    JBPanel<ConfigView>(BorderLayout()),
+    View<ConfigViewModel> {
     private val solutionFileField = ExtendableTextField()
     private val configComboBox = ComboBox<BuildConfig>()
 
@@ -54,12 +56,6 @@ class ConfigView(private val project: Project) : JBPanel<ConfigView>(BorderLayou
         )
 
         configComboBox.bindSelectionIndex(this, viewModel.selectedBuildConfigIndex)
-        configComboBox.addActionListener {
-            launch {
-                viewModel.selectedBuildConfigId.emit(configComboBox.selectedItem as Long?)
-            }
-        }
-
     }
 
     private fun ExtendableTextField.addBrowseButton() {
@@ -73,6 +69,6 @@ class ConfigView(private val project: Project) : JBPanel<ConfigView>(BorderLayou
             FileChooser.chooseFile(solutionFileDescriptor, project, selectedFile) {
                 this.text = it.path
             }
-        }, null)
+        }, parentDisposable)
     }
 }
