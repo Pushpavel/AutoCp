@@ -16,7 +16,9 @@ class LangItemView : JBPanel<LangItemView>(BorderLayout()), View<LangItemViewMod
     val list = JBList<BuildConfig>()
 
     override fun CoroutineScope.onViewModelBind(viewModel: LangItemViewModel) {
-        val container = ToolbarDecorator.createDecorator(list).setEditAction {
+        val container = ToolbarDecorator.createDecorator(list).setAddAction {
+            viewModel.addNewConfig()
+        }.setEditAction {
             viewModel.editConfig()
         }.createPanel()
 

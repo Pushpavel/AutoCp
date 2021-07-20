@@ -36,6 +36,24 @@ class LangItemViewModel(
     }
 
 
+    fun addNewConfig() {
+        val langList = languages.value.toMutableList()
+        val langIndex = selectedLangIndex.value
+        if (langIndex == -1)
+            return
+        val list = langList[langIndex].buildProperties.toMutableList()
+        val index = selectedConfigIndex.value
+        val config = BuildConfigDialog(BuildConfig("", ""), list).showAndGetConfig() ?: return
+
+        list.add(index + 1, config)
+        langList[langIndex] = langList[langIndex].copy(buildProperties = list)
+        scope.launch {
+            languages.emit(langList)
+            selectedConfigIndex.emit(index + 1)
+        }
+    }
+
+
     fun editConfig() {
         val langList = languages.value.toMutableList()
         val langIndex = selectedLangIndex.value

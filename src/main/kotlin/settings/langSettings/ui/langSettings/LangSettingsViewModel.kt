@@ -16,9 +16,10 @@ class LangSettingsViewModel : ViewModel() {
         val selectedLanguage = IDELangSelectorDialog().showAndGetSelection() ?: return
         val langList = languages.value.toMutableList()
 
-        langList.add(Lang(selectedLanguage.id, null, emptyList()))
+        langList.add(selectedLangIndex.value + 1, Lang(selectedLanguage.id, null, emptyList()))
         scope.launch {
             languages.emit(langList)
+            selectedLangIndex.emit(selectedLangIndex.value + 1)
         }
     }
 
