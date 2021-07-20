@@ -26,23 +26,7 @@ fun <T> Flow<List<T>>.toCollectionListModel(
     scope.launch {
         collect {
             pauseFlow = true
-            val deltas = diff.compute(model.items, it)
-            for (delta in deltas) {
-                when (delta.type) {
-                    DeltaType.INSERT -> model.addAll(delta.x, it.subList(delta.y, delta.y + delta.length))
-                    DeltaType.DELETE -> model.removeRange(delta.x, delta.x + delta.length - 1)
-                    DeltaType.UPDATE -> {
-                        var y = delta.y
-                        for (x in delta.x until (delta.x + delta.length)) {
-                            model.setElementAt(it[y]!!, x)
-                            y++
-                        }
-                    }
-                    DeltaType.NULL -> {
-                        // do nothing
-                    }
-                }
-            }
+            model.update(it, diff)
             pauseFlow = false
         }
     }
@@ -56,4 +40,25 @@ fun <T> Flow<List<T>>.toCollectionListModel(
 
 
     return model
+}
+
+
+fun <T> CollectionListModel<T>.update(list: List<T>, diff: MyersDiff<T>) {
+    val deltas = diff.compute(items, list)
+    for (delta in deltas) {
+        when (delta.type) {
+            DeltaType.INSERT -> addAll(delta.x, list.subList(delta.y, delta.y + delta.length))
+            DeltaType.DELETE -> removeRange(delta.x, delta.x + delta.length - 1)
+            DeltaType.UPDATE -> {
+                var y = delta.y
+                for (x in delta.x until (delta.x + delta.length)) {
+                    setElementAt(list[y]!!, x)
+                    y++
+                }
+            }
+            DeltaType.NULL -> {
+                // do nothing
+            }
+        }
+    }
 }
