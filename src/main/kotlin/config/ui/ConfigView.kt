@@ -15,6 +15,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import settings.langSettings.model.BuildConfig
 import ui.vvm.View
+import ui.vvm.swingModels.bindSelectionIndex
 import ui.vvm.swingModels.toCollectionComboBoxModel
 import ui.vvm.swingModels.toPlainDocument
 import java.awt.BorderLayout
@@ -50,6 +51,7 @@ class ConfigView(private val project: Project) : JBPanel<ConfigView>(BorderLayou
             }
         )
 
+        configComboBox.bindSelectionIndex(this, viewModel.selectedBuildConfigIndex)
         configComboBox.addActionListener {
             launch {
                 viewModel.selectedBuildConfigId.emit(configComboBox.selectedItem as Long?)

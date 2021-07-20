@@ -24,7 +24,11 @@ class ConfigEditor(private val project: Project) : SettingsEditor<AutoCpConfig>(
     override fun resetEditorFrom(s: AutoCpConfig) {
         scope.launch {
             model.solutionFilePath.emit(s.solutionFilePath)
-            model.selectedBuildConfigId.emit(s.buildConfigId.takeIf { it != -1L })
+
+            // emit selectedBuildConfigIndex from buildConfigId
+            val configId = s.buildConfigId.takeIf { it != -1L }
+            val index = model.getIndexOfBuildConfigId(configId)
+            model.selectedBuildConfigIndex.emit(index)
         }
     }
 
@@ -32,9 +36,13 @@ class ConfigEditor(private val project: Project) : SettingsEditor<AutoCpConfig>(
      * UI to Settings
      */
     override fun applyEditorTo(s: AutoCpConfig) {
-        // TODO: validate
         s.solutionFilePath = model.solutionFilePath.value
-        s.buildConfigId = model.selectedBuildConfigId.value ?: -1
+        scope.launch {
+            val index = model.selectedBuildConfigIndex.value
+            val config = model.getBuildConfigOfIndex(index)
+            if (config != null)
+                s.buildConfigId = config.id
+        }
     }
 
     override fun createEditor(): JComponent {
