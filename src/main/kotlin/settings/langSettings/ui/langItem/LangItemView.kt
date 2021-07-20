@@ -15,7 +15,7 @@ import java.awt.BorderLayout
 class LangItemView : JBPanel<LangItemView>(BorderLayout()), View<LangItemViewModel> {
 
     val list = JBList<BuildConfig>().apply {
-        cellRenderer = StringCellRenderer<BuildConfig> { it.name }
+        cellRenderer = StringCellRenderer<BuildConfig> { Pair(it.name, null) }
     }
 
     override fun CoroutineScope.onViewModelBind(viewModel: LangItemViewModel) {

@@ -20,7 +20,7 @@ data class SolutionLanguage(
 
     companion object {
         fun cellRenderer(): StringCellRenderer<SolutionLanguage> {
-            return StringCellRenderer { it.name }
+            return StringCellRenderer { Pair(it.name, null) }
         }
     }
 }

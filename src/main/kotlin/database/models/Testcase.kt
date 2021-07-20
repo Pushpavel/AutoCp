@@ -12,7 +12,7 @@ data class Testcase(
 ) {
     companion object {
         fun cellRenderer(): StringCellRenderer<Testcase> {
-            return StringCellRenderer { it.name }
+            return StringCellRenderer { Pair(it.name, null) }
         }
     }
 }

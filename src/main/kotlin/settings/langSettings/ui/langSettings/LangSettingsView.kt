@@ -20,17 +20,16 @@ import javax.swing.BorderFactory
 
 class LangSettingsView : OnePixelSplitter(false, 0.3F), View<LangSettingsViewModel> {
 
-    private val sideList: JBList<Lang>
+    private val sideList = JBList<Lang>()
     private val mainContainer: SingleChildContainer
     private val langItemView = LangItemView()
 
     init {
-        sideList = JBList<Lang>().apply {
-            val languages = Language.getRegisteredLanguages()
-            cellRenderer = StringCellRenderer<Lang> {
-                val lang = languages.first { l -> l.id == it.langId }
-                lang.displayName
-            }
+
+        sideList.cellRenderer = StringCellRenderer<Lang> {
+            val lang = Language.findLanguageByID(it.langId)
+            if (lang == null) null else
+                Pair(lang.displayName, lang.associatedFileType?.icon)
         }
 
 
