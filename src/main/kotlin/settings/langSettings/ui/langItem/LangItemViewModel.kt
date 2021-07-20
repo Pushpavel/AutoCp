@@ -1,42 +1,77 @@
 package settings.langSettings.ui.langItem
 
-import com.intellij.openapi.Disposable
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.combine
-import settings.langSettings.model.BuildProperties
+import common.isNotIndex
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
+import settings.langSettings.model.BuildConfig
 import settings.langSettings.model.Lang
+import settings.langSettings.ui.dialogs.buildConfigDialog.BuildConfigDialog
 import ui.vvm.ViewModel
 
-class LangItemViewModel(languages: MutableStateFlow<List<Lang>>, selectedLangIndex: StateFlow<Int>) : ViewModel() {
+class LangItemViewModel(
+    private val languages: MutableStateFlow<List<Lang>>,
+    private val selectedLangIndex: StateFlow<Int>
+) : ViewModel() {
 
-    val buildProperties = MutableStateFlow<List<BuildProperties>>(emptyList())
+    val buildConfig = languages.combine(selectedLangIndex) { list, index ->
+        if (list.isNotIndex(index))
+            emptyList()
+        else
+            list[index].buildConfigs
+    }
+
+    val buildConfigChanges = MutableSharedFlow<List<BuildConfig>>()
+
+    val selectedConfigIndex = MutableStateFlow(-1)
 
     init {
-        // parent to item
         scope.launch {
-            languages.combine(selectedLangIndex) { list, index ->
-                if (index == -1)
-                    emptyList()
-                else
-                    list[index].buildProperties
-            }.collect {
-                buildProperties.emit(it)
+            buildConfigChanges.collect {
+                val list = languages.value.toMutableList()
+                val index = selectedLangIndex.value
+                if (list.isNotIndex(index)) return@collect
+                list[index] = list[index].copy(buildConfigs = it)
+                languages.emit(list)
             }
         }
+    }
 
-        // item to parent
+
+    fun addNewConfig() {
+        val langList = languages.value.toMutableList()
+        val langIndex = selectedLangIndex.value
+        if (langList.isNotIndex(langIndex))
+            return
+        val list = langList[langIndex].buildConfigs.toMutableList()
+        val index = selectedConfigIndex.value
+        val newBlankConfig = BuildConfig(System.currentTimeMillis(), "", "")
+        val config = BuildConfigDialog(newBlankConfig, list).showAndGetConfig() ?: return
+
+        list.add(index + 1, config)
+        langList[langIndex] = langList[langIndex].copy(buildConfigs = list)
         scope.launch {
-            buildProperties
-                .collect {
-                    val list = languages.value.toMutableList()
-                    val index = selectedLangIndex.value
-                    if (index == -1) return@collect
-                    list[index] = list[index].copy(buildProperties = it)
-                    languages.emit(list)
-                }
+            languages.emit(langList)
+            selectedConfigIndex.emit(index + 1)
         }
+    }
+
+
+    fun editConfig() {
+        val langList = languages.value.toMutableList()
+        val langIndex = selectedLangIndex.value
+        if (langList.isNotIndex(langIndex))
+            return
+        val list = langList[langIndex].buildConfigs.toMutableList()
+        val index = selectedConfigIndex.value
+        if (list.isNotIndex(index))
+            return
+        val config = BuildConfigDialog(list[index], list).showAndGetConfig() ?: return
+
+        list[index] = config
+        langList[langIndex] = langList[langIndex].copy(buildConfigs = list)
+        scope.launch {
+            languages.emit(langList)
+        }
+
     }
 }

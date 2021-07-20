@@ -10,15 +10,22 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import settings.langSettings.model.Lang
+import ui.StringCellRenderer
 import ui.vvm.swingModels.toSingleSelectionModel
 import java.awt.BorderLayout
 import javax.swing.JComponent
 import javax.swing.JPanel
 
 
-class IDELangSelectorDialog : DialogWrapper(false) {
+class IDELangSelectorDialog(addedLangList: List<Lang>) : DialogWrapper(false) {
 
-    private val languages = Language.getRegisteredLanguages()
+    private val languages = Language.getRegisteredLanguages().run {
+        val addedLangMap = addedLangList.associateBy { it.langId }
+        filter {
+            it.associatedFileType?.icon != null && !addedLangMap.containsKey(it.id)
+        }
+    }
     private val selectedIndex = MutableStateFlow(-1)
     private val scope = MainScope()
 
@@ -36,6 +43,10 @@ class IDELangSelectorDialog : DialogWrapper(false) {
         val dialogPanel = JPanel(BorderLayout())
 
         val list = JBList(languages)
+        list.cellRenderer = StringCellRenderer<Language> {
+            Pair(it.displayName, it.associatedFileType?.icon)
+        }
+
         list.selectionModel = selectedIndex.toSingleSelectionModel(scope, selectedIndex)
         ListSpeedSearch(list) { it.displayName }
 
