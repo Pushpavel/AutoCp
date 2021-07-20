@@ -1,5 +1,6 @@
 package settings.langSettings.ui.langSettings
 
+import com.intellij.lang.Language
 import com.intellij.ui.OnePixelSplitter
 import com.intellij.ui.ToolbarDecorator
 import com.intellij.ui.components.JBList
@@ -9,6 +10,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import settings.langSettings.model.Lang
 import settings.langSettings.ui.langItem.LangItemView
+import ui.StringCellRenderer
 import ui.layouts.SingleChildContainer
 import ui.vvm.View
 import ui.vvm.bind
@@ -18,11 +20,20 @@ import javax.swing.BorderFactory
 
 class LangSettingsView : OnePixelSplitter(false, 0.3F), View<LangSettingsViewModel> {
 
-    private val sideList: JBList<Lang> = JBList<Lang>()
+    private val sideList: JBList<Lang>
     private val mainContainer: SingleChildContainer
     private val langItemView = LangItemView()
 
     init {
+        sideList = JBList<Lang>().apply {
+            val languages = Language.getRegisteredLanguages()
+            cellRenderer = StringCellRenderer<Lang> {
+                val lang = languages.first { l -> l.id == it.langId }
+                lang.displayName
+            }
+        }
+
+
         mainContainer = SingleChildContainer("Select a Language", langItemView)
 
         secondComponent = mainContainer.apply {
