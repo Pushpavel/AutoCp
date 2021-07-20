@@ -1,5 +1,6 @@
 package settings.langSettings.ui.langItem
 
+import common.isNotIndex
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import settings.langSettings.model.BuildConfig
@@ -13,7 +14,7 @@ class LangItemViewModel(
 ) : ViewModel() {
 
     val buildConfig = languages.combine(selectedLangIndex) { list, index ->
-        if (index == -1)
+        if (list.isNotIndex(index))
             emptyList()
         else
             list[index].buildProperties
@@ -28,7 +29,7 @@ class LangItemViewModel(
             buildConfigChanges.collect {
                 val list = languages.value.toMutableList()
                 val index = selectedLangIndex.value
-                if (index == -1) return@collect
+                if (list.isNotIndex(index)) return@collect
                 list[index] = list[index].copy(buildProperties = it)
                 languages.emit(list)
             }
@@ -39,7 +40,7 @@ class LangItemViewModel(
     fun addNewConfig() {
         val langList = languages.value.toMutableList()
         val langIndex = selectedLangIndex.value
-        if (langIndex == -1)
+        if (langList.isNotIndex(langIndex))
             return
         val list = langList[langIndex].buildProperties.toMutableList()
         val index = selectedConfigIndex.value
@@ -57,20 +58,18 @@ class LangItemViewModel(
     fun editConfig() {
         val langList = languages.value.toMutableList()
         val langIndex = selectedLangIndex.value
-        if (langIndex == -1)
+        if (langList.isNotIndex(langIndex))
             return
         val list = langList[langIndex].buildProperties.toMutableList()
         val index = selectedConfigIndex.value
-        if (index == -1)
+        if (list.isNotIndex(index))
             return
-        val config = BuildConfigDialog(list[index], list).showAndGetConfig()
+        val config = BuildConfigDialog(list[index], list).showAndGetConfig() ?: return
 
-        if (config != null) {
-            list[index] = config
-            langList[langIndex] = langList[langIndex].copy(buildProperties = list)
-            scope.launch {
-                languages.emit(langList)
-            }
+        list[index] = config
+        langList[langIndex] = langList[langIndex].copy(buildProperties = list)
+        scope.launch {
+            languages.emit(langList)
         }
 
     }

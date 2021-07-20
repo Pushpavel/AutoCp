@@ -1,5 +1,6 @@
 package settings.langSettings.ui.langItem
 
+import com.intellij.icons.AllIcons
 import com.intellij.ui.ToolbarDecorator
 import com.intellij.ui.components.JBList
 import com.intellij.ui.components.JBPanel
@@ -15,7 +16,7 @@ import java.awt.BorderLayout
 class LangItemView : JBPanel<LangItemView>(BorderLayout()), View<LangItemViewModel> {
 
     val list = JBList<BuildConfig>().apply {
-        cellRenderer = StringCellRenderer<BuildConfig> { Pair(it.name, null) }
+        cellRenderer = StringCellRenderer<BuildConfig> { Pair(it.name, AllIcons.RunConfigurations.Applet) }
     }
 
     override fun CoroutineScope.onViewModelBind(viewModel: LangItemViewModel) {

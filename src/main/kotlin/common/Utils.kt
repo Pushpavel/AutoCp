@@ -29,3 +29,11 @@ fun <T> Collection<T>.isItemsEqual(other: Collection<T>): Boolean {
 
     return true
 }
+
+fun <T> Collection<T>.isIndex(index: Int): Boolean {
+    return index in 0 until size
+}
+
+fun <T> Collection<T>.isNotIndex(index: Int): Boolean {
+    return index !in 0 until size
+}
