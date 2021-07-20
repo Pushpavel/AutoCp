@@ -42,6 +42,8 @@ class ConfigEditor(private val project: Project) : SettingsEditor<AutoCpConfig>(
             val config = model.getBuildConfigOfIndex(index)
             if (config != null)
                 s.buildConfigId = config.id
+            else
+                s.buildConfigId = -1
         }
     }
 

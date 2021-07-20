@@ -32,6 +32,8 @@ class ConfigView(private val project: Project) : JBPanel<ConfigView>(BorderLayou
         // browse button for executable field
         solutionFileField.addBrowseButton()
 
+        configComboBox.renderer = BuildConfig.cellRenderer()
+
         add(panel {
             row("Solution File:") {
                 solutionFileField().constraints(CCFlags.growX)
