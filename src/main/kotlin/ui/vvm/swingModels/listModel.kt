@@ -30,7 +30,7 @@ fun <T> Flow<List<T>>.toCollectionListModel(
             for (delta in deltas) {
                 when (delta.type) {
                     DeltaType.INSERT -> model.addAll(delta.x, it.subList(delta.y, delta.y + delta.length))
-                    DeltaType.DELETE -> model.removeRange(delta.x, delta.x + delta.length)
+                    DeltaType.DELETE -> model.removeRange(delta.x, delta.x + delta.length - 1)
                     DeltaType.UPDATE -> {
                         var y = delta.y
                         for (x in delta.x until (delta.x + delta.length)) {
