@@ -13,7 +13,7 @@ import ui.ErrorView
 import ui.vvm.bind
 import ui.vvm.swingModels.toPlainDocument
 
-class BuildConfigDialog(buildConfig: BuildConfig, list: List<BuildConfig>) : DialogWrapper(false) {
+class BuildConfigDialog(private val buildConfig: BuildConfig, list: List<BuildConfig>) : DialogWrapper(false) {
 
     private val scope = MainScope()
     private val model = BuildConfigViewModel(buildConfig, list)
@@ -62,7 +62,7 @@ class BuildConfigDialog(buildConfig: BuildConfig, list: List<BuildConfig>) : Dia
         val confirm = showAndGet()
 
         return if (confirm)
-            BuildConfig(model.name.value, model.buildCommand.value)
+            BuildConfig(buildConfig.id, model.name.value, model.buildCommand.value)
         else
             null
     }
