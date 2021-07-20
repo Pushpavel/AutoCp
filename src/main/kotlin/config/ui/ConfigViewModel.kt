@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.map
 import settings.langSettings.AutoCpLangSettings
 import kotlin.io.path.Path
 
-class ConfigViewModel(solutionPath: String, solutionConfigId: String) {
+class ConfigViewModel(solutionPath: String, buildConfigId: Long?) {
     val solutionFilePath = MutableStateFlow(solutionPath)
 
     val buildConfigs = solutionFilePath.map {
@@ -14,5 +14,5 @@ class ConfigViewModel(solutionPath: String, solutionConfigId: String) {
         AutoCpLangSettings.findLangByFile(file)?.buildConfigs ?: listOf()
     }
 
-    val selectedBuildConfigId = MutableStateFlow<String?>(solutionConfigId)
+    val selectedBuildConfigId = MutableStateFlow(buildConfigId)
 }
