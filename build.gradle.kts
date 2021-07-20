@@ -25,7 +25,7 @@ plugins {
     // gradle-changelog-plugin - read more: https://github.com/JetBrains/gradle-changelog-plugin
     id("org.jetbrains.changelog") version "1.1.2"
 
-    id("com.squareup.sqldelight") version "1.5.0"
+    id("com.squareup.sqldelight") version "1.5.1"
 }
 
 group = properties("pluginGroup")
@@ -46,7 +46,7 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.2")
     testImplementation("io.mockk:mockk:1.11.0")
 
-    implementation("com.squareup.sqldelight:sqlite-driver:1.5.0")
+    implementation("com.squareup.sqldelight:sqlite-driver:1.5.1")
 
 }
 
@@ -56,7 +56,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("com.squareup.sqldelight:gradle-plugin:1.5.0")
+        classpath("com.squareup.sqldelight:gradle-plugin:1.5.1")
     }
 }
 
