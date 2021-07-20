@@ -17,7 +17,7 @@ class LangItemViewModel(
         if (list.isNotIndex(index))
             emptyList()
         else
-            list[index].buildProperties
+            list[index].buildConfigs
     }
 
     val buildConfigChanges = MutableSharedFlow<List<BuildConfig>>()
@@ -30,7 +30,7 @@ class LangItemViewModel(
                 val list = languages.value.toMutableList()
                 val index = selectedLangIndex.value
                 if (list.isNotIndex(index)) return@collect
-                list[index] = list[index].copy(buildProperties = it)
+                list[index] = list[index].copy(buildConfigs = it)
                 languages.emit(list)
             }
         }
@@ -42,12 +42,13 @@ class LangItemViewModel(
         val langIndex = selectedLangIndex.value
         if (langList.isNotIndex(langIndex))
             return
-        val list = langList[langIndex].buildProperties.toMutableList()
+        val list = langList[langIndex].buildConfigs.toMutableList()
         val index = selectedConfigIndex.value
-        val config = BuildConfigDialog(BuildConfig("", ""), list).showAndGetConfig() ?: return
+        val newBlankConfig = BuildConfig(System.currentTimeMillis(), "", "")
+        val config = BuildConfigDialog(newBlankConfig, list).showAndGetConfig() ?: return
 
         list.add(index + 1, config)
-        langList[langIndex] = langList[langIndex].copy(buildProperties = list)
+        langList[langIndex] = langList[langIndex].copy(buildConfigs = list)
         scope.launch {
             languages.emit(langList)
             selectedConfigIndex.emit(index + 1)
@@ -60,14 +61,14 @@ class LangItemViewModel(
         val langIndex = selectedLangIndex.value
         if (langList.isNotIndex(langIndex))
             return
-        val list = langList[langIndex].buildProperties.toMutableList()
+        val list = langList[langIndex].buildConfigs.toMutableList()
         val index = selectedConfigIndex.value
         if (list.isNotIndex(index))
             return
         val config = BuildConfigDialog(list[index], list).showAndGetConfig() ?: return
 
         list[index] = config
-        langList[langIndex] = langList[langIndex].copy(buildProperties = list)
+        langList[langIndex] = langList[langIndex].copy(buildConfigs = list)
         scope.launch {
             languages.emit(langList)
         }
