@@ -11,7 +11,7 @@ import settings.langSettings.model.BuildConfig
 import ui.ErrorView
 import ui.helpers.mainScope
 import ui.vvm.bind
-import ui.vvm.swingModels.toPlainDocument
+import ui.vvm.swingModels.plainDocument
 
 class BuildConfigDialog(private val buildConfig: BuildConfig, list: List<BuildConfig>) : DialogWrapper(false) {
 
@@ -32,10 +32,10 @@ class BuildConfigDialog(private val buildConfig: BuildConfig, list: List<BuildCo
     override fun createCenterPanel() = panel {
         row {
             val nameField = ExtendableTextField(10).apply {
-                document = model.name.toPlainDocument(scope)
+                document = scope.plainDocument(model.name)
             }
             val buildCommandField = ExtendableTextField(50).apply {
-                document = model.buildCommand.toPlainDocument(scope)
+                document = scope.plainDocument(model.buildCommand)
             }
             MacrosDialog.addTextFieldExtension(buildCommandField)
 

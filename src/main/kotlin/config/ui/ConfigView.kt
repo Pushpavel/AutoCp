@@ -16,8 +16,8 @@ import kotlinx.coroutines.CoroutineScope
 import settings.langSettings.model.BuildConfig
 import ui.vvm.View
 import ui.vvm.swingModels.bindSelectionIndex
+import ui.vvm.swingModels.plainDocument
 import ui.vvm.swingModels.toCollectionComboBoxModel
-import ui.vvm.swingModels.toPlainDocument
 import java.awt.BorderLayout
 import java.nio.file.Path
 
@@ -47,7 +47,7 @@ class ConfigView(private val project: Project, private val parentDisposable: Dis
     }
 
     override fun CoroutineScope.onViewModelBind(viewModel: ConfigViewModel) {
-        solutionFileField.document = viewModel.solutionFilePath.toPlainDocument(this)
+        solutionFileField.document = plainDocument(viewModel.solutionFilePath)
 
         configComboBox.model = viewModel.buildConfigs.toCollectionComboBoxModel(this,
             object : DiffAdapter<BuildConfig> {

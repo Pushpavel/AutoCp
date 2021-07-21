@@ -10,19 +10,16 @@ import ui.helpers.onChange
 import ui.helpers.setText
 import javax.swing.text.PlainDocument
 
-fun MutableSharedFlow<String>.toPlainDocument(scope: CoroutineScope): PlainDocument {
-    return this.toPlainDocument(scope, this)
+fun CoroutineScope.plainDocument(flow: MutableSharedFlow<String>): PlainDocument {
+    return plainDocument(flow, flow)
 }
 
-fun Flow<String>.toPlainDocument(
-    scope: CoroutineScope,
-    sink: MutableSharedFlow<String>
-): PlainDocument {
+fun CoroutineScope.plainDocument(source: Flow<String>, sink: MutableSharedFlow<String>): PlainDocument {
     val doc = PlainDocument()
 
     // flow to doc
-    scope.launch {
-        collect {
+    launch {
+        source.collect {
             if (doc.getText() != it)
                 doc.setText(it)
         }
@@ -30,7 +27,7 @@ fun Flow<String>.toPlainDocument(
 
     // doc to sink
     doc.onChange {
-        scope.launch {
+        launch {
             sink.emit(doc.getText())
         }
     }
