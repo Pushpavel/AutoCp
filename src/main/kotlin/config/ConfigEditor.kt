@@ -1,85 +1,64 @@
 package config
 
-import com.intellij.ide.macro.MacrosDialog
-import com.intellij.openapi.fileChooser.FileChooser
-import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory
 import com.intellij.openapi.options.SettingsEditor
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.ui.ComboBox
-import com.intellij.openapi.vfs.VfsUtil
-import com.intellij.ui.CollectionComboBoxModel
-import com.intellij.ui.components.fields.ExtendableTextField
-import com.intellij.ui.layout.CCFlags
-import com.intellij.ui.layout.panel
-import settings.AutoCpSettings
-import settings.SolutionLanguage
-import java.nio.file.Path
+import com.intellij.openapi.util.Disposer
+import config.ui.ConfigView
+import config.ui.ConfigViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
+import ui.helpers.mainScope
 import javax.swing.JComponent
 
 /**
  * UI Editor of [AutoCpConfig] Run Configuration
  */
 class ConfigEditor(private val project: Project) : SettingsEditor<AutoCpConfig>() {
+    lateinit var scope: CoroutineScope
+    lateinit var model: ConfigViewModel
 
-    private val solutionFileField = ExtendableTextField()
-    private val solutionLangModel = CollectionComboBoxModel<SolutionLanguage>()
 
     /**
      * Settings to UI
      */
     override fun resetEditorFrom(s: AutoCpConfig) {
-        solutionFileField.text = s.solutionFilePath
+        scope.launch {
+            model.solutionFilePath.emit(s.solutionFilePath)
 
-        val settings = AutoCpSettings.instance
-        solutionLangModel.replaceAll(settings.solutionLanguages)
-        solutionLangModel.selectedItem = settings.getLangWithId(s.solutionLangId)
+            // emit selectedBuildConfigIndex from buildConfigId
+            val configId = s.buildConfigId.takeIf { it != -1L }
+            val index = model.getIndexOfBuildConfigId(configId)
+            model.selectedBuildConfigIndex.emit(index)
+        }
     }
 
     /**
      * UI to Settings
      */
     override fun applyEditorTo(s: AutoCpConfig) {
-        s.solutionFilePath = solutionFileField.text
-
-        val settings = AutoCpSettings.instance
-
-        // verifies if selected lang exists
-        val selectedLang = settings.getLangWithId(solutionLangModel.selected?.id)
-        s.solutionLangId = selectedLang?.id ?: -1
-    }
-
-    override fun createEditor(): JComponent {
-        // add macro support
-        MacrosDialog.addTextFieldExtension(solutionFileField)
-
-        // browse button for executable field
-        solutionFileField.addBrowseButton()
-
-        // ui layout
-        return panel {
-            row("Solution File:") {
-                solutionFileField()
-                    .constraints(CCFlags.growX)
-            }
-            row("Solution Language:") {
-                ComboBox(solutionLangModel).apply {
-                    renderer = SolutionLanguage.cellRenderer()
-                }()
-            }
+        s.solutionFilePath = model.solutionFilePath.value
+        scope.launch {
+            val index = model.selectedBuildConfigIndex.value
+            val config = model.getBuildConfigOfIndex(index)
+            if (config != null)
+                s.buildConfigId = config.id
+            else
+                s.buildConfigId = -1
         }
     }
 
-    private fun ExtendableTextField.addBrowseButton() {
-        // ensures user can select only one file
-        val solutionFileDescriptor = FileChooserDescriptorFactory
-            .createSingleFileDescriptor()
+    override fun createEditor(): JComponent {
+        scope = mainScope()
+        model = ConfigViewModel("", null)
+        return ConfigView(project, this).apply {
+            bindToViewModel(scope, model)
+        }
+    }
 
-        this.addBrowseExtension({
-            val preselectPath = Path.of(this.text.ifEmpty { project.basePath })
-            val selectedFile = VfsUtil.findFile(preselectPath, true)
-            FileChooser.chooseFile(solutionFileDescriptor, project, selectedFile) {
-                this.text = it.path
-            }
-        }, this@ConfigEditor)
+    override fun disposeEditor() {
+        super.disposeEditor()
+        scope.cancel()
+        Disposer.dispose(model)
     }
 }

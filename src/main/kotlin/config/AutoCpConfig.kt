@@ -2,7 +2,9 @@ package config
 
 import com.google.common.io.Files
 import com.intellij.execution.Executor
-import com.intellij.execution.configurations.*
+import com.intellij.execution.configurations.ConfigurationFactory
+import com.intellij.execution.configurations.LocatableConfigurationBase
+import com.intellij.execution.configurations.RunProfileState
 import com.intellij.execution.runners.ExecutionEnvironment
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.JDOMExternalizerUtil
@@ -16,6 +18,7 @@ class AutoCpConfig(project: Project, factory: ConfigurationFactory, name: String
 
     var solutionFilePath: String = ""
     var solutionLangId: Long = -1
+    var buildConfigId: Long = -1
 
 
     /**
@@ -44,12 +47,14 @@ class AutoCpConfig(project: Project, factory: ConfigurationFactory, name: String
     companion object {
         // SERIALIZATION KEYS
         private const val SOLUTION_FILE_PATH = "solutionFilePath"
-        private const val SOLUTION_LANG_ID = "solutionLang"
+        private const val SOLUTION_LANG_ID = "solutionLangId"
+        private const val BUILD_CONFIG_ID = "buildConfigId"
     }
 
     override fun writeExternal(element: Element) {
         JDOMExternalizerUtil.writeField(element, SOLUTION_FILE_PATH, solutionFilePath)
         JDOMExternalizerUtil.writeField(element, SOLUTION_LANG_ID, solutionLangId.toString())
+        JDOMExternalizerUtil.writeField(element, BUILD_CONFIG_ID, buildConfigId.toString())
         super.writeExternal(element)
     }
 
@@ -57,6 +62,7 @@ class AutoCpConfig(project: Project, factory: ConfigurationFactory, name: String
         super.readExternal(element)
         solutionFilePath = JDOMExternalizerUtil.readField(element, SOLUTION_FILE_PATH, "")
         solutionLangId = JDOMExternalizerUtil.readField(element, SOLUTION_LANG_ID, "-1").toLong()
+        buildConfigId = JDOMExternalizerUtil.readField(element, BUILD_CONFIG_ID, "-1").toLong()
     }
 
 }

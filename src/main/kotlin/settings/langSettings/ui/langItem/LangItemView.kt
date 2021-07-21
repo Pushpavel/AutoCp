@@ -1,13 +1,11 @@
 package settings.langSettings.ui.langItem
 
-import com.intellij.icons.AllIcons
 import com.intellij.ui.ToolbarDecorator
 import com.intellij.ui.components.JBList
 import com.intellij.ui.components.JBPanel
 import common.diff.DiffAdapter
 import kotlinx.coroutines.CoroutineScope
 import settings.langSettings.model.BuildConfig
-import ui.StringCellRenderer
 import ui.vvm.View
 import ui.vvm.swingModels.toCollectionListModel
 import ui.vvm.swingModels.toSingleSelectionModel
@@ -16,7 +14,7 @@ import java.awt.BorderLayout
 class LangItemView : JBPanel<LangItemView>(BorderLayout()), View<LangItemViewModel> {
 
     val list = JBList<BuildConfig>().apply {
-        cellRenderer = StringCellRenderer<BuildConfig> { Pair(it.name, AllIcons.RunConfigurations.Applet) }
+        cellRenderer = BuildConfig.cellRenderer()
     }
 
     override fun CoroutineScope.onViewModelBind(viewModel: LangItemViewModel) {
