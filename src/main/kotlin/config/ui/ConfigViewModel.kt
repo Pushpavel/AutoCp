@@ -20,11 +20,33 @@ class ConfigViewModel(
 ) : ViewModel(parentScope) {
     val solutionFilePath = MutableStateFlow(solutionPath)
 
+    val errorMessage = MutableStateFlow<String?>(null)
+
     val buildConfigs = solutionFilePath.map {
+        if (it.isEmpty()) {
+            errorMessage.value = "Solution Path is Required"
+            return@map listOf()
+        }
+
         val file = VirtualFileManager.getInstance().findFileByNioPath(Path(it))
-        AutoCpLangSettings.findLangByFile(file)?.buildConfigs ?: listOf()
+
+        if (file == null) {
+            errorMessage.value = "Solution Path does not contain a valid solution file"
+            return@map listOf()
+        }
+
+        val lang = AutoCpLangSettings.findLangByFile(file)
+
+        if (lang == null) {
+            errorMessage.value = "solution File is not associated with any language in AutoCp settings"
+            return@map listOf()
+        }
+
+        errorMessage.value = null
+        lang.buildConfigs
     }
     val selectedBuildConfigIndex = MutableStateFlow(-1)
+
 
     init {
         scope.launch {

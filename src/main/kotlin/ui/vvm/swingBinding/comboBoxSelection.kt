@@ -1,4 +1,4 @@
-package ui.vvm.swingModels
+package ui.vvm.swingBinding
 
 import com.intellij.openapi.ui.ComboBox
 import kotlinx.coroutines.CoroutineScope
