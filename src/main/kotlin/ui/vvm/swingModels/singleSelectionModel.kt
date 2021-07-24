@@ -7,15 +7,19 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-fun Flow<Int>.toSingleSelectionModel(scope: CoroutineScope, sink: MutableSharedFlow<Int>): SingleSelectionModel {
+fun CoroutineScope.singleSelectionModel(flow: MutableSharedFlow<Int>): SingleSelectionModel {
+    return singleSelectionModel(flow, flow)
+}
+
+fun CoroutineScope.singleSelectionModel(source: Flow<Int>, sink: MutableSharedFlow<Int>): SingleSelectionModel {
 
     val model = SingleSelectionModel()
 
     var previousIndex = model.minSelectionIndex
 
     // flow to model
-    scope.launch {
-        collect {
+    launch {
+        source.collect {
             model.setSelectionInterval(it, it)
         }
     }
@@ -23,7 +27,7 @@ fun Flow<Int>.toSingleSelectionModel(scope: CoroutineScope, sink: MutableSharedF
     // model to sink
     model.addListSelectionListener {
         if (model.minSelectionIndex != previousIndex)
-            scope.launch { sink.emit(model.minSelectionIndex) }
+            launch { sink.emit(model.minSelectionIndex) }
 
         previousIndex = model.minSelectionIndex
     }

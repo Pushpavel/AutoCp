@@ -1,7 +1,6 @@
 package config.ui
 
 import com.intellij.ide.macro.MacrosDialog
-import com.intellij.openapi.Disposable
 import com.intellij.openapi.fileChooser.FileChooser
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory
 import com.intellij.openapi.project.Project
@@ -11,19 +10,18 @@ import com.intellij.ui.components.JBPanel
 import com.intellij.ui.components.fields.ExtendableTextField
 import com.intellij.ui.layout.CCFlags
 import com.intellij.ui.layout.panel
-import common.diff.DiffAdapter
-import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import settings.langSettings.model.BuildConfig
-import ui.vvm.View
-import ui.vvm.swingModels.bindSelectionIndex
-import ui.vvm.swingModels.toCollectionComboBoxModel
-import ui.vvm.swingModels.toPlainDocument
+import ui.helpers.viewScope
+import ui.vvm.swingBinding.bind
+import ui.vvm.swingModels.plainDocument
 import java.awt.BorderLayout
 import java.nio.file.Path
 
-class ConfigView(private val project: Project, private val parentDisposable: Disposable) :
-    JBPanel<ConfigView>(BorderLayout()),
-    View<ConfigViewModel> {
+class ConfigView(private val project: Project, viewModel: ConfigViewModel) : JBPanel<ConfigView>(BorderLayout()) {
+
+    val scope = viewScope(viewModel.scope)
+
     private val solutionFileField = ExtendableTextField()
     private val configComboBox = ComboBox<BuildConfig>()
 
@@ -44,19 +42,20 @@ class ConfigView(private val project: Project, private val parentDisposable: Dis
                 configComboBox()
             }
         }, BorderLayout.CENTER)
+
+
+        scope.launch {
+            solutionFileField.document = plainDocument(viewModel.solutionFilePath)
+
+            bind(
+                configComboBox,
+                viewModel.buildConfigs,
+                viewModel.selectedBuildConfigIndex
+            ) { item1, item2 -> item1.id == item2.id }
+        }
+
     }
 
-    override fun CoroutineScope.onViewModelBind(viewModel: ConfigViewModel) {
-        solutionFileField.document = viewModel.solutionFilePath.toPlainDocument(this)
-
-        configComboBox.model = viewModel.buildConfigs.toCollectionComboBoxModel(this,
-            object : DiffAdapter<BuildConfig> {
-                override fun isSame(item1: BuildConfig, item2: BuildConfig) = item1.id == item2.id
-            }
-        )
-
-        configComboBox.bindSelectionIndex(this, viewModel.selectedBuildConfigIndex)
-    }
 
     private fun ExtendableTextField.addBrowseButton() {
         // ensures user can select only one file
@@ -69,6 +68,6 @@ class ConfigView(private val project: Project, private val parentDisposable: Dis
             FileChooser.chooseFile(solutionFileDescriptor, project, selectedFile) {
                 this.text = it.path
             }
-        }, parentDisposable)
+        }, null)
     }
 }

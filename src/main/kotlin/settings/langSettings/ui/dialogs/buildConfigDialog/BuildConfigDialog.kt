@@ -10,13 +10,12 @@ import kotlinx.coroutines.launch
 import settings.langSettings.model.BuildConfig
 import ui.ErrorView
 import ui.helpers.mainScope
-import ui.vvm.bind
-import ui.vvm.swingModels.toPlainDocument
+import ui.vvm.swingModels.plainDocument
 
 class BuildConfigDialog(private val buildConfig: BuildConfig, list: List<BuildConfig>) : DialogWrapper(false) {
 
     private val scope = mainScope()
-    private val model = BuildConfigViewModel(buildConfig, list)
+    private val model = BuildConfigViewModel(scope, buildConfig, list)
 
     init {
         title = "Edit ${buildConfig.name}"
@@ -32,10 +31,10 @@ class BuildConfigDialog(private val buildConfig: BuildConfig, list: List<BuildCo
     override fun createCenterPanel() = panel {
         row {
             val nameField = ExtendableTextField(10).apply {
-                document = model.name.toPlainDocument(scope)
+                document = scope.plainDocument(model.name)
             }
             val buildCommandField = ExtendableTextField(50).apply {
-                document = model.buildCommand.toPlainDocument(scope)
+                document = scope.plainDocument(model.buildCommand)
             }
             MacrosDialog.addTextFieldExtension(buildCommandField)
 
@@ -47,11 +46,8 @@ class BuildConfigDialog(private val buildConfig: BuildConfig, list: List<BuildCo
                             "@output@ will be replaced with \"path/to/output/file\" without quotes"
                 )
             }
-            val nameErrView = ErrorView()
-            val buildCommandErrView = ErrorView()
-
-            scope.bind(nameErrView, model.nameErrors)
-            scope.bind(buildCommandErrView, model.buildCommandErrors)
+            val nameErrView = ErrorView(scope, model.nameErrors)
+            val buildCommandErrView = ErrorView(scope, model.buildCommandErrors)
 
             row { nameErrView() }
             row { buildCommandErrView() }

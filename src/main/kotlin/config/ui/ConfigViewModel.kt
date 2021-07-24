@@ -2,6 +2,7 @@ package config.ui
 
 import com.intellij.openapi.vfs.VirtualFileManager
 import common.isNotIndex
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.single
@@ -12,7 +13,11 @@ import settings.langSettings.model.BuildConfig
 import ui.vvm.ViewModel
 import kotlin.io.path.Path
 
-class ConfigViewModel(solutionPath: String, buildConfigId: Long?) : ViewModel() {
+class ConfigViewModel(
+    parentScope: CoroutineScope?,
+    solutionPath: String,
+    buildConfigId: Long?,
+) : ViewModel(parentScope) {
     val solutionFilePath = MutableStateFlow(solutionPath)
 
     val buildConfigs = solutionFilePath.map {

@@ -2,6 +2,7 @@
 
 package settings.langSettings.ui.dialogs.buildConfigDialog
 
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
@@ -9,7 +10,11 @@ import settings.AutoCpSettings
 import settings.langSettings.model.BuildConfig
 import ui.vvm.ViewModel
 
-class BuildConfigViewModel(config: BuildConfig, list: List<BuildConfig>) : ViewModel() {
+class BuildConfigViewModel(
+    parentScope: CoroutineScope?,
+    config: BuildConfig,
+    list: List<BuildConfig>,
+) : ViewModel(parentScope) {
     val name = MutableStateFlow(config.name)
     val buildCommand = MutableStateFlow(config.buildCommand)
 

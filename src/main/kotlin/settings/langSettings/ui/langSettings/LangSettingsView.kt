@@ -4,62 +4,54 @@ import com.intellij.lang.Language
 import com.intellij.ui.OnePixelSplitter
 import com.intellij.ui.ToolbarDecorator
 import com.intellij.ui.components.JBList
-import common.diff.DiffAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import settings.langSettings.model.Lang
 import settings.langSettings.ui.langItem.LangItemView
 import ui.StringCellRenderer
+import ui.helpers.viewScope
 import ui.layouts.SingleChildContainer
-import ui.vvm.View
-import ui.vvm.bind
-import ui.vvm.swingModels.toCollectionListModel
-import ui.vvm.swingModels.toSingleSelectionModel
+import ui.vvm.swingModels.collectionListModel
+import ui.vvm.swingModels.singleSelectionModel
 import javax.swing.BorderFactory
 
-class LangSettingsView : OnePixelSplitter(false, 0.3F), View<LangSettingsViewModel> {
+class LangSettingsView(val viewModel: LangSettingsViewModel) : OnePixelSplitter(false, 0.3F) {
+
+    val scope = viewScope(viewModel.scope)
 
     private val sideList = JBList<Lang>()
     private val mainContainer: SingleChildContainer
-    private val langItemView = LangItemView()
+    private val langItemView = LangItemView(viewModel.itemModel)
 
     init {
 
+        mainContainer = SingleChildContainer("Select a Language", langItemView)
+
+        firstComponent = ToolbarDecorator.createDecorator(sideList)
+            .setAddAction { viewModel.addNewLanguage() }
+            .createPanel()
+
+        secondComponent = mainContainer.apply {
+            border = BorderFactory.createEmptyBorder(0, 8, 0, 0)
+        }
+
+        scope.launch { bind() }
+    }
+
+    private fun CoroutineScope.bind() {
         sideList.cellRenderer = StringCellRenderer<Lang> {
             val lang = Language.findLanguageByID(it.langId)
             if (lang == null) null else
                 Pair(lang.displayName, lang.associatedFileType?.icon)
         }
 
+        sideList.model = collectionListModel(
+            viewModel.languages,
+            viewModel.languages
+        ) { item1, item2 -> item1.langId == item2.langId }
 
-        mainContainer = SingleChildContainer("Select a Language", langItemView)
-
-        secondComponent = mainContainer.apply {
-            border = BorderFactory.createEmptyBorder(0, 8, 0, 0)
-        }
-    }
-
-
-    override fun CoroutineScope.onViewModelBind(viewModel: LangSettingsViewModel) {
-
-        bind(langItemView, viewModel.itemModel)
-
-        val listContainer = ToolbarDecorator.createDecorator(sideList)
-            .setAddAction { viewModel.addNewLanguage() }
-            .createPanel()
-
-        firstComponent = listContainer
-
-
-        sideList.model = viewModel.languages.toCollectionListModel(
-            this, viewModel.languages,
-            object : DiffAdapter<Lang> {
-                override fun isSame(item1: Lang, item2: Lang) = item1.langId == item2.langId
-            }
-        )
-
-        sideList.selectionModel = viewModel.selectedLangIndex.toSingleSelectionModel(this, viewModel.selectedLangIndex)
+        sideList.selectionModel = singleSelectionModel(viewModel.selectedLangIndex)
 
         launch {
             viewModel.selectedLangIndex.collect {
@@ -67,4 +59,5 @@ class LangSettingsView : OnePixelSplitter(false, 0.3F), View<LangSettingsViewMod
             }
         }
     }
+
 }

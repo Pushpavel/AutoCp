@@ -1,6 +1,7 @@
 package settings.langSettings.ui.langItem
 
 import common.isNotIndex
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import settings.langSettings.model.BuildConfig
@@ -9,9 +10,10 @@ import settings.langSettings.ui.dialogs.buildConfigDialog.BuildConfigDialog
 import ui.vvm.ViewModel
 
 class LangItemViewModel(
+    parentScope: CoroutineScope?,
     private val languages: MutableStateFlow<List<Lang>>,
-    private val selectedLangIndex: StateFlow<Int>
-) : ViewModel() {
+    private val selectedLangIndex: StateFlow<Int>,
+) : ViewModel(parentScope) {
 
     val buildConfig = languages.combine(selectedLangIndex) { list, index ->
         if (list.isNotIndex(index))
