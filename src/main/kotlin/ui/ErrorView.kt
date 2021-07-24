@@ -8,13 +8,13 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import ui.vvm.View
+import ui.helpers.viewScope
 
 /**
  * Error UI with error icon and a message
  */
-class ErrorView : JBPanel<ErrorView>(), View<Flow<String?>> {
-
+class ErrorView(parentScope: CoroutineScope, errorMessage: Flow<String?>) : JBPanel<ErrorView>() {
+    val scope = viewScope(parentScope)
     private val textComponent = JBLabel()
 
     init {
@@ -22,11 +22,9 @@ class ErrorView : JBPanel<ErrorView>(), View<Flow<String?>> {
         add(JBLabel("Error: ").apply { font = JBFont.label().asBold() })
         add(textComponent)
         isVisible = false
-    }
 
-    override fun CoroutineScope.onViewModelBind(viewModel: Flow<String?>) {
-        launch {
-            viewModel.collect {
+        scope.launch {
+            errorMessage.collect {
                 textComponent.text = it
                 isVisible = it != null
             }

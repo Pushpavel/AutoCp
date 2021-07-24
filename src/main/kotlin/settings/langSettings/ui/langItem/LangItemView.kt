@@ -3,34 +3,36 @@ package settings.langSettings.ui.langItem
 import com.intellij.ui.ToolbarDecorator
 import com.intellij.ui.components.JBList
 import com.intellij.ui.components.JBPanel
-import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import settings.langSettings.model.BuildConfig
-import ui.vvm.View
+import ui.helpers.viewScope
 import ui.vvm.swingModels.collectionListModel
 import ui.vvm.swingModels.singleSelectionModel
 import java.awt.BorderLayout
 
-class LangItemView : JBPanel<LangItemView>(BorderLayout()), View<LangItemViewModel> {
+class LangItemView(viewModel: LangItemViewModel) : JBPanel<LangItemView>(BorderLayout()) {
+    val scope = viewScope(viewModel.scope)
 
-    val list = JBList<BuildConfig>().apply {
-        cellRenderer = BuildConfig.cellRenderer()
-    }
+    init {
+        val list = JBList<BuildConfig>()
+        list.cellRenderer = BuildConfig.cellRenderer()
 
-    override fun CoroutineScope.onViewModelBind(viewModel: LangItemViewModel) {
         val container = ToolbarDecorator.createDecorator(list).setAddAction {
             viewModel.addNewConfig()
         }.setEditAction {
             viewModel.editConfig()
         }.createPanel()
 
-        list.model = collectionListModel(
-            viewModel.buildConfig,
-            viewModel.buildConfigChanges
-        ) { item1, item2 -> item1.name == item2.name }
 
-        list.selectionModel = singleSelectionModel(viewModel.selectedConfigIndex)
+        scope.launch {
+            list.model = collectionListModel(
+                viewModel.buildConfig,
+                viewModel.buildConfigChanges
+            ) { item1, item2 -> item1.name == item2.name }
 
-        add(container, BorderLayout.CENTER)
+            list.selectionModel = singleSelectionModel(viewModel.selectedConfigIndex)
+
+            add(container, BorderLayout.CENTER)
+        }
     }
-
 }

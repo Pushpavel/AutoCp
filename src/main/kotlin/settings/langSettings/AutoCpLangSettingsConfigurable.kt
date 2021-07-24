@@ -20,9 +20,7 @@ class AutoCpLangSettingsConfigurable : Configurable, DumbAware {
         scope = mainScope()
         model = LangSettingsViewModel(scope)
 
-        return LangSettingsView().apply {
-            bindToViewModel(scope, model)
-        }
+        return LangSettingsView(model)
     }
 
     override fun isModified(): Boolean {

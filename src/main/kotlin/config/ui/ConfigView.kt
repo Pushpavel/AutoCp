@@ -1,7 +1,6 @@
 package config.ui
 
 import com.intellij.ide.macro.MacrosDialog
-import com.intellij.openapi.Disposable
 import com.intellij.openapi.fileChooser.FileChooser
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory
 import com.intellij.openapi.project.Project
@@ -11,18 +10,19 @@ import com.intellij.ui.components.JBPanel
 import com.intellij.ui.components.fields.ExtendableTextField
 import com.intellij.ui.layout.CCFlags
 import com.intellij.ui.layout.panel
-import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import settings.langSettings.model.BuildConfig
-import ui.vvm.View
+import ui.helpers.viewScope
 import ui.vvm.swingModels.bindSelectionIndex
 import ui.vvm.swingModels.collectionComboBoxModel
 import ui.vvm.swingModels.plainDocument
 import java.awt.BorderLayout
 import java.nio.file.Path
 
-class ConfigView(private val project: Project, private val parentDisposable: Disposable) :
-    JBPanel<ConfigView>(BorderLayout()),
-    View<ConfigViewModel> {
+class ConfigView(private val project: Project, viewModel: ConfigViewModel) : JBPanel<ConfigView>(BorderLayout()) {
+
+    val scope = viewScope(viewModel.scope)
+
     private val solutionFileField = ExtendableTextField()
     private val configComboBox = ComboBox<BuildConfig>()
 
@@ -43,17 +43,20 @@ class ConfigView(private val project: Project, private val parentDisposable: Dis
                 configComboBox()
             }
         }, BorderLayout.CENTER)
+
+
+        scope.launch {
+            solutionFileField.document = plainDocument(viewModel.solutionFilePath)
+
+            configComboBox.model = collectionComboBoxModel(
+                viewModel.buildConfigs
+            ) { item1, item2 -> item1.id == item2.id }
+
+            bindSelectionIndex(configComboBox, viewModel.selectedBuildConfigIndex)
+        }
+
     }
 
-    override fun CoroutineScope.onViewModelBind(viewModel: ConfigViewModel) {
-        solutionFileField.document = plainDocument(viewModel.solutionFilePath)
-
-        configComboBox.model = collectionComboBoxModel(
-            viewModel.buildConfigs
-        ) { item1, item2 -> item1.id == item2.id }
-
-        bindSelectionIndex(configComboBox, viewModel.selectedBuildConfigIndex)
-    }
 
     private fun ExtendableTextField.addBrowseButton() {
         // ensures user can select only one file
@@ -66,6 +69,6 @@ class ConfigView(private val project: Project, private val parentDisposable: Dis
             FileChooser.chooseFile(solutionFileDescriptor, project, selectedFile) {
                 this.text = it.path
             }
-        }, parentDisposable)
+        }, null)
     }
 }

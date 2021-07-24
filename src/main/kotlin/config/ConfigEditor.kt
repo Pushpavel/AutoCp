@@ -2,7 +2,6 @@ package config
 
 import com.intellij.openapi.options.SettingsEditor
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.util.Disposer
 import config.ui.ConfigView
 import config.ui.ConfigViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -51,9 +50,7 @@ class ConfigEditor(private val project: Project) : SettingsEditor<AutoCpConfig>(
     override fun createEditor(): JComponent {
         scope = mainScope()
         model = ConfigViewModel(scope, "", null)
-        return ConfigView(project, this).apply {
-            bindToViewModel(scope, model)
-        }
+        return ConfigView(project, model)
     }
 
     override fun disposeEditor() {

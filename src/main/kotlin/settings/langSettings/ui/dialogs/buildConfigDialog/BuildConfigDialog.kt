@@ -1,9 +1,7 @@
 package settings.langSettings.ui.dialogs.buildConfigDialog
 
 import com.intellij.ide.macro.MacrosDialog
-import com.intellij.openapi.Disposable
 import com.intellij.openapi.ui.DialogWrapper
-import com.intellij.openapi.util.Disposer
 import com.intellij.ui.components.fields.ExtendableTextField
 import com.intellij.ui.layout.panel
 import kotlinx.coroutines.cancel
@@ -12,11 +10,9 @@ import kotlinx.coroutines.launch
 import settings.langSettings.model.BuildConfig
 import ui.ErrorView
 import ui.helpers.mainScope
-import ui.vvm.bind
 import ui.vvm.swingModels.plainDocument
 
-class BuildConfigDialog(private val buildConfig: BuildConfig, list: List<BuildConfig>) : DialogWrapper(false),
-    Disposable {
+class BuildConfigDialog(private val buildConfig: BuildConfig, list: List<BuildConfig>) : DialogWrapper(false) {
 
     private val scope = mainScope()
     private val model = BuildConfigViewModel(scope, buildConfig, list)
@@ -50,11 +46,8 @@ class BuildConfigDialog(private val buildConfig: BuildConfig, list: List<BuildCo
                             "@output@ will be replaced with \"path/to/output/file\" without quotes"
                 )
             }
-            val nameErrView = ErrorView()
-            val buildCommandErrView = ErrorView()
-
-            scope.bind(nameErrView, model.nameErrors)
-            scope.bind(buildCommandErrView, model.buildCommandErrors)
+            val nameErrView = ErrorView(scope, model.nameErrors)
+            val buildCommandErrView = ErrorView(scope, model.buildCommandErrors)
 
             row { nameErrView() }
             row { buildCommandErrView() }
@@ -73,6 +66,5 @@ class BuildConfigDialog(private val buildConfig: BuildConfig, list: List<BuildCo
     override fun dispose() {
         super.dispose()
         scope.cancel()
-        Disposer.dispose(this)
     }
 }
