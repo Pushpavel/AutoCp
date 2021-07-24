@@ -2,7 +2,6 @@ package settings.langSettings
 
 import com.intellij.openapi.options.Configurable
 import com.intellij.openapi.project.DumbAware
-import com.intellij.openapi.util.Disposer
 import common.isItemsEqual
 import common.isNotIndex
 import kotlinx.coroutines.CoroutineScope
@@ -19,7 +18,7 @@ class AutoCpLangSettingsConfigurable : Configurable, DumbAware {
 
     override fun createComponent(): JComponent {
         scope = mainScope()
-        model = LangSettingsViewModel()
+        model = LangSettingsViewModel(scope)
 
         return LangSettingsView().apply {
             bindToViewModel(scope, model)
@@ -45,10 +44,7 @@ class AutoCpLangSettingsConfigurable : Configurable, DumbAware {
         }
     }
 
-    override fun disposeUIResources() {
-        Disposer.dispose(model)
-        scope.cancel()
-    }
+    override fun disposeUIResources() = scope.cancel()
 
     override fun getDisplayName() = "Languages"
 }

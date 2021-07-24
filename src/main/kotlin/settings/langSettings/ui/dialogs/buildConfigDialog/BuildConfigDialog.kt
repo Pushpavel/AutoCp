@@ -19,7 +19,7 @@ class BuildConfigDialog(private val buildConfig: BuildConfig, list: List<BuildCo
     Disposable {
 
     private val scope = mainScope()
-    private val model = BuildConfigViewModel(this, buildConfig, list)
+    private val model = BuildConfigViewModel(scope, buildConfig, list)
 
     init {
         title = "Edit ${buildConfig.name}"

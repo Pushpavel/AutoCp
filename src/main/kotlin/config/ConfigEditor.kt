@@ -50,7 +50,7 @@ class ConfigEditor(private val project: Project) : SettingsEditor<AutoCpConfig>(
 
     override fun createEditor(): JComponent {
         scope = mainScope()
-        model = ConfigViewModel(this, "", null)
+        model = ConfigViewModel(scope, "", null)
         return ConfigView(project, this).apply {
             bindToViewModel(scope, model)
         }
@@ -59,6 +59,5 @@ class ConfigEditor(private val project: Project) : SettingsEditor<AutoCpConfig>(
     override fun disposeEditor() {
         super.disposeEditor()
         scope.cancel()
-        Disposer.dispose(model)
     }
 }

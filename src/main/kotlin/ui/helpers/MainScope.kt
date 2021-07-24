@@ -1,8 +1,7 @@
 package ui.helpers
 
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.*
+import kotlin.coroutines.CoroutineContext
 
 /**
  * Alternative to MainScope to avoid
@@ -10,4 +9,20 @@ import kotlinx.coroutines.Dispatchers
  */
 fun mainScope(): CoroutineScope {
     return CoroutineScope(Dispatchers.Main + CoroutineExceptionHandler { _, throwable -> throwable.printStackTrace() })
+}
+
+fun childScope(parentScope: CoroutineScope?, context: CoroutineContext = Dispatchers.Default): CoroutineScope {
+    val scope = CoroutineScope(CoroutineExceptionHandler { _, throwable ->
+        throwable.printStackTrace()
+    } + context)
+
+    parentScope?.launch {
+        try {
+            awaitCancellation()
+        } finally {
+            scope.cancel()
+        }
+    }
+
+    return scope
 }
