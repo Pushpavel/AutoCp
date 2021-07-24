@@ -1,13 +1,13 @@
 package config
 
-import com.google.common.io.Files
 import com.intellij.execution.actions.ConfigurationContext
 import com.intellij.execution.actions.LazyRunConfigurationProducer
 import com.intellij.openapi.components.service
 import com.intellij.openapi.util.Ref
+import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiElement
 import database.AcpDatabase
-import settings.AutoCpSettings
+import settings.langSettings.AutoCpLangSettings
 
 /**
  * Implementation class for creating [AutoCpConfig] from context
@@ -22,13 +22,14 @@ class AutoCpConfigProducer : LazyRunConfigurationProducer<AutoCpConfig>() {
         context: ConfigurationContext,
         sourceElement: Ref<PsiElement>
     ): Boolean {
-        val solutionPath = context.location?.virtualFile?.path ?: return false
+        val solutionFile = context.location?.virtualFile
+        val solutionPath = solutionFile?.path ?: return false
         val service = context.project.service<AcpDatabase>()
         val problem = service.getProblem(solutionPath)
         if (problem.isFailure) return false
 
         configuration.solutionFilePath = solutionPath
-        configuration.solutionLangId = getSelectedLangId(solutionPath)
+        configuration.buildConfigId = getSelectedBuildConfigId(solutionFile)
 
         val suggestedName = configuration.suggestedName()
         if (suggestedName != null)
@@ -38,32 +39,15 @@ class AutoCpConfigProducer : LazyRunConfigurationProducer<AutoCpConfig>() {
     }
 
     /**
-     * Selecting a language for the [AutoCpConfig] created from Context
-     * based on Preference and extension
+     * Selecting a BuildConfig for the [AutoCpConfig] created from Context
+     * based on Preference and File's Language
      */
-    private fun getSelectedLangId(solutionPath: String): Long {
-        val extension = Files.getFileExtension(solutionPath)
-        val settings = AutoCpSettings.instance
-        // selecting solution Language
+    private fun getSelectedBuildConfigId(solutionFile: VirtualFile): Long {
+        val lang = AutoCpLangSettings.findLangByFile(solutionFile) ?: return -1
 
-        // 1. Preferred Language from settings
-        val prefLang = settings.getPreferredLang()
-        if (prefLang != null && prefLang.extension == extension)
-            return prefLang.id
+        // TODO: select default BuildConfig for a Language
 
-        // 2. Any Solution Language with correct file extension
-        val lang = settings.solutionLanguages.find { it.extension == extension }
-        if (lang != null)
-            return lang.id
-
-        // 3. Any Solution Language
-        val anyLang = settings.solutionLanguages.firstOrNull()
-
-        if (anyLang != null)
-            return anyLang.id
-
-        // 4. no Language selected
-        return -1
+        return lang.buildConfigs.takeIf { it.isNotEmpty() }?.get(0)?.id ?: -1
     }
 
     /**

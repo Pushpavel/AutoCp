@@ -17,7 +17,6 @@ class AutoCpConfig(project: Project, factory: ConfigurationFactory, name: String
     LocatableConfigurationBase<RunProfileState>(project, factory, name) {
 
     var solutionFilePath: String = ""
-    var solutionLangId: Long = -1
     var buildConfigId: Long = -1
 
 
@@ -47,13 +46,11 @@ class AutoCpConfig(project: Project, factory: ConfigurationFactory, name: String
     companion object {
         // SERIALIZATION KEYS
         private const val SOLUTION_FILE_PATH = "solutionFilePath"
-        private const val SOLUTION_LANG_ID = "solutionLangId"
         private const val BUILD_CONFIG_ID = "buildConfigId"
     }
 
     override fun writeExternal(element: Element) {
         JDOMExternalizerUtil.writeField(element, SOLUTION_FILE_PATH, solutionFilePath)
-        JDOMExternalizerUtil.writeField(element, SOLUTION_LANG_ID, solutionLangId.toString())
         JDOMExternalizerUtil.writeField(element, BUILD_CONFIG_ID, buildConfigId.toString())
         super.writeExternal(element)
     }
@@ -61,7 +58,6 @@ class AutoCpConfig(project: Project, factory: ConfigurationFactory, name: String
     override fun readExternal(element: Element) {
         super.readExternal(element)
         solutionFilePath = JDOMExternalizerUtil.readField(element, SOLUTION_FILE_PATH, "")
-        solutionLangId = JDOMExternalizerUtil.readField(element, SOLUTION_LANG_ID, "-1").toLong()
         buildConfigId = JDOMExternalizerUtil.readField(element, BUILD_CONFIG_ID, "-1").toLong()
     }
 

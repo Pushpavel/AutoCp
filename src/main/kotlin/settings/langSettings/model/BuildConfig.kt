@@ -1,6 +1,7 @@
 package settings.langSettings.model
 
 import com.intellij.icons.AllIcons
+import settings.AutoCpSettings
 import ui.StringCellRenderer
 
 data class BuildConfig(
@@ -14,5 +15,11 @@ data class BuildConfig(
                 Pair(it.name, AllIcons.RunConfigurations.Applet)
             }
         }
+    }
+
+    fun constructBuildCommand(inputPath: String, outputPath: String): String {
+        return buildCommand
+            .replace(AutoCpSettings.INPUT_PATH_KEY, inputPath)
+            .replace(AutoCpSettings.OUTPUT_PATH_KEY, outputPath)
     }
 }
