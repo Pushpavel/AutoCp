@@ -1,7 +1,9 @@
 package settings.langSettings.ui.dialogs.buildConfigDialog
 
 import com.intellij.ide.macro.MacrosDialog
+import com.intellij.openapi.Disposable
 import com.intellij.openapi.ui.DialogWrapper
+import com.intellij.openapi.util.Disposer
 import com.intellij.ui.components.fields.ExtendableTextField
 import com.intellij.ui.layout.panel
 import kotlinx.coroutines.cancel
@@ -13,10 +15,11 @@ import ui.helpers.mainScope
 import ui.vvm.bind
 import ui.vvm.swingModels.plainDocument
 
-class BuildConfigDialog(private val buildConfig: BuildConfig, list: List<BuildConfig>) : DialogWrapper(false) {
+class BuildConfigDialog(private val buildConfig: BuildConfig, list: List<BuildConfig>) : DialogWrapper(false),
+    Disposable {
 
     private val scope = mainScope()
-    private val model = BuildConfigViewModel(buildConfig, list)
+    private val model = BuildConfigViewModel(this, buildConfig, list)
 
     init {
         title = "Edit ${buildConfig.name}"
@@ -70,5 +73,6 @@ class BuildConfigDialog(private val buildConfig: BuildConfig, list: List<BuildCo
     override fun dispose() {
         super.dispose()
         scope.cancel()
+        Disposer.dispose(this)
     }
 }

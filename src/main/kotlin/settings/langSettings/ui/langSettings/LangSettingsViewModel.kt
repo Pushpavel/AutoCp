@@ -7,10 +7,11 @@ import settings.langSettings.ui.dialogs.IDELangSelectorDialog
 import settings.langSettings.ui.langItem.LangItemViewModel
 import ui.vvm.ViewModel
 
-class LangSettingsViewModel : ViewModel() {
+class LangSettingsViewModel : ViewModel(null) {
+
     val selectedLangIndex = MutableStateFlow(-1)
     val languages = MutableStateFlow<List<Lang>>(emptyList())
-    val itemModel = LangItemViewModel(languages, selectedLangIndex).withParent(this)
+    val itemModel = LangItemViewModel(this, languages, selectedLangIndex)
 
     fun addNewLanguage() {
         val langList = languages.value.toMutableList()

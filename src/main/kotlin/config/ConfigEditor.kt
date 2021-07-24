@@ -50,7 +50,7 @@ class ConfigEditor(private val project: Project) : SettingsEditor<AutoCpConfig>(
 
     override fun createEditor(): JComponent {
         scope = mainScope()
-        model = ConfigViewModel("", null)
+        model = ConfigViewModel(this, "", null)
         return ConfigView(project, this).apply {
             bindToViewModel(scope, model)
         }

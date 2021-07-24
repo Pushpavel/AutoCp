@@ -1,5 +1,6 @@
 package settings.langSettings.ui.langItem
 
+import com.intellij.openapi.Disposable
 import common.isNotIndex
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -9,9 +10,10 @@ import settings.langSettings.ui.dialogs.buildConfigDialog.BuildConfigDialog
 import ui.vvm.ViewModel
 
 class LangItemViewModel(
+    parentDisposable: Disposable,
     private val languages: MutableStateFlow<List<Lang>>,
-    private val selectedLangIndex: StateFlow<Int>
-) : ViewModel() {
+    private val selectedLangIndex: StateFlow<Int>,
+) : ViewModel(parentDisposable) {
 
     val buildConfig = languages.combine(selectedLangIndex) { list, index ->
         if (list.isNotIndex(index))

@@ -1,5 +1,6 @@
 package config.ui
 
+import com.intellij.openapi.Disposable
 import com.intellij.openapi.vfs.VirtualFileManager
 import common.isNotIndex
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,7 +13,11 @@ import settings.langSettings.model.BuildConfig
 import ui.vvm.ViewModel
 import kotlin.io.path.Path
 
-class ConfigViewModel(solutionPath: String, buildConfigId: Long?) : ViewModel() {
+class ConfigViewModel(
+    parentDisposable: Disposable,
+    solutionPath: String,
+    buildConfigId: Long?,
+) : ViewModel(parentDisposable) {
     val solutionFilePath = MutableStateFlow(solutionPath)
 
     val buildConfigs = solutionFilePath.map {
