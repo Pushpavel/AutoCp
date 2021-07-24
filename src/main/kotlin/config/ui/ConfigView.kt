@@ -56,7 +56,7 @@ class ConfigView(private val project: Project, viewModel: ConfigViewModel) : JBP
                 configComboBox,
                 viewModel.buildConfigs,
                 viewModel.selectedBuildConfigIndex
-            ) { item1, item2 -> item1.id == item2.id }
+            )
         }
 
     }

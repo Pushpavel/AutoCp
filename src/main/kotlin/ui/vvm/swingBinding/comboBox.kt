@@ -2,23 +2,18 @@ package ui.vvm.swingBinding
 
 import com.intellij.openapi.ui.ComboBox
 import com.intellij.ui.CollectionComboBoxModel
-import common.diff.DiffAdapter
-import common.diff.MyersDiff
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import ui.vvm.swingModels.update
 
 fun <T> CoroutineScope.bind(
     comboBox: ComboBox<T>,
     listSource: Flow<List<T>>,
-    selectedIndex: MutableSharedFlow<Int>,
-    adapter: DiffAdapter<T>
+    selectedIndex: MutableSharedFlow<Int>
 ) {
     val model = CollectionComboBoxModel<T>()
-    val diff = MyersDiff(adapter)
 
     // flow to model
     launch {
@@ -27,7 +22,7 @@ fun <T> CoroutineScope.bind(
             if (model.items.isNotEmpty() && model.items[0] == null)
                 model.removeAll()
 
-            model.update(it, diff)
+            model.update(it)
 
             // select first if none selected
             if (it.isNotEmpty() && comboBox.selectedIndex == -1)

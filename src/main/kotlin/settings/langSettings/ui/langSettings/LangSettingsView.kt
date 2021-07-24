@@ -49,7 +49,7 @@ class LangSettingsView(val viewModel: LangSettingsViewModel) : OnePixelSplitter(
         sideList.model = collectionListModel(
             viewModel.languages,
             viewModel.languages
-        ) { item1, item2 -> item1.langId == item2.langId }
+        )
 
         sideList.selectionModel = singleSelectionModel(viewModel.selectedLangIndex)
 

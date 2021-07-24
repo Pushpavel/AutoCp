@@ -54,7 +54,7 @@ class LangItemView(viewModel: LangItemViewModel) : JBPanel<LangItemView>(BorderL
             list.model = collectionListModel(
                 viewModel.buildConfigs,
                 viewModel.buildConfigs
-            ) { item1, item2 -> item1.id == item2.id }
+            )
 
             list.selectionModel = singleSelectionModel(viewModel.selectedConfigIndex)
 
@@ -62,7 +62,7 @@ class LangItemView(viewModel: LangItemViewModel) : JBPanel<LangItemView>(BorderL
                 configComboBox,
                 viewModel.buildConfigs,
                 viewModel.selectedDefaultBuildConfigIndex
-            ) { item1, item2 -> item1.id == item2.id }
+            )
         }
     }
 }
