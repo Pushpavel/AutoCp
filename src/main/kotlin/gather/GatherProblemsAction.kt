@@ -15,6 +15,8 @@ import gather.server.getResponsesAsync
 import gather.ui.GatheringReporterDialog
 import gather.ui.GenerateSolutionsDialogModel
 import gather.ui.createGenerateSolutionsDialog
+import gather.ui.solutionsDialog.SolutionsDialog
+import gather.ui.solutionsDialog.SolutionsDialogModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.swing.Swing
 import java.net.ServerSocket
@@ -60,8 +62,8 @@ class GatherProblemsAction : AnAction(), DumbAware {
                 val service = project.service<AcpDatabase>()
 
                 service.insertProblems(problems).getOrThrow()
-                val model = GenerateSolutionsDialogModel(project, problems)
-                val dialog = createGenerateSolutionsDialog(model)
+                val model = SolutionsDialogModel(project, problems)
+                val dialog = SolutionsDialog(model)
 
                 invokeLater {
                     if (!dialog.showAndGet())

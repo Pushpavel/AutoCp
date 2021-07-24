@@ -54,6 +54,7 @@ class SolutionsDialog(val model: SolutionsDialogModel) : DialogWrapper(false) {
                     }
 
                     langComboBox.addActionListener { _ ->
+                        isOKActionEnabled = model.langModel.selected != null
                         model.langModel.selected?.let {
                             val lang = Language.findLanguageByID(it.langId)
                             model.langIcon = lang?.associatedFileType?.icon
@@ -66,6 +67,7 @@ class SolutionsDialog(val model: SolutionsDialogModel) : DialogWrapper(false) {
 
     }).apply {
         setChildVisible(model.groupName != null)
+        isOKActionEnabled = model.groupName != null
         minimumSize = Dimension(300, 300)
     }
 
