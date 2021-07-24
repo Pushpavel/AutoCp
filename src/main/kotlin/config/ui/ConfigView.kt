@@ -12,6 +12,7 @@ import com.intellij.ui.layout.CCFlags
 import com.intellij.ui.layout.panel
 import kotlinx.coroutines.launch
 import settings.langSettings.model.BuildConfig
+import ui.ErrorView
 import ui.helpers.viewScope
 import ui.vvm.swingBinding.bind
 import ui.vvm.swingModels.plainDocument
@@ -40,6 +41,10 @@ class ConfigView(private val project: Project, viewModel: ConfigViewModel) : JBP
             }
             row("Build Configuration:") {
                 configComboBox()
+            }
+            row {
+                val errorView = ErrorView(scope, viewModel.errorMessage)
+                errorView()
             }
         }, BorderLayout.CENTER)
 
