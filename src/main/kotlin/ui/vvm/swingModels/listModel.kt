@@ -11,8 +11,8 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import ui.helpers.SimpleListDataListener
 
-fun <T> Flow<List<T>>.toCollectionListModel(
-    scope: CoroutineScope,
+fun <T> CoroutineScope.collectionListModel(
+    source: Flow<List<T>>,
     sink: MutableSharedFlow<List<T>>,
     adapter: DiffAdapter<T>
 ): CollectionListModel<T> {
@@ -23,8 +23,8 @@ fun <T> Flow<List<T>>.toCollectionListModel(
     var pauseFlow = false
 
     // flow to model
-    scope.launch {
-        collect {
+    launch {
+        source.collect {
             pauseFlow = true
             model.update(it, diff)
             pauseFlow = false
@@ -34,11 +34,11 @@ fun <T> Flow<List<T>>.toCollectionListModel(
     // model to sink
     model.addListDataListener(SimpleListDataListener {
         if (!pauseFlow)
-            scope.launch { sink.emit(model.items) }
+            launch {
+                sink.emit(model.items)
+            }
     })
-
-
-
+    
     return model
 }
 

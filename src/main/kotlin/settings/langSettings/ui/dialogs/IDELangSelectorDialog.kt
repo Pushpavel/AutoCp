@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 import settings.langSettings.model.Lang
 import ui.StringCellRenderer
 import ui.helpers.mainScope
-import ui.vvm.swingModels.toSingleSelectionModel
+import ui.vvm.swingModels.singleSelectionModel
 import java.awt.BorderLayout
 import javax.swing.JComponent
 import javax.swing.JPanel
@@ -47,7 +47,7 @@ class IDELangSelectorDialog(addedLangList: List<Lang>) : DialogWrapper(false) {
             Pair(it.displayName, it.associatedFileType?.icon)
         }
 
-        list.selectionModel = selectedIndex.toSingleSelectionModel(scope, selectedIndex)
+        list.selectionModel = scope.singleSelectionModel(selectedIndex)
         ListSpeedSearch(list) { it.displayName }
 
         val container = JBScrollPane(list)
