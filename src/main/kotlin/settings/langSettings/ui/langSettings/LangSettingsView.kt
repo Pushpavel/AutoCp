@@ -1,6 +1,5 @@
 package settings.langSettings.ui.langSettings
 
-import com.intellij.lang.Language
 import com.intellij.ui.OnePixelSplitter
 import com.intellij.ui.ToolbarDecorator
 import com.intellij.ui.components.JBList
@@ -9,7 +8,6 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import settings.langSettings.model.Lang
 import settings.langSettings.ui.langItem.LangItemView
-import ui.StringCellRenderer
 import ui.helpers.viewScope
 import ui.layouts.SingleChildContainer
 import ui.vvm.swingModels.collectionListModel
@@ -40,11 +38,7 @@ class LangSettingsView(val viewModel: LangSettingsViewModel) : OnePixelSplitter(
     }
 
     private fun CoroutineScope.bind() {
-        sideList.cellRenderer = StringCellRenderer<Lang> {
-            val lang = Language.findLanguageByID(it.langId)
-            if (lang == null) null else
-                Pair(lang.displayName, lang.associatedFileType?.icon)
-        }
+        sideList.cellRenderer = Lang.cellRenderer()
 
         sideList.model = collectionListModel(
             viewModel.languages,
