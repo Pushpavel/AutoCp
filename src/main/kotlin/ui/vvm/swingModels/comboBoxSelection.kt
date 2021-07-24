@@ -6,20 +6,19 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-@Suppress("UNCHECKED_CAST")
-fun ComboBox<*>.bindSelectionIndex(scope: CoroutineScope, selectionItem: MutableSharedFlow<Int>) {
+fun CoroutineScope.bindSelectionIndex(comboBox: ComboBox<*>, selectionItem: MutableSharedFlow<Int>) {
     // model to flow
-    addActionListener {
-        scope.launch {
-            selectionItem.emit(selectedIndex)
+    comboBox.addActionListener {
+        launch {
+            selectionItem.emit(comboBox.selectedIndex)
         }
     }
 
     // flow to model
-    scope.launch {
+    launch {
         selectionItem.collect {
-            if (it != selectedIndex)
-                selectedIndex = it
+            if (it != comboBox.selectedIndex)
+                comboBox.selectedIndex = it
         }
     }
 }

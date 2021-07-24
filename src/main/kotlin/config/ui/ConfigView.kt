@@ -11,13 +11,12 @@ import com.intellij.ui.components.JBPanel
 import com.intellij.ui.components.fields.ExtendableTextField
 import com.intellij.ui.layout.CCFlags
 import com.intellij.ui.layout.panel
-import common.diff.DiffAdapter
 import kotlinx.coroutines.CoroutineScope
 import settings.langSettings.model.BuildConfig
 import ui.vvm.View
 import ui.vvm.swingModels.bindSelectionIndex
+import ui.vvm.swingModels.collectionComboBoxModel
 import ui.vvm.swingModels.plainDocument
-import ui.vvm.swingModels.toCollectionComboBoxModel
 import java.awt.BorderLayout
 import java.nio.file.Path
 
@@ -49,13 +48,11 @@ class ConfigView(private val project: Project, private val parentDisposable: Dis
     override fun CoroutineScope.onViewModelBind(viewModel: ConfigViewModel) {
         solutionFileField.document = plainDocument(viewModel.solutionFilePath)
 
-        configComboBox.model = viewModel.buildConfigs.toCollectionComboBoxModel(this,
-            object : DiffAdapter<BuildConfig> {
-                override fun isSame(item1: BuildConfig, item2: BuildConfig) = item1.id == item2.id
-            }
-        )
+        configComboBox.model = collectionComboBoxModel(
+            viewModel.buildConfigs
+        ) { item1, item2 -> item1.id == item2.id }
 
-        configComboBox.bindSelectionIndex(this, viewModel.selectedBuildConfigIndex)
+        bindSelectionIndex(configComboBox, viewModel.selectedBuildConfigIndex)
     }
 
     private fun ExtendableTextField.addBrowseButton() {
