@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import ui.vvm.swingModels.bindSelectionIndex
 import ui.vvm.swingModels.update
 
 fun <T> CoroutineScope.bind(
