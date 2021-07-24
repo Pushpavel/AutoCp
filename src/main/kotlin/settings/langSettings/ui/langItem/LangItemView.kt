@@ -61,7 +61,7 @@ class LangItemView(viewModel: LangItemViewModel) : JBPanel<LangItemView>(BorderL
             bind(
                 configComboBox,
                 viewModel.buildConfigs,
-                viewModel.selectedDefaultBuildConfigIndex
+                viewModel.defaultBuildConfigIndex
             )
         }
     }

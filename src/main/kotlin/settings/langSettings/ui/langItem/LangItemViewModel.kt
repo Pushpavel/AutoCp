@@ -1,5 +1,6 @@
 package settings.langSettings.ui.langItem
 
+import common.isIndex
 import common.isNotIndex
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,7 +21,18 @@ class LangItemViewModel(
 
     val selectedConfigIndex = MutableStateFlow(-1)
 
-    val selectedDefaultBuildConfigIndex = MutableStateFlow(-1)
+    val defaultBuildConfigIndex = lang.biState(scope, -1, {
+        it?.let {
+            it.buildConfigs.indexOfFirst { config -> config.id == it.defaultBuildConfigId }
+        } ?: -1
+    }, {
+        this?.let { lang ->
+            if (lang.buildConfigs.isIndex(it))
+                lang.copy(defaultBuildConfigId = lang.buildConfigs[it].id)
+            else
+                null
+        }
+    })
 
     fun addNewConfig() {
         val list = buildConfigs.value.toMutableList()
