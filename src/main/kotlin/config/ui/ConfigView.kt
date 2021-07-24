@@ -13,8 +13,7 @@ import com.intellij.ui.layout.panel
 import kotlinx.coroutines.launch
 import settings.langSettings.model.BuildConfig
 import ui.helpers.viewScope
-import ui.vvm.swingModels.bindSelectionIndex
-import ui.vvm.swingModels.collectionComboBoxModel
+import ui.vvm.swingBinding.bind
 import ui.vvm.swingModels.plainDocument
 import java.awt.BorderLayout
 import java.nio.file.Path
@@ -48,11 +47,11 @@ class ConfigView(private val project: Project, viewModel: ConfigViewModel) : JBP
         scope.launch {
             solutionFileField.document = plainDocument(viewModel.solutionFilePath)
 
-            configComboBox.model = collectionComboBoxModel(
-                viewModel.buildConfigs
+            bind(
+                configComboBox,
+                viewModel.buildConfigs,
+                viewModel.selectedBuildConfigIndex
             ) { item1, item2 -> item1.id == item2.id }
-
-            bindSelectionIndex(configComboBox, viewModel.selectedBuildConfigIndex)
         }
 
     }
