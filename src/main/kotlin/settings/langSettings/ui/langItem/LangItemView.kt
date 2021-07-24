@@ -1,8 +1,12 @@
 package settings.langSettings.ui.langItem
 
+import com.intellij.ide.ui.fullRow
+import com.intellij.openapi.ui.ComboBox
 import com.intellij.ui.ToolbarDecorator
 import com.intellij.ui.components.JBList
 import com.intellij.ui.components.JBPanel
+import com.intellij.ui.layout.CCFlags
+import com.intellij.ui.layout.panel
 import kotlinx.coroutines.launch
 import settings.langSettings.model.BuildConfig
 import ui.helpers.viewScope
@@ -17,12 +21,25 @@ class LangItemView(viewModel: LangItemViewModel) : JBPanel<LangItemView>(BorderL
         val list = JBList<BuildConfig>()
         list.cellRenderer = BuildConfig.cellRenderer()
 
-        val container = ToolbarDecorator.createDecorator(list).setAddAction {
+        val listContainer = ToolbarDecorator.createDecorator(list).setAddAction {
             viewModel.addNewConfig()
         }.setEditAction {
             viewModel.editConfig()
         }.createPanel()
 
+        val container = panel {
+            row("Default Build Configuration") {
+                ComboBox<String>()()
+            }
+            titledRow("Build Configurations") {
+                subRowIndent = 0
+                fullRow {
+                    listContainer(CCFlags.grow)
+                }
+            }
+        }
+
+        add(container, BorderLayout.CENTER)
 
         scope.launch {
             list.model = collectionListModel(
@@ -31,8 +48,6 @@ class LangItemView(viewModel: LangItemViewModel) : JBPanel<LangItemView>(BorderL
             ) { item1, item2 -> item1.name == item2.name }
 
             list.selectionModel = singleSelectionModel(viewModel.selectedConfigIndex)
-
-            add(container, BorderLayout.CENTER)
         }
     }
 }
