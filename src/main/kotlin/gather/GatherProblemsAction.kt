@@ -13,8 +13,6 @@ import database.AcpDatabase
 import gather.server.createServer
 import gather.server.getResponsesAsync
 import gather.ui.GatheringReporterDialog
-import gather.ui.GenerateSolutionsDialogModel
-import gather.ui.createGenerateSolutionsDialog
 import gather.ui.solutionsDialog.SolutionsDialog
 import gather.ui.solutionsDialog.SolutionsDialogModel
 import kotlinx.coroutines.*
