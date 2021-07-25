@@ -1,9 +1,6 @@
 package settings.generalSettings
 
-import com.intellij.openapi.components.PersistentStateComponent
-import com.intellij.openapi.components.Service
-import com.intellij.openapi.components.State
-import com.intellij.openapi.components.Storage
+import com.intellij.openapi.components.*
 
 /**
  * Model class for Settings of the plugin that persists across restarts
@@ -14,7 +11,7 @@ import com.intellij.openapi.components.Storage
 )
 @Service
 class AutoCpGeneralSettings : PersistentStateComponent<AutoCpGeneralSettings> {
-    private var preferredLangId: Long = -1
+    private var preferredLangId: String? = null
 
     override fun getState() = this
 
@@ -26,5 +23,16 @@ class AutoCpGeneralSettings : PersistentStateComponent<AutoCpGeneralSettings> {
         // TODO: move this somewhere else
         const val INPUT_PATH_KEY = "@input@"
         const val OUTPUT_PATH_KEY = "@output@"
+
+        private val instance: AutoCpGeneralSettings
+            get() = service()
+
+        fun getPreferredLangId(): String? {
+            return instance.preferredLangId
+        }
+
+        fun setPreferredLangId(langId: String?) {
+            instance.preferredLangId = langId
+        }
     }
 }
