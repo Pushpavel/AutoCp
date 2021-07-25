@@ -13,7 +13,7 @@
         <notificationGroup id="autocp-notifications-group" key="notificationGroup" displayType="BALLOON"/>
 
         <!--    Settings   -->
-        <applicationConfigurable instance="settings.SettingsConfigurable"
+        <applicationConfigurable instance="settings.generalSettings.AutoCpGeneralSettingsConfigurable"
                                  id="tools.autocp"
                                  groupId="tools"
                                  displayName="AutoCp"/>

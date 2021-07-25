@@ -1,7 +1,7 @@
 package settings.langSettings.model
 
 import com.intellij.icons.AllIcons
-import settings.AutoCpSettings
+import settings.generalSettings.AutoCpGeneralSettings
 import ui.StringCellRenderer
 
 data class BuildConfig(
@@ -19,7 +19,7 @@ data class BuildConfig(
 
     fun constructBuildCommand(inputPath: String, outputPath: String): String {
         return buildCommand
-            .replace(AutoCpSettings.INPUT_PATH_KEY, inputPath)
-            .replace(AutoCpSettings.OUTPUT_PATH_KEY, outputPath)
+            .replace(AutoCpGeneralSettings.INPUT_PATH_KEY, inputPath)
+            .replace(AutoCpGeneralSettings.OUTPUT_PATH_KEY, outputPath)
     }
 }
