@@ -17,7 +17,7 @@ fun <T> CollectionListModel<T>.update(list: List<T>) {
                 }
             }
             Delta.TYPE.DELETE -> {
-                removeRange(it.revised.position, it.revised.size())
+                removeRange(it.original.position, it.original.position + it.original.size() - 1)
             }
             Delta.TYPE.INSERT -> {
                 addAll(it.revised.position, it.revised.lines)
