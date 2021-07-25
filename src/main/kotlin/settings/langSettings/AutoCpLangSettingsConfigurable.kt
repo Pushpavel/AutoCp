@@ -4,7 +4,6 @@ import com.intellij.openapi.options.Configurable
 import com.intellij.openapi.project.DumbAware
 import common.isItemsEqual
 import common.isNotIndex
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.runBlocking
 import settings.langSettings.ui.langSettings.LangSettingsView
@@ -13,13 +12,10 @@ import ui.helpers.mainScope
 import javax.swing.JComponent
 
 class AutoCpLangSettingsConfigurable : Configurable, DumbAware {
-    lateinit var scope: CoroutineScope
-    lateinit var model: LangSettingsViewModel
+    val scope = mainScope()
+    val model = LangSettingsViewModel(scope)
 
     override fun createComponent(): JComponent {
-        scope = mainScope()
-        model = LangSettingsViewModel(scope)
-
         return LangSettingsView(model)
     }
 

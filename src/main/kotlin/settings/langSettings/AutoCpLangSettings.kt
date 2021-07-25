@@ -8,20 +8,20 @@ import settings.langSettings.model.BuildConfig
 import settings.langSettings.model.Lang
 
 @State(
-    name = "plugin.settings.BuildSettingsState",
+    name = "plugin.settings.LangSettingsState",
     storages = [Storage("autoCpLangSettings.xml")]
 )
 @Service
-class AutoCpLangSettings : PersistentStateComponent<List<Lang>> {
+class AutoCpLangSettings : PersistentStateComponent<AutoCpLangSettings> {
 
     private var languages: List<Lang> = listOf(
-        Lang("ObjectiveC", "File", listOf(BuildConfig(10, "C++ 17", "g++ build '@input@' '@output@'"))),
+        Lang("ObjectiveC", "File", -1, listOf(BuildConfig(10, "C++ 17", "g++ build '@input@' '@output@'"))),
     ) // TODO: Initialize with defaults
 
-    override fun getState() = languages
+    override fun getState() = this
 
-    override fun loadState(state: List<Lang>) {
-        languages = state
+    override fun loadState(state: AutoCpLangSettings) {
+        languages = state.languages
     }
 
     companion object {

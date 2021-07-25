@@ -6,7 +6,6 @@ import com.intellij.openapi.editor.EditorFactory
 import com.intellij.openapi.editor.event.DocumentEvent
 import com.intellij.openapi.editor.event.DocumentListener
 import database.models.Testcase
-import settings.SolutionLanguage
 
 /**
  * ViewModel for [TestcaseUI]

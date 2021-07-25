@@ -6,7 +6,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
-import settings.AutoCpSettings
+import settings.generalSettings.AutoCpGeneralSettings
 import settings.langSettings.model.BuildConfig
 import ui.vvm.ViewModel
 
@@ -28,20 +28,20 @@ class BuildConfigViewModel(
     }
 
     val buildCommandErrors = buildCommand.map { buildCommand ->
-        val input = buildCommand.contains(AutoCpSettings.INPUT_PATH_KEY)
-        val output = buildCommand.contains(AutoCpSettings.OUTPUT_PATH_KEY)
+        val input = buildCommand.contains(AutoCpGeneralSettings.INPUT_PATH_KEY)
+        val output = buildCommand.contains(AutoCpGeneralSettings.OUTPUT_PATH_KEY)
 
         // TODO: check if single quotes are useful so that we can just hardcode double quotes directly on the path
-        val inputDoubleQuotes = buildCommand.contains("\"" + AutoCpSettings.INPUT_PATH_KEY + "\"")
-        val inputSingleQuotes = buildCommand.contains("'" + AutoCpSettings.INPUT_PATH_KEY + "'")
-        val outputDoubleQuotes = buildCommand.contains("\"" + AutoCpSettings.OUTPUT_PATH_KEY + "\"")
-        val outputSingleQuotes = buildCommand.contains("'" + AutoCpSettings.OUTPUT_PATH_KEY + "'")
+        val inputDoubleQuotes = buildCommand.contains("\"" + AutoCpGeneralSettings.INPUT_PATH_KEY + "\"")
+        val inputSingleQuotes = buildCommand.contains("'" + AutoCpGeneralSettings.INPUT_PATH_KEY + "'")
+        val outputDoubleQuotes = buildCommand.contains("\"" + AutoCpGeneralSettings.OUTPUT_PATH_KEY + "\"")
+        val outputSingleQuotes = buildCommand.contains("'" + AutoCpGeneralSettings.OUTPUT_PATH_KEY + "'")
 
         when {
-            !input -> "buildCommand: ${AutoCpSettings.INPUT_PATH_KEY} missing"
-            !output -> "buildCommand: ${AutoCpSettings.OUTPUT_PATH_KEY} missing"
-            !inputSingleQuotes && !inputDoubleQuotes -> "buildCommand: ${AutoCpSettings.INPUT_PATH_KEY} should be wrapped with single or double quotes"
-            !outputSingleQuotes && !outputDoubleQuotes -> "buildCommand: ${AutoCpSettings.INPUT_PATH_KEY} should be wrapped with single or double quotes"
+            !input -> "buildCommand: ${AutoCpGeneralSettings.INPUT_PATH_KEY} missing"
+            !output -> "buildCommand: ${AutoCpGeneralSettings.OUTPUT_PATH_KEY} missing"
+            !inputSingleQuotes && !inputDoubleQuotes -> "buildCommand: ${AutoCpGeneralSettings.INPUT_PATH_KEY} should be wrapped with single or double quotes"
+            !outputSingleQuotes && !outputDoubleQuotes -> "buildCommand: ${AutoCpGeneralSettings.INPUT_PATH_KEY} should be wrapped with single or double quotes"
             else -> null
         }
     }

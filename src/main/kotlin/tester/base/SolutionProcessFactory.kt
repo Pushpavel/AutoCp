@@ -3,7 +3,7 @@ package tester.base
 import com.intellij.execution.configurations.GeneralCommandLine
 import common.errors.Err.TesterErr.BuildErr
 import config.AutoCpConfig
-import settings.AutoCpSettings
+import settings.langSettings.AutoCpLangSettings
 import tester.utils.splitCommandString
 import java.nio.file.Files
 import java.nio.file.Paths
@@ -24,9 +24,8 @@ class SolutionProcessFactory(private val executablePath: String) {
          * Creates an Executable from [AutoCpConfig] and returns a factory for creating sub [Process]es of this executable
          */
         suspend fun buildFromConfig(config: AutoCpConfig): SolutionProcessFactory {
-            val settings = AutoCpSettings.instance
-            val lang = settings.getLangWithId(config.solutionLangId)
-                ?: throw IllegalStateException("Select Solution Language in Run Configuration \"${config.name}\"")
+            val buildConfig = AutoCpLangSettings.findBuildConfigById(config.buildConfigId)
+                ?: throw BuildErr("Select a valid Build Configuration in Run Configuration \"${config.name}\"")
 
             @Suppress("BlockingMethodInNonBlockingContext")
             val tempDir = Files.createTempDirectory("AutoCp")
@@ -36,7 +35,7 @@ class SolutionProcessFactory(private val executablePath: String) {
 
 
             val outputPath = Paths.get(tempDir.pathString, config.name + ".exe")
-            val command = lang.buildCommandString(config.solutionFilePath, outputPath.pathString)
+            val command = buildConfig.constructBuildCommand(config.solutionFilePath, outputPath.pathString)
             val commandList = splitCommandString(command)
             val buildProcess = GeneralCommandLine(commandList).createProcess()
 
