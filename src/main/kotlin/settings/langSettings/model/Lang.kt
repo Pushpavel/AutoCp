@@ -1,7 +1,7 @@
 package settings.langSettings.model
 
 import com.intellij.lang.Language
-import ui.StringCellRenderer
+import ui.swing.TileCellRenderer
 
 data class Lang(
     val langId: String,
@@ -10,11 +10,15 @@ data class Lang(
     val buildConfigs: List<BuildConfig>,
 ) {
     companion object {
-        fun cellRenderer(): StringCellRenderer<Lang> {
-            return StringCellRenderer {
-                val lang = Language.findLanguageByID(it.langId)
-                if (lang == null) null else
-                    Pair(lang.displayName, lang.associatedFileType?.icon)
+        fun cellRenderer(emptyValue: String = "None"): TileCellRenderer<Lang?> {
+            return TileCellRenderer {
+                if (it != null)
+                    Language.findLanguageByID(it.langId)?.apply {
+                        text = displayName
+                        icon = associatedFileType?.icon
+                    }
+                else
+                    text = emptyValue
             }
         }
     }
