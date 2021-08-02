@@ -1,6 +1,8 @@
 package settings.langSettings.ui.langItem
 
+import com.intellij.ide.fileTemplates.FileTemplate
 import com.intellij.ide.ui.fullRow
+import com.intellij.openapi.fileTypes.FileTypeManager
 import com.intellij.openapi.ui.ComboBox
 import com.intellij.openapi.ui.DialogPanel
 import com.intellij.ui.ToolbarDecorator
@@ -10,6 +12,7 @@ import com.intellij.ui.layout.CCFlags
 import com.intellij.ui.layout.panel
 import kotlinx.coroutines.launch
 import settings.langSettings.model.BuildConfig
+import ui.StringCellRenderer
 import ui.helpers.viewScope
 import ui.vvm.swingBinding.bind
 import ui.vvm.swingModels.collectionListModel
@@ -21,6 +24,7 @@ class LangItemView(viewModel: LangItemViewModel) : JBPanel<LangItemView>(BorderL
     val scope = viewScope(viewModel.scope)
     val list = JBList<BuildConfig>()
     val configComboBox = ComboBox<BuildConfig>()
+    val fileTemplateComboBox = ComboBox<FileTemplate>()
     val listContainer: JPanel
     private val container: DialogPanel
 
@@ -36,7 +40,14 @@ class LangItemView(viewModel: LangItemViewModel) : JBPanel<LangItemView>(BorderL
         configComboBox.renderer = BuildConfig.cellRenderer()
 
 
+        fileTemplateComboBox.renderer = StringCellRenderer<FileTemplate> {
+            Pair(it.name, FileTypeManager.getInstance().getFileTypeByExtension(it.extension).icon)
+        }
+
         container = panel {
+            row("File Template") {
+                fileTemplateComboBox()
+            }
             row("Default Build Configuration") {
                 configComboBox()
             }
@@ -62,6 +73,12 @@ class LangItemView(viewModel: LangItemViewModel) : JBPanel<LangItemView>(BorderL
                 configComboBox,
                 viewModel.buildConfigs,
                 viewModel.defaultBuildConfigIndex
+            )
+
+            bind(
+                fileTemplateComboBox,
+                viewModel.fileTemplates,
+                viewModel.selectedFileTemplateIndex
             )
         }
     }

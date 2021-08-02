@@ -1,9 +1,14 @@
 package settings.langSettings.ui.langItem
 
+import com.intellij.ide.fileTemplates.FileTemplateManager
+import com.intellij.lang.Language
 import common.isIndex
 import common.isNotIndex
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import settings.langSettings.model.BuildConfig
 import settings.langSettings.model.Lang
@@ -33,6 +38,23 @@ class LangItemViewModel(
                 null
         }
     })
+
+    val fileTemplates = lang.map {
+        it?.let {
+            val fileType = Language.findLanguageByID(it.langId)?.associatedFileType!!
+            val manager = FileTemplateManager.getDefaultInstance()
+            listOf(*manager.allJ2eeTemplates, *manager.allTemplates, *manager.internalTemplates)
+                .filter { template -> template.isTemplateOfType(fileType) }
+
+        } ?: listOf()
+    }.stateIn(scope, SharingStarted.Lazily, listOf())
+
+    val selectedFileTemplateIndex = lang.biState(scope, -1, {
+        it?.fileTemplateName?.let { name -> fileTemplates.value.indexOfFirst { t -> t.name == name } } ?: -1
+    }, {
+        this?.copy(fileTemplateName = fileTemplates.value.getOrNull(it)?.name)
+    })
+
 
     fun addNewConfig() {
         val list = buildConfigs.value.toMutableList()

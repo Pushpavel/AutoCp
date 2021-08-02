@@ -15,7 +15,7 @@ import settings.langSettings.model.Lang
 class AutoCpLangSettings : PersistentStateComponent<AutoCpLangSettings> {
 
     private var languages: List<Lang> = listOf(
-        Lang("ObjectiveC", "File", -1, listOf(BuildConfig(10, "C++ 17", "g++ build '@input@' '@output@'"))),
+        Lang("ObjectiveC", null, -1, listOf(BuildConfig(10, "C++ 17", "g++ build '@input@' '@output@'"))),
     ) // TODO: Initialize with defaults
 
     override fun getState() = this
