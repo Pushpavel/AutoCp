@@ -11,7 +11,7 @@ import com.intellij.openapi.components.*
 )
 @Service
 class AutoCpGeneralSettings : PersistentStateComponent<AutoCpGeneralSettings> {
-    private var preferredLangId: String? = null
+    var preferredLangId: String? = null
 
     override fun getState() = this
 

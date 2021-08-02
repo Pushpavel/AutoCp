@@ -14,7 +14,7 @@ import settings.langSettings.model.Lang
 @Service
 class AutoCpLangSettings : PersistentStateComponent<AutoCpLangSettings> {
 
-    private var languages: List<Lang> = listOf(
+    var languages: List<Lang> = listOf(
         Lang("ObjectiveC", null, -1, listOf(BuildConfig(10, "C++ 17", "g++ build '@input@' '@output@'"))),
     ) // TODO: Initialize with defaults
 
