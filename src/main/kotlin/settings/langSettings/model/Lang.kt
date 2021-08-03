@@ -10,15 +10,12 @@ data class Lang(
     val buildConfigs: List<BuildConfig>,
 ) {
     companion object {
-        fun cellRenderer(emptyValue: String = "None"): TileCellRenderer<Lang?> {
-            return TileCellRenderer {
-                if (it != null)
-                    Language.findLanguageByID(it.langId)?.apply {
-                        text = displayName
-                        icon = associatedFileType?.icon
-                    }
-                else
-                    text = emptyValue
+        fun cellRenderer(emptyText: String = "None"): TileCellRenderer<Lang> {
+            return TileCellRenderer(emptyText = emptyText) {
+                Language.findLanguageByID(it.langId)?.apply {
+                    text = displayName
+                    icon = associatedFileType?.icon
+                }
             }
         }
     }

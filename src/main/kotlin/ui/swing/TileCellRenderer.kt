@@ -6,14 +6,23 @@ import javax.swing.BorderFactory
 import javax.swing.JList
 
 
-class TileCellRenderer<T>(
+class TileCellRenderer<T : Any>(
     private val padding: Int = 4,
+    private val emptyText: String? = "None",
     private val cellBuilder: TileCellRenderer<T>.(T) -> Unit
-) : SimpleListCellRenderer<T>() {
+) : SimpleListCellRenderer<T?>() {
+
+
+    override fun customize(list: JList<out T>, value: T?, index: Int, selected: Boolean, hasFocus: Boolean) {
+        if (value != null)
+            cellBuilder(value)
+        else if (emptyText != null)
+            text = emptyText
+    }
 
     override fun getListCellRendererComponent(
         list: JList<out T>?,
-        value: T,
+        value: T?,
         index: Int,
         isSelected: Boolean,
         cellHasFocus: Boolean
@@ -22,9 +31,5 @@ class TileCellRenderer<T>(
             val paddingBorder = BorderFactory.createEmptyBorder(padding, padding, padding, padding)
             border = BorderFactory.createCompoundBorder(border, paddingBorder)
         }
-    }
-
-    override fun customize(list: JList<out T>, value: T, index: Int, selected: Boolean, hasFocus: Boolean) {
-        cellBuilder(value)
     }
 }
