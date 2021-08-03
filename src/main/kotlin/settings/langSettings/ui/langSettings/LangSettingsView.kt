@@ -40,15 +40,15 @@ class LangSettingsView : OnePixelSplitter(false, 0.3F), DslCallbacks {
 
         sideList.onSelectedValue {
             langItemPanel.selectedLang = selectedValue
-            langItemPanel.dialogPanel.reset()
+            langItemPanel.reset()
             mainContainer.setChildVisible(it != null)
         }
     }
 
-    override fun isModified(): Boolean = langItemPanel.dialogPanel.isModified()
+    override fun isModified(): Boolean = langItemPanel.isModified()
 
     override fun apply() {
-        langItemPanel.dialogPanel.apply()
+        langItemPanel.apply()
         sideList.setSelectedValue(langItemPanel.selectedLang, false)
     }
 }

@@ -2,7 +2,7 @@ package settings.langSettings.model
 
 import com.intellij.icons.AllIcons
 import settings.generalSettings.AutoCpGeneralSettings
-import ui.StringCellRenderer
+import ui.swing.TileCellRenderer
 
 data class BuildConfig(
     val id: Long,
@@ -10,9 +10,10 @@ data class BuildConfig(
     val buildCommand: String
 ) {
     companion object {
-        fun cellRenderer(): StringCellRenderer<BuildConfig> {
-            return StringCellRenderer {
-                Pair(it.name, AllIcons.RunConfigurations.Applet)
+        fun cellRenderer(emptyText: String = "None"): TileCellRenderer<BuildConfig> {
+            return TileCellRenderer(emptyText = emptyText) {
+                text = it.name
+                icon = AllIcons.RunConfigurations.Applet
             }
         }
     }
