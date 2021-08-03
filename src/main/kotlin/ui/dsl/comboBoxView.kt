@@ -17,11 +17,15 @@ fun <T> Cell.comboBoxView(
 
 fun <T> Cell.simpleComboBoxView(
     list: List<T>,
-    getter: () -> T?,
+    getSelectionPredicate: (T) -> Boolean,
     setter: (T?) -> Unit,
     renderer: ListCellRenderer<T?>? = null,
 ): CellBuilder<ComboBox<T>> {
     val model = CollectionComboBoxModel(list)
-    return comboBox(model, { getter() ?: model.items.firstOrNull() }, setter, renderer)
+    return comboBox(model, {
+        model.items.run {
+            firstOrNull { getSelectionPredicate(it) } ?: firstOrNull()
+        }
+    }, setter, renderer)
 }
 
