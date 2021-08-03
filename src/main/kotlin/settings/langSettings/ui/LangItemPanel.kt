@@ -1,4 +1,4 @@
-package settings.langSettings.ui.langItem
+package settings.langSettings.ui
 
 import com.intellij.ide.fileTemplates.FileTemplate
 import com.intellij.ide.ui.fullRow

@@ -6,7 +6,7 @@ import com.intellij.ui.layout.CCFlags
 import com.intellij.ui.layout.LCFlags
 import com.intellij.ui.layout.panel
 import common.isItemsEqual
-import settings.langSettings.ui.langSettings.LangSettingsView
+import settings.langSettings.ui.LangSettingsPanel
 import ui.dsl.registerDslCallbacks
 
 class AutoCpLangSettingsConfigurable : BoundConfigurable("Languages") {
@@ -15,7 +15,7 @@ class AutoCpLangSettingsConfigurable : BoundConfigurable("Languages") {
 
     override fun createPanel() = panel(LCFlags.fill) {
         fullRow {
-            LangSettingsView()().apply {
+            LangSettingsPanel()().apply {
                 constraints(CCFlags.push, CCFlags.grow)
 
                 onReset {
