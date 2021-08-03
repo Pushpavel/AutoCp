@@ -16,6 +16,7 @@ class AutoCpLangSettings : PersistentStateComponent<AutoCpLangSettings> {
 
     var languages: List<Lang> = listOf(
         Lang("ObjectiveC", null, -1, listOf(BuildConfig(10, "C++ 17", "g++ build '@input@' '@output@'"))),
+        Lang("Python", null, -1, listOf(BuildConfig(10, "C++ 17", "g++ build '@input@' '@output@'"))),
     ) // TODO: Initialize with defaults
 
     override fun getState() = this
@@ -27,14 +28,8 @@ class AutoCpLangSettings : PersistentStateComponent<AutoCpLangSettings> {
     companion object {
         val instance: AutoCpLangSettings get() = service()
 
-        fun getLanguages() = service<AutoCpLangSettings>().languages
-        fun setLanguages(languages: List<Lang>) {
-            service<AutoCpLangSettings>().languages = languages
-        }
-
         fun findBuildConfigById(id: Long): BuildConfig? {
-            val languages = getLanguages()
-            for (lang in languages)
+            for (lang in instance.languages)
                 for (config in lang.buildConfigs)
                     if (config.id == id)
                         return config
@@ -49,7 +44,7 @@ class AutoCpLangSettings : PersistentStateComponent<AutoCpLangSettings> {
 
             val langId = fileType.language.id
 
-            return getLanguages().firstOrNull {
+            return instance.languages.firstOrNull {
                 it.langId == langId
             }
         }

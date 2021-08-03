@@ -11,9 +11,12 @@ import javax.swing.Icon
 class SolutionsDialogModel(val project: Project, problems: List<Problem>) {
     val listModel = CollectionListModel(problems)
     val groupName = problems.firstOrNull()?.groupName
-    val langModel = CollectionComboBoxModel(AutoCpLangSettings.getLanguages(), run {
-        val selectedLangId = AutoCpGeneralSettings.instance.preferredLangId
-        AutoCpLangSettings.getLanguages().firstOrNull { it.langId == selectedLangId }
+
+    private val generalSettings = AutoCpGeneralSettings.instance
+    private val langSettings = AutoCpLangSettings.instance
+
+    val langModel = CollectionComboBoxModel(langSettings.languages, run {
+        langSettings.languages.firstOrNull { it.langId == generalSettings.preferredLangId }
     })
     var langIcon: Icon? = null
 }

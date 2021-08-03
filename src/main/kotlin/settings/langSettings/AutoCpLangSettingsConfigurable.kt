@@ -14,22 +14,22 @@ import javax.swing.JComponent
 class AutoCpLangSettingsConfigurable : Configurable, DumbAware {
     val scope = mainScope()
     val model = LangSettingsViewModel(scope)
+    val langSettings = AutoCpLangSettings.instance
 
     override fun createComponent(): JComponent {
         return LangSettingsView(model)
     }
 
     override fun isModified(): Boolean {
-        val languages = AutoCpLangSettings.getLanguages()
-        return !model.languages.value.isItemsEqual(languages)
+        return !model.languages.value.isItemsEqual(langSettings.languages)
     }
 
     override fun apply() {
-        AutoCpLangSettings.setLanguages(model.languages.value)
+        langSettings.languages = model.languages.value
     }
 
     override fun reset() {
-        val languages = AutoCpLangSettings.getLanguages()
+        val languages = langSettings.languages
         runBlocking {
             model.languages.emit(languages)
             if (languages.isNotIndex(model.selectedLangIndex.value) && languages.isNotEmpty()) {
