@@ -1,14 +1,11 @@
 package tester
 
 import com.github.pushpavel.autocp.database.Problem
-import com.intellij.openapi.components.service
-import common.errors.Err
 import common.errors.Err.TesterErr.SolutionFileErr
 import common.errors.mapToErr
 import config.AutoCpConfig
-import database.AcpDatabase
+import database.autoCpDatabase
 import database.models.getTimeLimit
-import kotlinx.coroutines.CancellationException
 import tester.base.SolutionProcessFactory
 import tester.base.TestingProcessHandler
 import tester.tree.TestNode
@@ -45,7 +42,7 @@ class AutoCpTestingProcessHandler(private val config: AutoCpConfig) : TestingPro
         if (!solutionPath.exists())
             throw SolutionFileErr("Solution File \"${solutionPath.pathString}\" does not exists")
 
-        val database = config.project.service<AcpDatabase>()
+        val database = config.project.autoCpDatabase()
 
         return database.getProblem(config.solutionFilePath)
             .getOrThrow()

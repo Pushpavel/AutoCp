@@ -1,12 +1,11 @@
 package tool
 
-import com.intellij.openapi.components.service
+import com.github.pushpavel.autocp.database.Problem
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.util.containers.OrderedSet
-import database.AcpDatabase
+import database.autoCpDatabase
 import database.models.Testcase
-import com.github.pushpavel.autocp.database.Problem
 import tool.base.CollectionListListener
 import tool.base.FileFollowedContent
 import ui.poplist.PopListModel
@@ -20,7 +19,7 @@ class SpecFileAdapter(
     private val viewer: ProblemViewer
 ) : FileFollowedContent<Problem>(viewer) {
 
-    private val db = project.service<AcpDatabase>()
+    private val db = project.autoCpDatabase()
     private var problem: Problem? = null
 
     override fun getDataForFile(file: VirtualFile) = db.getProblem(file.path).getOrNull()
