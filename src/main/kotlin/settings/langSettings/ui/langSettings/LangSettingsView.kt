@@ -6,6 +6,7 @@ import com.intellij.ui.SingleSelectionModel
 import com.intellij.ui.ToolbarDecorator
 import com.intellij.ui.components.JBList
 import settings.langSettings.model.Lang
+import settings.langSettings.ui.dialogs.IDELangSelectorDialog
 import settings.langSettings.ui.langItem.LangItemPanel
 import ui.dsl.DslCallbacks
 import ui.helpers.onSelectedValue
@@ -30,8 +31,14 @@ class LangSettingsView : OnePixelSplitter(false, 0.3F), DslCallbacks {
         }
 
         firstComponent = ToolbarDecorator.createDecorator(sideList)
-//            .setAddAction { viewModel.addNewLanguage() }
-            .createPanel()
+            .setAddAction {
+                val selectedLanguage = IDELangSelectorDialog(langListModel.items).showAndGetSelection()
+                if (selectedLanguage != null) {
+                    val blank = Lang(selectedLanguage.id, null, null, mutableListOf())
+                    langListModel.add(blank)
+                    sideList.selectedIndex = langListModel.items.size - 1
+                }
+            }.createPanel()
 
         secondComponent = mainContainer.apply {
             border = BorderFactory.createEmptyBorder(0, 8, 0, 0)

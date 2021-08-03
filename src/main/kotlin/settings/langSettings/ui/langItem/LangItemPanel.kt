@@ -15,6 +15,7 @@ import common.isItemsEqual
 import lang.supportedFileTemplates
 import settings.langSettings.model.BuildConfig
 import settings.langSettings.model.Lang
+import settings.langSettings.ui.dialogs.buildConfigDialog.BuildConfigDialog
 import ui.dsl.DslCallbacks
 import ui.dsl.comboBoxView
 import ui.swing.TileCellRenderer
@@ -71,9 +72,16 @@ class LangItemPanel : DslCallbacks {
         }
 
         val listContainer = ToolbarDecorator.createDecorator(jbList).setAddAction {
-//                        viewModel.addNewConfig()
+            val blank = BuildConfig(System.currentTimeMillis(), "", "")
+            val newBuildConfig = BuildConfigDialog(blank, buildConfigsModel.items).showAndGetConfig()
+            if (newBuildConfig != null) {
+                buildConfigsModel.add(newBuildConfig)
+                jbList.selectedIndex = buildConfigsModel.items.size
+            }
         }.setEditAction {
-//                        viewModel.editConfig()
+            val config = BuildConfigDialog(jbList.selectedValue, buildConfigsModel.items).showAndGetConfig()
+            if (config != null)
+                buildConfigsModel.setElementAt(config, jbList.selectedIndex)
         }.createPanel()
 
 
