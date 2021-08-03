@@ -41,6 +41,5 @@ fun Lang.defaultFileTemplate(): FileTemplate? {
         firstOrNull {
             it.name == fileTemplateName
         } ?: firstOrNull()
-        // TODO: need fallback fileTemplate
     }
 }
