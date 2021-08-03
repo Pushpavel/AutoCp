@@ -1,13 +1,14 @@
 package gather
 
 import com.github.pushpavel.autocp.database.Problem
+import com.intellij.ide.actions.CreateFileFromTemplateAction
 import com.intellij.ide.projectView.ProjectView
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VfsUtil
 import com.intellij.psi.PsiManager
-import com.intellij.util.io.exists
 import database.AcpDatabase
+import lang.defaultFileTemplate
 import settings.langSettings.model.Lang
 import java.nio.file.Paths
 import kotlin.io.path.pathString
@@ -19,24 +20,20 @@ fun generateSolutionFiles(project: Project, problems: List<Problem>, lang: Lang)
     if (problems.isEmpty()) return
     val rootPath = Paths.get(project.basePath!!, problems[0].groupName)
     val rootDir = VfsUtil.createDirectories(rootPath.pathString)
-    val rootPsiDir = PsiManager.getInstance(project).findDirectory(rootDir)
+    val rootPsiDir = PsiManager.getInstance(project).findDirectory(rootDir)!!
 
     val service = project.service<AcpDatabase>()
-
     problems.forEach {
-//        CreateFileFromTemplateAction.createFileFromTemplate(
-//            it.name,
-//            FileTemplateManager.getDefaultInstance().getTemplate("C++.cpp"),
-//            rootPsiDir.,
-//            null,
-//            true
-//        )
-        val solutionPath = Paths.get(rootDir.path, "${it.name}.cpp")
+        val file = CreateFileFromTemplateAction.createFileFromTemplate(
+            it.name,
+            // TODO: catch no default file Template case
+            lang.defaultFileTemplate()!!,
+            rootPsiDir,
+            null,
+            true
+        )!!
 
-        if (!solutionPath.exists())
-            solutionPath.toFile().createNewFile()
-
-        service.associateSolutionToProblem(solutionPath.pathString, it).getOrThrow()
+        service.associateSolutionToProblem(file.virtualFile.path, it).getOrThrow()
     }
 
     ProjectView.getInstance(project).refresh()
