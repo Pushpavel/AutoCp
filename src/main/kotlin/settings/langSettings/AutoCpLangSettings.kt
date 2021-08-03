@@ -8,8 +8,8 @@ import settings.langSettings.model.BuildConfig
 import settings.langSettings.model.Lang
 
 @State(
-    name = "plugin.settings.LangSettingsState",
-    storages = [Storage("autoCpLangSettings.xml")]
+    name = "settings.Languages",
+    storages = [Storage("autoCpSettings.xml")]
 )
 @Service
 class AutoCpLangSettings : PersistentStateComponent<AutoCpLangSettings> {
