@@ -1,8 +1,12 @@
 package lang
 
+import com.intellij.ide.fileTemplates.FileTemplate
 import com.intellij.ide.fileTemplates.FileTemplateGroupDescriptor
 import com.intellij.ide.fileTemplates.FileTemplateGroupDescriptorFactory
+import com.intellij.ide.fileTemplates.FileTemplateManager
+import com.intellij.lang.Language
 import icons.Icons
+import settings.langSettings.model.Lang
 
 class FileTemplates : FileTemplateGroupDescriptorFactory {
     override fun getFileTemplatesDescriptor(): FileTemplateGroupDescriptor {
@@ -18,5 +22,25 @@ class FileTemplates : FileTemplateGroupDescriptorFactory {
         const val GROUP_NAME = "AutoCp Templates"
 
         const val CPP = "C++.cpp"
+    }
+}
+
+fun Lang.supportedFileTemplates(): List<FileTemplate> {
+    val fileType = Language.findLanguageByID(langId)?.associatedFileType!!
+    val manager = FileTemplateManager.getDefaultInstance()
+
+    return listOf(
+        *manager.allJ2eeTemplates,
+        *manager.allTemplates,
+        *manager.internalTemplates
+    ).filter { template -> template.isTemplateOfType(fileType) }
+}
+
+fun Lang.defaultFileTemplate(): FileTemplate? {
+    return supportedFileTemplates().run {
+        firstOrNull {
+            it.name == fileTemplateName
+        } ?: firstOrNull()
+        // TODO: need fallback fileTemplate
     }
 }

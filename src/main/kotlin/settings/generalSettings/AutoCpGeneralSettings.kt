@@ -11,7 +11,7 @@ import com.intellij.openapi.components.*
 )
 @Service
 class AutoCpGeneralSettings : PersistentStateComponent<AutoCpGeneralSettings> {
-    private var preferredLangId: String? = null
+    var preferredLangId: String? = null
 
     override fun getState() = this
 
@@ -24,15 +24,6 @@ class AutoCpGeneralSettings : PersistentStateComponent<AutoCpGeneralSettings> {
         const val INPUT_PATH_KEY = "@input@"
         const val OUTPUT_PATH_KEY = "@output@"
 
-        private val instance: AutoCpGeneralSettings
-            get() = service()
-
-        fun getPreferredLangId(): String? {
-            return instance.preferredLangId
-        }
-
-        fun setPreferredLangId(langId: String?) {
-            instance.preferredLangId = langId
-        }
+        val instance: AutoCpGeneralSettings get() = service()
     }
 }

@@ -1,44 +1,25 @@
 package settings.generalSettings
 
-import com.intellij.openapi.options.Configurable
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.launch
-import settings.generalSettings.ui.GeneralSettingsView
-import settings.generalSettings.ui.GeneralSettingsViewModel
+import com.intellij.openapi.options.BoundConfigurable
+import com.intellij.ui.layout.panel
 import settings.langSettings.AutoCpLangSettings
-import ui.helpers.mainScope
+import settings.langSettings.model.Lang
+import ui.dsl.simpleComboBoxView
 
-class AutoCpGeneralSettingsConfigurable : Configurable {
+class AutoCpGeneralSettingsConfigurable : BoundConfigurable("AutoCp") {
 
-    val scope = mainScope()
-    val model = GeneralSettingsViewModel(scope)
-    private val view = GeneralSettingsView(model)
+    private val langSettings = AutoCpLangSettings.instance
+    private val generalSettings = AutoCpGeneralSettings.instance
 
-    override fun createComponent() = view
+    override fun createPanel() = panel {
 
-    override fun isModified(): Boolean {
-        val langId = AutoCpGeneralSettings.getPreferredLangId()
-        val selectedLangId = model.langList.value.getOrNull(model.selectedLangIndex.value)?.langId
-        return selectedLangId != langId
-    }
-
-    override fun apply() {
-        val selectedLangId = model.langList.value.getOrNull(model.selectedLangIndex.value)?.langId
-        AutoCpGeneralSettings.setPreferredLangId(selectedLangId)
-    }
-
-    override fun reset() {
-        val langId = AutoCpGeneralSettings.getPreferredLangId()
-        val languages = AutoCpLangSettings.getLanguages()
-        scope.launch {
-            model.langList.emit(languages)
-            model.selectedLangIndex.emit(languages.indexOfFirst { it.langId == langId })
+        row("Preferred Language") {
+            simpleComboBoxView(
+                langSettings.languages,
+                { it.langId == generalSettings.preferredLangId },
+                { generalSettings.preferredLangId = it?.langId },
+                Lang.cellRenderer()
+            )
         }
     }
-
-    override fun disposeUIResources() {
-        scope.cancel()
-    }
-
-    override fun getDisplayName() = "AutoCp"
 }
