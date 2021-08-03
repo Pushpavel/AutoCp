@@ -5,74 +5,78 @@ import com.intellij.ide.ui.fullRow
 import com.intellij.lang.Language
 import com.intellij.openapi.ui.ComboBox
 import com.intellij.openapi.ui.DialogWrapper
+import com.intellij.ui.CollectionListModel
 import com.intellij.ui.ToolbarDecorator
 import com.intellij.ui.components.JBList
 import com.intellij.ui.layout.CCFlags
 import com.intellij.ui.layout.panel
-import kotlinx.coroutines.cancel
+import settings.generalSettings.AutoCpGeneralSettings
+import settings.langSettings.AutoCpLangSettings
 import settings.langSettings.model.Lang
-import ui.StringCellRenderer
-import ui.helpers.mainScope
-import ui.layouts.SingleChildContainer
+import ui.dsl.simpleComboBoxView
+import ui.helpers.onSelectedItem
+import ui.swing.TileCellRenderer
 import java.awt.Dimension
+import javax.swing.Icon
 
-class SolutionsDialog(val model: SolutionsDialogModel) : DialogWrapper(false) {
+class SolutionsDialog(private val groupName: String, problems: List<Problem>) : DialogWrapper(false) {
 
-    val scope = mainScope()
+    private val solutionListModel = CollectionListModel(problems.toMutableList())
+    var langIcon: Icon? = null
+
+    private val problemList = JBList(solutionListModel).apply {
+        cellRenderer = TileCellRenderer {
+            text = it.name
+            icon = langIcon
+        }
+    }
+    private lateinit var langComboBox: ComboBox<Lang>
 
     init {
         title = "Generate Solution Files"
+        isOKActionEnabled = true
         init()
     }
 
-    override fun createCenterPanel() = SingleChildContainer("No Problems to Generate Files", panel {
-        model.groupName?.let {
-            titledRow(model.groupName) {
-                subRowIndent = 0
-                val problemList = JBList(model.listModel)
-                val langComboBox = ComboBox(model.langModel)
+    override fun createCenterPanel() = panel {
+        titledRow(groupName) {
+            subRowIndent = 0
 
-                fullRow {
-                    problemList.cellRenderer = StringCellRenderer<Problem> {
-                        Pair(it.name, model.langIcon)
-                    }
-                    ToolbarDecorator
-                        .createDecorator(problemList)
-                        .disableUpDownActions()
-                        .disableRemoveAction()
-                        .createPanel()(CCFlags.grow)
 
-                }
+            fullRow {
+                ToolbarDecorator
+                    .createDecorator(problemList)
+                    .disableUpDownActions()
+                    .disableRemoveAction()
+                    .createPanel()(CCFlags.grow)
+            }
 
-                fullRow {
-                    langComboBox.renderer = Lang.cellRenderer()
-                    langComboBox()
-                    model.langModel.selected?.let {
-                        val lang = Language.findLanguageByID(it.langId)
-                        model.langIcon = lang?.associatedFileType?.icon
-                        problemList.updateUI()
-                    }
-
-                    langComboBox.addActionListener { _ ->
-                        isOKActionEnabled = model.langModel.selected != null
-                        model.langModel.selected?.let {
-                            val lang = Language.findLanguageByID(it.langId)
-                            model.langIcon = lang?.associatedFileType?.icon
-                            problemList.updateUI()
-                        }
-                    }
-                }
+            fullRow {
+                langComboBox = simpleComboBoxView(
+                    AutoCpLangSettings.instance.languages,
+                    { it.langId == AutoCpGeneralSettings.instance.preferredLangId },
+                    {}, Lang.cellRenderer()
+                ).component
             }
         }
-
-    }).apply {
-        setChildVisible(model.groupName != null)
-        isOKActionEnabled = model.groupName != null
+    }.apply {
         minimumSize = Dimension(300, 300)
+
+        langComboBox.onSelectedItem {
+            isOKActionEnabled = it != null
+            val lang = Language.findLanguageByID(it?.langId)
+            langIcon = lang?.associatedFileType?.icon
+            problemList.updateUI()
+        }
     }
 
-    override fun dispose() {
-        super.dispose()
-        scope.cancel()
+    fun showAndGetLang(): Lang? {
+        val confirm = showAndGet()
+
+        return if (confirm)
+            langComboBox.selectedItem as Lang?
+        else
+            null
     }
+
 }

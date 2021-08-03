@@ -14,8 +14,10 @@ import gather.server.createServer
 import gather.server.getResponsesAsync
 import gather.ui.GatheringReporterDialog
 import gather.ui.solutionsDialog.SolutionsDialog
-import gather.ui.solutionsDialog.SolutionsDialogModel
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.swing.Swing
 import java.net.ServerSocket
 import java.net.SocketTimeoutException
@@ -60,20 +62,16 @@ class GatherProblemsAction : AnAction(), DumbAware {
                 val service = project.service<AcpDatabase>()
 
                 service.insertProblems(problems).getOrThrow()
-                val model = SolutionsDialogModel(project, problems)
-                val dialog = SolutionsDialog(model)
+                val dialog = SolutionsDialog(problems[0].groupName, problems)
 
                 invokeLater {
-                    if (!dialog.showAndGet())
-                        return@invokeLater
-
-                    val selectedLang = model.langModel.selected ?: throw Exception("No Solution Language selected")
+                    val selectedLang = dialog.showAndGetLang() ?: return@invokeLater
 
                     generateSolutionFiles(project, problems, selectedLang)
 
                     Notifications.Bus.notify(
                         Notification(
-                            "AutoCp Notification Group",
+                            "autocp-notifications-group",
                             "Generated solution files",
                             problems[0].groupName,
                             NotificationType.INFORMATION
@@ -84,7 +82,7 @@ class GatherProblemsAction : AnAction(), DumbAware {
                 if (it.causes().any { ex -> ex is SocketTimeoutException })
                     Notifications.Bus.notify(
                         Notification(
-                            "AutoCp Notification Group",
+                            "autocp-notifications-group",
                             "Gathering problems failed",
                             "Competitive Companion browser extension taking longer to respond or is not responding",
                             NotificationType.ERROR
