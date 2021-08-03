@@ -1,32 +1,35 @@
 package settings.generalSettings
 
-import com.intellij.openapi.options.Configurable
-import settings.generalSettings.ui.GeneralSettingsView
+import com.intellij.openapi.options.BoundConfigurable
+import com.intellij.ui.CollectionComboBoxModel
+import com.intellij.ui.layout.panel
 import settings.langSettings.AutoCpLangSettings
+import settings.langSettings.model.Lang
 
-class AutoCpGeneralSettingsConfigurable : Configurable {
+class AutoCpGeneralSettingsConfigurable : BoundConfigurable("AutoCp") {
 
-    private val view = GeneralSettingsView()
+    private val langSettings = AutoCpLangSettings.instance
+    private val generalSettings = AutoCpGeneralSettings.instance
+    private val langModel = CollectionComboBoxModel<Lang>()
 
-    override fun createComponent() = view
+    override fun createPanel() = panel {
+        onGlobalReset {
+            langModel.replaceAll(langSettings.languages)
+        }
 
-    override fun isModified(): Boolean {
-        val langId = AutoCpGeneralSettings.getPreferredLangId()
-        println("${view.selectedLang?.langId} == $langId")
-        return view.selectedLang?.langId != langId
+        row("Preferred Language") {
+            comboBox<Lang?>(
+                langModel,
+                {
+                    langSettings.languages.firstOrNull {
+                        it.langId == generalSettings.preferredLangId
+                    }
+                },
+                {
+                    generalSettings.preferredLangId = it?.langId
+                },
+                Lang.cellRenderer()
+            )
+        }
     }
-
-    override fun apply() {
-        val selectedLangId = view.selectedLang?.langId
-        AutoCpGeneralSettings.setPreferredLangId(selectedLangId)
-    }
-
-    override fun reset() {
-        val langId = AutoCpGeneralSettings.getPreferredLangId()
-        val languages = AutoCpLangSettings.getLanguages()
-        view.langModel.replaceAll(languages)
-        view.selectedLang = languages.firstOrNull { it.langId == langId }
-    }
-
-    override fun getDisplayName() = "AutoCp"
 }

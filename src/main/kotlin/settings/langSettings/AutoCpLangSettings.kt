@@ -25,6 +25,8 @@ class AutoCpLangSettings : PersistentStateComponent<AutoCpLangSettings> {
     }
 
     companion object {
+        val instance: AutoCpLangSettings get() = service()
+
         fun getLanguages() = service<AutoCpLangSettings>().languages
         fun setLanguages(languages: List<Lang>) {
             service<AutoCpLangSettings>().languages = languages

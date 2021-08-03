@@ -12,7 +12,7 @@ class SolutionsDialogModel(val project: Project, problems: List<Problem>) {
     val listModel = CollectionListModel(problems)
     val groupName = problems.firstOrNull()?.groupName
     val langModel = CollectionComboBoxModel(AutoCpLangSettings.getLanguages(), run {
-        val selectedLangId = AutoCpGeneralSettings.getPreferredLangId()
+        val selectedLangId = AutoCpGeneralSettings.instance.preferredLangId
         AutoCpLangSettings.getLanguages().firstOrNull { it.langId == selectedLangId }
     })
     var langIcon: Icon? = null
