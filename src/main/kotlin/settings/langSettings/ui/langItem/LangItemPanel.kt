@@ -1,9 +1,7 @@
 package settings.langSettings.ui.langItem
 
 import com.intellij.ide.fileTemplates.FileTemplate
-import com.intellij.ide.fileTemplates.FileTemplateManager
 import com.intellij.ide.ui.fullRow
-import com.intellij.lang.Language
 import com.intellij.openapi.fileTypes.FileTypeManager
 import com.intellij.ui.CollectionComboBoxModel
 import com.intellij.ui.SingleSelectionModel
@@ -14,6 +12,7 @@ import com.intellij.ui.layout.InnerCell
 import com.intellij.ui.layout.LCFlags
 import com.intellij.ui.layout.panel
 import common.isItemsEqual
+import lang.supportedFileTemplates
 import settings.langSettings.model.BuildConfig
 import settings.langSettings.model.Lang
 import ui.dsl.DslCallbacks
@@ -91,7 +90,7 @@ class LangItemPanel : DslCallbacks {
             fileTemplatesModel.removeAll()
             buildConfigsModel.removeAll()
         } else {
-            resetFileTemplatesModel(selectedLang)
+            fileTemplatesModel.replaceAll(selectedLang.supportedFileTemplates())
             buildConfigsModel.replaceAll(selectedLang.buildConfigs)
         }
 
@@ -105,19 +104,4 @@ class LangItemPanel : DslCallbacks {
 
         dialogPanel.apply()
     }
-
-    private fun resetFileTemplatesModel(selectedLang: Lang) {
-
-        val fileType = Language.findLanguageByID(selectedLang.langId)?.associatedFileType!!
-        val manager = FileTemplateManager.getDefaultInstance()
-        val fileTemplates = listOf(
-            *manager.allJ2eeTemplates,
-            *manager.allTemplates,
-            *manager.internalTemplates
-        ).filter { template -> template.isTemplateOfType(fileType) }
-
-        fileTemplatesModel.replaceAll(fileTemplates)
-    }
-
-
 }
