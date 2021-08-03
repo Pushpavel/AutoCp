@@ -1,5 +1,6 @@
 package settings.langSettings.ui.langSettings
 
+import com.intellij.ui.CollectionListModel
 import common.isIndex
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,6 +14,8 @@ import ui.vvm.ViewModel
 
 class LangSettingsViewModel(parentScope: CoroutineScope?) : ViewModel(parentScope) {
 
+
+    val langListModel = CollectionListModel<Lang>()
     val selectedLangIndex = MutableStateFlow(-1)
     val languages = MutableStateFlow<List<Lang>>(emptyList())
     private val selectedLang = MutableStateFlow<Lang?>(null)

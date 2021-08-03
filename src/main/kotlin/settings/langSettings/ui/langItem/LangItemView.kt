@@ -22,9 +22,10 @@ import javax.swing.JPanel
 
 class LangItemView(viewModel: LangItemViewModel) : JBPanel<LangItemView>(BorderLayout()) {
     val scope = viewScope(viewModel.scope)
-    val list = JBList<BuildConfig>()
     val configComboBox = ComboBox<BuildConfig>()
     val fileTemplateComboBox = ComboBox<FileTemplate>()
+
+    val list = JBList<BuildConfig>()
     val listContainer: JPanel
     private val container: DialogPanel
 

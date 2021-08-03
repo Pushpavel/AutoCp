@@ -8,11 +8,15 @@ import javax.swing.ListCellRenderer
 
 fun <T> Cell.comboBoxView(
     model: CollectionComboBoxModel<T>,
-    getter: () -> T?,
+    getSelectionPredicate: (T) -> Boolean,
     setter: (T?) -> Unit,
     renderer: ListCellRenderer<T?>? = null,
 ): CellBuilder<ComboBox<T>> {
-    return comboBox(model, { getter() ?: model.items.firstOrNull() }, setter, renderer)
+    return comboBox(model, {
+        model.items.run {
+            firstOrNull { getSelectionPredicate(it) } ?: firstOrNull()
+        }
+    }, setter, renderer)
 }
 
 fun <T> Cell.simpleComboBoxView(
@@ -22,10 +26,6 @@ fun <T> Cell.simpleComboBoxView(
     renderer: ListCellRenderer<T?>? = null,
 ): CellBuilder<ComboBox<T>> {
     val model = CollectionComboBoxModel(list)
-    return comboBox(model, {
-        model.items.run {
-            firstOrNull { getSelectionPredicate(it) } ?: firstOrNull()
-        }
-    }, setter, renderer)
+    return comboBoxView(model, getSelectionPredicate, setter, renderer)
 }
 

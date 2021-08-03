@@ -1,57 +1,54 @@
 package settings.langSettings.ui.langSettings
 
+import com.intellij.ui.CollectionListModel
 import com.intellij.ui.OnePixelSplitter
+import com.intellij.ui.SingleSelectionModel
 import com.intellij.ui.ToolbarDecorator
 import com.intellij.ui.components.JBList
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 import settings.langSettings.model.Lang
-import settings.langSettings.ui.langItem.LangItemView
-import ui.helpers.viewScope
+import settings.langSettings.ui.langItem.LangItemPanel
+import ui.dsl.DslCallbacks
+import ui.helpers.onSelectedValue
 import ui.layouts.SingleChildContainer
-import ui.vvm.swingModels.collectionListModel
-import ui.vvm.swingModels.singleSelectionModel
 import javax.swing.BorderFactory
 
-class LangSettingsView(val viewModel: LangSettingsViewModel) : OnePixelSplitter(false, 0.3F) {
+class LangSettingsView : OnePixelSplitter(false, 0.3F), DslCallbacks {
+    val langListModel = CollectionListModel<Lang>()
 
-    val scope = viewScope(viewModel.scope)
+    val sideList: JBList<Lang>
 
-    private val sideList = JBList<Lang>()
     private val mainContainer: SingleChildContainer
-    private val langItemView = LangItemView(viewModel.itemModel)
+
+    private val langItemPanel = LangItemPanel()
 
     init {
+        mainContainer = SingleChildContainer("Select a Language", langItemPanel.dialogPanel)
 
-        mainContainer = SingleChildContainer("Select a Language", langItemView)
+        sideList = JBList(langListModel).apply {
+            selectionModel = SingleSelectionModel()
+            cellRenderer = Lang.cellRenderer()
+        }
 
         firstComponent = ToolbarDecorator.createDecorator(sideList)
-            .setAddAction { viewModel.addNewLanguage() }
+//            .setAddAction { viewModel.addNewLanguage() }
             .createPanel()
 
         secondComponent = mainContainer.apply {
             border = BorderFactory.createEmptyBorder(0, 8, 0, 0)
         }
 
-        scope.launch { bind() }
-    }
 
-    private fun CoroutineScope.bind() {
-        sideList.cellRenderer = Lang.cellRenderer()
-
-        sideList.model = collectionListModel(
-            viewModel.languages,
-            viewModel.languages
-        )
-
-        sideList.selectionModel = singleSelectionModel(viewModel.selectedLangIndex)
-
-        launch {
-            viewModel.selectedLangIndex.collect {
-                mainContainer.setChildVisible(it != -1)
-            }
+        sideList.onSelectedValue {
+            langItemPanel.selectedLang = selectedValue
+            langItemPanel.dialogPanel.reset()
+            mainContainer.setChildVisible(it != null)
         }
     }
 
+    override fun isModified(): Boolean = langItemPanel.dialogPanel.isModified()
+
+    override fun apply() {
+        langItemPanel.dialogPanel.apply()
+        sideList.setSelectedValue(langItemPanel.selectedLang, false)
+    }
 }

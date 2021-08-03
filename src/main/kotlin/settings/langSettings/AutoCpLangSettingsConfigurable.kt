@@ -1,44 +1,42 @@
 package settings.langSettings
 
-import com.intellij.openapi.options.Configurable
-import com.intellij.openapi.project.DumbAware
+import com.intellij.ide.ui.fullRow
+import com.intellij.openapi.options.BoundConfigurable
+import com.intellij.ui.layout.CCFlags
+import com.intellij.ui.layout.LCFlags
+import com.intellij.ui.layout.panel
 import common.isItemsEqual
-import common.isNotIndex
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.runBlocking
 import settings.langSettings.ui.langSettings.LangSettingsView
-import settings.langSettings.ui.langSettings.LangSettingsViewModel
-import ui.helpers.mainScope
-import javax.swing.JComponent
+import ui.dsl.registerDslCallbacks
 
-class AutoCpLangSettingsConfigurable : Configurable, DumbAware {
-    val scope = mainScope()
-    val model = LangSettingsViewModel(scope)
-    val langSettings = AutoCpLangSettings.instance
+class AutoCpLangSettingsConfigurable : BoundConfigurable("Languages") {
 
-    override fun createComponent(): JComponent {
-        return LangSettingsView(model)
-    }
+    val settings = AutoCpLangSettings.instance
 
-    override fun isModified(): Boolean {
-        return !model.languages.value.isItemsEqual(langSettings.languages)
-    }
+    override fun createPanel() = panel(LCFlags.fill) {
+        fullRow {
+            LangSettingsView()().apply {
+                constraints(CCFlags.push, CCFlags.grow)
 
-    override fun apply() {
-        langSettings.languages = model.languages.value
-    }
+                onReset {
+                    component.apply {
+                        langListModel.replaceAll(settings.languages)
+                        sideList.setSelectedValue(settings.languages.firstOrNull(), false)
+                    }
+                }
 
-    override fun reset() {
-        val languages = langSettings.languages
-        runBlocking {
-            model.languages.emit(languages)
-            if (languages.isNotIndex(model.selectedLangIndex.value) && languages.isNotEmpty()) {
-                model.selectedLangIndex.emit(0)
+                registerDslCallbacks()
+
+                onIsModified {
+                    !component.langListModel.items.isItemsEqual(settings.languages)
+                }
+
+                onApply {
+                    component.apply {
+                        settings.languages = langListModel.items
+                    }
+                }
             }
         }
     }
-
-    override fun disposeUIResources() = scope.cancel()
-
-    override fun getDisplayName() = "Languages"
 }
