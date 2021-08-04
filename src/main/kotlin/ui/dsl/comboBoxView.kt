@@ -4,6 +4,8 @@ import com.intellij.openapi.ui.ComboBox
 import com.intellij.ui.CollectionComboBoxModel
 import com.intellij.ui.layout.Cell
 import com.intellij.ui.layout.CellBuilder
+import com.intellij.ui.layout.applyToComponent
+import ui.helpers.SimpleListDataListener
 import javax.swing.ListCellRenderer
 
 fun <T> Cell.comboBoxView(
@@ -16,7 +18,18 @@ fun <T> Cell.comboBoxView(
         model.items.run {
             firstOrNull { getSelectionPredicate(it) } ?: firstOrNull()
         }
-    }, setter, renderer)
+    }, setter, renderer).applyToComponent {
+        model.addListDataListener(SimpleListDataListener {
+            if (model.items.isNotEmpty()) {
+                if (selectedItem == null)
+                    selectedItem = model.items.run {
+                        firstOrNull { getSelectionPredicate(it) } ?: firstOrNull()
+                    }
+            } else if (selectedItem != null)
+                selectedItem = null
+
+        })
+    }
 }
 
 fun <T> Cell.simpleComboBoxView(
