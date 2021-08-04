@@ -29,6 +29,7 @@
         <fileDocumentManagerListener implementation="database.AutoCpStorageSaver"/>
         <fileType name="Autocp Storage File" patterns=".autocp"
                   implementationClass="database.AutoCpFileType"/>
+        <fileEditorProvider implementation="database.AutoCpFileEditorProvider"/>
     </extensions>
 
     <actions>

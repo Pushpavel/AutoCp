@@ -26,7 +26,9 @@ class AutoCpStorage(project: Project) {
         if (virtualFile?.isValid == true) {
             runReadAction {
                 val document = FileDocumentManager.getInstance().getDocument(virtualFile)!!
+                // TODO: show error notification for document null due to file association changes
                 Json.decodeFromString(document.text)
+                // TODO: show error notification for .autocp in invalid format
             }
         } else
             AutoCpDB()
