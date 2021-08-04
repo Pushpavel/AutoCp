@@ -9,6 +9,9 @@ data class Lang(
     val defaultBuildConfigId: Long?,
     val buildConfigs: List<BuildConfig>,
 ) {
+
+    fun getLanguage() = Language.findLanguageByID(langId)
+
     companion object {
         fun cellRenderer(emptyText: String = "None"): TileCellRenderer<Lang> {
             return TileCellRenderer(emptyText = emptyText) {
