@@ -9,6 +9,7 @@ import database.models.Testcase
 /**
  * Interface for Persistence Layer of the plugin
  */
+@Deprecated("use AutoCpDB")
 interface AutoCpDatabase : AutoCloseable {
     fun insertProblems(problems: List<Problem>): Result<Unit>
     fun associateSolutionToProblem(solutionPath: String, problem: Problem): Result<Unit>
@@ -17,4 +18,5 @@ interface AutoCpDatabase : AutoCloseable {
     fun updateTestcases(problem: Problem, testcases: OrderedSet<Testcase>): Result<Unit>
 }
 
+@Deprecated("use Project.autoCp()")
 fun Project.autoCpDatabase(): AcpDatabase = service()
