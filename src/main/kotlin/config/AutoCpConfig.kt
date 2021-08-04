@@ -7,7 +7,7 @@ import com.intellij.execution.configurations.LocatableConfigurationBase
 import com.intellij.execution.configurations.RunProfileState
 import com.intellij.execution.runners.ExecutionEnvironment
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.util.JDOMExternalizerUtil
+import com.intellij.util.xmlb.XmlSerializer
 import org.jdom.Element
 
 /**
@@ -17,7 +17,7 @@ class AutoCpConfig(project: Project, factory: ConfigurationFactory, name: String
     LocatableConfigurationBase<RunProfileState>(project, factory, name) {
 
     var solutionFilePath: String = ""
-    var buildConfigId: Long = -1
+    var buildConfigId: Long? = null
 
 
     /**
@@ -41,24 +41,14 @@ class AutoCpConfig(project: Project, factory: ConfigurationFactory, name: String
         return Files.getNameWithoutExtension(solutionFilePath)
     }
 
-
-    /** SERIALIZATION */
-    companion object {
-        // SERIALIZATION KEYS
-        private const val SOLUTION_FILE_PATH = "solutionFilePath"
-        private const val BUILD_CONFIG_ID = "buildConfigId"
-    }
-
     override fun writeExternal(element: Element) {
-        JDOMExternalizerUtil.writeField(element, SOLUTION_FILE_PATH, solutionFilePath)
-        JDOMExternalizerUtil.writeField(element, BUILD_CONFIG_ID, buildConfigId.toString())
+        XmlSerializer.serializeInto(this, element)
         super.writeExternal(element)
     }
 
     override fun readExternal(element: Element) {
         super.readExternal(element)
-        solutionFilePath = JDOMExternalizerUtil.readField(element, SOLUTION_FILE_PATH, "")
-        buildConfigId = JDOMExternalizerUtil.readField(element, BUILD_CONFIG_ID, "-1").toLong()
+        XmlSerializer.deserializeInto(this, element)
     }
 
 }
