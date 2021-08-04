@@ -8,7 +8,7 @@ import com.intellij.openapi.fileEditor.FileDocumentManager
 import com.intellij.openapi.fileEditor.FileDocumentManagerListener
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.project.ProjectManager
-import com.intellij.openapi.vfs.VirtualFileManager
+import com.intellij.openapi.vfs.LocalFileSystem
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -21,7 +21,7 @@ class AutoCpStorage(project: Project) {
 
     val database by lazy {
         val path = Paths.get(project.basePath!!, ".autocp")
-        val virtualFile = VirtualFileManager.getInstance().findFileByNioPath(path)
+        val virtualFile = LocalFileSystem.getInstance().findFileByNioFile(path)
 
         if (virtualFile?.isValid == true) {
             runReadAction {
@@ -41,17 +41,17 @@ class AutoCpStorageSaver : FileDocumentManagerListener {
         ProjectManager.getInstanceIfCreated()?.openProjects?.forEach { project ->
 
             val path = Paths.get(project.basePath!!, ".autocp")
-            var virtualFile = VirtualFileManager.getInstance().findFileByNioPath(path)
+            var virtualFile = LocalFileSystem.getInstance().findFileByNioFile(path)
             val db = project.service<AutoCpStorage>().database
 
 
             if (virtualFile?.isValid != true) {
                 if (DEFAULT_AUTO_CP_DB != db) {
                     val projectRoot =
-                        VirtualFileManager.getInstance().findFileByNioPath(Path(project.basePath!!)) ?: return
+                        LocalFileSystem.getInstance().findFileByNioFile(Path(project.basePath!!)) ?: return
 
                     runWriteAction {
-                        virtualFile = projectRoot.createChildData(null, ".autocp")
+                        virtualFile = projectRoot.createChildData(FileDocumentManager.getInstance(), ".autocp")
                     }
                 }
             }
@@ -62,7 +62,9 @@ class AutoCpStorageSaver : FileDocumentManagerListener {
 
             runReadAction {
                 val document = FileDocumentManager.getInstance().getDocument(virtualFile!!)
-                println("read Document ${document != null}")
+
+                //TODO: check if document is null and warn user about file associations change for .autocp
+
                 runWriteAction {
                     document?.setText(Json.encodeToString(db))
                 }
