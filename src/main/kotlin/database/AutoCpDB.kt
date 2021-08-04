@@ -4,10 +4,12 @@ import common.errors.Err
 import database.models.Problem
 import database.models.SolutionFile
 import database.models.Testcase
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class AutoCpDB(
-    val problems: MutableMap<String, MutableMap<String, Problem>>,
-    val solutionFiles: MutableMap<String, SolutionFile>
+    val problems: MutableMap<String, MutableMap<String, Problem>> = mutableMapOf(),
+    val solutionFiles: MutableMap<String, SolutionFile> = mutableMapOf(),
 ) {
 
     fun updateProblems(problems: List<Problem>) {

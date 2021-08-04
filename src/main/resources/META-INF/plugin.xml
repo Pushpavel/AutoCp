@@ -26,6 +26,7 @@
 
         <toolWindow factoryClass="tool.ToolFactory" id="AutoCp" icon="Icons.LogoIcon" anchor="right"/>
         <fileTemplateGroup implementation="lang.FileTemplates"/>
+        <fileDocumentManagerListener implementation="database.AutoCpStorageSaver"/>
     </extensions>
 
     <actions>

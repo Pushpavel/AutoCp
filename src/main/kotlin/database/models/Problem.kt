@@ -1,5 +1,8 @@
 package database.models
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class Problem(
     val name: String,
     val groupName: String,
