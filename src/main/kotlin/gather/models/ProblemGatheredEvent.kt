@@ -1,6 +1,7 @@
 package gather.models
 
-import com.github.pushpavel.autocp.database.Problem
+import database.models.Problem
+
 
 /**
  * Data class containing status information while gathering problems

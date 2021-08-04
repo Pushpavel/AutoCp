@@ -6,7 +6,7 @@ import com.intellij.openapi.project.Project
 
 @State(
     name = "autoCp",
-    storages = [Storage(StoragePathMacros.MODULE_FILE)],
+    storages = [Storage("autocp.xml")],
     defaultStateAsResource = true
 )
 @Service

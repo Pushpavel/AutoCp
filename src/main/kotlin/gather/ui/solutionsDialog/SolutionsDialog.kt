@@ -1,6 +1,5 @@
 package gather.ui.solutionsDialog
 
-import com.github.pushpavel.autocp.database.Problem
 import com.intellij.ide.ui.fullRow
 import com.intellij.lang.Language
 import com.intellij.openapi.ui.ComboBox
@@ -10,6 +9,7 @@ import com.intellij.ui.ToolbarDecorator
 import com.intellij.ui.components.JBList
 import com.intellij.ui.layout.CCFlags
 import com.intellij.ui.layout.panel
+import database.models.Problem
 import settings.generalSettings.AutoCpGeneralSettings
 import settings.langSettings.AutoCpLangSettings
 import settings.langSettings.model.Lang

@@ -4,5 +4,7 @@ data class Problem(
     val name: String,
     val groupName: String,
     val url: String,
-    val sampleTestcases: List<Testcase>
+    val sampleTestcases: List<Testcase>,
+    val memoryLimit: Long,
+    val timeLimit: Long,
 )
