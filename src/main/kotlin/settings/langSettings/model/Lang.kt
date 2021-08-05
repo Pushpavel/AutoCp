@@ -1,6 +1,8 @@
 package settings.langSettings.model
 
+import com.intellij.ide.fileTemplates.FileTemplate
 import com.intellij.lang.Language
+import lang.supportedFileTemplates
 import ui.swing.TileCellRenderer
 
 data class Lang(
@@ -11,6 +13,18 @@ data class Lang(
 ) {
 
     fun getLanguage() = Language.findLanguageByID(langId)
+
+    fun getBuildConfig(): BuildConfig? {
+        return buildConfigs.run {
+            firstOrNull { it.id == defaultBuildConfigId } ?: firstOrNull()
+        }
+    }
+
+    fun defaultFileTemplate(): FileTemplate? {
+        return supportedFileTemplates().run {
+            firstOrNull { it.name == fileTemplateName } ?: firstOrNull()
+        }
+    }
 
     companion object {
         fun cellRenderer(emptyText: String = "None"): TileCellRenderer<Lang> {

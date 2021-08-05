@@ -5,7 +5,7 @@ import com.intellij.execution.actions.LazyRunConfigurationProducer
 import com.intellij.openapi.util.Ref
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiElement
-import database.autoCpDatabase
+import database.autoCp
 import settings.langSettings.AutoCpLangSettings
 
 /**
@@ -21,14 +21,15 @@ class AutoCpConfigProducer : LazyRunConfigurationProducer<AutoCpConfig>() {
         context: ConfigurationContext,
         sourceElement: Ref<PsiElement>
     ): Boolean {
-        val solutionFile = context.location?.virtualFile
-        val solutionPath = solutionFile?.path ?: return false
-        val service = context.project.autoCpDatabase()
-        val problem = service.getProblem(solutionPath)
-        if (problem.isFailure) return false
+        val file = context.location?.virtualFile
+        val solutionPath = file?.path ?: return false
+        val db = context.project.autoCp()
+
+        if (!db.solutionFiles.containsKey(solutionPath))
+            return false
 
         configuration.solutionFilePath = solutionPath
-        configuration.buildConfigId = getSelectedBuildConfigId(solutionFile)
+        configuration.buildConfigId = getBuildConfigId(file)
 
         val suggestedName = configuration.suggestedName()
         if (suggestedName != null)
@@ -41,12 +42,10 @@ class AutoCpConfigProducer : LazyRunConfigurationProducer<AutoCpConfig>() {
      * Selecting a BuildConfig for the [AutoCpConfig] created from Context
      * based on Preference and File's Language
      */
-    private fun getSelectedBuildConfigId(solutionFile: VirtualFile): Long {
-        val lang = AutoCpLangSettings.findLangByFile(solutionFile) ?: return -1
+    private fun getBuildConfigId(solutionFile: VirtualFile): Long? {
+        val lang = AutoCpLangSettings.findLangByFile(solutionFile) ?: return null
 
-        // TODO: select default BuildConfig for a Language
-
-        return lang.buildConfigs.takeIf { it.isNotEmpty() }?.get(0)?.id ?: -1
+        return lang.getBuildConfig()?.id
     }
 
     /**

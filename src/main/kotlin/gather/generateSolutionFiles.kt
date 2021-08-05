@@ -7,7 +7,6 @@ import com.intellij.openapi.vfs.VfsUtil
 import com.intellij.psi.PsiManager
 import database.autoCp
 import database.models.Problem
-import lang.defaultFileTemplate
 import settings.langSettings.model.Lang
 import java.nio.file.Paths
 import kotlin.io.path.pathString
