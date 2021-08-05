@@ -23,4 +23,15 @@ data class BuildConfig(
             .replace(AutoCpGeneralSettings.INPUT_PATH_KEY, inputPath)
             .replace(AutoCpGeneralSettings.OUTPUT_PATH_KEY, outputPath)
     }
+
+    constructor(m: MutableBuildConfig) : this(m.id, m.name, m.buildCommand)
+}
+
+
+data class MutableBuildConfig(
+    var id: Long = -1,
+    var name: String = "",
+    var buildCommand: String = "",
+) {
+    constructor(c: BuildConfig) : this(c.id, c.name, c.buildCommand)
 }

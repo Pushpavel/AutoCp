@@ -45,6 +45,7 @@ class LangSettingsPanel : OnePixelSplitter(false, 0.3F), DslCallbacks {
 
 
         sideList.onSelectedValue {
+            apply()
             langItemPanel.selectedLang = selectedValue
             langItemPanel.reset()
             mainContainer.setChildVisible(it != null)
@@ -55,6 +56,10 @@ class LangSettingsPanel : OnePixelSplitter(false, 0.3F), DslCallbacks {
 
     override fun apply() {
         langItemPanel.apply()
-        sideList.setSelectedValue(langItemPanel.selectedLang, false)
+        langItemPanel.selectedLang?.let { lang ->
+            langListModel.items.indexOfFirst { it.langId == lang.langId }.takeIf { it != -1 }?.let {
+                langListModel.setElementAt(lang, it)
+            }
+        }
     }
 }

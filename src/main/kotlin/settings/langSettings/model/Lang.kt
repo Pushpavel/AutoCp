@@ -22,4 +22,25 @@ data class Lang(
             }
         }
     }
+
+    constructor(m: MutableLang) : this(
+        m.langId,
+        m.fileTemplateName,
+        m.defaultBuildConfigId,
+        m.buildConfigs.map { BuildConfig(it) }
+    )
+}
+
+data class MutableLang(
+    var langId: String = "",
+    var fileTemplateName: String? = null,
+    var defaultBuildConfigId: Long? = null,
+    var buildConfigs: List<MutableBuildConfig> = listOf(),
+) {
+    constructor(lang: Lang) : this(
+        lang.langId,
+        lang.fileTemplateName,
+        lang.defaultBuildConfigId,
+        lang.buildConfigs.map { MutableBuildConfig(it) }
+    )
 }
