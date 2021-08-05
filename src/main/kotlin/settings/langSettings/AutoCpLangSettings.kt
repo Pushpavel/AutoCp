@@ -6,26 +6,39 @@ import com.intellij.openapi.fileTypes.UnknownFileType
 import com.intellij.openapi.vfs.VirtualFile
 import settings.langSettings.model.BuildConfig
 import settings.langSettings.model.Lang
+import settings.langSettings.model.MutableLang
 
 @State(
     name = "settings.Languages",
     storages = [Storage("autoCpSettings.xml")]
 )
 @Service
-class AutoCpLangSettings : PersistentStateComponent<AutoCpLangSettings> {
+class AutoCpLangSettings : PersistentStateComponent<LangSettings> {
 
     var languages: List<Lang> = listOf(
         Lang("ObjectiveC", null, -1, listOf(BuildConfig(10, "C++ 17", "g++ build '@input@' '@output@'"))),
-        Lang("Python", null, -1, listOf(BuildConfig(10, "python 3.8", "python build '@input@' '@output@'"))),
+//        Lang("Python", null, -1, listOf(BuildConfig(10, "python 3.8", "python build '@input@' '@output@'"))),
     ) // TODO: Initialize with defaults
 
-    override fun getState() = this
+    override fun getState(): LangSettings {
+        println("get State")
+        println(languages)
+        println()
+        println()
+        return LangSettings(languages.map { MutableLang(it) })
+    }
 
-    override fun loadState(state: AutoCpLangSettings) {
-        languages = state.languages
+
+    override fun loadState(state: LangSettings) {
+        println("load State")
+        println(state)
+        println()
+        println()
+        languages = state.languages.map { Lang(it) }
     }
 
     companion object {
+
         val instance: AutoCpLangSettings get() = service()
 
         fun findBuildConfigById(id: Long): BuildConfig? {
@@ -50,3 +63,7 @@ class AutoCpLangSettings : PersistentStateComponent<AutoCpLangSettings> {
         }
     }
 }
+
+data class LangSettings(
+    var languages: List<MutableLang> = listOf()
+)

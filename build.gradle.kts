@@ -26,6 +26,8 @@ plugins {
     id("org.jetbrains.changelog") version "1.1.2"
 
     id("com.squareup.sqldelight") version "1.5.1"
+
+    kotlin("plugin.serialization") version "1.5.21"
 }
 
 group = properties("pluginGroup")

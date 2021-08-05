@@ -18,9 +18,9 @@ class AutoCpRunState(private val config: AutoCpConfig) : RunProfileState {
         val processHandler = AutoCpTestingProcessHandler(config)
 
         // prepare console
-        val properties = SMTRunnerConsoleProperties(config, Constants.FrameworkName, executor)
+        val properties = SMTRunnerConsoleProperties(config, Constants.RunConfigName, executor)
         val console =
-            SMTestRunnerConnectionUtil.createAndAttachConsole(Constants.FrameworkName, processHandler, properties)
+            SMTestRunnerConnectionUtil.createAndAttachConsole(Constants.RunConfigName, processHandler, properties)
 
         return DefaultExecutionResult(console, processHandler)
     }

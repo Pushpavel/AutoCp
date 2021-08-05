@@ -1,10 +1,13 @@
 package database
 
+import com.github.pushpavel.autocp.database.AutoCpDatabaseTransactor
+import com.github.pushpavel.autocp.database.Problem
+import com.github.pushpavel.autocp.database.ProblemQueries
+import com.github.pushpavel.autocp.database.SolutionProblemQueries
 import com.intellij.openapi.project.Project
 import com.squareup.sqldelight.sqlite.driver.JdbcSqliteDriver
 import database.adapters.DataColumnAdapter
 import database.adapters.TestcaseColumnAdapter
-import com.github.pushpavel.autocp.database.*
 import java.nio.file.Paths
 import java.util.*
 import kotlin.io.path.pathString
@@ -12,6 +15,7 @@ import kotlin.io.path.pathString
 /**
  * Manages Setting up and migrating of Database
  */
+@Deprecated("use AutoCpDB")
 abstract class AbstractAutoCpDatabase(project: Project) : AutoCpDatabase {
     private val dbPath = project.basePath?.let { Paths.get(it, ".autocp").pathString } ?: ""
 

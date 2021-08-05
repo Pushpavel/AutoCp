@@ -24,7 +24,7 @@ class SolutionProcessFactory(private val executablePath: String) {
          * Creates an Executable from [AutoCpConfig] and returns a factory for creating sub [Process]es of this executable
          */
         suspend fun buildFromConfig(config: AutoCpConfig): SolutionProcessFactory {
-            val buildConfig = AutoCpLangSettings.findBuildConfigById(config.buildConfigId)
+            val buildConfig = AutoCpLangSettings.findBuildConfigById(config.buildConfigId!!) // fixme: buildConfigId can be null
                 ?: throw BuildErr("Select a valid Build Configuration in Run Configuration \"${config.name}\"")
 
             @Suppress("BlockingMethodInNonBlockingContext")

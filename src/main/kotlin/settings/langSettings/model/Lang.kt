@@ -1,6 +1,8 @@
 package settings.langSettings.model
 
+import com.intellij.ide.fileTemplates.FileTemplate
 import com.intellij.lang.Language
+import lang.supportedFileTemplates
 import ui.swing.TileCellRenderer
 
 data class Lang(
@@ -9,6 +11,21 @@ data class Lang(
     val defaultBuildConfigId: Long?,
     val buildConfigs: List<BuildConfig>,
 ) {
+
+    fun getLanguage() = Language.findLanguageByID(langId)
+
+    fun getBuildConfig(): BuildConfig? {
+        return buildConfigs.run {
+            firstOrNull { it.id == defaultBuildConfigId } ?: firstOrNull()
+        }
+    }
+
+    fun defaultFileTemplate(): FileTemplate? {
+        return supportedFileTemplates().run {
+            firstOrNull { it.name == fileTemplateName } ?: firstOrNull()
+        }
+    }
+
     companion object {
         fun cellRenderer(emptyText: String = "None"): TileCellRenderer<Lang> {
             return TileCellRenderer(emptyText = emptyText) {
@@ -19,4 +36,25 @@ data class Lang(
             }
         }
     }
+
+    constructor(m: MutableLang) : this(
+        m.langId,
+        m.fileTemplateName,
+        m.defaultBuildConfigId,
+        m.buildConfigs.map { BuildConfig(it) }
+    )
+}
+
+data class MutableLang(
+    var langId: String = "",
+    var fileTemplateName: String? = null,
+    var defaultBuildConfigId: Long? = null,
+    var buildConfigs: List<MutableBuildConfig> = listOf(),
+) {
+    constructor(lang: Lang) : this(
+        lang.langId,
+        lang.fileTemplateName,
+        lang.defaultBuildConfigId,
+        lang.buildConfigs.map { MutableBuildConfig(it) }
+    )
 }

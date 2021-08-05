@@ -35,11 +35,3 @@ fun Lang.supportedFileTemplates(): List<FileTemplate> {
         *manager.internalTemplates
     ).filter { template -> template.isTemplateOfType(fileType) }
 }
-
-fun Lang.defaultFileTemplate(): FileTemplate? {
-    return supportedFileTemplates().run {
-        firstOrNull {
-            it.name == fileTemplateName
-        } ?: firstOrNull()
-    }
-}

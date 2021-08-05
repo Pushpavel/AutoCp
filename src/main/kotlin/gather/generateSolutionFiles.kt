@@ -1,14 +1,12 @@
 package gather
 
-import com.github.pushpavel.autocp.database.Problem
 import com.intellij.ide.actions.CreateFileFromTemplateAction
 import com.intellij.ide.projectView.ProjectView
-import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VfsUtil
 import com.intellij.psi.PsiManager
-import database.AcpDatabase
-import lang.defaultFileTemplate
+import database.autoCp
+import database.models.Problem
 import settings.langSettings.model.Lang
 import java.nio.file.Paths
 import kotlin.io.path.pathString
@@ -22,7 +20,6 @@ fun generateSolutionFiles(project: Project, problems: List<Problem>, lang: Lang)
     val rootDir = VfsUtil.createDirectories(rootPath.pathString)
     val rootPsiDir = PsiManager.getInstance(project).findDirectory(rootDir)!!
 
-    val service = project.service<AcpDatabase>()
     problems.forEach {
         val file = CreateFileFromTemplateAction.createFileFromTemplate(
             it.name,
@@ -33,7 +30,7 @@ fun generateSolutionFiles(project: Project, problems: List<Problem>, lang: Lang)
             true
         )!!
 
-        service.associateSolutionToProblem(file.virtualFile.path, it).getOrThrow()
+        project.autoCp().createSolutionFile(file.virtualFile.path, Pair(it.groupName, it.name))
     }
 
     ProjectView.getInstance(project).refresh()

@@ -76,7 +76,7 @@ class LangItemPanel : DslCallbacks {
             val newBuildConfig = BuildConfigDialog(blank, buildConfigsModel.items).showAndGetConfig()
             if (newBuildConfig != null) {
                 buildConfigsModel.add(newBuildConfig)
-                jbList.selectedIndex = buildConfigsModel.items.size
+                jbList.selectedIndex = buildConfigsModel.items.size - 1
             }
         }.setEditAction {
             val config = BuildConfigDialog(jbList.selectedValue, buildConfigsModel.items).showAndGetConfig()
@@ -108,8 +108,7 @@ class LangItemPanel : DslCallbacks {
     override fun apply() {
         selectedLang?.apply {
             selectedLang = copy(buildConfigs = buildConfigsModel.items)
+            dialogPanel.apply()
         }
-
-        dialogPanel.apply()
     }
 }

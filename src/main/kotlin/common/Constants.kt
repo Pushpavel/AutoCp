@@ -1,7 +1,7 @@
 package common
 
 object Constants {
-    const val FrameworkName = "AutoCp"
-    const val FrameworkId = "autoCP"
-    const val Description = "Run tests with AutoCp"
+    const val RunConfigName = "AutoCp"
+    const val RunConfigId = "AutoCp"
+    const val RunConfigDescription = "Test your Competitive Programming solution with AutoCp"
 }
