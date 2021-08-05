@@ -56,9 +56,7 @@ class EditableListView<T>(
         for (i in event.index0..event.index1) {
             val it = listPanel.components[i]
             listPanel.remove(it)
-            itemViewMap[it]?.let { itemView ->
-                Disposer.dispose(itemView)
-            }
+            itemViewMap.remove(it)?.let { itemView -> Disposer.dispose(itemView) }
         }
         updateUI()
     }

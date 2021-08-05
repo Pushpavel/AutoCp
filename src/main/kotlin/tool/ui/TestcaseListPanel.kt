@@ -4,7 +4,6 @@ import com.intellij.openapi.Disposable
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Disposer
 import com.intellij.ui.CollectionListModel
-import database.autoCp
 import database.models.SolutionFile
 import ui.swing.editableList.EditableListView
 import javax.swing.JComponent
@@ -13,22 +12,17 @@ class TestcaseListPanel(project: Project, solutionFile: SolutionFile) : Disposab
 
     private val testcaseListModel = CollectionListModel(solutionFile.testcases)
 
-    private val db = project.autoCp()
-
     val component: JComponent
 
     init {
-
-        component = EditableListView(testcaseListModel) {
-            TestcasePanel()
-        }.also {
-            Disposer.register(this, it)
+        component = EditableListView(testcaseListModel) { testcase ->
+            TestcasePanel(testcaseListModel).also { it.contentChanged(testcase) }
         }
+        Disposer.register(this, component)
+
     }
 
-    override fun dispose() {
-        TODO("Not yet implemented")
-    }
+    override fun dispose() {}
 }
 
 
