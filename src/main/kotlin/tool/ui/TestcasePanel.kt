@@ -32,8 +32,8 @@ class TestcasePanel(val model: CollectionListModel<Testcase>) : ListItemView<Tes
     override val component: DialogPanel = panel(LCFlags.fillX) {
         row {
             inputEditor.headerComponent = titleLabel.apply {
-                font = JBFont.h3()
-                border = BorderFactory.createEmptyBorder(0, 0, 4, 0)
+                font = JBFont.regular().asBold()
+                border = BorderFactory.createEmptyBorder(4, 0, 4, 0)
             }
             outputEditor.headerComponent = inputEditor.component
             outputEditor.component(CCFlags.growX)

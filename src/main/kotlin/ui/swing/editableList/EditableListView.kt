@@ -47,7 +47,7 @@ class EditableListView<T>(
             val it = model.items[i]
             val itemView = itemFactory(it)
             itemViewMap[itemView.component] = itemView
-            listPanel.add(itemView.component, itemConstraints)
+            listPanel.add(itemView.component, itemConstraints, i)
         }
         updateUI()
     }
