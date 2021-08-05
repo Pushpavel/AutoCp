@@ -1,5 +1,7 @@
 package ui.swing.editableList
 
+import com.intellij.openapi.Disposable
+import com.intellij.openapi.util.Disposer
 import com.intellij.ui.CollectionListModel
 import com.intellij.ui.components.JBPanelWithEmptyText
 import com.intellij.ui.components.JBScrollPane
@@ -13,7 +15,7 @@ import javax.swing.event.ListDataListener
 
 class EditableListView<T>(
     val model: CollectionListModel<T>, val itemFactory: (T) -> ListItemView<T>
-) : JBScrollPane(), ListDataListener {
+) : JBScrollPane(), ListDataListener, Disposable {
 
     private val listPanel = JBPanelWithEmptyText(GridBagLayout())
     private val itemViewMap = mutableMapOf<Component, ListItemView<T>>()
@@ -47,15 +49,18 @@ class EditableListView<T>(
             itemViewMap[itemView.component] = itemView
             listPanel.add(itemView.component, itemConstraints)
         }
+        updateUI()
     }
 
     override fun intervalRemoved(event: ListDataEvent) {
         for (i in event.index0..event.index1) {
             val it = listPanel.components[i]
-            val itemView = itemViewMap[it]
-            itemView?.dispose()
             listPanel.remove(it)
+            itemViewMap[it]?.let { itemView ->
+                Disposer.dispose(itemView)
+            }
         }
+        updateUI()
     }
 
     override fun contentsChanged(event: ListDataEvent) {
@@ -64,6 +69,11 @@ class EditableListView<T>(
             val itemView = itemViewMap[it]
             itemView?.contentChanged(model.items[i])
         }
+        updateUI()
+    }
+
+    override fun dispose() {
+        model.removeListDataListener(this)
     }
 
 }

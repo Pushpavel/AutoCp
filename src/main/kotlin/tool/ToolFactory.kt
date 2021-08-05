@@ -2,11 +2,12 @@ package tool
 
 import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.util.Disposer
 import com.intellij.openapi.wm.ToolWindow
 import com.intellij.openapi.wm.ToolWindowFactory
 import common.helpers.onFileSelectionChange
 import database.autoCp
-import tool.ui.testcaseListPanel
+import tool.ui.TestcaseListPanel
 
 
 /**
@@ -28,9 +29,10 @@ class ToolFactory : ToolWindowFactory, DumbAware {
             if (file == null || !file.isValid || !db.solutionFiles.containsKey(file.path) || !isFileOpen(file))
                 return@onFileSelectionChange
 
-            val ui = testcaseListPanel(db.solutionFiles[file.path]!!)
+            val ui = TestcaseListPanel(project, db.solutionFiles[file.path]!!)
 
-            val content = contentManager.factory.createContent(ui, file.presentableName, false)
+            val content = contentManager.factory.createContent(ui.component, file.presentableName, false)
+            Disposer.register(content, ui)
             contentManager.addContent(content)
         }
     }
