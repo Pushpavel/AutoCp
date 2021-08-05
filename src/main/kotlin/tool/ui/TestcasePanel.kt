@@ -6,11 +6,13 @@ import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.editor.EditorFactory
 import com.intellij.openapi.editor.event.DocumentEvent
 import com.intellij.openapi.editor.event.DocumentListener
+import com.intellij.openapi.ui.DialogPanel
 import com.intellij.ui.CollectionListModel
 import com.intellij.ui.components.JBLabel
 import com.intellij.ui.layout.CCFlags
 import com.intellij.ui.layout.LCFlags
 import com.intellij.ui.layout.panel
+import com.intellij.util.ui.JBFont
 import database.models.Testcase
 import ui.swing.editableList.ListItemView
 import javax.swing.BorderFactory
@@ -23,19 +25,24 @@ class TestcasePanel(val model: CollectionListModel<Testcase>) : ListItemView<Tes
     private val inputDoc = editorFactory.createDocument("")
     private val outputDoc = editorFactory.createDocument("")
 
+    private val titleLabel = JBLabel("")
     private val inputEditor = editorFactory.createEditor(inputDoc).apply { customizeEditor() }
     private val outputEditor = editorFactory.createEditor(outputDoc).apply { customizeEditor() }
 
-    override val component = panel(LCFlags.fillX) {
+    override val component: DialogPanel = panel(LCFlags.fillX) {
         row {
-            inputEditor.headerComponent = JBLabel("Testcase #1").withBorder(BorderFactory.createEmptyBorder(0, 4, 4, 0))
+            inputEditor.headerComponent = titleLabel.apply {
+                font = JBFont.h3()
+                border = BorderFactory.createEmptyBorder(0, 0, 4, 0)
+            }
             outputEditor.headerComponent = inputEditor.component
             outputEditor.component(CCFlags.growX)
         }
-    }
+    }.withBorder(BorderFactory.createEmptyBorder(0, 4, 0, 4))
 
     override fun contentChanged(item: Testcase) {
         runUndoTransparentWriteAction {
+            titleLabel.text = item.name
 
             if (item.input != inputDoc.text)
                 inputDoc.setText(item.input)
@@ -53,6 +60,7 @@ class TestcasePanel(val model: CollectionListModel<Testcase>) : ListItemView<Tes
     private fun Editor.customizeEditor() {
         settings.apply {
             additionalLinesCount = 1
+            isLineMarkerAreaShown = false
         }
     }
 
