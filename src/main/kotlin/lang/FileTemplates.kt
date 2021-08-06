@@ -5,12 +5,12 @@ import com.intellij.ide.fileTemplates.FileTemplateGroupDescriptor
 import com.intellij.ide.fileTemplates.FileTemplateGroupDescriptorFactory
 import com.intellij.ide.fileTemplates.FileTemplateManager
 import com.intellij.lang.Language
-import icons.Icons
+import res.R
 import settings.langSettings.model.Lang
 
 class FileTemplates : FileTemplateGroupDescriptorFactory {
     override fun getFileTemplatesDescriptor(): FileTemplateGroupDescriptor {
-        val group = FileTemplateGroupDescriptor(GROUP_NAME, Icons.LogoIcon)
+        val group = FileTemplateGroupDescriptor(GROUP_NAME, R.icons.logo16)
         // adding c++ template
         group.addTemplate(CPP)
 

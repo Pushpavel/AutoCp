@@ -1,9 +1,11 @@
 package settings.langSettings.model
 
 import com.intellij.icons.AllIcons
+import kotlinx.serialization.Serializable
 import settings.generalSettings.AutoCpGeneralSettings
 import ui.swing.TileCellRenderer
 
+@Serializable
 data class BuildConfig(
     val id: Long,
     val name: String,

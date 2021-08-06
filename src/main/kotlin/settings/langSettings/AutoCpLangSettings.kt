@@ -4,6 +4,9 @@ import com.intellij.openapi.components.*
 import com.intellij.openapi.fileTypes.LanguageFileType
 import com.intellij.openapi.fileTypes.UnknownFileType
 import com.intellij.openapi.vfs.VirtualFile
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
+import res.R
 import settings.langSettings.model.BuildConfig
 import settings.langSettings.model.Lang
 import settings.langSettings.model.MutableLang
@@ -15,10 +18,7 @@ import settings.langSettings.model.MutableLang
 @Service
 class AutoCpLangSettings : PersistentStateComponent<LangSettings> {
 
-    var languages: List<Lang> = listOf(
-        Lang("ObjectiveC", null, -1, listOf(BuildConfig(10, "C++ 17", "g++ build '@input@' '@output@'"))),
-//        Lang("Python", null, -1, listOf(BuildConfig(10, "python 3.8", "python build '@input@' '@output@'"))),
-    ) // TODO: Initialize with defaults
+    var languages: List<Lang> = R.files.langJsons.map { Json.decodeFromString(it) }
 
     override fun getState(): LangSettings {
         return LangSettings(languages.map { MutableLang(it) })

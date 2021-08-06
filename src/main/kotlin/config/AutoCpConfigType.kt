@@ -7,7 +7,7 @@ import com.intellij.execution.configurations.RunConfiguration
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.NotNullLazyValue
 import common.Constants
-import icons.Icons
+import res.R
 
 /**
  * Definition of custom run configuration
@@ -16,7 +16,7 @@ class AutoCpConfigType : ConfigurationTypeBase(
     id = Constants.RunConfigId,
     displayName = Constants.RunConfigName,
     description = Constants.RunConfigDescription,
-    icon = NotNullLazyValue.createValue { Icons.LogoIcon }
+    icon = NotNullLazyValue.createValue { R.icons.logo16 }
 ) {
     init {
         factory = AutoCpConfigFactory(this)
