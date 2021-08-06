@@ -21,8 +21,8 @@ class AutoCpGeneralSettings : PersistentStateComponent<AutoCpGeneralSettings> {
 
     companion object {
         // TODO: move this somewhere else
-        const val INPUT_PATH_KEY = "@input@"
-        const val OUTPUT_PATH_KEY = "@output@"
+        const val INPUT_PATH_KEY = "@in"
+        const val OUTPUT_PATH_KEY = "@out"
 
         val instance: AutoCpGeneralSettings get() = service()
     }

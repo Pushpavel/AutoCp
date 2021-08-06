@@ -22,11 +22,10 @@ class UniqueNameEnforcer(
         return buildName(preferredPrefix, maxSuffixNumber + 1)
     }
 
-    fun buildUniqueName(preferredName: String, maxOccurrence: Int = 1): String {
+    fun buildUniqueName(preferredName: String): String {
         val currentNames = getCurrentNames()
 
-        val occurrences = currentNames.count { it == preferredName }
-        if (occurrences + 1 <= maxOccurrence)
+        if (currentNames.all { it != preferredName })
             return preferredName
 
         val prefix = nameRegex.matchEntire(preferredName)?.groupValues?.getOrNull(1) ?: preferredName
