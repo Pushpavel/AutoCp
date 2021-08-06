@@ -5,6 +5,7 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Disposer
 import com.intellij.ui.CollectionListModel
 import database.models.SolutionFile
+import database.models.Testcase
 import ui.swing.editableList.EditableListView
 import javax.swing.JComponent
 
@@ -15,9 +16,11 @@ class TestcaseListPanel(project: Project, solutionFile: SolutionFile) : Disposab
     val component: JComponent
 
     init {
-        component = EditableListView(testcaseListModel) { testcase ->
-            TestcasePanel(testcaseListModel).also { it.contentChanged(testcase) }
-        }
+        component = EditableListView(testcaseListModel, {
+            TestcasePanel(testcaseListModel)
+        }, {
+            Testcase("New Testcase", "input", "output")
+        }, "New Testcase")
         Disposer.register(this, component)
 
     }

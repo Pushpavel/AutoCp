@@ -5,6 +5,8 @@ import com.intellij.openapi.util.Disposer
 import com.intellij.ui.CollectionListModel
 import com.intellij.ui.components.JBPanelWithEmptyText
 import com.intellij.ui.components.JBScrollPane
+import com.intellij.ui.layout.panel
+import com.intellij.util.ui.JBUI
 import java.awt.Component
 import java.awt.GridBagConstraints
 import java.awt.GridBagLayout
@@ -14,7 +16,10 @@ import javax.swing.event.ListDataListener
 
 
 class EditableListView<T>(
-    val model: CollectionListModel<T>, val itemFactory: (T) -> ListItemView<T>
+    val model: CollectionListModel<T>,
+    val itemViewFactory: (T) -> ListItemView<T>,
+    val itemFactory: () -> T,
+    private val createButtonText: String,
 ) : JBScrollPane(), ListDataListener, Disposable {
 
     private val listPanel = JBPanelWithEmptyText(GridBagLayout())
@@ -29,10 +34,25 @@ class EditableListView<T>(
 
     init {
         model.items.forEach {
-            val itemView = itemFactory(it)
+            val itemView = itemViewFactory(it)
+            itemView.contentChanged(it)
+
             itemViewMap[itemView.component] = itemView
             listPanel.add(itemView.component, itemConstraints)
         }
+
+        // Create Button
+        listPanel.add(panel {
+            blockRow { }
+            row {
+                button(createButtonText) {
+                    val item = itemFactory()
+                    model.add(item)
+                }
+            }
+        }.apply {
+            border = JBUI.Borders.emptyLeft(8)
+        }, itemConstraints)
 
         // fills remaining space
         listPanel.add(Box.createVerticalGlue(), GridBagConstraints().apply { weighty = 1.0 })
@@ -45,7 +65,9 @@ class EditableListView<T>(
     override fun intervalAdded(event: ListDataEvent) {
         for (i in event.index0..event.index1) {
             val it = model.items[i]
-            val itemView = itemFactory(it)
+            val itemView = itemViewFactory(it)
+            itemView.contentChanged(it)
+
             itemViewMap[itemView.component] = itemView
             listPanel.add(itemView.component, itemConstraints, i)
         }
