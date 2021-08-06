@@ -25,8 +25,6 @@ plugins {
     // gradle-changelog-plugin - read more: https://github.com/JetBrains/gradle-changelog-plugin
     id("org.jetbrains.changelog") version "1.1.2"
 
-    id("com.squareup.sqldelight") version "1.5.1"
-
     kotlin("plugin.serialization") version "1.5.21"
 }
 
@@ -47,18 +45,12 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.2")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.2")
     testImplementation("io.mockk:mockk:1.11.0")
-
-    implementation("com.squareup.sqldelight:sqlite-driver:1.5.1")
-
 }
 
 buildscript {
     repositories {
         google()
         mavenCentral()
-    }
-    dependencies {
-        classpath("com.squareup.sqldelight:gradle-plugin:1.5.1")
     }
 }
 
@@ -81,12 +73,6 @@ changelog {
     version = properties("pluginVersion")
     groups = emptyList()
     headerParserRegex = Regex("""v[0-9]+.[0-9]+.[0-9]+""")
-}
-
-sqldelight {
-    database("AutoCpDatabaseTransactor") {
-        packageName = "com.github.pushpavel.autocp.database"
-    }
 }
 
 tasks {
