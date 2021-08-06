@@ -1,4 +1,4 @@
-package settings.langSettings.ui.dialogs.buildConfigDialog
+package settings.langSettings.ui.dialogs
 
 import com.intellij.ide.macro.MacrosDialog
 import com.intellij.openapi.ui.DialogWrapper
@@ -10,13 +10,14 @@ import com.intellij.ui.layout.panel
 import common.helpers.UniqueNameEnforcer
 import settings.generalSettings.AutoCpGeneralSettings
 import settings.langSettings.model.BuildConfig
-import ui.helpers.isError
 
-class BuildConfigDialog(private val buildConfig: BuildConfig, private val nameEnforcer: UniqueNameEnforcer, create: Boolean) :
-    DialogWrapper(false) {
-    var name = ""
-    var buildCommand = ""
-    private val invalidFields = mutableMapOf<String, Boolean>()
+class BuildConfigDialog(
+    private val buildConfig: BuildConfig,
+    private val nameEnforcer: UniqueNameEnforcer,
+    create: Boolean
+) : DialogWrapper(false) {
+    var name = buildConfig.name
+    var buildCommand = buildConfig.buildCommand
 
     init {
         title = if (create)
@@ -24,30 +25,24 @@ class BuildConfigDialog(private val buildConfig: BuildConfig, private val nameEn
         else
             "Edit ${buildConfig.name}"
 
+        isOKActionEnabled = false
         init()
     }
 
     override fun createCenterPanel() = panel {
         row {
             row("Name:") {
-                textField(::name, 12).withValidationOnInput {
-                    val info = validateName(it.text)
-                    invalidFields["name"] = info.isError()
-                    info
-                }
+                textField(::name, 12)
+                    .withValidationOnInput { validateName(it.text) }
             }
             row("Build Command:") {
                 expandableTextField(::buildCommand)
                     .constraints(CCFlags.growX)
                     .applyToComponent { MacrosDialog.addTextFieldExtension(this) }
-                    .withValidationOnInput {
-                        val info = validateBuildCommand(it.text)
-                        invalidFields["buildCommand"] = info.isError()
-                        info
-                    }
+                    .withValidationOnInput { validateBuildCommand(it.text) }
             }
         }
-    }
+    }.also { it.reset() }
 
     fun showAndGetConfig(): BuildConfig? {
         val confirm = showAndGet()
