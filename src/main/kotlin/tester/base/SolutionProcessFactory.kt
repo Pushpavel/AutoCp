@@ -24,8 +24,10 @@ class SolutionProcessFactory(private val executablePath: String) {
          * Creates an Executable from [AutoCpConfig] and returns a factory for creating sub [Process]es of this executable
          */
         suspend fun buildFromConfig(config: AutoCpConfig): SolutionProcessFactory {
-            val buildConfig = AutoCpLangSettings.findBuildConfigById(config.buildConfigId!!) // fixme: buildConfigId can be null
-                ?: throw BuildErr("Select a valid Build Configuration in Run Configuration \"${config.name}\"")
+
+            val buildConfig = config.buildConfigId?.let {
+                AutoCpLangSettings.findBuildConfigById(it)
+            } ?: throw BuildErr("Select a valid Build Configuration in Run Configuration \"${config.name}\"")
 
             @Suppress("BlockingMethodInNonBlockingContext")
             val tempDir = Files.createTempDirectory("AutoCp")
@@ -33,16 +35,17 @@ class SolutionProcessFactory(private val executablePath: String) {
             if (!tempDir.exists())
                 tempDir.toFile().mkdir()
 
-
             val outputPath = Paths.get(tempDir.pathString, config.name + ".exe")
-            val command = buildConfig.constructBuildCommand(config.solutionFilePath, outputPath.pathString)
-            val commandList = splitCommandString(command)
-            val buildProcess = GeneralCommandLine(commandList).createProcess()
 
-            val results = ProcessRunner.run(buildProcess)
+            try {
+                val command = buildConfig.constructBuildCommand(config.solutionFilePath, outputPath.pathString)
+                val commandList = splitCommandString(command)
+                val buildProcess = GeneralCommandLine(commandList).createProcess()
 
-            results.exceptionOrNull()?.let {
-                throw BuildErr(it.stackTraceToString())
+                ProcessRunner.run(buildProcess)
+
+            } catch (e: Exception) {
+                throw BuildErr(e.stackTraceToString())
             }
 
             return SolutionProcessFactory(outputPath.pathString)
