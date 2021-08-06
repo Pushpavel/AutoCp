@@ -21,19 +21,11 @@ class AutoCpLangSettings : PersistentStateComponent<LangSettings> {
     ) // TODO: Initialize with defaults
 
     override fun getState(): LangSettings {
-        println("get State")
-        println(languages)
-        println()
-        println()
         return LangSettings(languages.map { MutableLang(it) })
     }
 
 
     override fun loadState(state: LangSettings) {
-        println("load State")
-        println(state)
-        println()
-        println()
         languages = state.languages.map { Lang(it) }
     }
 
