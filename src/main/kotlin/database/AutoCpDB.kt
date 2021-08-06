@@ -40,4 +40,11 @@ data class AutoCpDB(
 
         solutionFiles[path] = solutionFile
     }
+
+    fun updateSolutionFile(solutionFile: SolutionFile) {
+        if (!solutionFiles.containsKey(solutionFile.pathString))
+            throw Err.InternalErr("trying to update solution File which does not exist")
+
+        solutionFiles[solutionFile.pathString] = solutionFile
+    }
 }
