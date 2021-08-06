@@ -12,7 +12,6 @@ import com.intellij.ui.components.JBLabel
 import com.intellij.ui.layout.CCFlags
 import com.intellij.ui.layout.LCFlags
 import com.intellij.ui.layout.panel
-import com.intellij.util.ui.JBFont
 import database.models.Testcase
 import ui.swing.editableList.ListItemView
 import javax.swing.BorderFactory
@@ -31,14 +30,13 @@ class TestcasePanel(val model: CollectionListModel<Testcase>) : ListItemView<Tes
 
     override val component: DialogPanel = panel(LCFlags.fillX) {
         row {
-            inputEditor.headerComponent = titleLabel.apply {
-                font = JBFont.regular().asBold()
-                border = BorderFactory.createEmptyBorder(4, 0, 4, 0)
-            }
+            inputEditor.headerComponent = testcaseHeader(model, titleLabel, ::testcaseIndex)
             outputEditor.headerComponent = inputEditor.component
             outputEditor.component(CCFlags.growX)
+
         }
     }.withBorder(BorderFactory.createEmptyBorder(0, 4, 0, 4))
+
 
     override fun contentChanged(item: Testcase) {
         runUndoTransparentWriteAction {
@@ -67,13 +65,16 @@ class TestcasePanel(val model: CollectionListModel<Testcase>) : ListItemView<Tes
     private fun Document.updateModelOnChange(predicate: Testcase.(String) -> Testcase) {
         addDocumentListener(object : DocumentListener {
             override fun documentChanged(event: DocumentEvent) {
-                if (testcase == null)
-                    return
-                val index = model.items.indexOfFirst { it.name == testcase?.name }.takeIf { it != -1 } ?: return
+                if (testcase == null) return
+                val index = testcaseIndex() ?: return
                 val updatedTestcase = model.items[index].predicate(event.document.text)
                 model.setElementAt(updatedTestcase, index)
             }
         }, this@TestcasePanel)
+    }
+
+    private fun testcaseIndex(): Int? {
+        return model.items.indexOfFirst { it.name == testcase?.name }.takeIf { it != -1 }
     }
 
     override fun dispose() {
