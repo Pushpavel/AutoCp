@@ -35,11 +35,12 @@ class BuildConfigDialog(
                 textField(::name, 12)
                     .withValidationOnInput { validateName(it.text) }
             }
-            row("Build Command:") {
+            row("Build Command Template:") {
                 expandableTextField(::buildCommand)
                     .constraints(CCFlags.growX)
                     .applyToComponent { MacrosDialog.addTextFieldExtension(this) }
                     .withValidationOnInput { validateBuildCommand(it.text) }
+                    .comment("AutoCp uses this template to construct a command that builds an executable on which your testcases are tested")
             }
         }
     }.also { it.reset() }
@@ -68,17 +69,9 @@ class BuildConfigDialog(
         val input = buildCommand.contains(AutoCpGeneralSettings.INPUT_PATH_KEY)
         val output = buildCommand.contains(AutoCpGeneralSettings.OUTPUT_PATH_KEY)
 
-        // TODO: check if single quotes are useful so that we can just hardcode double quotes directly on the path
-        val inputDoubleQuotes = buildCommand.contains("\"" + AutoCpGeneralSettings.INPUT_PATH_KEY + "\"")
-        val inputSingleQuotes = buildCommand.contains("'" + AutoCpGeneralSettings.INPUT_PATH_KEY + "'")
-        val outputDoubleQuotes = buildCommand.contains("\"" + AutoCpGeneralSettings.OUTPUT_PATH_KEY + "\"")
-        val outputSingleQuotes = buildCommand.contains("'" + AutoCpGeneralSettings.OUTPUT_PATH_KEY + "'")
-
         val errorMessage = when {
-            !input -> "buildCommand: ${AutoCpGeneralSettings.INPUT_PATH_KEY} missing"
-            !output -> "buildCommand: ${AutoCpGeneralSettings.OUTPUT_PATH_KEY} missing"
-            !inputSingleQuotes && !inputDoubleQuotes -> "buildCommand: ${AutoCpGeneralSettings.INPUT_PATH_KEY} should be wrapped with single or double quotes"
-            !outputSingleQuotes && !outputDoubleQuotes -> "buildCommand: ${AutoCpGeneralSettings.INPUT_PATH_KEY} should be wrapped with single or double quotes"
+            !input -> "${AutoCpGeneralSettings.INPUT_PATH_KEY} missing, This will be replaced with path to solution file ex- \"C:\\solution.cpp\""
+            !output -> "${AutoCpGeneralSettings.OUTPUT_PATH_KEY} missing, This will be replaced with path for the executable ex- \"C:\\temp\\output.exe\""
             else -> null
         }
 
