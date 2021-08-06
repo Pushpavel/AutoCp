@@ -1,7 +1,6 @@
 <idea-plugin>
     <name>AutoCp</name>
     <vendor email="jpushpavel@gmail.com">Pushpavel Janakiraman</vendor>
-
     <!-- Product and plugin compatibility requirements -->
     <!-- https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
     <depends>com.intellij.modules.platform</depends>
@@ -24,7 +23,7 @@
                                  displayName="Languages"/>
 
 
-        <toolWindow factoryClass="tool.ToolFactory" id="AutoCp" icon="Icons.LogoIcon" anchor="right"/>
+        <toolWindow factoryClass="tool.ToolFactory" id="AutoCp" icon="AutoCpIcons.logo13" anchor="right"/>
         <fileTemplateGroup implementation="lang.FileTemplates"/>
         <fileDocumentManagerListener implementation="database.AutoCpStorageSaver"/>
         <fileType name="Autocp Storage File" patterns=".autocp"
