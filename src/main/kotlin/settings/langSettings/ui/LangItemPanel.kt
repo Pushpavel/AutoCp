@@ -11,6 +11,7 @@ import com.intellij.ui.layout.CCFlags
 import com.intellij.ui.layout.InnerCell
 import com.intellij.ui.layout.LCFlags
 import com.intellij.ui.layout.panel
+import common.helpers.UniqueNameEnforcer
 import common.isItemsEqual
 import lang.supportedFileTemplates
 import settings.langSettings.model.BuildConfig
@@ -26,6 +27,12 @@ class LangItemPanel : DslCallbacks {
 
     private val fileTemplatesModel = CollectionComboBoxModel<FileTemplate>()
     private val buildConfigsModel = CollectionComboBoxModel<BuildConfig>()
+
+    private val buildConfigNameEnforcer = UniqueNameEnforcer(
+        Regex("^(.*) \\(([0-9]+)\\)\$"),
+        { p, s -> "$p ($s)" },
+        { buildConfigsModel.items.map { it.name } }
+    )
 
     val dialogPanel = panel(LCFlags.fill) {
         row("File Template") {
@@ -73,13 +80,13 @@ class LangItemPanel : DslCallbacks {
 
         val listContainer = ToolbarDecorator.createDecorator(jbList).setAddAction {
             val blank = BuildConfig(System.currentTimeMillis(), "", "")
-            val newBuildConfig = BuildConfigDialog(blank, buildConfigsModel.items).showAndGetConfig()
+            val newBuildConfig = BuildConfigDialog(blank, buildConfigNameEnforcer, true).showAndGetConfig()
             if (newBuildConfig != null) {
                 buildConfigsModel.add(newBuildConfig)
                 jbList.selectedIndex = buildConfigsModel.items.size - 1
             }
         }.setEditAction {
-            val config = BuildConfigDialog(jbList.selectedValue, buildConfigsModel.items).showAndGetConfig()
+            val config = BuildConfigDialog(jbList.selectedValue, buildConfigNameEnforcer, false).showAndGetConfig()
             if (config != null)
                 buildConfigsModel.setElementAt(config, jbList.selectedIndex)
         }.createPanel()

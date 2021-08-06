@@ -2,55 +2,50 @@ package settings.langSettings.ui.dialogs.buildConfigDialog
 
 import com.intellij.ide.macro.MacrosDialog
 import com.intellij.openapi.ui.DialogWrapper
-import com.intellij.ui.components.fields.ExtendableTextField
+import com.intellij.openapi.ui.ValidationInfo
+import com.intellij.ui.layout.CCFlags
+import com.intellij.ui.layout.ValidationInfoBuilder
+import com.intellij.ui.layout.applyToComponent
 import com.intellij.ui.layout.panel
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
+import common.helpers.UniqueNameEnforcer
+import settings.generalSettings.AutoCpGeneralSettings
 import settings.langSettings.model.BuildConfig
-import ui.ErrorView
-import ui.helpers.mainScope
-import ui.vvm.swingModels.plainDocument
+import ui.helpers.isError
 
-class BuildConfigDialog(private val buildConfig: BuildConfig, list: List<BuildConfig>) : DialogWrapper(false) {
-
-    private val scope = mainScope()
-    private val model = BuildConfigViewModel(scope, buildConfig, list)
+class BuildConfigDialog(private val buildConfig: BuildConfig, private val nameEnforcer: UniqueNameEnforcer, create: Boolean) :
+    DialogWrapper(false) {
+    var name = ""
+    var buildCommand = ""
+    private val invalidFields = mutableMapOf<String, Boolean>()
 
     init {
-        title = "Edit ${buildConfig.name}"
-        init()
+        title = if (create)
+            "Create New Build Configuration"
+        else
+            "Edit ${buildConfig.name}"
 
-        scope.launch {
-            model.isValid.collect {
-                isOKActionEnabled = it
-            }
-        }
+        init()
     }
 
     override fun createCenterPanel() = panel {
         row {
-            val nameField = ExtendableTextField(10).apply {
-                document = scope.plainDocument(model.name)
+            row("Name:") {
+                textField(::name, 12).withValidationOnInput {
+                    val info = validateName(it.text)
+                    invalidFields["name"] = info.isError()
+                    info
+                }
             }
-            val buildCommandField = ExtendableTextField(50).apply {
-                document = scope.plainDocument(model.buildCommand)
-            }
-            MacrosDialog.addTextFieldExtension(buildCommandField)
-
-            row("Name:") { nameField() }
             row("Build Command:") {
-                buildCommandField(pushX).comment(
-                    "This command will be executed to build the executable of your solution code.<br>" +
-                            "@input@ will be replaced with \"path/to/input/file\" without quotes<br>" +
-                            "@output@ will be replaced with \"path/to/output/file\" without quotes"
-                )
+                expandableTextField(::buildCommand)
+                    .constraints(CCFlags.growX)
+                    .applyToComponent { MacrosDialog.addTextFieldExtension(this) }
+                    .withValidationOnInput {
+                        val info = validateBuildCommand(it.text)
+                        invalidFields["buildCommand"] = info.isError()
+                        info
+                    }
             }
-            val nameErrView = ErrorView(scope, model.nameErrors)
-            val buildCommandErrView = ErrorView(scope, model.buildCommandErrors)
-
-            row { nameErrView() }
-            row { buildCommandErrView() }
         }
     }
 
@@ -58,13 +53,40 @@ class BuildConfigDialog(private val buildConfig: BuildConfig, list: List<BuildCo
         val confirm = showAndGet()
 
         return if (confirm)
-            BuildConfig(buildConfig.id, model.name.value, model.buildCommand.value)
+            BuildConfig(buildConfig.id, name, buildCommand)
         else
             null
     }
 
-    override fun dispose() {
-        super.dispose()
-        scope.cancel()
+
+    private fun ValidationInfoBuilder.validateName(name: String): ValidationInfo? {
+        if (name.isBlank())
+            return error("Must not be empty")
+
+        if (nameEnforcer.buildUniqueName(name) != name)
+            return error("\"$name\" already exists")
+
+        return null
+    }
+
+    private fun ValidationInfoBuilder.validateBuildCommand(buildCommand: String): ValidationInfo? {
+        val input = buildCommand.contains(AutoCpGeneralSettings.INPUT_PATH_KEY)
+        val output = buildCommand.contains(AutoCpGeneralSettings.OUTPUT_PATH_KEY)
+
+        // TODO: check if single quotes are useful so that we can just hardcode double quotes directly on the path
+        val inputDoubleQuotes = buildCommand.contains("\"" + AutoCpGeneralSettings.INPUT_PATH_KEY + "\"")
+        val inputSingleQuotes = buildCommand.contains("'" + AutoCpGeneralSettings.INPUT_PATH_KEY + "'")
+        val outputDoubleQuotes = buildCommand.contains("\"" + AutoCpGeneralSettings.OUTPUT_PATH_KEY + "\"")
+        val outputSingleQuotes = buildCommand.contains("'" + AutoCpGeneralSettings.OUTPUT_PATH_KEY + "'")
+
+        val errorMessage = when {
+            !input -> "buildCommand: ${AutoCpGeneralSettings.INPUT_PATH_KEY} missing"
+            !output -> "buildCommand: ${AutoCpGeneralSettings.OUTPUT_PATH_KEY} missing"
+            !inputSingleQuotes && !inputDoubleQuotes -> "buildCommand: ${AutoCpGeneralSettings.INPUT_PATH_KEY} should be wrapped with single or double quotes"
+            !outputSingleQuotes && !outputDoubleQuotes -> "buildCommand: ${AutoCpGeneralSettings.INPUT_PATH_KEY} should be wrapped with single or double quotes"
+            else -> null
+        }
+
+        return errorMessage?.let { error(it) }
     }
 }
