@@ -7,12 +7,16 @@ import com.intellij.ide.fileTemplates.FileTemplateManager
 import com.intellij.lang.Language
 import common.res.R
 import settings.langSettings.model.Lang
+import kotlin.io.path.nameWithoutExtension
 
 class FileTemplates : FileTemplateGroupDescriptorFactory {
     override fun getFileTemplatesDescriptor(): FileTemplateGroupDescriptor {
         val group = FileTemplateGroupDescriptor(GROUP_NAME, R.icons.logo16)
-        // adding c++ template
-        group.addTemplate(CPP)
+        
+        // adding file templates in resources/fileTemplates/j2ee
+        R.files.fileTemplates.forEach {
+            group.addTemplate(it.nameWithoutExtension)
+        }
 
         return group
     }
@@ -20,8 +24,6 @@ class FileTemplates : FileTemplateGroupDescriptorFactory {
 
     companion object {
         const val GROUP_NAME = "AutoCp Templates"
-
-        const val CPP = "C++.cpp"
     }
 }
 
