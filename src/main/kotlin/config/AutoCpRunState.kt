@@ -7,7 +7,7 @@ import com.intellij.execution.configurations.RunProfileState
 import com.intellij.execution.runners.ProgramRunner
 import com.intellij.execution.testframework.sm.SMTestRunnerConnectionUtil
 import com.intellij.execution.testframework.sm.runner.SMTRunnerConsoleProperties
-import common.Constants
+import res.R
 import tester.AutoCpTestingProcessHandler
 
 
@@ -18,9 +18,9 @@ class AutoCpRunState(private val config: AutoCpConfig) : RunProfileState {
         val processHandler = AutoCpTestingProcessHandler(config)
 
         // prepare console
-        val properties = SMTRunnerConsoleProperties(config, Constants.RunConfigName, executor)
+        val properties = SMTRunnerConsoleProperties(config, R.strings.runConfigName, executor)
         val console =
-            SMTestRunnerConnectionUtil.createAndAttachConsole(Constants.RunConfigName, processHandler, properties)
+            SMTestRunnerConnectionUtil.createAndAttachConsole(R.strings.runConfigName, processHandler, properties)
 
         return DefaultExecutionResult(console, processHandler)
     }
