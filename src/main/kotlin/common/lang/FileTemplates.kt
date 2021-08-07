@@ -1,4 +1,4 @@
-package lang
+package common.lang
 
 import com.intellij.ide.fileTemplates.FileTemplate
 import com.intellij.ide.fileTemplates.FileTemplateGroupDescriptor
