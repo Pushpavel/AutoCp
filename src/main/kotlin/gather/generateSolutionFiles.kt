@@ -1,6 +1,7 @@
 package gather
 
 import com.intellij.ide.actions.CreateFileFromTemplateAction
+import com.intellij.ide.actions.OpenFileAction
 import com.intellij.ide.projectView.ProjectView
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VfsUtil
@@ -21,16 +22,19 @@ fun generateSolutionFiles(project: Project, problems: List<Problem>, lang: Lang)
     val rootPsiDir = PsiManager.getInstance(project).findDirectory(rootDir)!!
 
     problems.forEach {
+
         val file = CreateFileFromTemplateAction.createFileFromTemplate(
             it.name,
             // TODO: catch no default file Template case
             lang.defaultFileTemplate()!!,
             rootPsiDir,
             null,
-            true
+            false
         )!!
 
         project.autoCp().createSolutionFile(file.virtualFile.path, Pair(it.groupName, it.name))
+
+        OpenFileAction.openFile(file.virtualFile, project)
     }
 
     ProjectView.getInstance(project).refresh()
