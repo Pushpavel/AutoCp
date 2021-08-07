@@ -1,6 +1,12 @@
 {
   "langId": "ObjectiveC",
-  "fileTemplateName": null,
-  "defaultBuildConfigId": null,
-  "buildConfigs": []
+  "fileTemplateName": "C/C++",
+  "defaultBuildConfigId": 0,
+  "buildConfigs": [
+    {
+      "name": "C++ 17",
+      "id": 0,
+      "buildCommand": "g++ @in -o @out"
+    }
+  ]
 }
