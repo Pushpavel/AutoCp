@@ -12,7 +12,7 @@ import com.intellij.ui.layout.InnerCell
 import com.intellij.ui.layout.LCFlags
 import com.intellij.ui.layout.panel
 import common.helpers.UniqueNameEnforcer
-import common.isItemsEqual
+import common.helpers.isItemsEqual
 import lang.supportedFileTemplates
 import settings.langSettings.model.BuildConfig
 import settings.langSettings.model.Lang

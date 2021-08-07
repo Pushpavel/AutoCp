@@ -5,7 +5,7 @@ import com.intellij.openapi.options.BoundConfigurable
 import com.intellij.ui.layout.CCFlags
 import com.intellij.ui.layout.LCFlags
 import com.intellij.ui.layout.panel
-import common.isItemsEqual
+import common.helpers.isItemsEqual
 import settings.langSettings.ui.LangSettingsPanel
 import ui.dsl.registerDslCallbacks
 
