@@ -3,6 +3,8 @@ package common.ui.dsl
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.ui.DialogPanel
 import com.intellij.openapi.ui.ValidationInfo
+import com.intellij.ui.layout.CellBuilder
+import com.intellij.ui.layout.ValidationInfoBuilder
 import common.ui.helpers.SimpleListDataListener
 import javax.swing.JComboBox
 import javax.swing.JComponent
@@ -28,4 +30,8 @@ fun DialogPanel.startValidating(
     customValidationRequestors = map
 
     registerValidators(parentDisposable, componentValidityChangedCallback)
+}
+
+fun <T : JComponent> CellBuilder<T>.withValidation(callback: ValidationInfoBuilder.(T) -> ValidationInfo?): CellBuilder<T> {
+    return withValidationOnInput(callback).withValidationOnApply(callback)
 }
