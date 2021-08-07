@@ -1,4 +1,4 @@
-package res
+package common.res
 
 object AutoCpStrings {
     const val runConfigName = "AutoCp"

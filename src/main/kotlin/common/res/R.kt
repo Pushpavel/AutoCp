@@ -1,4 +1,4 @@
-package res
+package common.res
 
 import icons.AutoCpIcons
 

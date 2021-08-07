@@ -5,7 +5,7 @@ import com.intellij.ide.fileTemplates.FileTemplateGroupDescriptor
 import com.intellij.ide.fileTemplates.FileTemplateGroupDescriptorFactory
 import com.intellij.ide.fileTemplates.FileTemplateManager
 import com.intellij.lang.Language
-import res.R
+import common.res.R
 import settings.langSettings.model.Lang
 
 class FileTemplates : FileTemplateGroupDescriptorFactory {

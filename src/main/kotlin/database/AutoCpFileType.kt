@@ -1,7 +1,7 @@
 package database
 
 import com.intellij.openapi.fileTypes.FileType
-import res.R
+import common.res.R
 
 class AutoCpFileType : FileType {
     override fun getName() = "Autocp Storage File"

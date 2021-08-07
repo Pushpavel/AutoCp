@@ -7,7 +7,7 @@ import com.intellij.execution.configurations.RunProfileState
 import com.intellij.execution.runners.ProgramRunner
 import com.intellij.execution.testframework.sm.SMTestRunnerConnectionUtil
 import com.intellij.execution.testframework.sm.runner.SMTRunnerConsoleProperties
-import res.R
+import common.res.R
 import tester.AutoCpTestingProcessHandler
 
 

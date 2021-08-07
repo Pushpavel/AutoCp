@@ -6,7 +6,7 @@ import com.intellij.execution.configurations.ConfigurationTypeBase
 import com.intellij.execution.configurations.RunConfiguration
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.NotNullLazyValue
-import res.R
+import common.res.R
 
 /**
  * Definition of custom run configuration

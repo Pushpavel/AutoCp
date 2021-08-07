@@ -1,4 +1,4 @@
-package res
+package common.res
 
 import com.intellij.util.io.readText
 import common.helpers.listPathsInDirectoryInResources
