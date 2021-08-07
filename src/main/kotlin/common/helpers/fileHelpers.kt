@@ -5,7 +5,7 @@ import com.intellij.openapi.fileEditor.FileEditorManagerEvent
 import com.intellij.openapi.fileEditor.FileEditorManagerListener
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
-import res.AutoCpFiles
+import common.res.AutoCpFiles
 import java.nio.file.*
 import kotlin.streams.toList
 

@@ -6,7 +6,7 @@ import com.intellij.openapi.fileTypes.UnknownFileType
 import com.intellij.openapi.vfs.VirtualFile
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
-import res.R
+import common.res.R
 import settings.langSettings.model.BuildConfig
 import settings.langSettings.model.Lang
 import settings.langSettings.model.MutableLang

@@ -13,9 +13,9 @@ import database.models.Problem
 import settings.generalSettings.AutoCpGeneralSettings
 import settings.langSettings.AutoCpLangSettings
 import settings.langSettings.model.Lang
-import ui.dsl.simpleComboBoxView
-import ui.helpers.onSelectedItem
-import ui.swing.TileCellRenderer
+import common.ui.dsl.simpleComboBoxView
+import common.ui.helpers.onSelectedItem
+import common.ui.swing.TileCellRenderer
 import java.awt.Dimension
 import javax.swing.Icon
 

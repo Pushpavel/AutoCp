@@ -12,14 +12,14 @@ import com.intellij.ui.layout.InnerCell
 import com.intellij.ui.layout.LCFlags
 import com.intellij.ui.layout.panel
 import common.helpers.UniqueNameEnforcer
-import common.isItemsEqual
-import lang.supportedFileTemplates
+import common.helpers.isItemsEqual
+import common.lang.supportedFileTemplates
 import settings.langSettings.model.BuildConfig
 import settings.langSettings.model.Lang
 import settings.langSettings.ui.dialogs.BuildConfigDialog
-import ui.dsl.DslCallbacks
-import ui.dsl.comboBoxView
-import ui.swing.TileCellRenderer
+import common.ui.dsl.DslCallbacks
+import common.ui.dsl.comboBoxView
+import common.ui.swing.TileCellRenderer
 
 class LangItemPanel : DslCallbacks {
 

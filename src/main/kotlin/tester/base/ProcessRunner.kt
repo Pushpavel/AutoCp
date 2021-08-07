@@ -1,10 +1,9 @@
 package tester.base
 
-import common.awaitAsResult
+import common.helpers.awaitAsResult
 import common.errors.Err
 import common.errors.Err.TesterErr.*
 import kotlinx.coroutines.*
-import java.io.InputStream
 
 /**
  * Simplifies execution of an Sub [Process]  by handling its input, output and error streams

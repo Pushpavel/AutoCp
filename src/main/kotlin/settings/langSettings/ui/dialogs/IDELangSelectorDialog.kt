@@ -10,9 +10,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import settings.langSettings.model.Lang
-import ui.StringCellRenderer
-import ui.helpers.mainScope
-import ui.vvm.swingModels.singleSelectionModel
+import common.ui.StringCellRenderer
+import common.ui.helpers.mainScope
+import common.ui.vvm.swingModels.singleSelectionModel
 import java.awt.BorderLayout
 import javax.swing.JComponent
 import javax.swing.JPanel

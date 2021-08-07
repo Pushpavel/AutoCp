@@ -13,7 +13,7 @@ import com.intellij.ui.layout.CCFlags
 import com.intellij.ui.layout.LCFlags
 import com.intellij.ui.layout.panel
 import database.models.Testcase
-import ui.swing.editableList.ListItemView
+import common.ui.swing.editableList.ListItemView
 import javax.swing.BorderFactory
 
 class TestcasePanel(val model: CollectionListModel<Testcase>) : ListItemView<Testcase> {
