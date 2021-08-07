@@ -5,6 +5,7 @@ import com.intellij.openapi.components.*
 import com.intellij.openapi.fileTypes.LanguageFileType
 import com.intellij.openapi.fileTypes.UnknownFileType
 import com.intellij.openapi.vfs.VirtualFile
+import com.intellij.util.io.readText
 import common.res.R
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
@@ -20,6 +21,7 @@ import settings.langSettings.model.MutableLang
 class AutoCpLangSettings : PersistentStateComponent<LangSettings> {
 
     var languages: List<Lang> = R.files.langJsons
+        .map { it.readText() }
         .map<String, Lang> { Json.decodeFromString(it) }
         .filter { Language.findLanguageByID(it.langId) != null }
 
