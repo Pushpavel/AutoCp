@@ -1,12 +1,13 @@
 package settings.langSettings
 
+import com.intellij.lang.Language
 import com.intellij.openapi.components.*
 import com.intellij.openapi.fileTypes.LanguageFileType
 import com.intellij.openapi.fileTypes.UnknownFileType
 import com.intellij.openapi.vfs.VirtualFile
+import common.res.R
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
-import common.res.R
 import settings.langSettings.model.BuildConfig
 import settings.langSettings.model.Lang
 import settings.langSettings.model.MutableLang
@@ -18,7 +19,9 @@ import settings.langSettings.model.MutableLang
 @Service
 class AutoCpLangSettings : PersistentStateComponent<LangSettings> {
 
-    var languages: List<Lang> = R.files.langJsons.map { Json.decodeFromString(it) }
+    var languages: List<Lang> = R.files.langJsons
+        .map<String, Lang> { Json.decodeFromString(it) }
+        .filter { Language.findLanguageByID(it.langId) != null }
 
     override fun getState(): LangSettings {
         return LangSettings(languages.map { MutableLang(it) })
