@@ -14,12 +14,12 @@ import com.intellij.ui.layout.panel
 import common.helpers.UniqueNameEnforcer
 import common.helpers.isItemsEqual
 import common.lang.supportedFileTemplates
-import settings.langSettings.model.BuildConfig
-import settings.langSettings.model.Lang
-import settings.langSettings.ui.dialogs.BuildConfigDialog
 import common.ui.dsl.DslCallbacks
 import common.ui.dsl.comboBoxView
 import common.ui.swing.TileCellRenderer
+import settings.langSettings.model.BuildConfig
+import settings.langSettings.model.Lang
+import settings.langSettings.ui.dialogs.BuildConfigDialog
 
 class LangItemPanel : DslCallbacks {
 
@@ -38,7 +38,7 @@ class LangItemPanel : DslCallbacks {
         row("File Template") {
             comboBoxView(
                 fileTemplatesModel,
-                { it.name == selectedLang?.fileTemplateName },
+                { it.name == selectedLang?.getFileTemplate()?.name },
                 {
                     selectedLang?.apply {
                         selectedLang = copy(fileTemplateName = it?.name)
@@ -54,7 +54,7 @@ class LangItemPanel : DslCallbacks {
         row("Default Build Configuration") {
             comboBoxView(
                 buildConfigsModel,
-                { it.id == selectedLang?.defaultBuildConfigId },
+                { it.id == selectedLang?.getDefaultBuildConfig()?.id },
                 {
                     selectedLang?.apply {
                         selectedLang = copy(defaultBuildConfigId = it?.id)

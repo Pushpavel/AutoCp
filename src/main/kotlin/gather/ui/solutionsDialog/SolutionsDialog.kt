@@ -9,13 +9,13 @@ import com.intellij.ui.ToolbarDecorator
 import com.intellij.ui.components.JBList
 import com.intellij.ui.layout.CCFlags
 import com.intellij.ui.layout.panel
+import common.ui.dsl.simpleComboBoxView
+import common.ui.helpers.onSelectedItem
+import common.ui.swing.TileCellRenderer
 import database.models.Problem
 import settings.generalSettings.AutoCpGeneralSettings
 import settings.langSettings.AutoCpLangSettings
 import settings.langSettings.model.Lang
-import common.ui.dsl.simpleComboBoxView
-import common.ui.helpers.onSelectedItem
-import common.ui.swing.TileCellRenderer
 import java.awt.Dimension
 import javax.swing.Icon
 
@@ -54,7 +54,7 @@ class SolutionsDialog(private val groupName: String, problems: List<Problem>) : 
             fullRow {
                 langComboBox = simpleComboBoxView(
                     AutoCpLangSettings.instance.languages,
-                    { it.langId == AutoCpGeneralSettings.instance.preferredLangId },
+                    { it.langId == AutoCpGeneralSettings.instance.getPreferredLang()?.langId },
                     {}, Lang.cellRenderer()
                 ).component
             }

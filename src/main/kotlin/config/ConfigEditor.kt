@@ -10,13 +10,14 @@ import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.ui.CollectionComboBoxModel
 import com.intellij.ui.layout.ValidationInfoBuilder
 import com.intellij.ui.layout.panel
+import common.ui.dsl.comboBoxView
+import common.ui.dsl.startValidating
+import common.ui.dsl.withValidation
+import common.ui.helpers.isError
 import database.autoCp
 import settings.langSettings.AutoCpLangSettings
 import settings.langSettings.model.BuildConfig
 import settings.langSettings.model.Lang
-import common.ui.dsl.comboBoxView
-import common.ui.dsl.startValidating
-import common.ui.helpers.isError
 import kotlin.io.path.Path
 
 /**
@@ -37,7 +38,7 @@ class ConfigEditor(project: Project) : SettingsEditor<AutoCpConfig>(), DumbAware
     override fun createEditor() = panel {
         row("Solution File:") {
             textFieldWithBrowseButton(::solutionFilePath, "Select Solution File")
-                .withValidationOnInput { validateSolutionFilePath(it.text) }
+                .withValidation { validateSolutionFilePath(it.text) }
         }
         row("Build Configuration:") {
             comboBoxView(
@@ -45,7 +46,7 @@ class ConfigEditor(project: Project) : SettingsEditor<AutoCpConfig>(), DumbAware
                 { it.id == buildConfigId },
                 { buildConfigId = it?.id },
                 BuildConfig.cellRenderer()
-            ).withValidationOnInput {
+            ).withValidation {
                 val info = if (lang != null && buildConfigsModel.isEmpty) {
                     error("No Build Configuration is setup for ${lang?.getLanguage()?.displayName}")
                 } else null

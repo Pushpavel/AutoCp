@@ -8,6 +8,7 @@ import com.intellij.ui.layout.ValidationInfoBuilder
 import com.intellij.ui.layout.applyToComponent
 import com.intellij.ui.layout.panel
 import common.helpers.UniqueNameEnforcer
+import common.ui.dsl.withValidation
 import settings.generalSettings.AutoCpGeneralSettings
 import settings.langSettings.model.BuildConfig
 
@@ -25,7 +26,6 @@ class BuildConfigDialog(
         else
             "Edit ${buildConfig.name}"
 
-        isOKActionEnabled = false
         init()
     }
 
@@ -33,13 +33,13 @@ class BuildConfigDialog(
         row {
             row("Name:") {
                 textField(::name, 12)
-                    .withValidationOnInput { validateName(it.text) }
+                    .withValidation { validateName(it.text) }
             }
             row("Build Command Template:") {
                 expandableTextField(::buildCommand)
                     .constraints(CCFlags.growX)
                     .applyToComponent { MacrosDialog.addTextFieldExtension(this) }
-                    .withValidationOnInput { validateBuildCommand(it.text) }
+                    .withValidation { validateBuildCommand(it.text) }
                     .comment("AutoCp uses this template to construct a command that builds an executable on which your testcases are tested")
             }
         }
@@ -47,6 +47,8 @@ class BuildConfigDialog(
 
     fun showAndGetConfig(): BuildConfig? {
         val confirm = showAndGet()
+
+
 
         return if (confirm)
             BuildConfig(buildConfig.id, name, buildCommand)

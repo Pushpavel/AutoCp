@@ -2,9 +2,9 @@ package settings.generalSettings
 
 import com.intellij.openapi.options.BoundConfigurable
 import com.intellij.ui.layout.panel
+import common.ui.dsl.simpleComboBoxView
 import settings.langSettings.AutoCpLangSettings
 import settings.langSettings.model.Lang
-import common.ui.dsl.simpleComboBoxView
 
 class AutoCpGeneralSettingsConfigurable : BoundConfigurable("AutoCp") {
 
@@ -16,7 +16,7 @@ class AutoCpGeneralSettingsConfigurable : BoundConfigurable("AutoCp") {
         row("Preferred Language") {
             simpleComboBoxView(
                 langSettings.languages,
-                { it.langId == generalSettings.preferredLangId },
+                { it.langId == generalSettings.getPreferredLang()?.langId },
                 { generalSettings.preferredLangId = it?.langId },
                 Lang.cellRenderer()
             )
