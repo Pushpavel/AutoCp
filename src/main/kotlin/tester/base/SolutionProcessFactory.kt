@@ -1,12 +1,14 @@
 package tester.base
 
 import com.intellij.execution.configurations.GeneralCommandLine
+import com.intellij.openapi.vfs.LocalFileSystem
 import common.errors.Err.TesterErr.BuildErr
 import config.AutoCpConfig
 import settings.langSettings.AutoCpLangSettings
 import tester.utils.splitCommandString
 import java.nio.file.Files
 import java.nio.file.Paths
+import kotlin.io.path.Path
 import kotlin.io.path.exists
 import kotlin.io.path.pathString
 
@@ -25,9 +27,9 @@ class SolutionProcessFactory(private val executablePath: String) {
          */
         suspend fun buildFromConfig(config: AutoCpConfig): SolutionProcessFactory {
 
-            val buildConfig = config.buildConfigId?.let {
-                AutoCpLangSettings.findBuildConfigById(it)
-            } ?: throw BuildErr("Select a valid Build Configuration in Run Configuration \"${config.name}\"")
+            val virtualFile = LocalFileSystem.getInstance().findFileByNioFile(Path(config.solutionFilePath))
+            val buildConfig = AutoCpLangSettings.guessBuildConfigById(config.buildConfigId, virtualFile)
+                ?: throw BuildErr("Select a valid Build Configuration in Run Configuration \"${config.name}\"")
 
             @Suppress("BlockingMethodInNonBlockingContext")
             val tempDir = Files.createTempDirectory("AutoCp")

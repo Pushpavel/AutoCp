@@ -45,7 +45,7 @@ class AutoCpConfigProducer : LazyRunConfigurationProducer<AutoCpConfig>() {
     private fun getBuildConfigId(solutionFile: VirtualFile): Long? {
         val lang = AutoCpLangSettings.findLangByFile(solutionFile) ?: return null
 
-        return lang.getBuildConfig()?.id
+        return lang.getDefaultBuildConfig()?.id
     }
 
     /**

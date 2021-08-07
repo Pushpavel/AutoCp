@@ -26,7 +26,7 @@ fun generateSolutionFiles(project: Project, problems: List<Problem>, lang: Lang)
         val file = CreateFileFromTemplateAction.createFileFromTemplate(
             it.name,
             // TODO: catch no default file Template case
-            lang.defaultFileTemplate()!!,
+            lang.getFileTemplate()!!,
             rootPsiDir,
             null,
             false

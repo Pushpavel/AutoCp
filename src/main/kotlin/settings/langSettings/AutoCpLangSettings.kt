@@ -38,13 +38,10 @@ class AutoCpLangSettings : PersistentStateComponent<LangSettings> {
 
         val instance: AutoCpLangSettings get() = service()
 
-        fun findBuildConfigById(id: Long): BuildConfig? {
-            for (lang in instance.languages)
-                for (config in lang.buildConfigs)
-                    if (config.id == id)
-                        return config
-
-            return null
+        fun guessBuildConfigById(id: Long?, file: VirtualFile?): BuildConfig? {
+            val lang = findLangByFile(file)
+            // TODO: avoid guessing and look into build Configs of other languages too
+            return lang?.getBuildConfig(id)
         }
 
         fun findLangByFile(file: VirtualFile?): Lang? {

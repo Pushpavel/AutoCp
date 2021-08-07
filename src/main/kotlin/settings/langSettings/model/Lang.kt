@@ -2,9 +2,9 @@ package settings.langSettings.model
 
 import com.intellij.ide.fileTemplates.FileTemplate
 import com.intellij.lang.Language
-import kotlinx.serialization.Serializable
 import common.lang.supportedFileTemplates
 import common.ui.swing.TileCellRenderer
+import kotlinx.serialization.Serializable
 
 @Serializable
 data class Lang(
@@ -16,13 +16,17 @@ data class Lang(
 
     fun getLanguage() = Language.findLanguageByID(langId)
 
-    fun getBuildConfig(): BuildConfig? {
+    fun getBuildConfig(id: Long?): BuildConfig? {
         return buildConfigs.run {
-            firstOrNull { it.id == defaultBuildConfigId } ?: firstOrNull()
+            firstOrNull { it.id == id } ?: firstOrNull()
         }
     }
 
-    fun defaultFileTemplate(): FileTemplate? {
+    fun getDefaultBuildConfig(): BuildConfig? {
+        return getBuildConfig(defaultBuildConfigId)
+    }
+
+    fun getFileTemplate(): FileTemplate? {
         return supportedFileTemplates().run {
             firstOrNull { it.name == fileTemplateName } ?: firstOrNull()
         }

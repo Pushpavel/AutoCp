@@ -1,6 +1,8 @@
 package settings.generalSettings
 
 import com.intellij.openapi.components.*
+import settings.langSettings.AutoCpLangSettings
+import settings.langSettings.model.Lang
 
 /**
  * Model class for Settings of the plugin that persists across restarts
@@ -11,7 +13,17 @@ import com.intellij.openapi.components.*
 )
 @Service
 class AutoCpGeneralSettings : PersistentStateComponent<AutoCpGeneralSettings> {
-    var preferredLangId: String? = null
+    var preferredLangId: String? = AutoCpLangSettings.instance.languages.firstOrNull()?.langId
+
+
+    fun getPreferredLang(): Lang? {
+        return AutoCpLangSettings.instance.languages.run {
+            if (preferredLangId != null)
+                firstOrNull { it.langId == preferredLangId } ?: firstOrNull()
+            else
+                firstOrNull()
+        }
+    }
 
     override fun getState() = this
 
