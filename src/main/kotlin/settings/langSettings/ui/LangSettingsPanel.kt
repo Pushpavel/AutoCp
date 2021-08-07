@@ -7,9 +7,9 @@ import com.intellij.ui.ToolbarDecorator
 import com.intellij.ui.components.JBList
 import settings.langSettings.model.Lang
 import settings.langSettings.ui.dialogs.IDELangSelectorDialog
-import ui.dsl.DslCallbacks
-import ui.helpers.onSelectedValue
-import ui.layouts.SingleChildContainer
+import common.ui.dsl.DslCallbacks
+import common.ui.helpers.onSelectedValue
+import common.ui.layouts.SingleChildContainer
 import javax.swing.BorderFactory
 
 class LangSettingsPanel : OnePixelSplitter(false, 0.3F), DslCallbacks {

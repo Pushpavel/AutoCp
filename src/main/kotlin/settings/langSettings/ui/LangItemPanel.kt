@@ -17,9 +17,9 @@ import lang.supportedFileTemplates
 import settings.langSettings.model.BuildConfig
 import settings.langSettings.model.Lang
 import settings.langSettings.ui.dialogs.BuildConfigDialog
-import ui.dsl.DslCallbacks
-import ui.dsl.comboBoxView
-import ui.swing.TileCellRenderer
+import common.ui.dsl.DslCallbacks
+import common.ui.dsl.comboBoxView
+import common.ui.swing.TileCellRenderer
 
 class LangItemPanel : DslCallbacks {
 

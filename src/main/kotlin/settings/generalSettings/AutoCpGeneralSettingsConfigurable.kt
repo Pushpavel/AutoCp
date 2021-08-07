@@ -4,7 +4,7 @@ import com.intellij.openapi.options.BoundConfigurable
 import com.intellij.ui.layout.panel
 import settings.langSettings.AutoCpLangSettings
 import settings.langSettings.model.Lang
-import ui.dsl.simpleComboBoxView
+import common.ui.dsl.simpleComboBoxView
 
 class AutoCpGeneralSettingsConfigurable : BoundConfigurable("AutoCp") {
 

@@ -14,9 +14,9 @@ import database.autoCp
 import settings.langSettings.AutoCpLangSettings
 import settings.langSettings.model.BuildConfig
 import settings.langSettings.model.Lang
-import ui.dsl.comboBoxView
-import ui.dsl.startValidating
-import ui.helpers.isError
+import common.ui.dsl.comboBoxView
+import common.ui.dsl.startValidating
+import common.ui.helpers.isError
 import kotlin.io.path.Path
 
 /**

@@ -8,7 +8,7 @@ import common.helpers.UniqueNameEnforcer
 import database.autoCp
 import database.models.SolutionFile
 import database.models.Testcase
-import ui.swing.editableList.EditableListView
+import common.ui.swing.editableList.EditableListView
 import javax.swing.JComponent
 import javax.swing.event.ListDataEvent
 import javax.swing.event.ListDataListener
