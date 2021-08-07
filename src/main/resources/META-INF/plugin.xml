@@ -29,6 +29,7 @@
         <fileType name="Autocp Storage File" patterns=".autocp"
                   implementationClass="database.AutoCpFileType"/>
         <fileEditorProvider implementation="database.AutoCpFileEditorProvider"/>
+        <project.converterProvider implementation="common.compat.v0_5.AutoCpProjectConverterProvider" id="AutoCp v0.3"/>
     </extensions>
 
     <actions>
