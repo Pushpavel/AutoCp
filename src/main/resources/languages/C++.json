@@ -1,6 +1,6 @@
 {
   "langId": "ObjectiveC",
-  "fileTemplateName": "C/C++",
+  "fileTemplateName": "C++",
   "defaultBuildConfigId": 0,
   "buildConfigs": [
     {
