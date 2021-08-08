@@ -114,7 +114,7 @@ class LangItemPanel : DslCallbacks {
 
     override fun apply() {
         selectedLang?.apply {
-            selectedLang = copy(buildConfigs = buildConfigsModel.items)
+            selectedLang = copy(buildConfigs = buildConfigsModel.items.toList())
             dialogPanel.apply()
         }
     }
