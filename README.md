@@ -13,33 +13,47 @@ _Automates Competitive Programming Stuff, so you can focus on solving the proble
 
 </div>
 
-> [Competitive Companion](https://github.com/jmerle/competitive-companion) browser extension is required to parse the problems
 
 <!-- Plugin description -->
+> [Competitive Companion](https://github.com/jmerle/competitive-companion) browser extension is required to parse the problems
 
 Generate and judge your solution files in Programming Contests 😀. [See Docs](https://github.com/Pushpavel/AutoCp)
 
-- Go to <kbd>tools</kbd> > <kbd>Gather Problems</kbd> to generate solution files
-  using [Competitive Companion](https://github.com/jmerle/competitive-companion).
+> WARNING: Updates might remove previous problem's data or settings
+
+- Go to <kbd>Tools</kbd> > <kbd>Gather Problems</kbd> to generate solution files
+  using [Competitive Companion](https://github.com/jmerle/competitive-companion) (browser extension).
 - Open <kbd>View</kbd> > <kbd>Tool Windows</kbd> > <kbd>AutoCp</kbd> to edit testcases.
+- Go to <kbd>Settings/Preferences</kbd> > <kbd>Tools</kbd> > <kbd>AutoCp</kbd> > <kbd>Languages</kbd> to add new
+  language support and edit build configurations
+- Go to <kbd>Settings/Preferences</kbd> > <kbd>Editor</kbd> > <kbd>File and Code Templates</kbd> > <kbd>
+  Other</kbd> > <kbd>AutoCp Templates</kbd> to edit File Templates
 
 ### Features
 
-- Create solution Files using [Competitive Companion](https://github.com/jmerle/competitive-companion)
-- Build and run any programming language by customizing the build command in <kbd>Settings/Preferences</kbd>
-- Test your solutions against sample testcases, or your own testcases
-- Test results are presented in Test Runner UI built in the IDE.
+- Generate solution Files from contests or problems
+  using [Competitive Companion](https://github.com/jmerle/competitive-companion)
+- supports File Templates
+- supports using any programming language supported by the IDE
+- supports sample Testcase editor
+- results are presented in Test Runner UI built in the IDE.
 
 <!-- Plugin description end -->
 
 ### Installation
 
-- Using IDE built-in plugin system:
+Manually installing the plugin would give you the latest version at least a day earlier than IDE built-in plugin system
 
-  <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>Marketplace</kbd> > <kbd>Search for "AutoCp"</kbd> >
-  <kbd>Install Plugin</kbd>
+- __Using IDE built-in plugin system:__
 
-- Manually:
+    - Include pre-release versions (required)
+        - <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>⚙️</kbd> > Manage Plugin Repositories...
+        - Add <https://plugins.jetbrains.com/plugins/eap/list> to the list
+    - <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>Marketplace</kbd> > <kbd>Search for "AutoCp"</kbd> >
+      <kbd>Install Plugin</kbd>
+
+
+- __Manually:__
 
   Download the [latest release](https://github.com/Pushpavel/autoCP/releases/latest) and install it manually using
   <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>⚙️</kbd> > <kbd>Install plugin from disk...</kbd>
@@ -51,7 +65,8 @@ Generate and judge your solution files in Programming Contests 😀. [See Docs](
 - Program your solution 😎
 - Right-click your solution and run it
 - Open <kbd>View</kbd> > <kbd>Tool Windows</kbd> > <kbd>AutoCp</kbd> to view and edit your testcases
-- Customize Build commands or add new Programming Languages through <kbd>Settings / Preferences</kbd> > <kbd>AutoCp</kbd>
+- Customize Build commands or add new Programming Languages through <kbd>Settings / Preferences</kbd> > <kbd>
+  AutoCp</kbd>
 
 ### Screenshot
 
