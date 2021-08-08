@@ -62,11 +62,11 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git commit -m "Update changelog for ${{ github.event.release.tag_name }}" -a
+          git commit -m "📝: updated CHANGELOG.md for ${{ github.event.release.tag_name }}" -a
 
       # Push changes
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
-          branch: ${{ github.ref }}
+          branch: ${{ github.event.release.target_commitish }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
