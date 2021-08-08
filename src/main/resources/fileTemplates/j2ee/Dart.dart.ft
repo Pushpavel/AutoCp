@@ -3,6 +3,8 @@
  *
  * wrap the code like #[[ code ]]# so that it is generated as it is
  *#
-#[[main(){
+#[[
+main(){
 
-}]]#
+}
+]]#
