@@ -15,28 +15,28 @@ _Automates Competitive Programming Stuff, so you can focus on solving the proble
 
 
 <!-- Plugin description -->
-> [Competitive Companion](https://github.com/jmerle/competitive-companion) browser extension is required to parse the problems
-
 Generate and judge your solution files in Programming Contests 😀. [See Docs](https://github.com/Pushpavel/AutoCp)
+
+> [Competitive Companion](https://github.com/jmerle/competitive-companion) browser extension is required
 
 > WARNING: Updates might remove previous problem's data or settings
 
-- Go to <kbd>Tools</kbd> > <kbd>Gather Problems</kbd> to generate solution files
+- Go to ```Tools``` > ```Gather Problems``` to generate solution files
   using [Competitive Companion](https://github.com/jmerle/competitive-companion) (browser extension).
-- Open <kbd>View</kbd> > <kbd>Tool Windows</kbd> > <kbd>AutoCp</kbd> to edit testcases.
-- Go to <kbd>Settings/Preferences</kbd> > <kbd>Tools</kbd> > <kbd>AutoCp</kbd> > <kbd>Languages</kbd> to add new
-  language support and edit build configurations
-- Go to <kbd>Settings/Preferences</kbd> > <kbd>Editor</kbd> > <kbd>File and Code Templates</kbd> > <kbd>
-  Other</kbd> > <kbd>AutoCp Templates</kbd> to edit File Templates
+- Open ```View``` > ```Tool Windows``` > ```AutoCp``` to edit testcases.
+- Go to ```Settings/Preferences``` > ```Tools``` > ```AutoCp``` > ```Languages``` to add new language support and edit
+  build configurations
+- Go to ```Settings/Preferences``` > ```Editor``` > ```File and Code Templates``` > ```
+  Other``` > ```AutoCp Templates``` to edit File Templates
 
 ### Features
 
 - Generate solution Files from contests or problems
   using [Competitive Companion](https://github.com/jmerle/competitive-companion)
-- supports File Templates
-- supports using any programming language supported by the IDE
-- supports sample Testcase editor
-- results are presented in Test Runner UI built in the IDE.
+- Supports File Templates
+- Supports using any programming language supported by the IDE
+- Supports sample Testcase editor
+- Results are presented in Test Runner UI built in the IDE.
 
 <!-- Plugin description end -->
 
@@ -88,6 +88,7 @@ to.
 > This restriction will be removed
 
 ### Limitations
+
 Hopefully, these limitations will be removed soon.
 
 - Memory Limit is ignored.
