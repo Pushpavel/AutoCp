@@ -6,5 +6,4 @@
  *#
 #[[program main
   implicit none
-end program main 
-]]#
+end program main]]#
