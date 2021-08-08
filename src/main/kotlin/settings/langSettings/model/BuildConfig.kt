@@ -7,7 +7,7 @@ import settings.generalSettings.AutoCpGeneralSettings
 
 @Serializable
 data class BuildConfig(
-    val id: Long,
+    val id: String,
     val name: String,
     val buildCommand: String
 ) {
@@ -31,7 +31,7 @@ data class BuildConfig(
 
 
 data class MutableBuildConfig(
-    var id: Long = -1,
+    var id: String = "",
     var name: String = "",
     var buildCommand: String = "",
 ) {

@@ -18,7 +18,7 @@ class AutoCpConfig(project: Project, factory: ConfigurationFactory, name: String
     LocatableConfigurationBase<RunProfileState>(project, factory, name) {
 
     var solutionFilePath: String = ""
-    var buildConfigId: Long? = null
+    var buildConfigId: String? = null
 
 
     /**
