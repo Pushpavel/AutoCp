@@ -4,8 +4,7 @@
  *
  * wrap the code like #[[ code ]]# so that it is generated as it is
  *#
-#[[
-program main
+#[[program main
   implicit none
 end program main 
 ]]#
