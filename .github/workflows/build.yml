@@ -226,6 +226,7 @@ jobs:
           body: ${{ needs.build.outputs.changelog }}
           commit: ${{ github.ref }}
           draft: true
+          prerelease: ${{ github.ref == 'refs/heads/eap' }}
 
       # Download plugin artifact provided by the previous job
       - name: Download Artifact
