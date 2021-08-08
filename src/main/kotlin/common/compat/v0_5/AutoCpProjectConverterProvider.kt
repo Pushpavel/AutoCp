@@ -12,7 +12,7 @@ import kotlin.io.path.readText
 
 class AutoCpProjectConverterProvider : ConverterProvider() {
     override fun getConversionDescription(): String {
-        return "Current Settings, .autocp and Run configurations will be removed and replaced with new defaults"
+        return "AutoCp Settings, .autocp file and its Run configurations will be removed to use the new version"
     }
 
     override fun createConverter(context: ConversionContext): ProjectConverter {
