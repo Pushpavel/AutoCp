@@ -3,6 +3,7 @@
 # AutoCp Changelog
 
 ## [Unreleased]
+
 ## [v0.5.0-eap.1]
 
 ### Added
