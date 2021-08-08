@@ -60,19 +60,20 @@ Manually installing the plugin would give you the latest version at least a day 
 
 ### Quick Start
 
+- Make sure you installed [Competitive Companion](https://github.com/jmerle/competitive-companion) browser extension.
+- Make sure your programming language is already set up.
+    - <kbd>Settings/Preferences</kbd> > <kbd>Tools</kbd> > <kbd>AutoCp</kbd> > <kbd>Languages</kbd>.
 - Create solution files by <kbd>Tools</kbd> > <kbd>Gather Problems</kbd> and parsing the problem or contest
   using [Competitive Companion](https://github.com/jmerle/competitive-companion)
 - Program your solution 😎
-- Right-click your solution and run it
 - Open <kbd>View</kbd> > <kbd>Tool Windows</kbd> > <kbd>AutoCp</kbd> to view and edit your testcases
-- Customize Build commands or add new Programming Languages through <kbd>Settings / Preferences</kbd> > <kbd>
-  AutoCp</kbd>
+- Right-click your solution file and run using AutoCp ️
 
 ### Screenshot
 
 ![CLION Screenshot](Screenshot.png)
 
-### Why is there a ```.autocp``` file at the root of my project ?
+### ```.autocp``` file
 
 This file stores the problems and testcases you gathered using <kbd>Gather Problems</kbd> Action. It is very crucial to
 this plugin and should not be touched.
@@ -80,14 +81,19 @@ this plugin and should not be touched.
 ### File Structure
 
 <kbd>Gather Problems</kbd> Action generates solution files inside a folder named by
-the [group](https://github.com/jmerle/competitive-companion#explanation) that the problem belows to.
+the [group](https://github.com/jmerle/competitive-companion#explanation) (mostly Contest Name) that the problem belongs
+to.
+
 > Moving or renaming files will unlink the solution file to its problem
+> This restriction will be removed
 
 ### Limitations
+Hopefully, these limitations will be removed soon.
 
 - Memory Limit is ignored.
 - Strict File Structure
 - No Debugging through AutoCp
+- Only files created by AutoCp can be run by AutoCp
 
 ### Help? 😀
 
@@ -103,7 +109,7 @@ Read the [contributing guide](CONTRIBUTING.md) to learn how you can take part in
 
 ### License
 
-The scripts and documentation in this project are released under the [Apache License 2.0](LICENSE.md)
+The scripts and documentation in this project are released under the [MIT License](LICENSE)
 
 ---
 Plugin based on the [IntelliJ Platform Plugin Template][template].
