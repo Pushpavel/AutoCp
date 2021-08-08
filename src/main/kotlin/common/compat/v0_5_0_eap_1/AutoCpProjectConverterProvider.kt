@@ -1,4 +1,4 @@
-package common.compat.v0_5
+package common.compat.v0_5_0_eap_1
 
 import com.intellij.conversion.*
 import database.AutoCpDB
