@@ -49,4 +49,4 @@ touch
 
 ### License
 
-By contributing, you agree that your contributions will be licensed under its [Apache License 2.0](LICENSE.md).
+By contributing, you agree that your contributions will be licensed under its [MIT License](LICENSE).
