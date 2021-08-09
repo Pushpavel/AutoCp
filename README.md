@@ -5,7 +5,7 @@
 
 # AutoCp
 
-_Automates Competitive Programming Stuff, so you can focus on solving the problem and improving your skills_
+Competitive Programming Plugin for Intellij-Based IDEs
 
 ![Build](https://github.com/Pushpavel/autoCP/workflows/Build/badge.svg)
 [![Version](https://img.shields.io/jetbrains/plugin/v/17061.svg)](https://plugins.jetbrains.com/plugin/17061-autocp)
@@ -13,28 +13,28 @@ _Automates Competitive Programming Stuff, so you can focus on solving the proble
 
 </div>
 
-
+[Plugin Homepage](https://plugins.jetbrains.com/plugin/17061-autocp)
 <!-- Plugin description -->
-Generate and judge your solution files in Programming Contests 😀. [See Docs](https://github.com/Pushpavel/AutoCp)
+__Generates files and judges your solutions while Competitive Programming.__
 
-> [Competitive Companion](https://github.com/jmerle/competitive-companion) browser extension is required
+Problems and Contests from these [contest websites](https://github.com/jmerle/competitive-companion#supported-websites) are supported. If you come across bugs or have feature requests, please raise
+an [issue](https://github.com/Pushpavel/AutoCp/issues/new) on our GitHub repository.
 
-> WARNING: Updates might remove previous problem's data or settings
+### Quick Start
 
-- Go to ```Tools``` > ```Gather Problems``` to generate solution files
-  using [Competitive Companion](https://github.com/jmerle/competitive-companion) (browser extension).
-- Open ```View``` > ```Tool Windows``` > ```AutoCp``` to edit testcases.
-- Go to ```Settings/Preferences``` > ```Tools``` > ```AutoCp``` > ```Languages``` to add new language support and edit
-  build configurations
-- Go to ```Settings/Preferences``` > ```Editor``` > ```File and Code Templates``` > ```
-  Other``` > ```AutoCp Templates``` to edit File Templates
+- Make sure you had installed [Competitive Companion](https://github.com/jmerle/competitive-companion).
+    - [Chrome extension <img valign="middle" src="https://img.shields.io/chrome-web-store/v/cjnmckjndlpiamhfimnnjmnckgghkjbl.svg?label=%20">](https://chrome.google.com/webstore/detail/competitive-companion/cjnmckjndlpiamhfimnnjmnckgghkjbl)
+    - [Firefox add-on <img valign="middle" src="https://img.shields.io/amo/v/competitive-companion.svg?label=%20">](https://addons.mozilla.org/en-US/firefox/addon/competitive-companion/)
+- Create solution files by ```Tools``` > ```Gather Problems```
+- Program your solution 😎
+- Open ```View``` > ```Tool Windows``` > ```AutoCp``` to view and edit your testcases
+- Right-click your solution file and run using AutoCp ️
 
 ### Features
 
-- Generate solution Files from contests or problems
-  using [Competitive Companion](https://github.com/jmerle/competitive-companion)
+- Generate files from [contest websites](https://github.com/jmerle/competitive-companion#supported-websites)
 - Supports File Templates
-- Supports using any programming language supported by the IDE
+- Supports all Programming languages supported by the IDE.some might need setup.
 - Supports sample Testcase editor
 - Results are presented in Test Runner UI built in the IDE.
 
@@ -58,17 +58,6 @@ Manually installing the plugin would give you the latest version at least a day 
   Download the [latest release](https://github.com/Pushpavel/autoCP/releases/latest) and install it manually using
   <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>⚙️</kbd> > <kbd>Install plugin from disk...</kbd>
 
-### Quick Start
-
-- Make sure you installed [Competitive Companion](https://github.com/jmerle/competitive-companion) browser extension.
-- Make sure your programming language is already set up.
-    - <kbd>Settings/Preferences</kbd> > <kbd>Tools</kbd> > <kbd>AutoCp</kbd> > <kbd>Languages</kbd>.
-- Create solution files by <kbd>Tools</kbd> > <kbd>Gather Problems</kbd> and parsing the problem or contest
-  using [Competitive Companion](https://github.com/jmerle/competitive-companion)
-- Program your solution 😎
-- Open <kbd>View</kbd> > <kbd>Tool Windows</kbd> > <kbd>AutoCp</kbd> to view and edit your testcases
-- Right-click your solution file and run using AutoCp ️
-
 ### Screenshot
 
 ![CLION Screenshot](Screenshot.png)
@@ -81,8 +70,7 @@ this plugin and should not be touched.
 ### File Structure
 
 <kbd>Gather Problems</kbd> Action generates solution files inside a folder named by
-the [group](https://github.com/jmerle/competitive-companion#explanation) (mostly Contest Name) that the problem belongs
-to.
+the ```<judge> - <category/contest>``` that the problem belongs to.
 
 > Moving or renaming files will unlink the solution file to its problem
 > This restriction will be removed
