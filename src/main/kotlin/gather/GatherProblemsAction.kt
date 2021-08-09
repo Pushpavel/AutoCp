@@ -8,16 +8,14 @@ import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.application.invokeLater
 import com.intellij.openapi.project.DumbAware
 import common.helpers.causes
+import common.helpers.mainScope
 import database.autoCp
 import gather.server.createServer
 import gather.server.getResponsesAsync
 import gather.ui.GatheringReporterDialog
 import gather.ui.solutionsDialog.SolutionsDialog
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.swing.Swing
 import java.net.ServerSocket
 import java.net.SocketTimeoutException
 
@@ -33,13 +31,14 @@ class GatherProblemsAction : AnAction(), DumbAware {
     }
 
     private var server: ServerSocket? = null
+    private var scope = mainScope()
 
     @ExperimentalCoroutinesApi
     override fun actionPerformed(event: AnActionEvent) {
         if (isServerActive())
             return
 
-        GlobalScope.launch(Dispatchers.Swing) {
+       scope.launch {
             runCatching {
 
                 val project = event.project!!
@@ -101,4 +100,6 @@ class GatherProblemsAction : AnAction(), DumbAware {
     private fun isServerActive(): Boolean {
         return server != null && !server!!.isClosed
     }
+
+
 }

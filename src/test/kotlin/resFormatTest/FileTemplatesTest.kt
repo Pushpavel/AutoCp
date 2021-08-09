@@ -10,7 +10,7 @@ import kotlin.io.path.extension
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class FileTemplatesTest {
-    lateinit var fileTemplatePaths: List<Path>
+    private lateinit var fileTemplatePaths: List<Path>
 
     @BeforeAll
     fun setup() {
