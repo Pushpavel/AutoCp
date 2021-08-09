@@ -22,7 +22,7 @@ import javax.swing.Icon
 class SolutionsDialog(private val groupName: String, problems: List<Problem>) : DialogWrapper(false) {
 
     private val solutionListModel = CollectionListModel(problems.toMutableList())
-    var langIcon: Icon? = null
+    private var langIcon: Icon? = null
 
     private val problemList = JBList(solutionListModel).apply {
         cellRenderer = TileCellRenderer {

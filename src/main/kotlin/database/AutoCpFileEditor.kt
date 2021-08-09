@@ -7,8 +7,8 @@ import com.intellij.openapi.fileEditor.FileEditorProvider
 import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
+import com.intellij.ui.layout.applyToComponent
 import com.intellij.ui.layout.panel
-import com.intellij.util.ui.JBFont
 import javax.swing.JComponent
 
 class AutoCpFileEditorProvider : FileEditorProvider, DumbAware {
@@ -23,7 +23,9 @@ class AutoCpFileEditorProvider : FileEditorProvider, DumbAware {
                 row {
                     subRowIndent = 1
                     row {
-                        label("AutoCp Storage File", JBFont.h1())
+                        label("AutoCp Storage File").applyToComponent {
+                            font = font.deriveFont(32F)
+                        }
                     }
                     row {
                         label("Stores parsed problems and testcases")

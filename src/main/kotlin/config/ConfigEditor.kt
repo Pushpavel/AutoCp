@@ -24,6 +24,7 @@ import kotlin.io.path.Path
  * UI Editor of [AutoCpConfig] Run Configuration
  */
 class ConfigEditor(project: Project) : SettingsEditor<AutoCpConfig>(), DumbAware {
+    @Suppress("MemberVisibilityCanBePrivate")
     var solutionFilePath = ""
     private var buildConfigId: String? = null
 

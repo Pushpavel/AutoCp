@@ -20,7 +20,7 @@ class GatheringReporterDialog(project: Project, parentScope: CoroutineScope) : A
     private val statusLabel = JBLabel("Listening for competitive companion...")
     private val dialog = DialogBuilder(project)
     val eventsChannel = Channel<ProblemGatheredEvent>()
-    var job: Job
+    private var job: Job
 
     init {
         dialog.apply {

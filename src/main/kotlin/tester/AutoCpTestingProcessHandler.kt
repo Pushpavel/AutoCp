@@ -19,7 +19,7 @@ import kotlin.io.path.pathString
 class AutoCpTestingProcessHandler(private val config: AutoCpConfig) : TestingProcessHandler() {
 
     private val reporter = TreeTestingProcessReporter(this)
-    val db = config.project.autoCp()
+    private val db = config.project.autoCp()
 
     override suspend fun createTestingProcess() = runCatching {
         // get and validate SolutionFile from config
