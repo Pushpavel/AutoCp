@@ -1,7 +1,8 @@
 package common.ui.helpers
 
-import kotlinx.coroutines.*
-import kotlin.coroutines.CoroutineContext
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 
 val exceptionPrinter = CoroutineExceptionHandler { _, throwable ->
     throwable.printStackTrace()
@@ -11,22 +12,7 @@ val exceptionPrinter = CoroutineExceptionHandler { _, throwable ->
  * Alternative to MainScope to avoid
  * https://github.com/Kotlin/kotlinx.coroutines/issues/1300
  */
+@Deprecated("don't use it")
 fun mainScope(): CoroutineScope {
     return CoroutineScope(Dispatchers.Main + exceptionPrinter)
-}
-
-fun viewScope(parentScope: CoroutineScope?) = childScope(parentScope, Dispatchers.Main)
-
-fun childScope(parentScope: CoroutineScope?, context: CoroutineContext): CoroutineScope {
-    val scope = CoroutineScope(exceptionPrinter + SupervisorJob() + context)
-
-    parentScope?.launch {
-        try {
-            awaitCancellation()
-        } finally {
-            scope.cancel()
-        }
-    }
-
-    return scope
 }

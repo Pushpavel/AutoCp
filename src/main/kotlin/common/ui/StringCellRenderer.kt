@@ -10,6 +10,7 @@ import javax.swing.JList
  * CellRenderer that maps model classes to presentable names with icons in ListViews
  * through @param cellGetter
  */
+@Deprecated("use TileCellRenderer")
 open class StringCellRenderer<out T>(private val cellGetter: (T) -> Pair<String, Icon?>?) :
     DefaultListCellRenderer() {
 
