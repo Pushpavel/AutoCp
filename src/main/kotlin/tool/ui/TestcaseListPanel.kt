@@ -5,10 +5,10 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Disposer
 import com.intellij.ui.CollectionListModel
 import common.helpers.UniqueNameEnforcer
+import common.ui.swing.editableList.EditableListView
 import database.autoCp
 import database.models.SolutionFile
 import database.models.Testcase
-import common.ui.swing.editableList.EditableListView
 import javax.swing.JComponent
 import javax.swing.event.ListDataEvent
 import javax.swing.event.ListDataListener
@@ -22,7 +22,7 @@ class TestcaseListPanel(project: Project, private val solutionFile: SolutionFile
         { testcaseListModel.items.map { it.name } }
     )
 
-    val db = project.autoCp()
+    private val db = project.autoCp()
     val component: JComponent
 
     init {

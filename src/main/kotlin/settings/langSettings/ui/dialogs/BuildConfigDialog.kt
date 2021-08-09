@@ -18,6 +18,7 @@ class BuildConfigDialog(
     create: Boolean
 ) : DialogWrapper(false) {
     var name = buildConfig.name
+    @Suppress("MemberVisibilityCanBePrivate")
     var buildCommand = buildConfig.buildCommand
 
     init {
