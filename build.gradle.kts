@@ -72,7 +72,7 @@ intellij {
 changelog {
     version = properties("pluginVersion")
     groups = emptyList()
-    headerParserRegex = Regex("""v[0-9]+.[0-9]+.[0-9]+""")
+    headerParserRegex = Regex("""v[0-9]+\.[0-9]+\.[0-9]+(-eap\.[1-9]+)?""")
 }
 
 tasks {

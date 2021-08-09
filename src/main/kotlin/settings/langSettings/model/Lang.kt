@@ -10,13 +10,13 @@ import kotlinx.serialization.Serializable
 data class Lang(
     val langId: String,
     val fileTemplateName: String?,
-    val defaultBuildConfigId: Long?,
+    val defaultBuildConfigId: String?,
     val buildConfigs: List<BuildConfig>,
 ) {
 
     fun getLanguage() = Language.findLanguageByID(langId)
 
-    fun getBuildConfig(id: Long?): BuildConfig? {
+    fun getBuildConfig(id: String?): BuildConfig? {
         return buildConfigs.run {
             firstOrNull { it.id == id } ?: firstOrNull()
         }
@@ -54,7 +54,7 @@ data class Lang(
 data class MutableLang(
     var langId: String = "",
     var fileTemplateName: String? = null,
-    var defaultBuildConfigId: Long? = null,
+    var defaultBuildConfigId: String? = null,
     var buildConfigs: List<MutableBuildConfig> = listOf(),
 ) {
     constructor(lang: Lang) : this(

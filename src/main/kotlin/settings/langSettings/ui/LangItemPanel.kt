@@ -79,7 +79,7 @@ class LangItemPanel : DslCallbacks {
         }
 
         val listContainer = ToolbarDecorator.createDecorator(jbList).setAddAction {
-            val blank = BuildConfig(System.currentTimeMillis(), "", "")
+            val blank = BuildConfig(System.currentTimeMillis().toString(), "", "")
             val newBuildConfig = BuildConfigDialog(blank, buildConfigNameEnforcer, true).showAndGetConfig()
             if (newBuildConfig != null) {
                 buildConfigsModel.add(newBuildConfig)
@@ -114,7 +114,7 @@ class LangItemPanel : DslCallbacks {
 
     override fun apply() {
         selectedLang?.apply {
-            selectedLang = copy(buildConfigs = buildConfigsModel.items)
+            selectedLang = copy(buildConfigs = buildConfigsModel.items.toList())
             dialogPanel.apply()
         }
     }

@@ -25,7 +25,7 @@ import kotlin.io.path.Path
  */
 class ConfigEditor(project: Project) : SettingsEditor<AutoCpConfig>(), DumbAware {
     var solutionFilePath = ""
-    private var buildConfigId: Long? = null
+    private var buildConfigId: String? = null
 
     private val buildConfigsModel = CollectionComboBoxModel<BuildConfig>()
 

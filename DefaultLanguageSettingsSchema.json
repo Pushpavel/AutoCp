@@ -14,13 +14,13 @@
       "description": [
         "Name of the default file template for generating files of this language",
         "These template files has to placed in src/main/resources/fileTemplates/j2ee folder",
-        "fileName should be of the format {Title Cased Language Name}.{languageFileExtension}.ft ex- C/C++.cpp.ft",
-        "This value only includes Title Cased Language Name ex- C/C++ for C/C++.cpp.ft"
+        "fileName should be of the format {Title Cased Language Name}.{languageFileExtension}.ft ex- C++.cpp.ft",
+        "This value only includes Title Cased Language Name ex- C++ for C++.cpp.ft"
       ]
     },
     {
       "name": "defaultBuildConfigId",
-      "type": "integer",
+      "type": "string",
       "description": "Default Build Config to use, should be id of one of the buildConfigs"
     },
     {
@@ -37,14 +37,10 @@
           },
           {
             "name": "id",
-            "type": "integer",
+            "type": "string",
             "description": [
-              "unique integer across buildConfigs in all default languages",
-              "please follow this convention",
-              "each language's build config id should have the same 100s digit",
-              "ex- C++: 0,1,2,..",
-              "Python: 100,101,102,..",
-              "Java: 200,201,202,.."
+              "unique string across buildConfigs in all default languages",
+              "it must be of the form {langId of this Language}.{name of this Build Config}"
             ]
           },
           {
@@ -54,7 +50,7 @@
               "template to construct a command that builds an executable",
               "this string must contain @in and @out",
               "@in will be replaced with input path of solution file with quotes",
-              "@out will be replaced with output path of the executable",
+              "@out will be replaced with output path of the executable with quotes",
               "example:",
               "g++ @in -o @out",
               "will be replaced as",
