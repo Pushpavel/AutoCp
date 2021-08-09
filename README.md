@@ -23,8 +23,8 @@ an [issue](https://github.com/Pushpavel/AutoCp/issues/new) on our GitHub reposit
 ### Quick Start
 
 - Make sure you had installed [Competitive Companion](https://github.com/jmerle/competitive-companion).
-    - [Chrome extension <img valign="middle" src="https://img.shields.io/chrome-web-store/v/cjnmckjndlpiamhfimnnjmnckgghkjbl.svg?label=%20">](https://chrome.google.com/webstore/detail/competitive-companion/cjnmckjndlpiamhfimnnjmnckgghkjbl)
-    - [Firefox add-on <img valign="middle" src="https://img.shields.io/amo/v/competitive-companion.svg?label=%20">](https://addons.mozilla.org/en-US/firefox/addon/competitive-companion/)
+    - [Chrome extension](https://chrome.google.com/webstore/detail/competitive-companion/cjnmckjndlpiamhfimnnjmnckgghkjbl)
+    - [Firefox add-on](https://addons.mozilla.org/en-US/firefox/addon/competitive-companion/)
 - Create solution files by ```Tools``` > ```Gather Problems```
 - Program your solution 😎
 - Open ```View``` > ```Tool Windows``` > ```AutoCp``` to view and edit your testcases
