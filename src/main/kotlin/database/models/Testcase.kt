@@ -1,10 +1,10 @@
 package database.models
 
-import kotlinx.serialization.Serializable
 import common.ui.StringCellRenderer
+import kotlinx.serialization.Serializable
 
 /**
- * Model class representing a single Testcase of a [Problem][com.github.pushpavel.autocp.database.Problem]
+ * Model class representing a single Testcase of a [Problem][database.models.Problem]
  */
 @Serializable
 data class Testcase(
