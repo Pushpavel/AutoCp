@@ -13,13 +13,12 @@ Competitive Programming Plugin for Intellij-Based IDEs
 
 </div>
 
-
+[Plugin Homepage](https://plugins.jetbrains.com/plugin/17061-autocp)
 <!-- Plugin description -->
 __Generates files and judges your solutions while Competitive Programming.__
 
-Refer [this](https://github.com/jmerle/competitive-companion#supported-websites) for supported contest websites. If you
-come across bugs or have feature requests, please raise an [issue](https://github.com/Pushpavel/AutoCp/issues/new) on
-our GitHub repository.
+Problems and Contests from these [contest websites](https://github.com/jmerle/competitive-companion#supported-websites) are supported. If you come across bugs or have feature requests, please raise
+an [issue](https://github.com/Pushpavel/AutoCp/issues/new) on our GitHub repository.
 
 ### Quick Start
 
