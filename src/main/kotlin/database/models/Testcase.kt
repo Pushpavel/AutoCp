@@ -1,6 +1,6 @@
 package database.models
 
-import common.ui.StringCellRenderer
+import common.ui.swing.TileCellRenderer
 import kotlinx.serialization.Serializable
 
 /**
@@ -13,8 +13,6 @@ data class Testcase(
     val output: String,
 ) {
     companion object {
-        fun cellRenderer(): StringCellRenderer<Testcase> {
-            return StringCellRenderer { Pair(it.name, null) }
-        }
+        fun cellRenderer() = TileCellRenderer<Testcase> { text = it.name }
     }
 }

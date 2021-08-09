@@ -5,8 +5,8 @@ import com.intellij.openapi.ui.DialogWrapper
 import com.intellij.ui.ListSpeedSearch
 import com.intellij.ui.components.JBList
 import com.intellij.ui.layout.panel
-import common.ui.StringCellRenderer
 import common.ui.helpers.onSelectedValue
+import common.ui.swing.TileCellRenderer
 import settings.langSettings.model.Lang
 
 
@@ -32,8 +32,9 @@ class IDELangSelectorDialog(addedLangList: List<Lang>) : DialogWrapper(false) {
 
     override fun createCenterPanel() = panel {
 
-        list.cellRenderer = StringCellRenderer<Language> {
-            Pair(it.displayName, it.associatedFileType?.icon)
+        list.cellRenderer = TileCellRenderer {
+            text = it.displayName
+            icon = it.associatedFileType?.icon
         }
 
         ListSpeedSearch(list) { it.displayName }
