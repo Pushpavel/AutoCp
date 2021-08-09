@@ -4,6 +4,8 @@
 
 ## [Unreleased]
 
+## [v0.5.0-eap.1]
+
 ### Added
 
 - File Templates support
