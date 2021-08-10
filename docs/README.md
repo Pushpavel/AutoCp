@@ -6,7 +6,7 @@ __Generates files and judges your solutions while Competitive Programming.__
 
 Problems and Contests from these [contest websites](https://github.com/jmerle/competitive-companion#supported-websites)
 are supported. If you come across bugs or have feature requests, please raise
-an [issue](https://github.com/Pushpavel/AutoCp/issues/new) on our GitHub repository.
+an [issue](https://github.com/Pushpavel/AutoCp/issues/new/choose) on our GitHub repository.
 
 ![CLION Screenshot](_assets/Screenshot.png)
 

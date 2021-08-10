@@ -18,7 +18,7 @@ Competitive Programming Plugin for Intellij-Based IDEs
 __Generates files and judges your solutions while Competitive Programming.__
 
 Problems and Contests from these [contest websites](https://github.com/jmerle/competitive-companion#supported-websites) are supported. If you come across bugs or have feature requests, please raise
-an [issue](https://github.com/Pushpavel/AutoCp/issues/new) on our GitHub repository.
+an [issue](https://github.com/Pushpavel/AutoCp/issues/new/choose) on our GitHub repository.
 
 ### Quick Start
 
@@ -87,7 +87,7 @@ Hopefully, these limitations will be removed soon.
 ### Help? 😀
 
 - If you've noticed a bug or have a feature request,
-  consider [opening a new issue](https://github.com/Pushpavel/AutoCp/issues/new).
+  consider [opening a new issue](https://github.com/Pushpavel/AutoCp/issues/new/choose).
 - Use [discussions](https://github.com/Pushpavel/AutoCp/discussions) for questions.
 
 ### Contributing
