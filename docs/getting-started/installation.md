@@ -1,3 +1,5 @@
+!> At the moment, only pre-release versions of the plugin are available
+
 ## Install Plugin
 
 ?> Manually installing the plugin would give you the latest version at least 2 days earlier than IDE built-in plugin
@@ -25,4 +27,8 @@ system
 
   <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>⚙️</kbd> > <kbd>Install plugin from disk...</kbd>
 
-!> At the moment, only pre-release versions of the plugin are available
+## Programming Language Setup
+
+You must refer some online resources for setting up Build tools for programming languages you wish to use with Autocp.
+
+?> AutoCp plugin is not bundled with any build tool.
