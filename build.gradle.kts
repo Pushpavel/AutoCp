@@ -72,6 +72,7 @@ intellij {
 changelog {
     version = properties("pluginVersion")
     groups = emptyList()
+    path = "docs/CHANGELOG.md"
     headerParserRegex = Regex("""v[0-9]+\.[0-9]+\.[0-9]+(-eap\.[1-9]+)?""")
 }
 
