@@ -32,3 +32,14 @@ system
 You must refer some online resources for setting up Build tools for programming languages you wish to use with Autocp.
 
 ?> AutoCp plugin is not bundled with any build tool.
+
+## Competitive Companion
+
+A browser extension which parses competitive programming problems from various online judges (like Codeforces and UVa).
+
+- [**Chrome extension**][link-cws] [<img valign="middle" src="https://img.shields.io/chrome-web-store/v/cjnmckjndlpiamhfimnnjmnckgghkjbl.svg?label=%20">][link-cws]
+- [**Firefox add-on**][link-amo] [<img valign="middle" src="https://img.shields.io/amo/v/competitive-companion.svg?label=%20">][link-amo]
+
+[link-cws]: https://chrome.google.com/webstore/detail/competitive-companion/cjnmckjndlpiamhfimnnjmnckgghkjbl
+
+[link-amo]: https://addons.mozilla.org/en-US/firefox/addon/competitive-companion/
