@@ -16,7 +16,7 @@ system
         https://plugins.jetbrains.com/plugins/eap/list
         ``` 
 
-    1. <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>Marketplace</kbd> > <kbd>Search for "AutoCp"</kbd> >
+    1. <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>Marketplace</kbd> tab > <kbd>Search for "AutoCp"</kbd> >
        <kbd>Install Plugin</kbd>
 
 
