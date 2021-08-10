@@ -1,5 +1,5 @@
 - [Home](/)
-  
-- Getting started
-  
-    - [Installation](/getting-started/installation.md)
+
+- [Installation](installation.md)
+
+- [Getting started](getting-started.md)
