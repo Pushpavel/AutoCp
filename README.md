@@ -60,7 +60,7 @@ Manually installing the plugin would give you the latest version at least a day 
 
 ### Screenshot
 
-![CLION Screenshot](Screenshot.png)
+![CLION Screenshot](docs/_assets/Screenshot.png)
 
 ### ```.autocp``` file
 
