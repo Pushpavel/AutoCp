@@ -1,10 +1,10 @@
 ## Quick start
 
-##### Install plugin
+#### Install plugin
 
 See instructions [here](installation.md)
 
-##### Gather the problems
+#### Gather the problems
 
 - In the IDE, open  <kbd>Tools</kbd> > <kbd>Gather Problems</kbd> Dialog.
 
@@ -12,12 +12,12 @@ See instructions [here](installation.md)
 
 - AutoCp will gather the problems and generates the boilerplate files.
 
-##### Edit testcases
+#### Edit testcases
 
 <kbd>View</kbd> > <kbd>Tool Windows</kbd> > <kbd>AutoCp</kbd> opens a tool window containing the testcases of the
 currently selected file.
 
-##### Check the solution
+#### Check the solution
 
 Right-click the solution file and run using AutoCp.
 
