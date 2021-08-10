@@ -2,8 +2,6 @@
 [![Version](https://img.shields.io/jetbrains/plugin/v/17061.svg)](https://plugins.jetbrains.com/plugin/17061-autocp)
 [![Downloads](https://img.shields.io/jetbrains/plugin/d/17061.svg)](https://plugins.jetbrains.com/plugin/17061-autocp)
 
-[Plugin Homepage](https://plugins.jetbrains.com/plugin/17061-autocp)
-
 __Generates files and judges your solutions while Competitive Programming.__
 
 Problems and Contests from these [contest websites](https://github.com/jmerle/competitive-companion#supported-websites)

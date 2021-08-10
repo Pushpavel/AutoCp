@@ -68,8 +68,8 @@
         plugins: [
             function (hook, vm) {
                 hook.beforeEach(function (html) {
-                    if (vm.route.file === "CHANGELOG.md")
-                        return '<div style="height: 48px"></div>' + html
+                    if (["CHANGELOG.md", "README.md"].includes(vm.route.file))
+                        return html
                     const url = 'https://github.com/Pushpavel/AutoCp/edit/docs/docs/' + vm.route.file;
                     const editHtml = '<div id="edit-page-link">\n' +
                         '\n' +
