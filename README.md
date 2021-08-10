@@ -55,7 +55,7 @@ Manually installing the plugin would give you the latest version at least a day 
 
 - __Manually:__
 
-  Download the [latest release](https://github.com/Pushpavel/autoCP/releases/latest) and install it manually using
+  Download the [latest release](https://github.com/Pushpavel/AutoCp/releases) and install it manually using
   <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>⚙️</kbd> > <kbd>Install plugin from disk...</kbd>
 
 ### Screenshot
