@@ -4,5 +4,5 @@
 
 > Competitive Programming Plugin for Intellij-Based IDEs
 
-[GitHub]()
-[Get Started]()
+[Marketplace](https://plugins.jetbrains.com/plugin/17061-autocp)
+[Get Started](getting-started.md)
