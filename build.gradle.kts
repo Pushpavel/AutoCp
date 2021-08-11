@@ -23,7 +23,7 @@ plugins {
     // gradle-intellij-plugin - read more: https://github.com/JetBrains/gradle-intellij-plugin
     id("org.jetbrains.intellij") version "1.1.4"
     // gradle-changelog-plugin - read more: https://github.com/JetBrains/gradle-changelog-plugin
-    id("org.jetbrains.changelog") version "1.1.2"
+    id("org.jetbrains.changelog") version "1.2.1"
 
     kotlin("plugin.serialization") version "1.5.21"
 }
@@ -71,9 +71,10 @@ intellij {
 // Configure gradle-changelog-plugin plugin.
 // Read more: https://github.com/JetBrains/gradle-changelog-plugin
 changelog {
-    version = properties("pluginVersion")
-    groups = emptyList()
-    headerParserRegex = Regex("""v[0-9]+\.[0-9]+\.[0-9]+(-eap\.[1-9]+)?""")
+    version.set(properties("pluginVersion"))
+    groups.set(emptyList())
+    path.set("docs/CHANGELOG.md")
+    headerParserRegex.set(Regex("""v[0-9]+\.[0-9]+\.[0-9]+(-eap\.[1-9]+)?"""))
 }
 
 tasks {
