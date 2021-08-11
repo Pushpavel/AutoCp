@@ -37,10 +37,15 @@ object AutoCpStrings {
                 gatheredProblemsList(parsed)
     }
 
-    fun gatheredProblemsList(problems: List<Problem>): String {
-        return "Gathered Problems:\n" +
-                problems.joinToString("\n") { it.name }
-    }
+    fun gatheredAllProblems(group: String, problems: List<Problem>) = "" +
+            "From $group\n\n" +
+            gatheredProblemsList(problems)
+
+    fun gatheredProblemsList(problems: List<Problem>) = "" +
+            "Gathered Problems:\n" +
+            problems.joinToString("\n") { it.name }
 }
 
 fun String.failed(): String = "$this Failed"
+
+fun String.success(): String = "$this Successful"

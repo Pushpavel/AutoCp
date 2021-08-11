@@ -10,11 +10,13 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 
 
-class ProblemGatheringServer : SimpleLocalServer(R.others.competitiveCompanionPorts) {
+class ProblemGatheringServer(
+    private val listener: ProblemGatheringServerListener
+) : SimpleLocalServer(R.others.competitiveCompanionPorts) {
 
     private val serializer = Json { ignoreUnknownKeys = true }
-    private var currentBatch: BatchJson? = null
-    private var parsedProblems = mutableListOf<Problem>()
+    var currentBatch: BatchJson? = null
+    var parsedProblems = mutableListOf<Problem>()
 
     override suspend fun onMessage(message: String) {
         val (problem, batch) = deserializeJson(message) ?: return
@@ -22,9 +24,19 @@ class ProblemGatheringServer : SimpleLocalServer(R.others.competitiveCompanionPo
         if (currentBatch != null && currentBatch != batch)
             return // ignoring different batches
 
-        parsedProblems.add(problem)
+        if (currentBatch == null)
+            listener.onBatchStart()
 
-        // TODO: utilize problem
+        parsedProblems.add(problem)
+        currentBatch = batch
+
+        listener.onProblem(parsedProblems, batch)
+
+        if (batch.size == parsedProblems.size) {
+            // all problems gathered
+            listener.onBatchEnd()
+            currentBatch = null
+        }
     }
 
     override suspend fun onTimeout() {

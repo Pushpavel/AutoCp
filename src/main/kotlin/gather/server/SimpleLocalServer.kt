@@ -19,7 +19,7 @@ abstract class SimpleLocalServer(private val ports: List<Int>) {
     private var serverSocket: ServerSocket? = null
     private val scope = ioScope()
 
-    fun start() {
+    fun startServer() {
         if (isActive()) return
 
         var portIndex = 0

@@ -33,6 +33,7 @@ data class ProblemJson(
 /**
  * data type of a property in ProblemJson
  */
+@Serializable
 data class BatchJson(
     val id: String,
     val size: Int
