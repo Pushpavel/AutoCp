@@ -84,7 +84,7 @@
                 hook.beforeEach(function (html) {
                     if (["CHANGELOG.md", "README.md"].includes(vm.route.file))
                         return html
-                    const url = 'https://github.com/Pushpavel/AutoCp/edit/docs/docs/' + vm.route.file;
+                    const url = 'https://github.com/Pushpavel/AutoCp/edit/gh-pages/docs/' + vm.route.file;
                     const editHtml = '<div id="edit-page-link">\n' +
                         '\n' +
                         '[<img id="github-icon" src="_assets/github-icon.svg"> Edit page](' + url + ') Last modified: {docsify-updated}\n' +
