@@ -6,6 +6,7 @@ import com.intellij.openapi.progress.Task
 import com.intellij.openapi.project.Project
 import common.res.R
 import gather.models.ProblemGatheredEvent
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -24,17 +25,16 @@ class ProblemGatheringProgressReporter(
         completed = false
 
         runBlocking {
-
             val job = launch {
                 progress?.collectLatest {
-                    indicator.fraction = (it.gathered / it.total).toDouble()
+                    indicator.fraction = it.gathered.toDouble() / it.total
                     indicator.text = it.problem.name
                     indicator.text2 = it.problem.groupName
                 }
             }
 
-            @Suppress("ControlFlowWithEmptyBody")
-            while (!indicator.isCanceled && !completed);
+            while (!indicator.isCanceled && !completed)
+                delay(100)
 
             if (indicator.isCanceled)
                 cancelCallback()

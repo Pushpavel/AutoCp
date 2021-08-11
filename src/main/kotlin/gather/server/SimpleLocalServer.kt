@@ -33,13 +33,12 @@ abstract class SimpleLocalServer(private val ports: List<Int>) {
                 )
 
             try {
-                serverSocket = ServerSocket(45, 50, InetAddress.getByName("localhost"))
+                serverSocket = ServerSocket(ports[portIndex], 50, InetAddress.getByName("localhost"))
                 onServerStart(serverSocket!!)
                 // successfully started the server
                 return
             } catch (e: SocketException) {
-                // failed
-                // retrying with next port
+                // failed retrying with next port
                 portIndex++
             }
         }
@@ -52,7 +51,7 @@ abstract class SimpleLocalServer(private val ports: List<Int>) {
     }
 
     private fun onServerStart(serverSocket: ServerSocket) {
-        serverSocket.soTimeout = 1000
+        serverSocket.soTimeout = 20000
         scope.launch(Dispatchers.IO) {
             while (true) {
                 try {
@@ -63,11 +62,11 @@ abstract class SimpleLocalServer(private val ports: List<Int>) {
 
                         if (strings.size > 1)
                             launch { onMessage(strings[1]) }
-
                     }
                 } catch (e: SocketTimeoutException) {
                     launch { onTimeout() }
                 } catch (e: SocketException) {
+                    e.printStackTrace()
                     // socket maybe closed, catch and ignore it
                 }
             }

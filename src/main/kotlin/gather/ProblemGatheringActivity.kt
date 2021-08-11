@@ -17,7 +17,7 @@ class ProblemGatheringActivity : StartupActivity, ProblemGatheringServerListener
     private val server = ProblemGatheringServer(this)
 
     override fun runActivity(project: Project) {
-        reporter = ProblemGatheringProgressReporter(project, this::onCancel)
+        reporter = ProblemGatheringProgressReporter(project, server::cancelCurrentBatch)
         server.startServer()
     }
 
@@ -26,10 +26,5 @@ class ProblemGatheringActivity : StartupActivity, ProblemGatheringServerListener
 
     override suspend fun onProblem(problems: List<Problem>, batch: BatchJson) {
         reporter.progress?.emit(ProblemGatheredEvent(problems.last(), problems.size, batch.size))
-    }
-
-
-    private fun onCancel() {
-        // TODO: ignore current Batch
     }
 }

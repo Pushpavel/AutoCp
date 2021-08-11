@@ -1,8 +1,12 @@
 package gather.server
 
 import common.helpers.notifyErr
+import common.helpers.notifyInfo
+import common.helpers.notifyWarn
 import common.res.R
+import common.res.cancelled
 import common.res.failed
+import common.res.success
 import database.models.Problem
 import gather.models.BatchJson
 import gather.models.ProblemJson
@@ -15,14 +19,22 @@ class ProblemGatheringServer(
 ) : SimpleLocalServer(R.others.competitiveCompanionPorts) {
 
     private val serializer = Json { ignoreUnknownKeys = true }
-    var currentBatch: BatchJson? = null
-    var parsedProblems = mutableListOf<Problem>()
+
+    private val ignoredBatches = mutableSetOf<BatchJson>()
+
+    private var currentBatch: BatchJson? = null
+    private var parsedProblems = mutableListOf<Problem>()
 
     override suspend fun onMessage(message: String) {
         val (problem, batch) = deserializeJson(message) ?: return
 
-        if (currentBatch != null && currentBatch != batch)
+        if (currentBatch != null && currentBatch != batch) {
+            ignoredBatches.add(batch)
             return // ignoring different batches
+        }
+
+        if (ignoredBatches.contains(batch))
+            return
 
         if (currentBatch == null)
             listener.onBatchStart()
@@ -34,7 +46,12 @@ class ProblemGatheringServer(
 
         if (batch.size == parsedProblems.size) {
             // all problems gathered
+            notifyInfo(
+                R.strings.problemGatheringTitle.success(),
+                R.strings.gatheredAllProblems(parsedProblems.first().groupName, parsedProblems)
+            )
             listener.onBatchEnd()
+            parsedProblems.clear()
             currentBatch = null
         }
     }
@@ -51,6 +68,19 @@ class ProblemGatheringServer(
                 currentBatch!!.size
             )
         )
+
+        parsedProblems.clear()
+        currentBatch = null
+    }
+
+    fun cancelCurrentBatch() {
+        currentBatch?.let {
+            ignoredBatches.add(it)
+            notifyWarn(
+                R.strings.problemGatheringTitle.cancelled(),
+                R.strings.gatheringProblemsCancelled(parsedProblems.first().groupName, parsedProblems, it.size)
+            )
+        }
 
         parsedProblems.clear()
         currentBatch = null

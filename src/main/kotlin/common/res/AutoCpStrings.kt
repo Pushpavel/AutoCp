@@ -29,11 +29,13 @@ object AutoCpStrings {
     const val competitiveCompanionJsonFormatErrMsg =
         "The Problem sent by competitive companion was not parsed correctly. This was not supposed to happen, $fileIssue"
 
+
     fun incompleteProblemsGathering(group: String, parsed: List<Problem>, total: Int): String {
         val c = total - parsed.size
         return "$c of the problem${if (c == 1) "" else 's'} from $group are not gathered. " +
                 "Possibly you clicked competitive companion button before AutoCp started listening. " +
-                "If it was not the case, " + fileIssue + "\n\n" +
+                "If it was not the case, " + fileIssue + "\n" +
+                "You could also try again\n\n" +
                 gatheredProblemsList(parsed)
     }
 
@@ -41,11 +43,25 @@ object AutoCpStrings {
             "From $group\n\n" +
             gatheredProblemsList(problems)
 
-    fun gatheredProblemsList(problems: List<Problem>) = "" +
+    fun gatheringProblemsCancelled(group: String, parsed: List<Problem>, total: Int) = "" +
+            "You have cancelled. " +
+            problemGatheringReport(group, parsed, total) + "\n\n" +
+            gatheredProblemsList(parsed)
+
+
+    private fun problemGatheringReport(group: String, parsed: List<Problem>, total: Int): String {
+        val c = total - parsed.size
+        return "$c of the problem${if (c == 1) "" else 's'} from $group are not gathered. "
+    }
+
+
+    private fun gatheredProblemsList(problems: List<Problem>) = "" +
             "Gathered Problems:\n" +
             problems.joinToString("\n") { it.name }
+
 }
 
 fun String.failed(): String = "$this Failed"
+fun String.cancelled(): String = "$this Cancelled"
 
 fun String.success(): String = "$this Successful"
