@@ -21,6 +21,18 @@ currently selected file.
 
 Right-click the solution file and run using AutoCp.
 
+## ```.autocp``` file
+
+This file stores the problems and testcases you gathered using <kbd>Gather Problems</kbd> Action. It is very crucial to
+this plugin and should not be touched.
+
+## File Structure
+
+<kbd>Gather Problems</kbd> Action generates solution files inside a folder named by
+the ```<judge> - <category/contest>``` that the problem belongs to.
+
+!> Moving or renaming files will unlink the solution file to its problem. This restriction will be removed
+
 ## Custom File Template
 
 AutoCp comes with few file templates optimized for competitive programming.
@@ -56,3 +68,19 @@ int main() {
 ```
 
 !> ```#[[``` causes a newline.
+
+## Limitations
+
+Hopefully, these limitations will be removed soon.
+
+- Memory Limit is ignored.
+- Strict File Structure
+- No Debugging through AutoCp
+- Only files created by AutoCp can be run by AutoCp
+
+## Help ? 😀
+
+- If you've noticed a bug or have a feature request,
+  consider [opening a new issue](https://github.com/Pushpavel/AutoCp/issues/new/choose).
+- Use [discussions](https://github.com/Pushpavel/AutoCp/discussions) for questions.
+

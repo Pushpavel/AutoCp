@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- Compatibility problems with IntelliJ IDEA Ultimate 
+
 ## [v0.5.0-eap.1]
 
 ### Added
