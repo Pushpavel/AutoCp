@@ -13,7 +13,7 @@ system
       and add the below url to the list
 
         ```url
-        https://plugins.jetbrains.com/plugins/eap/list
+        https://plugins.jetbrains.com/plugins/eap/17061
         ``` 
 
     1. <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>Marketplace</kbd> tab > <kbd>Search for "
