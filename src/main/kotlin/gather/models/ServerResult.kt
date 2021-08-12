@@ -1,7 +1,11 @@
 package gather.models
 
+import java.net.ServerSocket
+
 sealed interface ServerStatus {
-    object Started : ServerStatus
+    object Idle : ServerStatus
+    object Starting : ServerStatus
+    data class Started(val serverSocket: ServerSocket) : ServerStatus
     data class PortTakenErr(val failedPort: Int, val retryPort: Int?) : Exception(), ServerStatus
 }
 
