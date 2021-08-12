@@ -2,13 +2,10 @@ package gather.server
 
 import gather.models.ServerMessage
 import gather.models.ServerStatus
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
@@ -39,8 +36,8 @@ fun CoroutineScope.startServerAsync(ports: List<Int>, status: MutableStateFlow<S
 
             try {
                 val serverSocket = ServerSocket(ports[portIndex], 50, InetAddress.getByName("localhost"))
-                status.emit(ServerStatus.Started(serverSocket))
                 // successfully started the server
+                status.emit(ServerStatus.Started(serverSocket))
                 return@launch
             } catch (e: SocketException) {
                 // failed retrying with next port
@@ -52,6 +49,25 @@ fun CoroutineScope.startServerAsync(ports: List<Int>, status: MutableStateFlow<S
             status.emit(ServerStatus.PortTakenErr(ports[portIndex - 1], null))
 
         status.emit(ServerStatus.Idle)
+    }
+}
+
+/**
+ * listens to [status] and closes the serverSocket received in [ServerStatus.Started] event
+ * during the [ServerStatus.Stopped] event and also resets back to [ServerStatus.Idle]
+ */
+suspend fun setupServerStopper(status: MutableSharedFlow<ServerStatus>) = coroutineScope {
+    var serverSocket: ServerSocket? = null
+
+    status.collect {
+
+        if (it is ServerStatus.Started)
+            serverSocket = it.serverSocket
+        else if (it is ServerStatus.Stopped && serverSocket?.isClosed == false)
+            launch(Dispatchers.IO) {
+                serverSocket?.close()
+                status.emit(ServerStatus.Idle)
+            }
     }
 }
 

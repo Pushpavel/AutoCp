@@ -5,6 +5,7 @@ import java.net.ServerSocket
 sealed interface ServerStatus {
     object Idle : ServerStatus
     object Starting : ServerStatus
+    object Stopped : ServerStatus
     data class Started(val serverSocket: ServerSocket) : ServerStatus
     data class PortTakenErr(val failedPort: Int, val retryPort: Int?) : Exception(), ServerStatus
 }
