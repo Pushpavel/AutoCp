@@ -15,38 +15,40 @@ class AutoCpProjectSettingsConfigurable(project: Project) : BoundConfigurable("P
     private val projectSettings = project.autoCpProject()
 
     override fun createPanel() = panel {
-
-        row {
-            val box = checkBox(
-                "Override Preferred Language",
-                { projectSettings.overridePreferredLang },
-                { projectSettings.overridePreferredLang = it }
-            )
-
-            row("Preferred Language") {
-                simpleComboBoxView(
-                    langSettings.languages,
-                    { it.langId == projectSettings.guessPreferredLang()?.langId },
-                    { projectSettings.preferredLangId = it?.langId },
-                    Lang.cellRenderer()
-                )
-            }.enableIf(box.isSelected())
-        }
-        row {
-
-            val box = checkBox(
-                "Override ${R.strings.gatheringServiceOnStart}",
-                { projectSettings.overrideShouldStartGatheringOnStart },
-                { projectSettings.overrideShouldStartGatheringOnStart = it }
-            )
+        titledRow("Solution File Generation") {
 
             row {
-                checkBox(
-                    R.strings.gatheringServiceOnStart,
-                    { projectSettings.shouldStartGatheringOnStart },
-                    { projectSettings.shouldStartGatheringOnStart = it }
-                ).comment(R.strings.gatheringServiceOnStartDesc)
-            }.enableIf(box.isSelected())
+                val box = checkBox(
+                    "Override Preferred Language",
+                    { projectSettings.overridePreferredLang },
+                    { projectSettings.overridePreferredLang = it }
+                )
+
+                row("Preferred Language") {
+                    simpleComboBoxView(
+                        langSettings.languages,
+                        { it.langId == projectSettings.guessPreferredLang()?.langId },
+                        { projectSettings.preferredLangId = it?.langId },
+                        Lang.cellRenderer()
+                    )
+                }.enableIf(box.isSelected())
+            }
+            row {
+
+                val box = checkBox(
+                    "Override ${R.strings.gatheringServiceOnStart}",
+                    { projectSettings.overrideShouldStartGatheringOnStart },
+                    { projectSettings.overrideShouldStartGatheringOnStart = it }
+                )
+
+                row {
+                    checkBox(
+                        R.strings.gatheringServiceOnStart,
+                        { projectSettings.shouldStartGatheringOnStart },
+                        { projectSettings.shouldStartGatheringOnStart = it }
+                    ).comment(R.strings.gatheringServiceOnStartDesc)
+                }.enableIf(box.isSelected())
+            }
         }
     }
 

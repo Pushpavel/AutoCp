@@ -11,7 +11,7 @@ import settings.langSettings.model.Lang
     storages = [Storage("autoCpSettings.xml")]
 )
 @Service
-class AutoCpProjectSettings(val project: Project) : PersistentStateComponent<AutoCpProjectSettings> {
+class AutoCpProjectSettings : PersistentStateComponent<AutoCpProjectSettings> {
 
     var preferredLangId: String? = AutoCpLangSettings.instance.languages.firstOrNull()?.langId
     var overridePreferredLang = false
@@ -39,7 +39,12 @@ class AutoCpProjectSettings(val project: Project) : PersistentStateComponent<Aut
     }
 
     override fun getState() = this
-    override fun loadState(state: AutoCpProjectSettings) {}
+    override fun loadState(state: AutoCpProjectSettings) {
+        preferredLangId = state.preferredLangId
+        overridePreferredLang = state.overridePreferredLang
+        shouldStartGatheringOnStart = state.shouldStartGatheringOnStart
+        overrideShouldStartGatheringOnStart = state.overrideShouldStartGatheringOnStart
+    }
 }
 
 fun Project.autoCpProject(): AutoCpProjectSettings = service()

@@ -13,21 +13,23 @@ class AutoCpGeneralSettingsConfigurable : BoundConfigurable("AutoCp") {
     private val generalSettings = AutoCpGeneralSettings.instance
 
     override fun createPanel() = panel {
+        titledRow("Solution File Generation") {
 
-        row("Preferred Language") {
-            simpleComboBoxView(
-                langSettings.languages,
-                { it.langId == generalSettings.getPreferredLang()?.langId },
-                { generalSettings.preferredLangId = it?.langId },
-                Lang.cellRenderer()
-            )
-        }
-        row {
-            checkBox(
-                R.strings.gatheringServiceOnStart,
-                { generalSettings.shouldStartGatheringOnStart },
-                { generalSettings.shouldStartGatheringOnStart = it }
-            ).comment(R.strings.gatheringServiceOnStartDesc)
+            row("Preferred Language") {
+                simpleComboBoxView(
+                    langSettings.languages,
+                    { it.langId == generalSettings.getPreferredLang()?.langId },
+                    { generalSettings.preferredLangId = it?.langId },
+                    Lang.cellRenderer()
+                )
+            }
+            row {
+                checkBox(
+                    R.strings.gatheringServiceOnStart,
+                    { generalSettings.shouldStartGatheringOnStart },
+                    { generalSettings.shouldStartGatheringOnStart = it }
+                ).comment(R.strings.gatheringServiceOnStartDesc)
+            }
         }
     }
 }

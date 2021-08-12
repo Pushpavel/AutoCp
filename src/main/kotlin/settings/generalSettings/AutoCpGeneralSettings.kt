@@ -30,6 +30,7 @@ class AutoCpGeneralSettings : PersistentStateComponent<AutoCpGeneralSettings> {
 
     override fun loadState(state: AutoCpGeneralSettings) {
         preferredLangId = state.preferredLangId
+        shouldStartGatheringOnStart = state.shouldStartGatheringOnStart
     }
 
     companion object {
