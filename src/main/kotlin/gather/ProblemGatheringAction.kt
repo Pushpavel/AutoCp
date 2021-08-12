@@ -25,12 +25,12 @@ class ProblemGatheringAction : AnAction() {
         val service = e.project!!.service<ProblemGatheringService>()
         if (service.isRunning()) {
             e.presentation.icon = ExecutionUtil.getLiveIndicator(AllIcons.Webreferences.Server)
-            e.presentation.text = R.strings.startGatheringText
-            e.presentation.description = R.strings.startGatheringDesc
-        } else {
-            e.presentation.icon = (AllIcons.Webreferences.Server)
             e.presentation.text = R.strings.stopGatheringText
             e.presentation.description = R.strings.stopGatheringDesc
+        } else {
+            e.presentation.icon = (AllIcons.Webreferences.Server)
+            e.presentation.text = R.strings.startGatheringText
+            e.presentation.description = R.strings.startGatheringDesc
         }
     }
 }
