@@ -35,8 +35,9 @@ object AutoCpStrings {
     fun incompleteProblemsGathering(group: String, parsed: List<Problem>, total: Int): String {
         val c = total - parsed.size
         return "$c of the problem${if (c == 1) "" else 's'} from $group are not gathered. " +
-                "Possibly you clicked competitive companion button before AutoCp started listening. " +
-                "If it was not the case, " + fileIssue + "\n" +
+                "This could happen if you closed competitive companion or " +
+                "you clicked competitive companion button before AutoCp started listening. " +
+                "If it was not the case, " + fileIssue + "\n\n" +
                 "You could also try again\n\n" +
                 gatheredProblemsList(parsed)
     }
