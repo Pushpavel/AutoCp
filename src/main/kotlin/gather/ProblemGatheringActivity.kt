@@ -3,6 +3,7 @@ package gather
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.startup.StartupActivity
+import settings.projectSettings.autoCpProject
 
 /**
  * Starts a server and generates files arriving from competitive companion
@@ -10,6 +11,7 @@ import com.intellij.openapi.startup.StartupActivity
 class ProblemGatheringActivity : StartupActivity {
 
     override fun runActivity(project: Project) {
-        project.service<ProblemGatheringService>().startServiceAsync()
+        if (project.autoCpProject().shouldStartGatheringOnStart())
+            project.service<ProblemGatheringService>().startServiceAsync()
     }
 }
