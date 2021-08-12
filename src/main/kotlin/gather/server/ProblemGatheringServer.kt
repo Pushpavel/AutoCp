@@ -16,7 +16,7 @@ import kotlinx.serialization.json.Json
 
 class ProblemGatheringServer(
     private val listener: ProblemGatheringServerListener
-) : SimpleLocalServer(R.others.competitiveCompanionPorts) {
+) : SimpleLocalServer(R.others.competitiveCompanionPorts, R.others.problemGatheringTimeoutMillis) {
 
     private val serializer = Json { ignoreUnknownKeys = true }
 

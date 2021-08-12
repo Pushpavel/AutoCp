@@ -10,4 +10,6 @@ object AutoCpOthers {
         4244, // Hightail
         1327, // cpbooster
     )
+
+    val problemGatheringTimeoutMillis = 30000 // 30 sec
 }

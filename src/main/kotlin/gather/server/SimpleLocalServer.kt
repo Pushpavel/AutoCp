@@ -15,7 +15,7 @@ import java.net.ServerSocket
 import java.net.SocketException
 import java.net.SocketTimeoutException
 
-abstract class SimpleLocalServer(private val ports: List<Int>) {
+abstract class SimpleLocalServer(private val ports: List<Int>, private val timeout: Int) {
     private var serverSocket: ServerSocket? = null
     private val scope = ioScope()
 
@@ -51,7 +51,7 @@ abstract class SimpleLocalServer(private val ports: List<Int>) {
     }
 
     private fun onServerStart(serverSocket: ServerSocket) {
-        serverSocket.soTimeout = 20000
+        serverSocket.soTimeout = timeout
         scope.launch(Dispatchers.IO) {
             while (true) {
                 try {
