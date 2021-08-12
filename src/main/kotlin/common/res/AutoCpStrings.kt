@@ -9,13 +9,15 @@ object AutoCpStrings {
     const val runConfigDescription = "Test your Competitive Programming solution with AutoCp"
 
 
-    // Error messages
     const val problemGatheringTitle = "Problem Gathering"
 
     const val fileIssue = "please file an issue (https://github.com/Pushpavel/AutoCp/issues/new/choose)"
 
 
-    // Server Port Errors
+    const val serverTitle = "Problem Gathering Service"
+    fun serverRunningMsg(port: Int) = "Server is listening at $port ..."
+    const val serverStoppedMsg = "Server is stopped successfully"
+
     fun portTakenMsg(port: Int) = "Port $port is already in use."
 
     fun portRetryMsg(port: Int) = "Retrying with port $port..."
