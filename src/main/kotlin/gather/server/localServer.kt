@@ -4,6 +4,7 @@ import gather.models.ServerMessage
 import gather.models.ServerStatus
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -62,16 +63,21 @@ fun CoroutineScope.getServerMessagesAsync(
     status: MutableStateFlow<ServerStatus>,
     messages: MutableStateFlow<ServerMessage>
 ) = launch(Dispatchers.IO) {
+
+    var currentJob: Job? = null
+
     status.collect {
         when (it) {
             is ServerStatus.Started -> {
-                while (true) {
-                    val result = getMessageBlocking(it.serverSocket)
-                    if (result != null)
-                        messages.emit(result)
+                currentJob = launch(Dispatchers.IO) {
+                    while (true) {
+                        val result = getMessageBlocking(it.serverSocket, timeout)
+                        if (result != null)
+                            messages.emit(result)
+                    }
                 }
             }
-            else -> TODO()
+            else -> currentJob?.cancel()
         }
     }
 }
@@ -80,9 +86,10 @@ fun CoroutineScope.getServerMessagesAsync(
  * Blocks till a connection is available and returns the message sent to the [serverSocket]
  */
 @Suppress("BlockingMethodInNonBlockingContext")
-private fun getMessageBlocking(serverSocket: ServerSocket): ServerMessage? {
+private fun getMessageBlocking(serverSocket: ServerSocket, timeout: Int): ServerMessage? {
     try {
         serverSocket.accept().use {
+            serverSocket.soTimeout = timeout
             val inputStream = it.getInputStream()
             val request = readFromStream(inputStream)
             val strings = request.split("\n\n".toPattern(), 2).toTypedArray()
@@ -91,6 +98,7 @@ private fun getMessageBlocking(serverSocket: ServerSocket): ServerMessage? {
                 return ServerMessage.Success(strings[1])
         }
     } catch (e: SocketTimeoutException) {
+        serverSocket.soTimeout = -1
         return ServerMessage.TimeoutErr
     } catch (e: SocketException) {
         e.printStackTrace()

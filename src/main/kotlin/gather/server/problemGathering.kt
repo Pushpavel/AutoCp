@@ -39,9 +39,7 @@ class ProblemGathering(
                         currentBatch?.let { batch ->
                             gathers.emit(GatheringResult.IncompleteErr(parsedProblems.toList(), batch))
                         }
-
-                        currentBatch = null
-                        parsedProblems.clear()
+                        clearBatch()
                     }
                 }
             }
@@ -76,9 +74,9 @@ class ProblemGathering(
 
     fun cancelBatch() {
         currentBatch?.let {
-            scope.launch {
-                gathers.emit(GatheringResult.Cancelled(parsedProblems.toList(), it))
-            }
+            scope.launch { gathers.emit(GatheringResult.Cancelled(parsedProblems.toList(), it)) }
+            ignoredBatches.add(it)
+            clearBatch()
         }
     }
 
