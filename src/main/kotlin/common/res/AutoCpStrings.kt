@@ -9,10 +9,19 @@ object AutoCpStrings {
     const val runConfigDescription = "Test your Competitive Programming solution with AutoCp"
 
 
+    // Problem Gathering Action messages
+    const val startGatheringText = "Start Problem Gathering Service"
+    const val stopGatheringText = "Stop Problem Gathering Service"
+
+    const val startGatheringDesc =
+        "Start an AutoCp service that listens for problem data coming from competitive companion browser extension"
+
+    const val stopGatheringDesc =
+        "Stops an AutoCp service that is listening for problem data coming from competitive companion browser extension"
+
     const val problemGatheringTitle = "Problem Gathering"
 
     const val fileIssue = "please file an issue (https://github.com/Pushpavel/AutoCp/issues/new/choose)"
-
 
     const val serverTitle = "Problem Gathering Service"
     fun serverRunningMsg(port: Int) = "Server is listening at $port ..."

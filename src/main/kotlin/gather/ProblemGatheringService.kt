@@ -42,6 +42,8 @@ class ProblemGatheringService(val project: Project) {
 
     fun startServiceAsync() = scope.startServerAsync(R.others.competitiveCompanionPorts, server)
 
+    fun isRunning() = server.value !is ServerStatus.Idle
+
     fun stopService() {
         gathering.cancelBatch()
         server.value = ServerStatus.Stopped

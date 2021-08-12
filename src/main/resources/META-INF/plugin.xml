@@ -33,4 +33,9 @@
                                    id="AutoCp v0.5.0-eap.1"/>
         <postStartupActivity implementation="gather.ProblemGatheringActivity"/>
     </extensions>
+    <actions>
+        <action id="gather.ProblemGatheringAction" class="gather.ProblemGatheringAction">
+            <add-to-group group-id="ToolsMenu" anchor="first"/>
+        </action>
+    </actions>
 </idea-plugin>
