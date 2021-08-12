@@ -14,6 +14,7 @@ import settings.langSettings.model.Lang
 @Service
 class AutoCpGeneralSettings : PersistentStateComponent<AutoCpGeneralSettings> {
     var preferredLangId: String? = AutoCpLangSettings.instance.languages.firstOrNull()?.langId
+    var shouldStartGatheringOnStart = true
 
 
     fun getPreferredLang(): Lang? {

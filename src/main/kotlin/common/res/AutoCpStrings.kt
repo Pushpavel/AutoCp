@@ -10,14 +10,21 @@ object AutoCpStrings {
 
 
     // Problem Gathering Action messages
-    const val startGatheringText = "Start Problem Gathering Service"
-    const val stopGatheringText = "Stop Problem Gathering Service"
+    const val startGatheringText = "Start problem gathering service"
+    const val stopGatheringText = "Stop problem gathering service"
 
     const val startGatheringDesc =
         "Start an AutoCp service that listens for problem data coming from competitive companion browser extension"
 
     const val stopGatheringDesc =
         "Stops an AutoCp service that is listening for problem data coming from competitive companion browser extension"
+
+    const val gatheringServiceOnStart = "Start problem gathering service when project loads"
+    const val gatheringServiceOnStartDesc = "" +
+            "problem gathering service listens for problem data coming " +
+            "from competitive companion browser extension to " +
+            "generate files."
+
 
     const val problemGatheringTitle = "Problem Gathering"
 

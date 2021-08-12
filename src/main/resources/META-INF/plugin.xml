@@ -22,6 +22,11 @@
                                  parentId="tools.autocp"
                                  displayName="Languages"/>
 
+        <projectConfigurable instance="settings.projectSettings.AutoCpProjectSettingsConfigurable"
+                             id="tools.autocp.project"
+                             parentId="tools.autocp"
+                             displayName="Project"/>
+
 
         <toolWindow factoryClass="tool.ToolFactory" id="AutoCp" icon="AutoCpIcons.logo13" anchor="right"/>
         <fileTemplateGroup implementation="common.lang.FileTemplates"/>
