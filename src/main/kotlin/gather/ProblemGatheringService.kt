@@ -7,6 +7,7 @@ import common.helpers.notifyErr
 import common.helpers.notifyInfo
 import common.helpers.notifyWarn
 import common.res.R
+import common.res.cancelled
 import common.res.failed
 import common.res.success
 import gather.models.GatheringResult
@@ -101,7 +102,7 @@ class ProblemGatheringService(val project: Project) {
                 }
                 is GatheringResult.Cancelled -> {
                     notifyWarn(
-                        R.strings.problemGatheringTitle.failed(),
+                        R.strings.problemGatheringTitle.cancelled(),
                         R.strings.gatheringProblemsCancelled(
                             it.problems.first().groupName,
                             it.problems,
