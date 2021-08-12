@@ -8,6 +8,7 @@ import common.helpers.notifyInfo
 import common.helpers.notifyWarn
 import common.res.R
 import common.res.failed
+import common.res.success
 import gather.models.GatheringResult
 import gather.models.ServerMessage
 import gather.models.ServerStatus
@@ -52,7 +53,7 @@ class ProblemGatheringService(val project: Project) {
     init {
         scope.launch {
             setupServerNotificationsAsync()
-
+            setupGatheringNotificationsAsync()
         }
     }
 
@@ -77,6 +78,50 @@ class ProblemGatheringService(val project: Project) {
                 }
                 ServerStatus.Stopped -> notifyInfo(R.strings.serverTitle, R.strings.serverStoppedMsg)
                 else -> {
+                }
+            }
+        }
+    }
+
+    private fun CoroutineScope.setupGatheringNotificationsAsync() = launch {
+        gathers.collect {
+            when (it) {
+                is GatheringResult.Gathered -> {
+                    if (it.problems.size == it.batch.size) {
+                        notifyInfo(
+                            R.strings.problemGatheringTitle.success(),
+                            R.strings.gatheredAllProblems(
+                                it.problems.first().groupName,
+                                it.problems
+                            )
+                        )
+                    }
+                }
+                is GatheringResult.Cancelled -> {
+                    notifyWarn(
+                        R.strings.problemGatheringTitle.failed(),
+                        R.strings.gatheringProblemsCancelled(
+                            it.problems.first().groupName,
+                            it.problems,
+                            it.batch.size
+                        )
+                    )
+                }
+                is GatheringResult.IncompleteErr -> {
+                    notifyErr(
+                        R.strings.problemGatheringTitle.failed(),
+                        R.strings.incompleteProblemsGathering(
+                            it.problems.first().groupName,
+                            it.problems,
+                            it.batch.size
+                        )
+                    )
+                }
+                GatheringResult.JsonErr -> {
+                    notifyErr(
+                        R.strings.problemGatheringTitle.failed(),
+                        R.strings.competitiveCompanionJsonFormatErrMsg
+                    )
                 }
             }
         }
