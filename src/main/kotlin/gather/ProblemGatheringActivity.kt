@@ -1,5 +1,6 @@
 package gather
 
+import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.startup.StartupActivity
 
@@ -8,5 +9,7 @@ import com.intellij.openapi.startup.StartupActivity
  */
 class ProblemGatheringActivity : StartupActivity {
 
-    override fun runActivity(project: Project) {}
+    override fun runActivity(project: Project) {
+        project.service<ProblemGatheringService>().startServiceAsync()
+    }
 }

@@ -5,6 +5,7 @@ import gather.models.ServerStatus
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -61,7 +62,7 @@ fun CoroutineScope.startServerAsync(ports: List<Int>, status: MutableStateFlow<S
 fun CoroutineScope.getServerMessagesAsync(
     timeout: Int,
     status: MutableStateFlow<ServerStatus>,
-    messages: MutableStateFlow<ServerMessage>
+    messages: MutableSharedFlow<ServerMessage>
 ) = launch(Dispatchers.IO) {
 
     var currentJob: Job? = null

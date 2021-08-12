@@ -20,9 +20,9 @@ import kotlinx.serialization.json.Json
  * and ignores possible incomplete batches beforehand
  */
 class ProblemGathering(
-    val scope: CoroutineScope,
-    val messages: MutableSharedFlow<ServerMessage>,
-    val gathers: MutableSharedFlow<GatheringResult>
+    private val scope: CoroutineScope,
+    private val messages: MutableSharedFlow<ServerMessage>,
+    private val gathers: MutableSharedFlow<GatheringResult>
 ) {
 
     private val serializer = Json { ignoreUnknownKeys = true }
