@@ -5,7 +5,12 @@ import common.helpers.notifyErr
 import common.helpers.notifyWarn
 import common.res.R
 import common.res.failed
+import gather.models.ServerMessage
+import gather.models.ServerStatus
+import gather.models.ServerStatus.PortTakenErr
+import gather.models.ServerStatus.Started
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import java.io.BufferedReader
 import java.io.InputStream
@@ -18,36 +23,45 @@ import java.net.SocketTimeoutException
 abstract class SimpleLocalServer(private val ports: List<Int>, private val timeout: Int) {
     private var serverSocket: ServerSocket? = null
     private val scope = ioScope()
+    val status = MutableSharedFlow<ServerStatus>()
+    val messages = MutableSharedFlow<ServerMessage>()
 
     fun startServer() {
         if (isActive()) return
 
-        var portIndex = 0
+        scope.launch(Dispatchers.IO) {
+            var portIndex = 0
 
-        while (portIndex < ports.size) {
+            while (portIndex < ports.size) {
 
-            if (portIndex != 0)
-                notifyWarn(
+                if (portIndex != 0) {
+                    status.emit(PortTakenErr(ports[portIndex - 1], ports[portIndex]))
+                    notifyWarn(
+                        R.strings.problemGatheringTitle.failed(),
+                        R.strings.portTakenMsg(ports[portIndex - 1]) + " " + R.strings.portRetryMsg(ports[portIndex])
+                    )
+                }
+
+                try {
+                    serverSocket = ServerSocket(ports[portIndex], 50, InetAddress.getByName("localhost"))
+                    onServerStart(serverSocket!!)
+                    status.emit(Started)
+                    // successfully started the server
+                    return@launch
+                } catch (e: SocketException) {
+                    // failed retrying with next port
+                    portIndex++
+                }
+            }
+
+            if (portIndex != 0) {
+                status.emit(PortTakenErr(ports[portIndex - 1], null))
+                notifyErr(
                     R.strings.problemGatheringTitle.failed(),
-                    R.strings.portTakenMsg(ports[portIndex - 1]) + " " + R.strings.portRetryMsg(ports[portIndex])
+                    R.strings.portTakenMsg(ports[portIndex - 1]) + " " + R.strings.allPortFailedMsg()
                 )
-
-            try {
-                serverSocket = ServerSocket(ports[portIndex], 50, InetAddress.getByName("localhost"))
-                onServerStart(serverSocket!!)
-                // successfully started the server
-                return
-            } catch (e: SocketException) {
-                // failed retrying with next port
-                portIndex++
             }
         }
-
-        if (portIndex != 0)
-            notifyErr(
-                R.strings.problemGatheringTitle.failed(),
-                R.strings.portTakenMsg(ports[portIndex - 1]) + " " + R.strings.allPortFailedMsg()
-            )
     }
 
     private fun onServerStart(serverSocket: ServerSocket) {
@@ -61,10 +75,14 @@ abstract class SimpleLocalServer(private val ports: List<Int>, private val timeo
                         val strings = request.split("\n\n".toPattern(), 2).toTypedArray()
 
                         if (strings.size > 1)
-                            launch(Dispatchers.Default) { onMessage(strings[1]) }
+                            launch {
+                                messages.emit(ServerMessage.Success(strings[1]))
+                            }
                     }
                 } catch (e: SocketTimeoutException) {
-                    launch(Dispatchers.Default) { onTimeout() }
+                    launch {
+                        messages.emit(ServerMessage.TimeoutErr)
+                    }
                 } catch (e: SocketException) {
                     e.printStackTrace()
                     // socket maybe closed, catch and ignore it

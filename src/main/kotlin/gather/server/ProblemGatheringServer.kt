@@ -50,9 +50,8 @@ class ProblemGatheringServer(
                 R.strings.problemGatheringTitle.success(),
                 R.strings.gatheredAllProblems(parsedProblems.first().groupName, parsedProblems)
             )
-            listener.onBatchEnd()
-            parsedProblems.clear()
-            currentBatch = null
+
+            clearBatch()
         }
     }
 
@@ -69,8 +68,7 @@ class ProblemGatheringServer(
             )
         )
 
-        parsedProblems.clear()
-        currentBatch = null
+        clearBatch()
     }
 
     fun cancelCurrentBatch() {
@@ -82,6 +80,11 @@ class ProblemGatheringServer(
             )
         }
 
+        clearBatch()
+    }
+
+    private fun clearBatch() {
+        listener.onBatchEnd()
         parsedProblems.clear()
         currentBatch = null
     }
