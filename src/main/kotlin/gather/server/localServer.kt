@@ -88,9 +88,8 @@ fun CoroutineScope.getServerMessagesAsync(
             is ServerStatus.Started -> {
                 currentJob = launch(Dispatchers.IO) {
                     while (true) {
-                        val result = getMessageBlocking(it.serverSocket, timeout)
-                        if (result != null)
-                            messages.emit(result)
+                        val result = getMessageBlocking(it.serverSocket, timeout) ?: break
+                        messages.emit(result)
                     }
                 }
             }
