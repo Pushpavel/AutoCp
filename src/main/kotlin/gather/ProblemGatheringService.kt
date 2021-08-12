@@ -63,7 +63,7 @@ class ProblemGatheringService(val project: Project) {
         server.collect {
             when (it) {
                 is ServerStatus.Started -> {
-                    notifyInfo(R.strings.serverTitle, R.strings.serverRunningMsg(it.serverSocket.localPort))
+                    notifyInfo(R.strings.serverTitle, R.strings.serverRunningMsg)
                 }
                 is ServerStatus.PortTakenErr -> {
 

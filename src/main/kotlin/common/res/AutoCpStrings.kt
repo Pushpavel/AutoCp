@@ -24,8 +24,13 @@ object AutoCpStrings {
     const val fileIssue = "please file an issue (https://github.com/Pushpavel/AutoCp/issues/new/choose)"
 
     const val serverTitle = "Problem Gathering Service"
-    fun serverRunningMsg(port: Int) = "Server is listening at $port ..."
-    const val serverStoppedMsg = "Server is stopped successfully"
+    const val serverRunningMsg = "" +
+            "Started AutoCp Problem Gathering Service...\n" +
+            "Open the problem/ contest page in the browser and " +
+            "press the parse button of competitive companion browser extension. "
+
+    const val serverStoppedMsg = "Service has been stopped successfully. " +
+            "Use Tools > $startGatheringText to start it."
 
     fun portTakenMsg(port: Int) = "Port $port is already in use."
 
