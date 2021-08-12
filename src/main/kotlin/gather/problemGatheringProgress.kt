@@ -39,7 +39,7 @@ class ProgressReporter(
 
     override fun run(indicator: ProgressIndicator) {
         var job: Job? = null
-
+        indicator.isIndeterminate = false
 
         fun showProgress(indicator: ProgressIndicator, event: GatheringResult.Gathered) {
             indicator.fraction = event.problems.size.toDouble() / event.batch.size

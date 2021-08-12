@@ -115,7 +115,7 @@ private fun getMessageBlocking(serverSocket: ServerSocket, timeout: Int): Server
                 return ServerMessage.Success(strings[1])
         }
     } catch (e: SocketTimeoutException) {
-        serverSocket.soTimeout = -1
+        serverSocket.soTimeout = 0
         return ServerMessage.TimeoutErr
     } catch (e: SocketException) {
         e.printStackTrace()
