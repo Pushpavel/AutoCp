@@ -9,7 +9,7 @@ object AutoCpStrings {
     const val runConfigDescription = "Test your Competitive Programming solution with AutoCp"
 
 
-    // Problem Gathering Action messages
+    // Problem Gathering Action strings
     const val startGatheringText = "Start problem gathering service"
     const val stopGatheringText = "Stop problem gathering service"
 
@@ -25,6 +25,8 @@ object AutoCpStrings {
             "from competitive companion browser extension to " +
             "generate files."
 
+    // Settings strings
+    const val projectSettingsOverrideMsg = "Some of these settings could be overridden at Tools > AutoCp > Project"
 
     const val problemGatheringTitle = "Problem Gathering"
 

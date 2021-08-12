@@ -13,6 +13,7 @@ class AutoCpGeneralSettingsConfigurable : BoundConfigurable("AutoCp") {
     private val generalSettings = AutoCpGeneralSettings.instance
 
     override fun createPanel() = panel {
+        commentRow(R.strings.projectSettingsOverrideMsg)
         titledRow("Solution File Generation") {
 
             row("Preferred Language") {
