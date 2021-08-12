@@ -13,3 +13,7 @@ fun mainScope(): CoroutineScope {
 fun defaultScope(): CoroutineScope {
     return CoroutineScope(Dispatchers.Default + defaultExceptionHandler)
 }
+
+fun ioScope(): CoroutineScope {
+    return CoroutineScope(Dispatchers.IO + defaultExceptionHandler)
+}
