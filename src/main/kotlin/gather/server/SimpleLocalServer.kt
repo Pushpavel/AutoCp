@@ -61,10 +61,10 @@ abstract class SimpleLocalServer(private val ports: List<Int>) {
                         val strings = request.split("\n\n".toPattern(), 2).toTypedArray()
 
                         if (strings.size > 1)
-                            launch { onMessage(strings[1]) }
+                            launch(Dispatchers.Default) { onMessage(strings[1]) }
                     }
                 } catch (e: SocketTimeoutException) {
-                    launch { onTimeout() }
+                    launch(Dispatchers.Default) { onTimeout() }
                 } catch (e: SocketException) {
                     e.printStackTrace()
                     // socket maybe closed, catch and ignore it
