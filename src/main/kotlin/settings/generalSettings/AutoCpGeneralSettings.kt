@@ -13,9 +13,10 @@ import settings.langSettings.model.Lang
 )
 @Service
 class AutoCpGeneralSettings : PersistentStateComponent<AutoCpGeneralSettings> {
+    // TODO: set this default based on IDE
     var preferredLangId: String? = AutoCpLangSettings.instance.languages.firstOrNull()?.langId
     var shouldStartGatheringOnStart = true
-
+    var openFilesOnGather = OpenFileOnGather.ONLY_FIRST
 
     fun getPreferredLang(): Lang? {
         return AutoCpLangSettings.instance.languages.run {
@@ -40,4 +41,10 @@ class AutoCpGeneralSettings : PersistentStateComponent<AutoCpGeneralSettings> {
 
         val instance: AutoCpGeneralSettings get() = service()
     }
+}
+
+enum class OpenFileOnGather {
+    NONE,
+    ONLY_FIRST,
+    ALL
 }

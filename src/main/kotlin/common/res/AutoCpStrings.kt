@@ -4,6 +4,7 @@ package common.res
 
 import database.models.Problem
 import gather.models.GenerateFileErr
+import settings.generalSettings.OpenFileOnGather
 
 
 object AutoCpStrings {
@@ -19,6 +20,22 @@ object AutoCpStrings {
             "An error had occurred. If it is not expected, $fileIssue\n\n" +
             "The Error message:\n${e.localizedMessage}\n" +
             "Stacktrace:\n${e.stackTraceToString()}"
+
+
+    // Settings strings
+    const val projectSettingsOverrideMsg = "Some of these settings could be overridden at Tools > AutoCp > Project"
+
+    const val problemGatheringTitle = "Problem Gathering"
+
+    // General Settings strings
+    const val openFilesOnGatherText = "Open files while gathering problems from competitive companion"
+
+    fun OpenFileOnGather.presentable() = when (this) {
+        OpenFileOnGather.NONE -> "None"
+        OpenFileOnGather.ONLY_FIRST -> "Only first"
+        OpenFileOnGather.ALL -> "All"
+    }
+
 
     // Problem Gathering Action strings
     const val startGatheringText = "Start problem gathering service"
@@ -51,11 +68,6 @@ object AutoCpStrings {
             "Please check at Settings/Preference > Tools > AutoCp > Languages > " +
             "${e.lang.getLanguage()?.displayName} > File Template\n\n" +
             "For creating a new template, go to Settings/Preference > Editor > File and code templates > Files tab > +"
-
-    // Settings strings
-    const val projectSettingsOverrideMsg = "Some of these settings could be overridden at Tools > AutoCp > Project"
-
-    const val problemGatheringTitle = "Problem Gathering"
 
 
     // Problem Gathering Service Server strings
