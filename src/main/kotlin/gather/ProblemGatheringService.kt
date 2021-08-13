@@ -28,6 +28,8 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import settings.generalSettings.AutoCpGeneralSettings
+import settings.generalSettings.OpenFileOnGather
 import settings.projectSettings.autoCpProject
 import java.nio.file.Paths
 import kotlin.io.path.Path
@@ -73,8 +75,15 @@ class ProblemGatheringService(val project: Project) {
             if (it is GatheringResult.Gathered) {
                 db.updateProblem(it.problems.last())
                 try {
-                    // TODO: should open file should be in settings
-                    generateFileAsync(it.problems.last(), it.problems.size == 1)
+
+                    val openFile = when (AutoCpGeneralSettings.instance.openFilesOnGather) {
+                        OpenFileOnGather.NONE -> false
+                        OpenFileOnGather.ONLY_FIRST -> it.problems.size == 1
+                        OpenFileOnGather.ALL -> true
+                    }
+
+                    generateFileAsync(it.problems.last(), openFile)
+
                 } catch (err: Exception) {
                     notifyGenerateFileErr(err, it.problems.last())
                 }
