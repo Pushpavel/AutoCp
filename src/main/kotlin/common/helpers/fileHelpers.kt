@@ -1,5 +1,6 @@
 package common.helpers
 
+import com.intellij.ide.fileTemplates.FileTemplate
 import com.intellij.openapi.fileEditor.FileEditorManager
 import com.intellij.openapi.fileEditor.FileEditorManagerEvent
 import com.intellij.openapi.fileEditor.FileEditorManagerListener
@@ -38,4 +39,8 @@ fun listPathsInDirectoryInResources(relativePath: String): List<Path> {
 
 
     return Files.list(dirPath).toList()
+}
+
+fun FileTemplate.constructFileNameWithExt(name: String): String {
+    return name + if (extension.isNotBlank()) ".$extension" else ""
 }

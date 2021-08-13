@@ -1,6 +1,9 @@
+@file:Suppress("MemberVisibilityCanBePrivate")
+
 package common.res
 
 import database.models.Problem
+import gather.models.GenerateFileErr
 
 
 object AutoCpStrings {
@@ -8,6 +11,14 @@ object AutoCpStrings {
     const val runConfigId = "AutoCp"
     const val runConfigDescription = "Test your Competitive Programming solution with AutoCp"
 
+
+    // File Issue notes
+    const val fileIssue = "please file an issue (https://github.com/Pushpavel/AutoCp/issues/new/choose)"
+
+    fun defaultFileIssue(e: Exception) = "" +
+            "An error had occurred. If it is not expected, $fileIssue\n\n" +
+            "The Error message:\n${e.localizedMessage}\n" +
+            "Stacktrace:\n${e.stackTraceToString()}"
 
     // Problem Gathering Action strings
     const val startGatheringText = "Start problem gathering service"
@@ -25,13 +36,29 @@ object AutoCpStrings {
             "from competitive companion browser extension to " +
             "generate files."
 
+    // Solution File Generation Messages
+    fun fileGenFailedTitle(name: String) = "$name file is not created"
+
+    const val langNotConfiguredMsg = "" +
+            "No Programming Language is configured with AutoCp. " +
+            "Please configure languages that you use at Settings/Preference > Tools > AutoCp > Languages"
+
+    fun fileAlreadyExistsMsg(e: GenerateFileErr.FileAlreadyExistsErr) = "" +
+            "${e.filePath} already exists"
+
+    fun fileTemplateMissingMsg(e: GenerateFileErr.FileTemplateMissingErr) = "" +
+            "Your Preferred language \"${e.lang.getLanguage()?.displayName}\" does not have a File Template. " +
+            "Please check at Settings/Preference > Tools > AutoCp > Languages > " +
+            "${e.lang.getLanguage()?.displayName} > File Template\n\n" +
+            "For creating a new template, go to Settings/Preference > Editor > File and code templates > Files tab > +"
+
     // Settings strings
     const val projectSettingsOverrideMsg = "Some of these settings could be overridden at Tools > AutoCp > Project"
 
     const val problemGatheringTitle = "Problem Gathering"
 
-    const val fileIssue = "please file an issue (https://github.com/Pushpavel/AutoCp/issues/new/choose)"
 
+    // Problem Gathering Service Server strings
     const val serverTitle = "Problem Gathering Service"
     const val serverRunningMsg = "" +
             "Started AutoCp Problem Gathering Service...\n" +

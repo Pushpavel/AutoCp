@@ -1,16 +1,21 @@
 package gather
 
+import com.intellij.ide.actions.CreateFileFromTemplateAction
+import com.intellij.ide.projectView.ProjectView
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.project.Project
-import common.helpers.ioScope
-import common.helpers.notifyErr
-import common.helpers.notifyInfo
-import common.helpers.notifyWarn
+import com.intellij.openapi.vfs.VfsUtil
+import com.intellij.psi.PsiManager
+import com.intellij.util.IncorrectOperationException
+import common.helpers.*
 import common.res.R
 import common.res.cancelled
 import common.res.failed
 import common.res.success
+import database.autoCp
+import database.models.Problem
 import gather.models.GatheringResult
+import gather.models.GenerateFileErr
 import gather.models.ServerMessage
 import gather.models.ServerStatus
 import gather.server.ProblemGathering
@@ -18,14 +23,21 @@ import gather.server.getServerMessagesAsync
 import gather.server.setupServerStopper
 import gather.server.startServerAsync
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import settings.projectSettings.autoCpProject
+import java.nio.file.Paths
+import kotlin.io.path.Path
+import kotlin.io.path.name
+import kotlin.io.path.pathString
 
 @Service
 class ProblemGatheringService(val project: Project) {
     private val scope = ioScope()
+    private val db = project.autoCp()
 
     private val server = MutableStateFlow<ServerStatus>(ServerStatus.Idle)
     private val messages = MutableSharedFlow<ServerMessage>()
@@ -48,6 +60,57 @@ class ProblemGatheringService(val project: Project) {
     fun stopService() {
         gathering.cancelBatch()
         server.value = ServerStatus.Stopped
+    }
+
+    // Processing the Problems
+
+    init {
+        scope.launch { addGathersToDBAsync() }
+    }
+
+    private fun CoroutineScope.addGathersToDBAsync() = launch {
+        gathers.collect {
+            if (it is GatheringResult.Gathered) {
+                db.updateProblem(it.problems.last())
+                try {
+                    // TODO: should open file should be in settings
+                    generateFileAsync(it.problems.last(), it.problems.size == 1)
+                } catch (err: Exception) {
+                    notifyGenerateFileErr(err, it.problems.last())
+                }
+            }
+        }
+    }
+
+    private fun CoroutineScope.generateFileAsync(problem: Problem, open: Boolean) = launch(Dispatchers.IO) {
+        val rootPath = Paths.get(project.basePath!!, problem.groupName)
+        val rootDir = VfsUtil.createDirectories(rootPath.pathString)
+        val rootPsiDir = PsiManager.getInstance(project).findDirectory(rootDir)!!
+        val lang = project.autoCpProject().guessPreferredLang() ?: throw GenerateFileErr.LangNotConfiguredErr(problem)
+
+        val fileTemplate = lang.getFileTemplate() ?: throw GenerateFileErr.FileTemplateMissingErr(lang, problem)
+
+        val fileName = fileTemplate.constructFileNameWithExt(problem.name)
+
+        val filePath = Paths.get(rootPsiDir.virtualFile.path, fileName).pathString
+
+        try {
+            rootPsiDir.checkCreateFile(fileName)
+        } catch (e: IncorrectOperationException) {
+            throw GenerateFileErr.FileAlreadyExistsErr(filePath, problem)
+        }
+
+        project.autoCp().createSolutionFile(filePath, Pair(problem.groupName, problem.name))
+
+        CreateFileFromTemplateAction.createFileFromTemplate(
+            fileName,
+            fileTemplate,
+            rootPsiDir,
+            null,
+            open
+        )
+
+        ProjectView.getInstance(project).refresh()
     }
 
 
@@ -127,6 +190,28 @@ class ProblemGatheringService(val project: Project) {
                     )
                 }
             }
+        }
+    }
+
+
+    private fun notifyGenerateFileErr(err: Exception, problem: Problem) {
+        when (err) {
+            is GenerateFileErr.FileAlreadyExistsErr -> notifyWarn(
+                R.strings.fileGenFailedTitle(Path(err.filePath).name),
+                R.strings.fileAlreadyExistsMsg(err)
+            )
+            is GenerateFileErr.FileTemplateMissingErr -> notifyErr(
+                R.strings.fileGenFailedTitle(problem.name),
+                R.strings.fileTemplateMissingMsg(err)
+            )
+            is GenerateFileErr.LangNotConfiguredErr -> notifyErr(
+                R.strings.fileGenFailedTitle(problem.name),
+                R.strings.langNotConfiguredMsg
+            )
+            else -> notifyErr(
+                R.strings.fileGenFailedTitle(problem.name),
+                R.strings.defaultFileIssue(err)
+            )
         }
     }
 }
