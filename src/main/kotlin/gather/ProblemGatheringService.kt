@@ -2,6 +2,9 @@ package gather
 
 import com.intellij.ide.actions.CreateFileFromTemplateAction
 import com.intellij.ide.projectView.ProjectView
+import com.intellij.openapi.application.ModalityState
+import com.intellij.openapi.application.invokeLater
+import com.intellij.openapi.application.runReadAction
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VfsUtil
@@ -67,7 +70,7 @@ class ProblemGatheringService(val project: Project) {
     // Processing the Problems
 
     init {
-        scope.launch { addGathersToDBAsync() }
+        scope.addGathersToDBAsync()
     }
 
     private fun CoroutineScope.addGathersToDBAsync() = launch {
@@ -94,7 +97,7 @@ class ProblemGatheringService(val project: Project) {
     private fun CoroutineScope.generateFileAsync(problem: Problem, open: Boolean) = launch(Dispatchers.IO) {
         val rootPath = Paths.get(project.basePath!!, problem.groupName)
         val rootDir = VfsUtil.createDirectories(rootPath.pathString)
-        val rootPsiDir = PsiManager.getInstance(project).findDirectory(rootDir)!!
+        val rootPsiDir = runReadAction { PsiManager.getInstance(project).findDirectory(rootDir)!! }
         val lang = project.autoCpProject().guessPreferredLang() ?: throw GenerateFileErr.LangNotConfiguredErr(problem)
 
         val fileTemplate = lang.getFileTemplate() ?: throw GenerateFileErr.FileTemplateMissingErr(lang, problem)
@@ -111,15 +114,17 @@ class ProblemGatheringService(val project: Project) {
 
         project.autoCp().createSolutionFile(filePath, Pair(problem.groupName, problem.name))
 
-        CreateFileFromTemplateAction.createFileFromTemplate(
-            fileName,
-            fileTemplate,
-            rootPsiDir,
-            null,
-            open
-        )
+        invokeLater(ModalityState.NON_MODAL) {
+            CreateFileFromTemplateAction.createFileFromTemplate(
+                fileName,
+                fileTemplate,
+                rootPsiDir,
+                null,
+                open
+            )
 
-        ProjectView.getInstance(project).refresh()
+            ProjectView.getInstance(project).refresh()
+        }
     }
 
 
