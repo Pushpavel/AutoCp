@@ -5,6 +5,7 @@ import com.intellij.execution.actions.LazyRunConfigurationProducer
 import com.intellij.openapi.util.Ref
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiElement
+import common.helpers.pathString
 import database.autoCp
 import settings.langSettings.AutoCpLangSettings
 
@@ -22,7 +23,7 @@ class AutoCpConfigProducer : LazyRunConfigurationProducer<AutoCpConfig>() {
         sourceElement: Ref<PsiElement>
     ): Boolean {
         val file = context.location?.virtualFile
-        val solutionPath = file?.path ?: return false
+        val solutionPath = file?.pathString ?: return false
         val db = context.project.autoCp()
 
         if (!db.solutionFiles.containsKey(solutionPath))
@@ -52,7 +53,7 @@ class AutoCpConfigProducer : LazyRunConfigurationProducer<AutoCpConfig>() {
      * Used to reuse existing AutoCpConfig created from this Context
      */
     override fun isConfigurationFromContext(configuration: AutoCpConfig, context: ConfigurationContext): Boolean {
-        val path = context.location?.virtualFile?.path ?: return false
+        val path = context.location?.virtualFile?.pathString ?: return false
         return configuration.solutionFilePath == path
     }
 

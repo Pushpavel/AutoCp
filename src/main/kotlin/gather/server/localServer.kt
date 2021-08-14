@@ -1,5 +1,6 @@
 package gather.server
 
+import common.res.R
 import gather.models.ServerMessage
 import gather.models.ServerStatus
 import kotlinx.coroutines.*
@@ -14,6 +15,23 @@ import java.net.ServerSocket
 import java.net.SocketException
 import java.net.SocketTimeoutException
 
+
+class SimpleLocalServer(
+    private val scope: CoroutineScope,
+    private val ports: List<Int>,
+) {
+    val status = MutableStateFlow<ServerStatus>(ServerStatus.Idle)
+    val messages = MutableSharedFlow<ServerMessage>()
+
+    init {
+        scope.launch { closeSocketOnServerStopped(status) }
+        scope.receiveServerMessagesAsync(R.others.problemGatheringTimeoutMillis, status, messages)
+    }
+
+    fun startAsync() = scope.startServerAsync(ports, status)
+
+    fun stopAsync() = scope.launch { status.emit(ServerStatus.Stopped) }
+}
 
 /**
  * Starts a simple server using [Dispatchers.IO]
@@ -56,7 +74,7 @@ fun CoroutineScope.startServerAsync(ports: List<Int>, status: MutableStateFlow<S
  * listens to [status] and closes the serverSocket received in [ServerStatus.Started] event
  * during the [ServerStatus.Stopped] event and also resets back to [ServerStatus.Idle]
  */
-suspend fun setupServerStopper(status: MutableSharedFlow<ServerStatus>) = coroutineScope {
+suspend fun closeSocketOnServerStopped(status: MutableSharedFlow<ServerStatus>) = coroutineScope {
     var serverSocket: ServerSocket? = null
 
     status.collect {
@@ -75,7 +93,7 @@ suspend fun setupServerStopper(status: MutableSharedFlow<ServerStatus>) = corout
  * Accepts connection to server from [status] and
  * sends [messages] coming to the server
  */
-fun CoroutineScope.getServerMessagesAsync(
+fun CoroutineScope.receiveServerMessagesAsync(
     timeout: Int,
     status: MutableStateFlow<ServerStatus>,
     messages: MutableSharedFlow<ServerMessage>
@@ -87,9 +105,15 @@ fun CoroutineScope.getServerMessagesAsync(
         when (it) {
             is ServerStatus.Started -> {
                 currentJob = launch(Dispatchers.IO) {
-                    while (true) {
-                        val result = getMessageBlocking(it.serverSocket, timeout) ?: break
-                        messages.emit(result)
+                    try {
+                        while (true) {
+                            val result = getMessageBlocking(it.serverSocket, timeout) ?: continue
+                            messages.emit(result)
+                        }
+                    } catch (e: SocketException) {
+                        e.printStackTrace()
+                        // socket maybe closed, catch and ignore it
+                        messages.emit(ServerMessage.Err.ServerStopped)
                     }
                 }
             }
@@ -115,10 +139,7 @@ private fun getMessageBlocking(serverSocket: ServerSocket, timeout: Int): Server
         }
     } catch (e: SocketTimeoutException) {
         serverSocket.soTimeout = 0
-        return ServerMessage.TimeoutErr
-    } catch (e: SocketException) {
-        e.printStackTrace()
-        // socket maybe closed, catch and ignore it
+        return ServerMessage.Err.TimeoutErr
     }
 
     return null

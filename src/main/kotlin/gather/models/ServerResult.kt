@@ -12,5 +12,8 @@ sealed interface ServerStatus {
 
 sealed interface ServerMessage {
     data class Success(val message: String) : ServerMessage
-    object TimeoutErr : Exception(), ServerMessage
+    sealed interface Err : ServerMessage {
+        object TimeoutErr : Exception(), Err
+        object ServerStopped : Exception(), Err
+    }
 }

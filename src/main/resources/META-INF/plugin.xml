@@ -22,6 +22,11 @@
                                  parentId="tools.autocp"
                                  displayName="Languages"/>
 
+        <projectConfigurable instance="settings.projectSettings.AutoCpProjectSettingsConfigurable"
+                             id="tools.autocp.project"
+                             parentId="tools.autocp"
+                             displayName="Project"/>
+
 
         <toolWindow factoryClass="tool.ToolFactory" id="AutoCp" icon="AutoCpIcons.logo13" anchor="right"/>
         <fileTemplateGroup implementation="common.lang.FileTemplates"/>
@@ -33,4 +38,9 @@
                                    id="AutoCp v0.5.0-eap.1"/>
         <postStartupActivity implementation="gather.ProblemGatheringActivity"/>
     </extensions>
+    <actions>
+        <action id="gather.ProblemGatheringAction" class="gather.ProblemGatheringAction">
+            <add-to-group group-id="ToolsMenu" anchor="first"/>
+        </action>
+    </actions>
 </idea-plugin>
