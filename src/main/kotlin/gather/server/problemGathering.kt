@@ -1,10 +1,9 @@
 package gather.server
 
+import common.errors.NoReachErr
+import common.helpers.catchAndLog
 import database.models.Problem
-import gather.models.BatchJson
-import gather.models.GatheringResult
-import gather.models.ProblemJson
-import gather.models.ServerMessage
+import gather.models.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.collect
@@ -22,8 +21,8 @@ import kotlinx.serialization.json.Json
 class ProblemGathering(
     private val scope: CoroutineScope,
     private val messages: MutableSharedFlow<ServerMessage>,
-    private val gathers: MutableSharedFlow<GatheringResult>
 ) {
+    val gathers = MutableSharedFlow<GatheringResult>()
 
     private val serializer = Json { ignoreUnknownKeys = true }
     private var currentBatch: BatchJson? = null
@@ -32,55 +31,75 @@ class ProblemGathering(
 
     init {
         scope.launch {
-            messages.collect {
-                when (it) {
-                    is ServerMessage.Success -> onMessage(it.message)
-                    else -> {
-                        currentBatch?.let { batch ->
-                            gathers.emit(GatheringResult.IncompleteErr(parsedProblems.toList(), batch))
-                        }
+            messages.collect { catchAndLog { handleServerMessage(it) } }
+        }
+    }
+
+    private suspend fun handleServerMessage(it: ServerMessage) {
+        when (it) {
+            is ServerMessage.Success -> {
+                val result = deserializeMessage(it.message) ?: return
+                when (result) {
+                    is GatheringResult.Gathered -> {
+                        gathers.emit(result)
+
+                        if (result.isCompleted())
+                            clearBatch()
+                    }
+                    is GatheringResult.JsonErr -> {
+                        gathers.emit(result)
                         clearBatch()
                     }
+                    else -> throw NoReachErr
                 }
+            }
+            is ServerMessage.Err -> {
+                gathers.emit(GatheringResult.ServerErr(it, parsedProblems.toList(), currentBatch))
+                clearBatch()
             }
         }
     }
 
-    private suspend fun onMessage(message: String) {
+
+    private fun deserializeMessage(message: String): GatheringResult? {
         try {
             val json = serializer.decodeFromString<ProblemJson>(message)
             val problem = json.toProblem()
             val batch = json.batch
 
-            // ignoring batches which is not currentBatch
+            // ignoring batches which is not currentBatch or already ignored
             if (ignoredBatches.contains(batch) || (currentBatch != null && currentBatch != batch)) {
                 ignoredBatches.add(batch)
-                return
+                return null
             }
 
             parsedProblems.add(problem)
             currentBatch = batch
 
-            gathers.emit(GatheringResult.Gathered(parsedProblems.toList(), batch))
-
-            if (batch.size == parsedProblems.size)
-                clearBatch()
-
+            return GatheringResult.Gathered(parsedProblems.toList(), batch)
         } catch (e: SerializationException) {
-            gathers.emit(GatheringResult.JsonErr)
-            clearBatch()
+            return GatheringResult.JsonErr(parsedProblems.toList(), currentBatch)
         }
     }
 
     fun cancelBatch() {
         currentBatch?.let {
-            scope.launch { gathers.emit(GatheringResult.Cancelled(parsedProblems.toList(), it)) }
-            ignoredBatches.add(it)
-            clearBatch()
+            scope.launch {
+                gathers.emit(GatheringResult.Cancelled(parsedProblems.toList(), it))
+            }
+        }
+    }
+
+    fun interruptBatch(err: Exception) {
+        currentBatch?.let {
+            scope.launch {
+                gathers.emit(GatheringResult.Interrupted(err, parsedProblems.toList(), it))
+            }
         }
     }
 
     private fun clearBatch() {
+        currentBatch?.let { ignoredBatches.add(it) }
         parsedProblems.clear()
         currentBatch = null
     }

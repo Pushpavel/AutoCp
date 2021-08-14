@@ -36,6 +36,9 @@ object AutoCpStrings {
         OpenFileOnGather.ALL -> "All"
     }
 
+    // Common Err strings
+    const val noReachErrMsg = "Execution should not have reached this line, $fileIssue"
+
 
     // Problem Gathering Action strings
     const val startGatheringText = "Start problem gathering service"
