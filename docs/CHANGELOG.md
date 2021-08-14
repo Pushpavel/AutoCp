@@ -1,12 +1,13 @@
 <!-- Keep a Changelog guide -> https://keepachangelog.com -->
+?> All notable changes to this project will be documented in this page.
 
-## [Unreleased]
+## v0.5.0-eap.2
 
 ### Fixed
 
-- Compatibility problems with IntelliJ IDEA Ultimate 
+- Compatibility problems with IntelliJ IDEA Ultimate
 
-## [v0.5.0-eap.1]
+## v0.5.0-eap.1
 
 ### Added
 
@@ -24,25 +25,25 @@
 - .autocp file is created unnecessarily in every project
 - Build Errors were incorrectly reported as internal errors
 
-## [v0.2.2]
+## v0.2.2
 
 ### Fixed
 
 - Fix some correct output were declared wrong by AutoCp.
 
-## [v0.2.1]
+## v0.2.1
 
 ### Fixed
 
 - Fix output of solution execution being blank.
 
-## [v0.2.0]
+## v0.2.0
 
 ### Added
 
 - Time Limit of Problem is respected while solution execution
 
-## [v0.1.1]
+## v0.1.1
 
 ### Added
 
