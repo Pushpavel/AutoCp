@@ -21,7 +21,6 @@ import gather.models.GenerateFileErr
 import gather.models.ServerStatus
 import gather.server.ProblemGathering
 import gather.server.SimpleLocalServer
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.collect
@@ -132,32 +131,31 @@ class ProblemGatheringService(val project: Project) {
 
     init {
         scope.launch {
-            setupServerNotificationsAsync()
+            server.status.collect {
+                catchAndLog { serverNotification(it) }
+            }
         }
     }
 
-    private fun CoroutineScope.setupServerNotificationsAsync() = launch {
-        server.status.collect {
-            when (it) {
-                is ServerStatus.Started -> {
-                    notifyInfo(R.strings.serverTitle, R.strings.serverRunningMsg)
-                }
-                is ServerStatus.PortTakenErr -> {
+    private fun serverNotification(it: ServerStatus) {
+        when (it) {
+            is ServerStatus.Started -> {
+                notifyInfo(R.strings.serverTitle, R.strings.serverRunningMsg)
+            }
+            is ServerStatus.PortTakenErr -> {
 
-                    if (it.retryPort != null)
-                        notifyWarn(
-                            R.strings.serverTitle,
-                            R.strings.portTakenMsg(it.failedPort) + " " + R.strings.portRetryMsg(it.retryPort)
-                        )
-                    else
-                        notifyErr(
-                            R.strings.serverTitle.failed(),
-                            R.strings.portTakenMsg(it.failedPort) + " " + R.strings.allPortFailedMsg()
-                        )
-                }
-                ServerStatus.Stopped -> notifyInfo(R.strings.serverTitle, R.strings.serverStoppedMsg)
-                else -> {
-                }
+                if (it.retryPort != null)
+                    notifyWarn(
+                        R.strings.serverTitle,
+                        R.strings.portTakenMsg(it.failedPort) + " " + R.strings.portRetryMsg(it.retryPort)
+                    )
+                else
+                    notifyErr(
+                        R.strings.serverTitle.failed(),
+                        R.strings.portTakenMsg(it.failedPort) + " " + R.strings.allPortFailedMsg()
+                    )
+            }
+            else -> {
             }
         }
     }
