@@ -8,7 +8,7 @@ See instructions [here](installation.md)
 
 With the IDE project already open, Open the problem/ contest page in the browser and press the competitive companion
 button in the browser. This will generate files with default file template. You can change the programming language
-in ```Settings/Preferences``` > ```Tools``` > ```AutoCp``` before generating the files.
+in <kbd>Settings/Preferences</kbd> > <kbd>Tools</kbd> > <kbd>AutoCp</kbd> before generating the files.
 
 #### Edit testcases
 
