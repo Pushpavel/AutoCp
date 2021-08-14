@@ -1,6 +1,18 @@
 <!-- Keep a Changelog guide -> https://keepachangelog.com -->
 ?> All notable changes to this project will be documented in this page.
 
+## [Unreleased]
+
+### Added
+
+- Problem Gathering Service to replace problem gathering and generating dialogs
+- Project specific overrides at ```Settings/Preference``` > ```Tools``` > ```AutoCp``` > ```Project```
+
+### Removed
+
+- Gather Problems Action (```Tools``` > ```Gather Problems```)
+- Generate Files Dialog
+
 ## v0.5.0-eap.2
 
 ### Fixed
