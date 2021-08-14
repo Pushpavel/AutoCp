@@ -1,24 +1,20 @@
 package gather.models
 
-import com.google.gson.JsonObject
 import database.models.Problem
+import kotlinx.serialization.Serializable
 
 /**
  * Data class representing the Json Scheme of the data received
  * from Competitive Companion Browser extension
  */
+@Serializable
 data class ProblemJson(
     val name: String,
     val group: String,
     val url: String,
-    val interactive: Boolean,
     val memoryLimit: Long,
     val timeLimit: Long,
     val tests: ArrayList<TestJson>,
-    val testType: String,
-    val input: JsonObject,
-    val output: JsonObject,
-    val languages: JsonObject,
     val batch: BatchJson
 ) {
 
@@ -34,3 +30,11 @@ data class ProblemJson(
 
 }
 
+/**
+ * data type of a property in ProblemJson
+ */
+@Serializable
+data class BatchJson(
+    val id: String,
+    val size: Int
+)

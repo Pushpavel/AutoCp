@@ -1,5 +1,7 @@
 package common.errors
 
+import common.res.R
+
 sealed class Err(message: String) : Exception(message) {
     class InternalErr(message: String) : Err(message)
     sealed class TesterErr(message: String) : Err(message) {
@@ -10,3 +12,5 @@ sealed class Err(message: String) : Exception(message) {
         class RuntimeErr(message: String) : TesterErr(message)
     }
 }
+
+object NoReachErr : Exception(R.strings.noReachErrMsg)
