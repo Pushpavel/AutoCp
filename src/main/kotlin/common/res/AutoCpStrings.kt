@@ -78,8 +78,8 @@ object AutoCpStrings {
             "Started AutoCp Problem Gathering Service...\n" +
             "Open the problem/ contest page in the browser and " +
             "press the Competitive companion button to generate solution files.\n\n" +
-            "You can stop this service by Tools > $stopGatheringDesc\n" +
-            "or to prevent starting this service on project loading, go to Settings/Preferences > Tools > AutoCp"
+            "You can start/stop this service at Tools > $stopGatheringText\n" +
+            "To prevent starting this service on project load, go to Settings/Preferences > Tools > AutoCp"
 
     const val serverStoppedMsg = "Service has been stopped. " +
             "Use Tools > $startGatheringText to start it."
