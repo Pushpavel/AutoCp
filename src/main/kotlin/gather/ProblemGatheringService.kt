@@ -74,12 +74,15 @@ class ProblemGatheringService(val project: Project) {
                             try {
                                 generateFileBlocking(it.problems.last(), openFile)
                             } catch (err: Exception) {
-                                // TODO: notify only file already exists error other errors handled as interrupted error
-
-                                if (err !is FileAlreadyExistsException)
+                                if (err !is GenerateFileErr.FileAlreadyExistsErr)
                                     gathering.interruptBatch(err)
-
-                                // TODO: open file even if it already exists
+                                else {
+                                    notifyWarn(
+                                        R.strings.fileGenFailedTitle(it.problems.last().name),
+                                        R.strings.fileAlreadyExistsMsg(err)
+                                    )
+                                    // TODO: open file even if it already exists
+                                }
                             }
                         }
                     }

@@ -64,7 +64,7 @@ object AutoCpStrings {
             "Please configure languages that you use at Settings/Preference > Tools > AutoCp > Languages"
 
     fun fileAlreadyExistsMsg(e: GenerateFileErr.FileAlreadyExistsErr) = "" +
-            "${e.filePath} already exists"
+            "File already exists.\nPath to file: ${e.filePath}"
 
     fun fileTemplateMissingMsg(e: GenerateFileErr.FileTemplateMissingErr) = "" +
             "Your Preferred language \"${e.lang.getLanguage()?.displayName}\" does not have a File Template. " +
