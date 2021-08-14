@@ -191,10 +191,13 @@ class ProblemGatheringService(val project: Project) {
             )
             is GatheringResult.ServerErr -> {
                 when (it.err) {
-                    ServerMessage.Err.TimeoutErr -> notifyErr(
-                        R.strings.problemGatheringTitle.failed(),
-                        R.strings.gatheringProblemTimeout(it.problems, it.batch?.size)
-                    )
+                    ServerMessage.Err.TimeoutErr -> {
+                        if (it.batch != null)
+                            notifyErr(
+                                R.strings.problemGatheringTitle.failed(),
+                                R.strings.gatheringProblemTimeout(it.problems, it.batch.size)
+                            )
+                    }
                     ServerMessage.Err.ServerStopped -> notifyErr(
                         R.strings.problemGatheringTitle.failed(),
                         R.strings.serverStoppedMsg + "\n\n" +
