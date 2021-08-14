@@ -5,6 +5,7 @@ import com.intellij.ide.actions.OpenFileAction
 import com.intellij.ide.projectView.ProjectView
 import com.intellij.openapi.application.ModalityState
 import com.intellij.openapi.application.invokeLater
+import com.intellij.openapi.application.runInEdt
 import com.intellij.openapi.application.runReadAction
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.project.Project
@@ -86,7 +87,7 @@ class ProblemGatheringService(val project: Project) {
                                     )
 
                                     if (openFile)
-                                        OpenFileAction.openFile(err.filePath, project)
+                                        runInEdt { OpenFileAction.openFile(err.filePath, project) }
                                 }
                             }
                         }
