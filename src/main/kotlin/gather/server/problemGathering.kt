@@ -33,6 +33,16 @@ class ProblemGathering(
         scope.launch {
             messages.collect { catchAndLog { handleServerMessage(it) } }
         }
+
+        // clears the currentBatch if cancelled or interrupted
+        scope.launch {
+            gathers.collect {
+                catchAndLog {
+                    if (it is GatheringResult.Cancelled || it is GatheringResult.Interrupted)
+                        clearBatch()
+                }
+            }
+        }
     }
 
     private suspend fun handleServerMessage(it: ServerMessage) {
