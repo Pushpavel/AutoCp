@@ -13,7 +13,9 @@ import com.intellij.psi.PsiManager
 import com.intellij.util.IncorrectOperationException
 import common.helpers.*
 import common.res.R
+import common.res.cancelled
 import common.res.failed
+import common.res.success
 import database.autoCp
 import database.models.Problem
 import gather.models.GatheringResult
@@ -135,6 +137,13 @@ class ProblemGatheringService(val project: Project) {
                 catchAndLog { serverNotification(it) }
             }
         }
+
+        scope.launch {
+            gathering.gathers.collect {
+                catchAndLog { gatheringNotification(it) }
+            }
+        }
+
     }
 
     private fun serverNotification(it: ServerStatus) {
@@ -157,6 +166,29 @@ class ProblemGatheringService(val project: Project) {
             }
             else -> {
             }
+        }
+    }
+
+    private fun gatheringNotification(it: GatheringResult) {
+        when (it) {
+            is GatheringResult.Gathered -> {
+                if (it.problems.size == it.batch.size)
+                    notifyInfo(
+                        R.strings.problemGatheringTitle.success(),
+                        R.strings.allProblemsGatheredMsg(it.problems, it.batch.size)
+                    )
+            }
+            is GatheringResult.Cancelled -> notifyInfo(
+                R.strings.problemGatheringTitle.cancelled(),
+                R.strings.gatheringProblemsCancelled(it.problems, it.batch.size)
+            )
+
+            is GatheringResult.JsonErr -> notifyErr(
+                R.strings.problemGatheringTitle.failed(),
+                R.strings.gatheringJsonErrMsg(it.problems, it.batch?.size)
+            )
+            is GatheringResult.ServerErr -> TODO()
+            is GatheringResult.Interrupted -> TODO()
         }
     }
 }

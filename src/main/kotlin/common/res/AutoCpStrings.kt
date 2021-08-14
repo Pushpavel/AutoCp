@@ -25,7 +25,6 @@ object AutoCpStrings {
     // Settings strings
     const val projectSettingsOverrideMsg = "Some of these settings could be overridden at Tools > AutoCp > Project"
 
-    const val problemGatheringTitle = "Problem Gathering"
 
     // General Settings strings
     const val openFilesOnGatherText = "Open files while gathering problems from competitive companion"
@@ -80,7 +79,7 @@ object AutoCpStrings {
             "Open the problem/ contest page in the browser and " +
             "press the parse button of competitive companion browser extension. "
 
-    const val serverStoppedMsg = "Service has been stopped successfully. " +
+    const val serverStoppedMsg = "Service has been stopped. " +
             "Use Tools > $startGatheringText to start it."
 
     fun portTakenMsg(port: Int) = "Port $port is already in use."
@@ -91,6 +90,27 @@ object AutoCpStrings {
             "Could not find a free port to use with competitive companion. " +
             "You may be running multiple instances of AutoCp installed IDEs or other tools that use competitive companion. " +
             "Try closing other programs or restarting your pc. If this issue still occurs, " + fileIssue
+
+
+    // Problem Gathering Service Gathering strings
+    const val problemGatheringTitle = "Problem Gathering"
+
+    fun allProblemsGatheredMsg(problems: List<Problem>, total: Int) = "" +
+            "All problems gathered from ${problems.first().groupName}\n\n" +
+            gatheredReport(problems, total)
+
+    fun gatheredReport(problems: List<Problem>, total: Int) = "" +
+            "(${problems.size}/${total}) problems gathered.\n" +
+            problems.joinToString(separator = "\n") { it.name }
+
+    fun gatheringProblemsCancelled(problems: List<Problem>, total: Int) = "" +
+            "You have cancelled.\n\n" +
+            gatheredReport(problems, total)
+
+    fun gatheringJsonErrMsg(problems: List<Problem>, total: Int?) = "" +
+            competitiveCompanionJsonFormatErrMsg + "\n\n" +
+            if (total != null) gatheredReport(problems, total) else ""
+
 
 
     const val competitiveCompanionJsonFormatErrMsg =
@@ -107,14 +127,7 @@ object AutoCpStrings {
                 gatheredProblemsList(parsed)
     }
 
-    fun gatheredAllProblems(group: String, problems: List<Problem>) = "" +
-            "From $group\n\n" +
-            gatheredProblemsList(problems)
 
-    fun gatheringProblemsCancelled(group: String, parsed: List<Problem>, total: Int) = "" +
-            "You have cancelled. " +
-            problemGatheringReport(group, parsed, total) + "\n\n" +
-            gatheredProblemsList(parsed)
 
 
     private fun problemGatheringReport(group: String, parsed: List<Problem>, total: Int): String {
