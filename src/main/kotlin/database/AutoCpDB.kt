@@ -23,6 +23,14 @@ data class AutoCpDB(
             this.problems[groupName] = updateGroup
     }
 
+    fun updateProblem(problem: Problem) {
+        val group = this.problems[problem.groupName]
+        if (group != null)
+            group[problem.name] = problem
+        else
+            this.problems[problem.groupName] = mutableMapOf(Pair(problem.name, problem))
+    }
+
     fun createSolutionFile(path: String, linkedProblemId: Pair<String, String>?) {
         var testcases: List<Testcase>? = null
         if (linkedProblemId != null) {

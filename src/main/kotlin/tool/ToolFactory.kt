@@ -6,6 +6,7 @@ import com.intellij.openapi.util.Disposer
 import com.intellij.openapi.wm.ToolWindow
 import com.intellij.openapi.wm.ToolWindowFactory
 import common.helpers.onFileSelectionChange
+import common.helpers.pathString
 import database.autoCp
 import tool.ui.TestcaseListPanel
 
@@ -26,10 +27,10 @@ class ToolFactory : ToolWindowFactory, DumbAware {
         project.onFileSelectionChange { file ->
             contentManager.removeAllContents(true)
 
-            if (file == null || !file.isValid || !db.solutionFiles.containsKey(file.path) || !isFileOpen(file))
+            if (file == null || !file.isValid || !db.solutionFiles.containsKey(file.path.pathString) || !isFileOpen(file))
                 return@onFileSelectionChange
 
-            val ui = TestcaseListPanel(project, db.solutionFiles[file.path]!!)
+            val ui = TestcaseListPanel(project, db.solutionFiles[file.path.pathString]!!)
 
             val content = contentManager.factory.createContent(ui.component, file.presentableName, false)
             Disposer.register(content, ui)

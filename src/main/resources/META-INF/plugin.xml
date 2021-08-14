@@ -22,6 +22,11 @@
                                  parentId="tools.autocp"
                                  displayName="Languages"/>
 
+        <projectConfigurable instance="settings.projectSettings.AutoCpProjectSettingsConfigurable"
+                             id="tools.autocp.project"
+                             parentId="tools.autocp"
+                             displayName="Project"/>
+
 
         <toolWindow factoryClass="tool.ToolFactory" id="AutoCp" icon="AutoCpIcons.logo13" anchor="right"/>
         <fileTemplateGroup implementation="common.lang.FileTemplates"/>
@@ -29,16 +34,13 @@
         <fileType name="Autocp Storage File" patterns=".autocp"
                   implementationClass="database.AutoCpFileType"/>
         <fileEditorProvider implementation="database.AutoCpFileEditorProvider"/>
-        <project.converterProvider implementation="common.compat.v0_5_0_eap_1.AutoCpProjectConverterProvider" id="AutoCp v0.5.0-eap.1"/>
+        <project.converterProvider implementation="common.compat.v0_5_0_eap_1.AutoCpProjectConverterProvider"
+                                   id="AutoCp v0.5.0-eap.1"/>
+        <postStartupActivity implementation="gather.ProblemGatheringActivity"/>
     </extensions>
-
     <actions>
-        <action id="dev.pushpavel.autoCP.gather.GatherProblemsAction"
-                class="gather.GatherProblemsAction"
-                text="Gather Problems"
-                description="Gathers problems parsed by competitive companion browser extension">
+        <action id="gather.ProblemGatheringAction" class="gather.ProblemGatheringAction">
             <add-to-group group-id="ToolsMenu" anchor="first"/>
         </action>
     </actions>
-
 </idea-plugin>
