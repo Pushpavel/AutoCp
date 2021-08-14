@@ -47,10 +47,10 @@ class TestcaseListPanel(project: Project, private val solutionFile: SolutionFile
             add(panel(LCFlags.fill) {
                 row {
                     label("Constraints:")
-                    label("200ms").applyToComponent {
+                    label("${solutionFile.timeLimit}ms").applyToComponent {
                         icon = R.icons.clock
                     }
-                    label("1000KB").applyToComponent {
+                    label("${solutionFile.memoryLimit}MB").applyToComponent {
                         icon = R.icons.memory
                     }
                     placeholder().constraints(pushX)
