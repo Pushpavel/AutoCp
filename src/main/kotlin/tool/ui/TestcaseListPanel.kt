@@ -4,11 +4,18 @@ import com.intellij.openapi.Disposable
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Disposer
 import com.intellij.ui.CollectionListModel
+import com.intellij.ui.layout.LCFlags
+import com.intellij.ui.layout.applyToComponent
+import com.intellij.ui.layout.panel
+import com.intellij.util.ui.JBUI
+import com.intellij.util.ui.components.BorderLayoutPanel
 import common.helpers.UniqueNameEnforcer
+import common.res.R
 import common.ui.swing.editableList.EditableListView
 import database.autoCp
 import database.models.SolutionFile
 import database.models.Testcase
+import java.awt.BorderLayout
 import javax.swing.JComponent
 import javax.swing.event.ListDataEvent
 import javax.swing.event.ListDataListener
@@ -26,7 +33,7 @@ class TestcaseListPanel(project: Project, private val solutionFile: SolutionFile
     val component: JComponent
 
     init {
-        component = EditableListView(
+        val listComponent = EditableListView(
             testcaseListModel,
             { TestcasePanel(testcaseListModel) },
             {
@@ -35,9 +42,29 @@ class TestcaseListPanel(project: Project, private val solutionFile: SolutionFile
             },
             "New Testcase"
         )
-        Disposer.register(this, component)
+
+        component = BorderLayoutPanel().apply {
+            add(panel(LCFlags.fill) {
+                row {
+                    label("Constraints:")
+                    label("200ms").applyToComponent {
+                        icon = R.icons.clock
+                    }
+                    label("1000KB").applyToComponent {
+                        icon = R.icons.memory
+                    }
+                    placeholder().constraints(pushX)
+                }
+            }.apply {
+                border = JBUI.Borders.empty(8, 8, 0, 8)
+            }, BorderLayout.PAGE_START)
+            add(listComponent, BorderLayout.CENTER)
+        }
+
+        Disposer.register(this, listComponent)
 
         testcaseListModel.addListDataListener(this)
+
     }
 
 
