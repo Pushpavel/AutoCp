@@ -202,7 +202,25 @@ class ProblemGatheringService(val project: Project) {
                     )
                 }
             }
-            is GatheringResult.Interrupted -> TODO()
+            is GatheringResult.Interrupted -> {
+                when (it.err) {
+                    is GenerateFileErr -> when (it.err) {
+                        is GenerateFileErr.FileTemplateMissingErr -> notifyErr(
+                            R.strings.fileGenFailedTitle(it.err.problem.name),
+                            R.strings.fileTemplateMissingMsg(it.err)
+                        )
+                        is GenerateFileErr.LangNotConfiguredErr -> notifyErr(
+                            R.strings.fileGenFailedTitle(it.err.problem.name),
+                            R.strings.langNotConfiguredMsg
+                        )
+                    }
+                    else -> notifyErr(
+                        R.strings.problemGatheringTitle.failed(),
+                        R.strings.defaultFileIssue(it.err) + "\n\n" +
+                                R.strings.gatheredReport(it.problems, it.batch.size)
+                    )
+                }
+            }
         }
     }
 }
