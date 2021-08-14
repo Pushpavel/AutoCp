@@ -4,31 +4,24 @@ import common.errors.Err
 import database.models.Problem
 import database.models.SolutionFile
 import database.models.Testcase
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class AutoCpDB(
-    val problems: MutableMap<String, MutableMap<String, Problem>> = mutableMapOf(),
-    val solutionFiles: MutableMap<String, SolutionFile> = mutableMapOf(),
+    @SerialName("problems") private val _problems: MutableMap<String, MutableMap<String, Problem>> = mutableMapOf(),
+    @SerialName("solutionFiles") private val _solutionFiles: MutableMap<String, SolutionFile> = mutableMapOf(),
 ) {
 
-    fun updateProblems(problems: List<Problem>) {
-        if (problems.isEmpty()) return
-        val groupName = problems[0].groupName
-        val updateGroup = problems.associateBy { it.name }.toMutableMap()
-        val group = this.problems[groupName]
-        if (group != null)
-            updateGroup.forEach { group[it.key] = it.value }
-        else
-            this.problems[groupName] = updateGroup
-    }
+    val problems: Map<String, Map<String, Problem>> get() = _problems
+    val solutionFiles: Map<String, SolutionFile> get() = _solutionFiles
 
     fun updateProblem(problem: Problem) {
-        val group = this.problems[problem.groupName]
+        val group = this._problems[problem.groupName]
         if (group != null)
             group[problem.name] = problem
         else
-            this.problems[problem.groupName] = mutableMapOf(Pair(problem.name, problem))
+            this._problems[problem.groupName] = mutableMapOf(Pair(problem.name, problem))
     }
 
     fun createSolutionFile(path: String, linkedProblemId: Pair<String, String>?) {
@@ -46,13 +39,13 @@ data class AutoCpDB(
             testcases ?: listOf()
         )
 
-        solutionFiles[path] = solutionFile
+        _solutionFiles[path] = solutionFile
     }
 
     fun updateSolutionFile(solutionFile: SolutionFile) {
         if (!solutionFiles.containsKey(solutionFile.pathString))
             throw Err.InternalErr("trying to update solution File which does not exist")
 
-        solutionFiles[solutionFile.pathString] = solutionFile
+        _solutionFiles[solutionFile.pathString] = solutionFile
     }
 }
