@@ -8,6 +8,8 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
 import common.res.AutoCpFiles
 import java.nio.file.*
+import kotlin.io.path.Path
+import kotlin.io.path.pathString
 import kotlin.streams.toList
 
 fun Project.onFileSelectionChange(action: FileEditorManager.(VirtualFile?) -> Unit) {
@@ -44,3 +46,12 @@ fun listPathsInDirectoryInResources(relativePath: String): List<Path> {
 fun FileTemplate.constructFileNameWithExt(name: String): String {
     return name + if (extension.isNotBlank()) ".$extension" else ""
 }
+
+val String.pathString: String
+    get() = try {
+        Path(this).pathString
+    } catch (e: Exception) {
+        this
+    }
+
+val VirtualFile.pathString get() = path.pathString
