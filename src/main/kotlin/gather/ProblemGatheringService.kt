@@ -54,8 +54,6 @@ class ProblemGatheringService(val project: Project) {
         scope.launch { setupServerStopper(server) }
         ProgressReporter(scope, project, gathers, gathering::cancelBatch)
         scope.getServerMessagesAsync(R.others.problemGatheringTimeoutMillis, server, messages)
-
-
     }
 
     fun startServiceAsync() = scope.startServerAsync(R.others.competitiveCompanionPorts, server)
@@ -77,24 +75,25 @@ class ProblemGatheringService(val project: Project) {
         gathers.collect {
             if (it is GatheringResult.Gathered) {
                 db.updateProblem(it.problems.last())
-                try {
 
-                    val openFile = when (AutoCpGeneralSettings.instance.openFilesOnGather) {
-                        OpenFileOnGather.NONE -> false
-                        OpenFileOnGather.ONLY_FIRST -> it.problems.size == 1
-                        OpenFileOnGather.ALL -> true
+                val openFile = when (AutoCpGeneralSettings.instance.openFilesOnGather) {
+                    OpenFileOnGather.NONE -> false
+                    OpenFileOnGather.ONLY_FIRST -> it.problems.size == 1
+                    OpenFileOnGather.ALL -> true
+                }
+
+                launch(Dispatchers.IO) {
+                    try {
+                        generateFileBlocking(it.problems.last(), openFile)
+                    } catch (err: Exception) {
+                        notifyGenerateFileErr(err, it.problems.last())
                     }
-
-                    generateFileAsync(it.problems.last(), openFile)
-
-                } catch (err: Exception) {
-                    notifyGenerateFileErr(err, it.problems.last())
                 }
             }
         }
     }
 
-    private fun CoroutineScope.generateFileAsync(problem: Problem, open: Boolean) = launch(Dispatchers.IO) {
+    private fun generateFileBlocking(problem: Problem, open: Boolean) {
         val rootPath = Paths.get(project.basePath!!, problem.groupName)
         val rootDir = VfsUtil.createDirectories(rootPath.pathString)
         val rootPsiDir = runReadAction { PsiManager.getInstance(project).findDirectory(rootDir)!! }
