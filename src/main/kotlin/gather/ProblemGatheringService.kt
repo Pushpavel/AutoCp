@@ -1,6 +1,7 @@
 package gather
 
 import com.intellij.ide.actions.CreateFileFromTemplateAction
+import com.intellij.ide.actions.OpenFileAction
 import com.intellij.ide.projectView.ProjectView
 import com.intellij.openapi.application.ModalityState
 import com.intellij.openapi.application.invokeLater
@@ -81,7 +82,9 @@ class ProblemGatheringService(val project: Project) {
                                         R.strings.fileGenFailedTitle(it.problems.last().name),
                                         R.strings.fileAlreadyExistsMsg(err)
                                     )
-                                    // TODO: open file even if it already exists
+
+                                    if (openFile)
+                                        OpenFileAction.openFile(err.filePath, project)
                                 }
                             }
                         }
