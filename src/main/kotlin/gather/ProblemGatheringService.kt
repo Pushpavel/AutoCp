@@ -20,6 +20,7 @@ import database.autoCp
 import database.models.Problem
 import gather.models.GatheringResult
 import gather.models.GenerateFileErr
+import gather.models.ServerMessage
 import gather.models.ServerStatus
 import gather.server.ProblemGathering
 import gather.server.SimpleLocalServer
@@ -187,7 +188,20 @@ class ProblemGatheringService(val project: Project) {
                 R.strings.problemGatheringTitle.failed(),
                 R.strings.gatheringJsonErrMsg(it.problems, it.batch?.size)
             )
-            is GatheringResult.ServerErr -> TODO()
+            is GatheringResult.ServerErr -> {
+                when (it.err) {
+                    ServerMessage.Err.TimeoutErr -> notifyErr(
+                        R.strings.problemGatheringTitle.failed(),
+                        R.strings.gatheringProblemTimeout(it.problems, it.batch!!.size)
+                    )
+                    ServerMessage.Err.ServerStopped -> notifyErr(
+                        R.strings.problemGatheringTitle.failed(),
+                        R.strings.serverStoppedMsg + "\n\n" +
+                                if (it.batch == null) ""
+                                else R.strings.gatheredReport(it.problems, it.batch.size)
+                    )
+                }
+            }
             is GatheringResult.Interrupted -> TODO()
         }
     }

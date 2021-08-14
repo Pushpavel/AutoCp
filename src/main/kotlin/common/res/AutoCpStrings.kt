@@ -95,13 +95,17 @@ object AutoCpStrings {
     // Problem Gathering Service Gathering strings
     const val problemGatheringTitle = "Problem Gathering"
 
+    const val competitiveCompanionJsonFormatErrMsg =
+        "The Problem sent by competitive companion was not parsed correctly. This was not supposed to happen, $fileIssue"
+
+    fun gatheredReport(problems: List<Problem>, total: Int) = "" +
+            "(${problems.size}/${total}) problems gathered.\n" +
+            problems.joinToString(separator = "\n") { "\t" + it.name }
+
     fun allProblemsGatheredMsg(problems: List<Problem>, total: Int) = "" +
             "All problems gathered from ${problems.first().groupName}\n\n" +
             gatheredReport(problems, total)
 
-    fun gatheredReport(problems: List<Problem>, total: Int) = "" +
-            "(${problems.size}/${total}) problems gathered.\n" +
-            problems.joinToString(separator = "\n") { it.name }
 
     fun gatheringProblemsCancelled(problems: List<Problem>, total: Int) = "" +
             "You have cancelled.\n\n" +
@@ -112,33 +116,13 @@ object AutoCpStrings {
             if (total != null) gatheredReport(problems, total) else ""
 
 
-
-    const val competitiveCompanionJsonFormatErrMsg =
-        "The Problem sent by competitive companion was not parsed correctly. This was not supposed to happen, $fileIssue"
-
-
-    fun incompleteProblemsGathering(group: String, parsed: List<Problem>, total: Int): String {
-        val c = total - parsed.size
-        return "$c of the problem${if (c == 1) "" else 's'} from $group are not gathered. " +
-                "This could happen if you closed competitive companion or " +
-                "you clicked competitive companion button before AutoCp started listening. " +
-                "If it was not the case, " + fileIssue + "\n\n" +
-                "You could also try again\n\n" +
-                gatheredProblemsList(parsed)
-    }
-
-
-
-
-    private fun problemGatheringReport(group: String, parsed: List<Problem>, total: Int): String {
-        val c = total - parsed.size
-        return "$c of the problem${if (c == 1) "" else 's'} from $group are not gathered. "
-    }
-
-
-    private fun gatheredProblemsList(problems: List<Problem>) = "" +
-            "Gathered Problems:\n" +
-            problems.joinToString("\n") { it.name }
+    fun gatheringProblemTimeout(problems: List<Problem>, total: Int) = "" +
+            "Competitive companion has not responded for too long. You should try again.\n" +
+            "This could happen due to below reasons\n" +
+            "\t1.Competitive companion is shutdown (you may have closed the browser tab)\n" +
+            "\t2.you clicked competitive companion button before AutoCp started listening.\n" +
+            "if these were not the reason, $fileIssue\n\n" +
+            gatheredReport(problems, total)
 
 }
 
