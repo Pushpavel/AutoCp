@@ -6,6 +6,8 @@ import com.intellij.execution.testframework.sm.ServiceMessageBuilder
 import com.intellij.execution.testframework.sm.ServiceMessageBuilder.*
 import common.errors.Err
 import common.errors.presentableString
+import settings.langSettings.model.BuildConfig
+import tester.base.ProcessRunner
 import tester.judge.Verdict
 import tester.judge.Verdict.Companion.presentableString
 import tester.tree.ResultNode
@@ -66,8 +68,16 @@ class TreeTestingProcessReporter(private val processHandler: ProcessHandler) : T
         testSuiteFinished(node.sourceNode.name).apply()
     }
 
+    override fun compileStart(configName: String, buildConfig: BuildConfig) {
+        TODO("Not yet implemented")
+    }
+
+    override fun compileFinish(result: Result<ProcessRunner.CapturedResults>) {
+        TODO("Not yet implemented")
+    }
+
+
     override fun testingProcessStartErrored(error: Err) {
-        testsStarted()
         processHandler.notifyTextAvailable(
             error.presentableString() + "\n", ProcessOutputTypes.STDERR
         )
