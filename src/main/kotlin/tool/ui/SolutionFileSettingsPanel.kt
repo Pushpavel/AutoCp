@@ -5,6 +5,7 @@ import com.intellij.openapi.fileTypes.FileTypeManager
 import com.intellij.openapi.project.Project
 import com.intellij.ui.layout.applyToComponent
 import com.intellij.ui.layout.panel
+import com.intellij.util.ui.components.BorderLayoutPanel
 import common.helpers.mainScope
 import common.res.R
 import common.ui.helpers.allowOnlyPositiveIntegers
@@ -16,6 +17,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import java.awt.BorderLayout
 import javax.swing.JComponent
 import kotlin.io.path.Path
 
@@ -28,12 +30,13 @@ class SolutionFileSettingsPanel(project: Project, private val pathString: String
     val component: JComponent
 
     init {
-        component = panel {
+
+        val header = panel {
             row {
                 placeholder().constraints(growX, pushX)
                 cell {
                     val icon = label("").component
-                    val title = label("").component
+                    val title = label(html { tag("h2", "...") }).component
 
                     scope.launch {
                         flow.collect {
@@ -48,6 +51,9 @@ class SolutionFileSettingsPanel(project: Project, private val pathString: String
                 }
                 placeholder().constraints(growX, pushX)
             }
+        }
+
+        val body = panel {
             row {
                 row { label("Constraints:") }
                 row {
@@ -71,6 +77,12 @@ class SolutionFileSettingsPanel(project: Project, private val pathString: String
                     placeholder().constraints(growX, pushX)
                 }
             }
+        }
+
+
+        component = BorderLayoutPanel().apply {
+            add(header, BorderLayout.PAGE_START)
+            add(body, BorderLayout.CENTER)
         }
     }
 
