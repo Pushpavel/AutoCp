@@ -10,26 +10,36 @@ import com.intellij.ui.layout.panel
 import com.intellij.util.ui.JBUI
 import com.intellij.util.ui.components.BorderLayoutPanel
 import common.helpers.UniqueNameEnforcer
+import common.helpers.isItemsEqual
+import common.helpers.mainScope
 import common.res.R
 import common.ui.swing.editableList.EditableListView
 import database.autoCp
-import database.models.SolutionFile
 import database.models.Testcase
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import java.awt.BorderLayout
 import javax.swing.JComponent
 import javax.swing.event.ListDataEvent
 import javax.swing.event.ListDataListener
 
-class TestcaseListPanel(project: Project, private val solutionFile: SolutionFile) : Disposable, ListDataListener {
+class TestcaseListPanel(project: Project, private val pathString: String) : Disposable, ListDataListener {
 
-    private val testcaseListModel = CollectionListModel(solutionFile.testcases)
+    private val scope = mainScope()
+    private val db = project.autoCp()
+    private val flow = db.solutionFilesFlow.map { it[pathString] }.filterNotNull()
+    private var resetting = false
+
+    private val testcaseListModel = CollectionListModel<Testcase>()
     private val testcaseNameEnforcer = UniqueNameEnforcer(
         Regex("^(.*) #([0-9]+)\$"),
         { p, s -> "$p #$s" },
         { testcaseListModel.items.map { it.name } }
     )
 
-    private val db = project.autoCp()
     val component: JComponent
 
     init {
@@ -47,11 +57,21 @@ class TestcaseListPanel(project: Project, private val solutionFile: SolutionFile
             add(panel(LCFlags.fill) {
                 row {
                     label("Constraints:")
-                    label("${solutionFile.timeLimit}ms").applyToComponent {
+                    label("").applyToComponent {
                         icon = R.icons.clock
+                        scope.launch {
+                            flow.collect {
+                                text = "${it.timeLimit}ms"
+                            }
+                        }
                     }
-                    label("${solutionFile.memoryLimit}MB").applyToComponent {
+                    label("").applyToComponent {
                         icon = R.icons.memory
+                        scope.launch {
+                            flow.collect {
+                                text = "${it.memoryLimit}MB"
+                            }
+                        }
                     }
                     placeholder().constraints(pushX)
                 }
@@ -64,6 +84,16 @@ class TestcaseListPanel(project: Project, private val solutionFile: SolutionFile
         Disposer.register(this, listComponent)
 
         testcaseListModel.addListDataListener(this)
+
+        scope.launch {
+            flow.collect {
+                if (it.testcases.isItemsEqual(testcaseListModel.items)) return@collect
+
+                resetting = true
+                testcaseListModel.replaceAll(it.testcases)
+                resetting = false
+            }
+        }
 
     }
 
@@ -91,13 +121,17 @@ class TestcaseListPanel(project: Project, private val solutionFile: SolutionFile
 
     override fun dispose() {
         testcaseListModel.removeListDataListener(this)
+        scope.cancel()
     }
 
 
     private fun updateTestcases(update: (MutableList<Testcase>) -> Unit) {
-        val testcases = db.solutionFiles[solutionFile.pathString]?.testcases?.toMutableList() ?: return
-        update(testcases)
-        db.updateSolutionFile(solutionFile.copy(testcases = testcases))
+        if (resetting) return
+        db.solutionFiles[pathString]?.let {
+            val testcases = it.testcases.toMutableList()
+            update(testcases)
+            db.updateSolutionFile(it.copy(testcases = testcases))
+        }
     }
 }
 

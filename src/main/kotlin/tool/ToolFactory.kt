@@ -43,7 +43,7 @@ class ToolFactory : ToolWindowFactory, DumbAware {
             if (file == null || !file.isValid || !db.solutionFiles.containsKey(file.pathString) || !isFileOpen(file))
                 return@onFileSelectionChange
 
-            val ui = TestcaseListPanel(project, db.solutionFiles[file.pathString]!!)
+            val ui = TestcaseListPanel(project, file.pathString)
             val settingsPanel = SolutionFileSettingsPanel(project, file.pathString)
 
             val content = contentManager.factory.createContent(ui.component, file.presentableName, false)
