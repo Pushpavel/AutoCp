@@ -1,6 +1,7 @@
 package tester.base
 
 import com.intellij.execution.configurations.GeneralCommandLine
+import com.jetbrains.cidr.toolchains.OSType
 import database.models.SolutionFile
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -33,8 +34,13 @@ class SolutionProcessFactory(private val executablePath: String) {
                 Files.createTempDirectory("AutoCp")
             }
 
-            // fixme: executable extension must be dependent on OS
-            val outputPath = Paths.get(tempDir.pathString, Path(solutionFile.pathString).nameWithoutExtension + ".exe")
+            val executableExtension = if (OSType.getCurrent() == OSType.WIN) ".exe" else ""
+
+            val outputPath = Paths.get(
+                tempDir.pathString,
+                Path(solutionFile.pathString).nameWithoutExtension + executableExtension
+            )
+
             val command = buildConfig.constructBuildCommand(solutionFile.pathString, outputPath.pathString)
             val commandList = splitCommandString(command)
             try {
