@@ -5,8 +5,6 @@ import com.intellij.execution.process.ProcessOutputTypes
 import common.errors.Err
 import common.errors.presentableString
 import common.helpers.defaultScope
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import tester.TestcaseTreeTestingProcess
@@ -17,20 +15,17 @@ import tester.TestcaseTreeTestingProcess
  */
 abstract class TestingProcessHandler : NopProcessHandler() {
 
-    private var testingProcessJob: Job? = null
-
     abstract suspend fun createTestingProcess(): TestcaseTreeTestingProcess?
 
-    private var scope: CoroutineScope? = null
+    private var scope = defaultScope()
 
     override fun startNotify() {
         if (isStartNotified) return
 
         super.startNotify()
-        scope = defaultScope()
 
         // launch the testing Process
-        testingProcessJob = scope?.launch {
+        scope.launch {
             try {
                 val process = createTestingProcess()
                 process?.execute()
@@ -46,19 +41,7 @@ abstract class TestingProcessHandler : NopProcessHandler() {
     }
 
     override fun destroyProcessImpl() {
-
-        // notifyProcessTerminated on successfully cancelling testingProcessJob
-        testingProcessJob?.let {
-            it.cancel()
-
-            scope?.launch {
-                // ignoring exceptions as it will be handled within the job itself
-                it.join()
-                notifyProcessTerminated(0)
-            }
-
-            scope?.cancel()
-
-        } ?: notifyProcessTerminated(0)
+        scope.cancel()
+        notifyProcessTerminated(0)
     }
 }
