@@ -28,11 +28,11 @@ class ToolFactory : ToolWindowFactory, DumbAware {
         project.onFileSelectionChange { file ->
             contentManager.removeAllContents(true)
 
-            if (file == null || !file.isValid || !db.solutionFiles.containsKey(file.path.pathString) || !isFileOpen(file))
+            if (file == null || !file.isValid || !db.solutionFiles.containsKey(file.pathString) || !isFileOpen(file))
                 return@onFileSelectionChange
 
-            val ui = TestcaseListPanel(project, db.solutionFiles[file.path.pathString]!!)
-            val settingsPanel = SolutionFileSettingsPanel()
+            val ui = TestcaseListPanel(project, db.solutionFiles[file.pathString]!!)
+            val settingsPanel = SolutionFileSettingsPanel(project, file.pathString)
 
             val content = contentManager.factory.createContent(ui.component, file.presentableName, false)
             val settingsContent = contentManager.factory.createContent(settingsPanel.component, "Settings", false)
