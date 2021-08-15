@@ -56,13 +56,9 @@ class AutoCpTestingProcessHandler(private val config: AutoCpConfig) : TestingPro
             TestNode.Leaf(it.name, it.input, it.output, processFactory)
         }
 
-        // TODO: remove this dependence on Problem
-        val problem = db.problems[solutionFile.linkedProblemId?.first]?.get(solutionFile.linkedProblemId?.second)
-            ?: throw SolutionFileErr("Solution File \"${solutionFile.pathString}\" is not associated with any Problem parsed by AutoCp")
-
         return TestNode.Group(
             Path(solutionFile.pathString).nameWithoutExtension,
-            problem.timeLimit,
+            solutionFile.timeLimit,
             leafNodes,
             processFactory
         )

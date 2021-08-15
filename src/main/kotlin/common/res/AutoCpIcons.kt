@@ -13,4 +13,10 @@ object AutoCpIcons {
 
     @JvmField
     val logo13 = IconLoader.getIcon("/icons/logo13.svg", javaClass)
+
+    @JvmField
+    val clock = IconLoader.getIcon("/icons/clock.svg", javaClass)
+
+    @JvmField
+    val memory = IconLoader.getIcon("/icons/memory.svg", javaClass)
 }
