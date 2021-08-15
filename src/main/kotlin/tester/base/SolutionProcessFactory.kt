@@ -28,7 +28,7 @@ class SolutionProcessFactory(private val executablePath: String) {
         suspend fun from(
             solutionFile: SolutionFile,
             buildConfig: BuildConfig
-        ): SolutionProcessFactory {
+        ): Pair<SolutionProcessFactory, Result<ProcessRunner.CapturedResults>> {
             val tempDir = withContext(Dispatchers.IO) {
                 @Suppress("BlockingMethodInNonBlockingContext")
                 Files.createTempDirectory("AutoCp")
@@ -43,14 +43,16 @@ class SolutionProcessFactory(private val executablePath: String) {
 
             val command = buildConfig.constructBuildCommand(solutionFile.pathString, outputPath.pathString)
             val commandList = splitCommandString(command)
+            val result: Result<ProcessRunner.CapturedResults>
+
             try {
                 val buildProcess = GeneralCommandLine(commandList).createProcess()
-                ProcessRunner.run(buildProcess)
+                result = ProcessRunner.run(buildProcess)
             } catch (e: Exception) {
                 throw BuildErr(e, solutionFile, buildConfig)
             }
 
-            return SolutionProcessFactory(outputPath.pathString)
+            return Pair(SolutionProcessFactory(outputPath.pathString), result)
         }
 
     }

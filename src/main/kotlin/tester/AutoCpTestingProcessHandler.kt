@@ -7,6 +7,7 @@ import config.validators.SolutionFilePathErr
 import config.validators.getValidBuildConfig
 import config.validators.getValidSolutionFile
 import database.models.SolutionFile
+import settings.langSettings.model.BuildConfig
 import tester.base.SolutionProcessFactory
 import tester.base.TestingProcessHandler
 import tester.tree.TestNode
@@ -28,9 +29,9 @@ class AutoCpTestingProcessHandler(private val config: AutoCpConfig) : TestingPro
             // validate buildConfig
             val buildConfig = getValidBuildConfig(solutionFile, config.buildConfigId)
 
-            // TODO: report compile logs and errors
-            // Build Executable from Solution File
-            val processFactory = SolutionProcessFactory.from(solutionFile, buildConfig)
+
+            // Build Executable from Solution File and BuildConfig
+            val processFactory = compileIntoProcessFactory(solutionFile, buildConfig) ?: return null
 
             // Build Test tree
             val rootNode = solutionFileToTestNode(solutionFile, processFactory)
@@ -40,6 +41,21 @@ class AutoCpTestingProcessHandler(private val config: AutoCpConfig) : TestingPro
         } catch (err: Exception) {
             reportTestingStartErr(err)
             return null
+        }
+    }
+
+    private suspend fun compileIntoProcessFactory(
+        solutionFile: SolutionFile,
+        buildConfig: BuildConfig
+    ): SolutionProcessFactory? {
+        reporter.compileStart(config.name, buildConfig)
+        return try {
+            val (factory, result) = SolutionProcessFactory.from(solutionFile, buildConfig)
+            reporter.compileFinish(result)
+            factory
+        } catch (e: Exception) {
+            reporter.compileFinish(Result.failure(e))
+            null
         }
     }
 
