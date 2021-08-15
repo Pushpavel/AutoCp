@@ -6,7 +6,9 @@ import com.intellij.execution.testframework.sm.ServiceMessageBuilder
 import com.intellij.execution.testframework.sm.ServiceMessageBuilder.*
 import common.errors.Err
 import common.errors.presentableString
+import common.res.R
 import settings.langSettings.model.BuildConfig
+import tester.base.BuildErr
 import tester.base.ProcessRunner
 import tester.judge.Verdict
 import tester.judge.Verdict.Companion.presentableString
@@ -69,11 +71,27 @@ class TreeTestingProcessReporter(private val processHandler: ProcessHandler) : T
     }
 
     override fun compileStart(configName: String, buildConfig: BuildConfig) {
-        TODO("Not yet implemented")
+        processHandler.notifyTextAvailable(
+            R.strings.startCompilingMsg(configName, buildConfig) + "\n",
+            ProcessOutputTypes.STDOUT
+        )
     }
 
     override fun compileFinish(result: Result<ProcessRunner.CapturedResults>) {
-        TODO("Not yet implemented")
+        when {
+            result.isSuccess -> {
+                val r = result.getOrThrow()
+                val msg = R.strings.compileSuccessMsg(r.output, r.executionTime)
+                processHandler.notifyTextAvailable(msg + "\n", ProcessOutputTypes.STDOUT)
+            }
+            result.isFailure -> {
+                val msg = when (val e = result.exceptionOrNull()!!) {
+                    is BuildErr -> R.strings.buildErrMsg(e)
+                    else -> throw e
+                }
+                processHandler.notifyTextAvailable(msg + "\n", ProcessOutputTypes.STDERR)
+            }
+        }
     }
 
 

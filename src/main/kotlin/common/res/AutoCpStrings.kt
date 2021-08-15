@@ -7,6 +7,7 @@ import config.validators.SolutionFilePathErr
 import database.models.Problem
 import gather.models.GenerateFileErr
 import settings.generalSettings.OpenFileOnGather
+import settings.langSettings.model.BuildConfig
 import tester.base.BuildErr
 import tester.errors.ProcessRunnerErr
 
@@ -137,7 +138,7 @@ object AutoCpStrings {
             gatheredReport(problems, total)
 
 
-    /* Testing Process Strings */
+    // Testing Process Strings
 
     fun solutionFilePathErrMsg(e: SolutionFilePathErr) = "" +
             "solutionFilePath in the run configuration \"${e.configName}\" has issues\n" +
@@ -156,11 +157,22 @@ object AutoCpStrings {
             "No Build Configuration configured for ${e.lang.getLanguage()?.displayName}.\n" +
             "Fix this issue at Settings/Preferences > Tools > AutoCp > Languages > ${e.lang.getLanguage()?.displayName}"
 
-    fun buildErrMsg(e: BuildErr) = when (e.err) {
-        is ProcessRunnerErr.RuntimeErr -> ""
-        is ProcessRunnerErr.DeadProcessErr -> TODO()
-        else -> TODO()
-    }
+    // Testing Compile Strings
+
+    fun startCompilingMsg(configName: String, config: BuildConfig) = "" +
+            "Building \"$configName\" using Build Configuration \"${config.name}\"...\n"
+
+    fun compileSuccessMsg(log: String, executionMills: Long) = "" +
+            "Compilation completed in ${executionMills}ms\n" + log
+
+    fun buildErrMsg(e: BuildErr) = "" +
+            "Error while running the below command\n${e.command}\n\n" +
+            when (e.err) {
+                is ProcessRunnerErr.RuntimeErr -> e.err.localizedMessage
+                is ProcessRunnerErr.DeadProcessErr -> "" +
+                        "Trying to run a process which is already dead, $fileIssue"
+                else -> throw e.err
+            }
 }
 
 fun String.failed(): String = "$this Failed"

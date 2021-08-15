@@ -49,7 +49,7 @@ class SolutionProcessFactory(private val executablePath: String) {
                 val buildProcess = GeneralCommandLine(commandList).createProcess()
                 result = ProcessRunner.run(buildProcess)
             } catch (e: Exception) {
-                throw BuildErr(e, solutionFile, buildConfig)
+                throw BuildErr(e, command)
             }
 
             return Pair(SolutionProcessFactory(outputPath.pathString), result)
@@ -58,4 +58,4 @@ class SolutionProcessFactory(private val executablePath: String) {
     }
 }
 
-class BuildErr(val err: Exception, val solutionFile: SolutionFile, val buildConfig: BuildConfig) : Exception()
+class BuildErr(val err: Exception, val command: String) : Exception()

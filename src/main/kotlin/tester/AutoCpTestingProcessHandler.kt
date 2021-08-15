@@ -29,7 +29,6 @@ class AutoCpTestingProcessHandler(private val config: AutoCpConfig) : TestingPro
             // validate buildConfig
             val buildConfig = getValidBuildConfig(solutionFile, config.buildConfigId)
 
-
             // Build Executable from Solution File and BuildConfig
             val processFactory = compileIntoProcessFactory(solutionFile, buildConfig) ?: return null
 
