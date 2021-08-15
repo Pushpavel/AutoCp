@@ -2,9 +2,8 @@ package tester.base
 
 import com.intellij.execution.process.NopProcessHandler
 import com.intellij.execution.process.ProcessOutputTypes
-import common.errors.Err
-import common.errors.presentableString
 import common.helpers.defaultScope
+import common.res.R
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import tester.TestcaseTreeTestingProcess
@@ -27,13 +26,10 @@ abstract class TestingProcessHandler : NopProcessHandler() {
         // launch the testing Process
         scope.launch {
             try {
-                val process = createTestingProcess()
-                process?.execute()
+                createTestingProcess()?.execute()
             } catch (e: Exception) {
-                if (e is Err)
-                    notifyTextAvailable(e.presentableString() + "\n", ProcessOutputTypes.STDERR)
                 // Last hope for logging any errors in the testing Process
-                notifyTextAvailable(e.stackTraceToString(), ProcessOutputTypes.STDERR)
+                notifyTextAvailable(R.strings.fatalFileIssue(e), ProcessOutputTypes.STDERR)
             } finally {
                 destroyProcess()
             }

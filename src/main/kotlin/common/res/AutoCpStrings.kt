@@ -21,6 +21,10 @@ object AutoCpStrings {
             "The Error message:\n${e.localizedMessage}\n" +
             "Stacktrace:\n${e.stackTraceToString()}"
 
+    fun fatalFileIssue(e: Exception) = "" +
+            "This was not supposed to happen, $fileIssue\n\n" +
+            "The Error message:\n${e.localizedMessage}\n" +
+            "Stacktrace:\n${e.stackTraceToString()}"
 
     // Settings strings
     const val projectSettingsOverrideMsg = "Some of these settings could be overridden at Tools > AutoCp > Project"
@@ -127,6 +131,9 @@ object AutoCpStrings {
             "\t2.you clicked competitive companion button before AutoCp started listening.\n" +
             "if these were not the reason, $fileIssue\n\n" +
             gatheredReport(problems, total)
+
+
+    // Testing Process Strings
 
 }
 
