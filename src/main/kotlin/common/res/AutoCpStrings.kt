@@ -160,10 +160,10 @@ object AutoCpStrings {
     // Testing Compile Strings
 
     fun startCompilingMsg(configName: String, config: BuildConfig) = "" +
-            "Building \"$configName\" using Build Configuration \"${config.name}\"...\n"
+            "Building \"$configName\" using Build Configuration \"${config.name}\"..."
 
     fun compileSuccessMsg(log: String, executionMills: Long) = "" +
-            "Compilation completed in ${executionMills}ms\n" + log
+            "Build completed in ${executionMills}ms\n" + log
 
     fun buildErrMsg(e: BuildErr) = "" +
             "Error while running the below command\n${e.command}\n\n" +
