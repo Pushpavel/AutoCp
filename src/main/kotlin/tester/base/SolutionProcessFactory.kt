@@ -56,4 +56,4 @@ class SolutionProcessFactory(private val executablePath: String) {
     }
 }
 
-class BuildErr(err: Exception, val solutionFile: SolutionFile, val buildConfig: BuildConfig) : Exception()
+class BuildErr(val err: Exception, val solutionFile: SolutionFile, val buildConfig: BuildConfig) : Exception()

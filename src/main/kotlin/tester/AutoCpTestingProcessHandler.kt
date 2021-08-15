@@ -1,9 +1,11 @@
 package tester
 
+import common.res.R
 import config.AutoCpConfig
+import config.validators.NoBuildConfigErr
+import config.validators.SolutionFilePathErr
 import config.validators.getValidBuildConfig
 import config.validators.getValidSolutionFile
-import database.autoCp
 import database.models.SolutionFile
 import tester.base.SolutionProcessFactory
 import tester.base.TestingProcessHandler
@@ -17,23 +19,28 @@ import kotlin.io.path.nameWithoutExtension
 class AutoCpTestingProcessHandler(private val config: AutoCpConfig) : TestingProcessHandler() {
 
     private val reporter = TreeTestingProcessReporter(this)
-    private val db = config.project.autoCp()
 
-    override suspend fun createTestingProcess(): TestcaseTreeTestingProcess {
-        // get and validate SolutionFile from config
-        val solutionFile = getValidSolutionFile(config.project, config.name, config.solutionFilePath)
+    override suspend fun createTestingProcess(): TestcaseTreeTestingProcess? {
+        try {
+            // get and validate SolutionFile from config
+            val solutionFile = getValidSolutionFile(config.project, config.name, config.solutionFilePath)
 
-        // validate buildConfig
-        val buildConfig = getValidBuildConfig(solutionFile, config.buildConfigId)
+            // validate buildConfig
+            val buildConfig = getValidBuildConfig(solutionFile, config.buildConfigId)
 
-        // Build Executable from Solution File
-        val processFactory = SolutionProcessFactory.from(solutionFile, buildConfig)
+            // TODO: report compile logs and errors
+            // Build Executable from Solution File
+            val processFactory = SolutionProcessFactory.from(solutionFile, buildConfig)
 
-        // Build Test tree
-        val rootNode = solutionFileToTestNode(solutionFile, processFactory)
+            // Build Test tree
+            val rootNode = solutionFileToTestNode(solutionFile, processFactory)
 
-        // create a TestingProcess from the Problem and Test Tree
-        return TestcaseTreeTestingProcess(rootNode, reporter)
+            // create a TestingProcess from the Problem and Test Tree
+            return TestcaseTreeTestingProcess(rootNode, reporter)
+        } catch (err: Exception) {
+            reportTestingStartErr(err)
+            return null
+        }
     }
 
 
@@ -50,7 +57,13 @@ class AutoCpTestingProcessHandler(private val config: AutoCpConfig) : TestingPro
         )
     }
 
-    private fun reportErr(err: Exception) {
-        // TODO: report errors
+    private fun reportTestingStartErr(err: Exception) {
+        val message = when (err) {
+            is SolutionFilePathErr -> R.strings.solutionFilePathErrMsg(err)
+            is NoBuildConfigErr -> R.strings.noBuildConfigFoundMsg(err)
+            else -> throw err
+        }
+
+        reporter.testingProcessError(message)
     }
 }
