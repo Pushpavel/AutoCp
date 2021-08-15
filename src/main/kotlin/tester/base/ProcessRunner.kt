@@ -1,9 +1,8 @@
 package tester.base
 
 import common.helpers.awaitAsResult
-import common.errors.Err
-import common.errors.Err.TesterErr.*
 import kotlinx.coroutines.*
+import tester.errors.ProcessRunnerErr
 
 /**
  * Simplifies execution of an Sub [Process]  by handling its input, output and error streams
@@ -12,14 +11,15 @@ import kotlinx.coroutines.*
  */
 object ProcessRunner {
 
-    suspend fun run(process: Process, input: String = "", timeLimit: Long = Long.MAX_VALUE) =
-        withContext(Dispatchers.IO) {
+    suspend fun run(process: Process, input: String = "", timeLimit: Long = Long.MAX_VALUE) = coroutineScope {
+
+        val deferred = async(Dispatchers.IO) {
+            if (!process.isAlive)
+                throw ProcessRunnerErr.DeadProcessErr
+
+            setInput(process, input)
 
             val result = runCatching {
-                if (!process.isAlive)
-                    throw Err.InternalErr("ProcessRunner<T>.run: Dead Process provided as argument")
-
-                setInput(process, input)
                 val deferredOutput = readOutputAsync(process)
                 val executionTime = monitorProcess(process, timeLimit)
                 val output = deferredOutput.awaitAsResult()
@@ -32,8 +32,11 @@ object ProcessRunner {
 
             process.destroy()
 
-            return@withContext result
+            return@async result
         }
+
+        return@coroutineScope deferred.await()
+    }
 
     private fun setInput(process: Process, input: String) {
         process.outputStream.use {
@@ -57,7 +60,7 @@ object ProcessRunner {
 
         awaitAll(output, error).let {
             if (it[1].isNotEmpty())
-                throw RuntimeErr(it[1])
+                throw ProcessRunnerErr.RuntimeErr(it[1])
             it[0]
         }
     }
