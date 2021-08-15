@@ -65,6 +65,7 @@ class ConfigEditor(project: Project) : SettingsEditor<AutoCpConfig>(), DumbAware
 
 
     private fun ValidationInfoBuilder.validateSolutionFilePath(pathString: String): ValidationInfo? {
+        // TODO: replace this validation with [config.validators.getValidSolutionFile]
         val info = run {
             if (pathString.isBlank())
                 return@run error("Must not be empty")
