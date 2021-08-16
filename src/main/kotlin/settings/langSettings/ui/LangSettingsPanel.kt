@@ -5,11 +5,11 @@ import com.intellij.ui.OnePixelSplitter
 import com.intellij.ui.SingleSelectionModel
 import com.intellij.ui.ToolbarDecorator
 import com.intellij.ui.components.JBList
-import settings.langSettings.model.Lang
-import settings.langSettings.ui.dialogs.IDELangSelectorDialog
 import common.ui.dsl.DslCallbacks
 import common.ui.helpers.onSelectedValue
 import common.ui.layouts.SingleChildContainer
+import settings.langSettings.model.Lang
+import settings.langSettings.ui.dialogs.IDELangSelectorDialog
 import javax.swing.BorderFactory
 
 class LangSettingsPanel : OnePixelSplitter(false, 0.3F), DslCallbacks {
@@ -33,7 +33,7 @@ class LangSettingsPanel : OnePixelSplitter(false, 0.3F), DslCallbacks {
             .setAddAction {
                 val selectedLanguage = IDELangSelectorDialog(langListModel.items).showAndGetSelection()
                 if (selectedLanguage != null) {
-                    val blank = Lang(selectedLanguage.id, null, null, mutableListOf())
+                    val blank = Lang(selectedLanguage.id, null, null, mutableMapOf())
                     langListModel.add(blank)
                     sideList.selectedIndex = langListModel.items.size - 1
                 }

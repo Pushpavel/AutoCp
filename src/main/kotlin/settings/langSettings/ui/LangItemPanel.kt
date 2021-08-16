@@ -96,7 +96,9 @@ class LangItemPanel : DslCallbacks {
     }
 
     override fun isModified(): Boolean {
-        return dialogPanel.isModified() || !buildConfigsModel.items.isItemsEqual(selectedLang?.buildConfigs ?: listOf())
+        return dialogPanel.isModified() || !buildConfigsModel.items.isItemsEqual(
+            selectedLang?.buildConfigs?.values ?: listOf()
+        )
     }
 
     override fun reset() {
@@ -106,7 +108,7 @@ class LangItemPanel : DslCallbacks {
             buildConfigsModel.removeAll()
         } else {
             fileTemplatesModel.replaceAll(selectedLang.supportedFileTemplates())
-            buildConfigsModel.replaceAll(selectedLang.buildConfigs)
+            buildConfigsModel.replaceAll(selectedLang.buildConfigs.values.toList())
         }
 
         dialogPanel.reset()
@@ -114,7 +116,7 @@ class LangItemPanel : DslCallbacks {
 
     override fun apply() {
         selectedLang?.apply {
-            selectedLang = copy(buildConfigs = buildConfigsModel.items.toList())
+            selectedLang = copy(buildConfigs = buildConfigsModel.items.associateBy { it.id })
             dialogPanel.apply()
         }
     }

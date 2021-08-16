@@ -84,7 +84,7 @@ class ConfigEditor(project: Project) : SettingsEditor<AutoCpConfig>(), DumbAware
             lang = AutoCpLangSettings.findLangByFile(file)
                 ?: return@run warning("File's language is not registered in Settings/Preferences > Tools > AutoCp > Languages")
 
-            buildConfigsModel.replaceAll(lang!!.buildConfigs)
+            buildConfigsModel.replaceAll(lang!!.buildConfigs.values.toList())
 
             // TODO: remove this restriction
             if (!db.solutionFiles.containsKey(pathString))

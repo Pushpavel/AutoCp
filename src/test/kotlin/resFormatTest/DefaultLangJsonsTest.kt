@@ -67,8 +67,8 @@ class DefaultLangJsonsTest {
         @Test
         fun `defaultBuildConfigId must be valid`() {
             for (lang in langs)
-                Assertions.assertTrue(
-                    lang.buildConfigs.any { it.id == lang.defaultBuildConfigId },
+                Assertions.assertNotNull(
+                    lang.buildConfigs[lang.defaultBuildConfigId],
                     "defaultBuildConfigId ${lang.defaultBuildConfigId} in ${lang.langId} does not correspond to any of the buildConfigs specified"
                 )
         }
@@ -78,7 +78,7 @@ class DefaultLangJsonsTest {
 
             @Test
             fun `BuildConfig id must be valid and unique across all Languages`() {
-                val ids = langs.flatMap { it.buildConfigs.map { bc -> bc.id } }
+                val ids = langs.flatMap { it.buildConfigs.keys }
                 Assertions.assertEquals(ids.size, ids.toSet().size, run {
                     val duplicateId = ids.firstOrNull {
                         val occurrences = ids.count { id -> id == it }
@@ -92,7 +92,7 @@ class DefaultLangJsonsTest {
             @Test
             fun `BuildConfig name must be valid and unique`() {
                 for (lang in langs) {
-                    val names = lang.buildConfigs.map {
+                    val names = lang.buildConfigs.values.map {
                         Assertions.assertTrue(
                             it.name.isNotBlank(),
                             "Build Configuration must not have a blank name, langId = ${lang.langId}, build config id = ${it.id}"
@@ -113,7 +113,7 @@ class DefaultLangJsonsTest {
             @Test
             fun `BuildConfig buildCommand must be valid`() {
                 for (lang in langs) {
-                    for (config in lang.buildConfigs) {
+                    for (config in lang.buildConfigs.values) {
                         val input = config.buildCommand.contains(AutoCpGeneralSettings.INPUT_PATH_KEY)
                         val output = config.buildCommand.contains(AutoCpGeneralSettings.OUTPUT_PATH_KEY)
 
