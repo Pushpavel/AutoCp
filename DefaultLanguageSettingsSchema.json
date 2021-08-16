@@ -25,8 +25,9 @@
     },
     {
       "name": "buildConfigs",
-      "type": "list",
-      "description": "List of Build Configurations for this language",
+      "type": "map",
+      "keys": "id Field of this Build Configuration",
+      "description": "Map of Build Configurations with id as key for this language",
       "itemType": {
         "description": "Build Configuration required to build an executable from this language's file",
         "fields": [
