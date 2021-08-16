@@ -22,7 +22,7 @@ class TestcaseTreeTestingProcess(rootTestNode: TestNode, reporter: Listener) :
     override suspend fun executeLeaf(node: TestNode.Leaf, parent: TestNode.Group): ResultNode.Leaf {
         val process = node.processFactory.createProcess()
 
-        val result = ProcessRunner.run(process, node.input, parent.timeLimit)
+        val result = runCatching { ProcessRunner.run(process, node.input, parent.timeLimit) }
 
         val verdict: Verdict
         var verdictMessage = ""

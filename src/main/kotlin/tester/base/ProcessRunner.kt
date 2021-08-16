@@ -19,7 +19,8 @@ object ProcessRunner {
 
             setInput(process, input)
 
-            val result = runCatching {
+
+            return@async try {
                 val deferredOutput = readOutputAsync(process)
                 val executionTime = monitorProcess(process, timeLimit)
                 val output = deferredOutput.awaitAsResult()
@@ -28,11 +29,9 @@ object ProcessRunner {
                     output.getOrDefault(""),
                     executionTime
                 )
+            } finally {
+                process.destroy()
             }
-
-            process.destroy()
-
-            return@async result
         }
 
         return@coroutineScope deferred.await()
@@ -47,6 +46,7 @@ object ProcessRunner {
     private suspend fun monitorProcess(process: Process, timeLimit: Long) = coroutineScope {
         val startTime = System.currentTimeMillis()
 
+        //  TODO: throw ProcessRunnerErr for timeout
         withTimeout(timeLimit) {
             while (process.isAlive) ensureActive()
         }

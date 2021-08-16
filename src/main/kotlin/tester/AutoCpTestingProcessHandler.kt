@@ -48,14 +48,9 @@ class AutoCpTestingProcessHandler(private val config: AutoCpConfig) : TestingPro
         buildConfig: BuildConfig
     ): SolutionProcessFactory? {
         reporter.compileStart(config.name, buildConfig)
-        return try {
-            val (factory, result) = SolutionProcessFactory.from(solutionFile, buildConfig)
-            reporter.compileFinish(result)
-            factory
-        } catch (e: Exception) {
-            reporter.compileFinish(Result.failure(e))
-            null
-        }
+        val result = runCatching { SolutionProcessFactory.from(solutionFile, buildConfig) }
+        reporter.compileFinish(result.map { it.second })
+        return result.getOrNull()?.first
     }
 
 
