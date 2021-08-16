@@ -1,6 +1,7 @@
 package tester.base
 
 import common.errors.Err
+import settings.langSettings.model.BuildConfig
 
 /**
  * This interface is used instead of an actual Process in [TestingProcessHandler].
@@ -10,6 +11,8 @@ interface TestingProcess {
     suspend fun execute()
 
     interface Listener {
+        fun compileStart(configName: String, buildConfig: BuildConfig)
+        fun compileFinish(result: Result<ProcessRunner.CapturedResults>)
         fun testingProcessStartErrored(error: Err)
         fun testingProcessError(message: String)
     }

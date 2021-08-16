@@ -65,6 +65,7 @@ class ConfigEditor(project: Project) : SettingsEditor<AutoCpConfig>(), DumbAware
 
 
     private fun ValidationInfoBuilder.validateSolutionFilePath(pathString: String): ValidationInfo? {
+        // TODO: replace this validation with [config.validators.getValidSolutionFile]
         val info = run {
             if (pathString.isBlank())
                 return@run error("Must not be empty")
@@ -83,7 +84,7 @@ class ConfigEditor(project: Project) : SettingsEditor<AutoCpConfig>(), DumbAware
             lang = AutoCpLangSettings.findLangByFile(file)
                 ?: return@run warning("File's language is not registered in Settings/Preferences > Tools > AutoCp > Languages")
 
-            buildConfigsModel.replaceAll(lang!!.buildConfigs)
+            buildConfigsModel.replaceAll(lang!!.buildConfigs.values.toList())
 
             // TODO: remove this restriction
             if (!db.solutionFiles.containsKey(pathString))

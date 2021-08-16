@@ -2,6 +2,7 @@ package settings.projectSettings
 
 import com.intellij.openapi.components.*
 import com.intellij.openapi.project.Project
+import com.jetbrains.rd.util.firstOrNull
 import settings.generalSettings.AutoCpGeneralSettings
 import settings.langSettings.AutoCpLangSettings
 import settings.langSettings.model.Lang
@@ -13,7 +14,7 @@ import settings.langSettings.model.Lang
 @Service
 class AutoCpProjectSettings : PersistentStateComponent<AutoCpProjectSettings> {
 
-    var preferredLangId: String? = AutoCpLangSettings.instance.languages.firstOrNull()?.langId
+    var preferredLangId: String? = AutoCpLangSettings.instance.languages.firstOrNull()?.value?.langId
     var overridePreferredLang = false
 
     var shouldStartGatheringOnStart = true
@@ -23,12 +24,7 @@ class AutoCpProjectSettings : PersistentStateComponent<AutoCpProjectSettings> {
         if (!overridePreferredLang)
             return AutoCpGeneralSettings.instance.getPreferredLang()
 
-        return AutoCpLangSettings.instance.languages.run {
-            if (preferredLangId != null)
-                firstOrNull { it.langId == preferredLangId } ?: firstOrNull()
-            else
-                firstOrNull()
-        }
+        return AutoCpLangSettings.instance.languages.run { this[preferredLangId] ?: firstOrNull()?.value }
     }
 
     fun shouldStartGatheringOnStart(): Boolean {

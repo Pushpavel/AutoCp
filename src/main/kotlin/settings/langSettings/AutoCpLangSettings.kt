@@ -20,18 +20,19 @@ import settings.langSettings.model.MutableLang
 @Service
 class AutoCpLangSettings : PersistentStateComponent<LangSettings> {
 
-    var languages: List<Lang> = R.files.langJsons
+    var languages: Map<String, Lang> = R.files.langJsons
         .map { it.readText() }
         .map<String, Lang> { Json.decodeFromString(it) }
         .filter { Language.findLanguageByID(it.langId) != null }
+        .associateBy { it.langId }
 
     override fun getState(): LangSettings {
-        return LangSettings(languages.map { MutableLang(it) })
+        return LangSettings(languages.mapValues { MutableLang(it.value) })
     }
 
 
     override fun loadState(state: LangSettings) {
-        languages = state.languages.map { Lang(it) }
+        languages = state.languages.mapValues { Lang(it.value) }
     }
 
     companion object {
@@ -51,13 +52,11 @@ class AutoCpLangSettings : PersistentStateComponent<LangSettings> {
 
             val langId = fileType.language.id
 
-            return instance.languages.firstOrNull {
-                it.langId == langId
-            }
+            return instance.languages[langId]
         }
     }
 }
 
 data class LangSettings(
-    var languages: List<MutableLang> = listOf()
+    var languages: Map<String, MutableLang> = mapOf()
 )
