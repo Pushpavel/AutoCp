@@ -63,7 +63,7 @@ object ProcessRunner {
 
         awaitAll(output, error).let {
             if (it[1].isNotEmpty())
-                throw ProcessRunnerErr.RuntimeErr(it[1])
+                throw ProcessRunnerErr.RuntimeErr(it[0], it[1])
             it[0]
         }
     }

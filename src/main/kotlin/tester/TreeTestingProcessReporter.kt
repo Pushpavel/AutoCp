@@ -59,7 +59,9 @@ class TreeTestingProcessReporter(private val processHandler: ProcessHandler) : T
             }
             is tester.errors.Verdict.RuntimeErr -> {
 
-                // TODO: print stdOut here
+                testStdOut(nodeName)
+                    .addAttribute("out", node.verdict.output + '\n')
+                    .apply()
 
                 testFailed(nodeName)
                     .addAttribute("message", R.strings.verdictOneLine(node.verdict))

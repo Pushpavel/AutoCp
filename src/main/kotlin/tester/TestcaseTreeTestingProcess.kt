@@ -32,7 +32,7 @@ class TestcaseTreeTestingProcess(rootTestNode: TestNode, reporter: Listener) :
         } catch (e: Exception) {
             when (e) {
                 is ProcessRunnerErr.TimeoutErr -> Verdict.TimeLimitErr(e.timeLimit)
-                is ProcessRunnerErr.RuntimeErr -> Verdict.RuntimeErr(e.localizedMessage)
+                is ProcessRunnerErr.RuntimeErr -> Verdict.RuntimeErr(e.output, e.localizedMessage)
                 else -> Verdict.InternalErr(e)
             }
         }
