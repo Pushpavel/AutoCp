@@ -57,9 +57,36 @@ class TreeTestingProcessReporter(private val processHandler: ProcessHandler) : T
                     .addAttribute("duration", node.verdict.executionTime.toString())
                     .apply()
             }
-            is tester.errors.Verdict.InternalErr -> TODO()
-            is tester.errors.Verdict.RuntimeErr -> TODO()
-            is tester.errors.Verdict.TimeLimitErr -> TODO()
+            is tester.errors.Verdict.RuntimeErr -> {
+
+                // TODO: print stdOut here
+
+                testFailed(nodeName)
+                    .addAttribute("message", R.strings.verdictOneLine(node.verdict))
+                    .addAttribute("details", node.verdict.errMsg)
+                    .apply()
+
+                testFinished(nodeName)
+                    .apply()
+            }
+            is tester.errors.Verdict.TimeLimitErr -> {
+                testFailed(nodeName)
+                    .addAttribute("message", R.strings.verdictOneLine(node.verdict))
+                    .apply()
+
+                testFinished(nodeName)
+                    .addAttribute("duration", node.verdict.timeLimit.toString())
+                    .apply()
+            }
+            is tester.errors.Verdict.InternalErr -> {
+                testFailed(nodeName)
+                    .addAttribute("message", R.strings.verdictOneLine(node.verdict))
+                    .addAttribute("details", R.strings.defaultFileIssue(node.verdict.err))
+                    .apply()
+
+                testFinished(nodeName)
+                    .apply()
+            }
             else -> throw NoReachErr
         }
     }
