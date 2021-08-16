@@ -115,7 +115,7 @@ class ProblemGatheringService(val project: Project) {
             throw GenerateFileErr.FileAlreadyExistsErr(filePath, problem)
         }
 
-        project.autoCp().createSolutionFile(filePath, Pair(problem.groupName, problem.name))
+        project.autoCp().addSolutionFile(filePath, Pair(problem.groupName, problem.name))
 
         invokeLater(ModalityState.NON_MODAL) {
             CreateFileFromTemplateAction.createFileFromTemplate(

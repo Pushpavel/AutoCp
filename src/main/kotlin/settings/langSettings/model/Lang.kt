@@ -2,6 +2,7 @@ package settings.langSettings.model
 
 import com.intellij.ide.fileTemplates.FileTemplate
 import com.intellij.lang.Language
+import com.jetbrains.rd.util.firstOrNull
 import common.lang.supportedFileTemplates
 import common.ui.swing.TileCellRenderer
 import kotlinx.serialization.Serializable
@@ -11,15 +12,13 @@ data class Lang(
     val langId: String,
     val fileTemplateName: String?,
     val defaultBuildConfigId: String?,
-    val buildConfigs: List<BuildConfig>,
+    var buildConfigs: Map<String, BuildConfig>,
 ) {
 
     fun getLanguage() = Language.findLanguageByID(langId)
 
     fun getBuildConfig(id: String?): BuildConfig? {
-        return buildConfigs.run {
-            firstOrNull { it.id == id } ?: firstOrNull()
-        }
+        return buildConfigs.run { this[id] ?: firstOrNull()?.value }
     }
 
     fun getDefaultBuildConfig(): BuildConfig? {
@@ -47,7 +46,7 @@ data class Lang(
         m.langId,
         m.fileTemplateName,
         m.defaultBuildConfigId,
-        m.buildConfigs.map { BuildConfig(it) }
+        m.buildConfigs.mapValues { BuildConfig(it.value) }
     )
 }
 
@@ -55,12 +54,12 @@ data class MutableLang(
     var langId: String = "",
     var fileTemplateName: String? = null,
     var defaultBuildConfigId: String? = null,
-    var buildConfigs: List<MutableBuildConfig> = listOf(),
+    var buildConfigs: Map<String, MutableBuildConfig> = mapOf(),
 ) {
     constructor(lang: Lang) : this(
         lang.langId,
         lang.fileTemplateName,
         lang.defaultBuildConfigId,
-        lang.buildConfigs.map { MutableBuildConfig(it) }
+        lang.buildConfigs.mapValues { MutableBuildConfig(it.value) }
     )
 }

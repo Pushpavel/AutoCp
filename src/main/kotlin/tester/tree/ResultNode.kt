@@ -1,6 +1,7 @@
 package tester.tree
 
-import tester.judge.Verdict
+import tester.errors.Verdict
+
 
 /**
  * Tree Data-structure containing result of the Test Tree
@@ -18,11 +19,7 @@ sealed interface ResultNode {
      */
     data class Leaf(
         override val sourceNode: TestNode.Leaf,
-        val verdict: Verdict,
-        val verdictError: String,
-        val output: String,
-        val error: String,
-        val executionTime: Long
+        val verdict: Verdict
     ) : ResultNode
 
     /**

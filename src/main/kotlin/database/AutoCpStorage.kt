@@ -9,6 +9,7 @@ import com.intellij.openapi.fileEditor.FileDocumentManagerListener
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.project.ProjectManager
 import com.intellij.openapi.vfs.LocalFileSystem
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -23,7 +24,7 @@ class AutoCpStorage(project: Project) {
         val path = Paths.get(project.basePath!!, ".autocp")
         val virtualFile = LocalFileSystem.getInstance().findFileByNioFile(path)
 
-        if (virtualFile?.isValid == true) {
+        val db = if (virtualFile?.isValid == true) {
             runReadAction {
                 val document = FileDocumentManager.getInstance().getDocument(virtualFile)!!
                 // TODO: show error notification for document null due to file association changes
@@ -32,19 +33,22 @@ class AutoCpStorage(project: Project) {
             }
         } else
             AutoCpDB()
+
+        AutoCpDatabase(MutableStateFlow(db.problems), MutableStateFlow(db.solutionFiles))
     }
+
+    val serializableDatabase get() = database.run { AutoCpDB(problems, solutionFiles) }
 
 }
 
 class AutoCpStorageSaver : FileDocumentManagerListener {
 
-    var database = AutoCpDB()
     override fun beforeAllDocumentsSaving() {
         ProjectManager.getInstanceIfCreated()?.openProjects?.forEach { project ->
 
             val path = Paths.get(project.basePath!!, ".autocp")
             var virtualFile = LocalFileSystem.getInstance().findFileByNioFile(path)
-            val db = project.service<AutoCpStorage>().database
+            val db = project.service<AutoCpStorage>().serializableDatabase
 
 
             if (virtualFile?.isValid != true) {
@@ -76,6 +80,6 @@ class AutoCpStorageSaver : FileDocumentManagerListener {
 }
 
 
-fun Project.autoCp(): AutoCpDB = service<AutoCpStorage>().database
+fun Project.autoCp(): AutoCpDatabase = service<AutoCpStorage>().database
 
 val DEFAULT_AUTO_CP_DB = AutoCpDB()
