@@ -46,9 +46,12 @@ object ProcessRunner {
     private suspend fun monitorProcess(process: Process, timeLimit: Long) = coroutineScope {
         val startTime = System.currentTimeMillis()
 
-        //  TODO: throw ProcessRunnerErr for timeout
-        withTimeout(timeLimit) {
-            while (process.isAlive) ensureActive()
+        try {
+            withTimeout(timeLimit) {
+                while (process.isAlive) ensureActive()
+            }
+        } catch (e: TimeoutCancellationException) {
+            throw ProcessRunnerErr.TimeoutErr(timeLimit)
         }
 
         return@coroutineScope System.currentTimeMillis() - startTime

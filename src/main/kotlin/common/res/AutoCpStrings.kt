@@ -169,8 +169,8 @@ object AutoCpStrings {
             "Error while running the below command\n${e.command}\n\n" +
             when (e.err) {
                 is ProcessRunnerErr.RuntimeErr -> e.err.localizedMessage
-                is ProcessRunnerErr.DeadProcessErr -> "" +
-                        "Trying to run a process which is already dead, $fileIssue"
+                is ProcessRunnerErr.TimeoutErr -> "Took longer than ${e.err.timeLimit}ms to execute"
+                is ProcessRunnerErr.DeadProcessErr -> "Trying to run a process which is already dead, $fileIssue"
                 else -> throw e.err
             }
 }
