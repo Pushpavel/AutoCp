@@ -77,6 +77,13 @@ class DefaultLangJsonsTest {
         inner class BuildConfigValidationTest {
 
             @Test
+            fun `BuildConfig id must match key of the buildConfigs MapEntry`() {
+                for (lang in langs)
+                    for (it in lang.buildConfigs)
+                        Assertions.assertEquals(it.key, it.value.id)
+            }
+
+            @Test
             fun `BuildConfig id must be valid and unique across all Languages`() {
                 val ids = langs.flatMap { it.buildConfigs.keys }
                 Assertions.assertEquals(ids.size, ids.toSet().size, run {
