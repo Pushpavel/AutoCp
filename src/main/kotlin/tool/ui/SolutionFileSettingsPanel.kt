@@ -30,7 +30,6 @@ class SolutionFileSettingsPanel(project: Project, private val pathString: String
 
     private var solutionFile: SolutionFile? = null
     var timeLimit = 0
-    var memoryLimit = 0
     var resetting = false
 
     private val scope = mainScope()
@@ -72,17 +71,6 @@ class SolutionFileSettingsPanel(project: Project, private val pathString: String
                 }
                 placeholder().constraints(growX, pushX)
             }
-            row {
-                cell {
-                    label("").applyToComponent { icon = R.icons.memory }
-                    intTextField(::memoryLimit).applyToComponent {
-                        allowOnlyPositiveIntegers()
-                        document.onChange { apply() }
-                    }
-                    label("MB")
-                }
-                placeholder().constraints(growX, pushX)
-            }
         }
     }
 
@@ -102,10 +90,7 @@ class SolutionFileSettingsPanel(project: Project, private val pathString: String
             header.apply()
             body.apply()
 
-            solutionFile = it.copy(
-                timeLimit = timeLimit.toLong(),
-                memoryLimit = memoryLimit.toLong()
-            )
+            solutionFile = it.copy(timeLimit = timeLimit.toLong())
 
             db.updateSolutionFile(solutionFile!!)
         }
@@ -115,14 +100,7 @@ class SolutionFileSettingsPanel(project: Project, private val pathString: String
         resetting = true
         this.solutionFile = solutionFile
 
-        solutionFile?.let {
-            memoryLimit = it.memoryLimit.toInt()
-            timeLimit = it.timeLimit.toInt()
-        } ?: run {
-            memoryLimit = 0
-            timeLimit = 0
-        }
-
+        timeLimit = solutionFile?.timeLimit?.toInt() ?: 0
 
         header.reset()
         body.reset()

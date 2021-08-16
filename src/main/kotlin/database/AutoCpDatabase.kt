@@ -27,7 +27,6 @@ class AutoCpDatabase(
                 path,
                 linkedProblemId,
                 problem.sampleTestcases.toList(),
-                problem.memoryLimit,
                 problem.timeLimit
             )
         } else

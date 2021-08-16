@@ -65,14 +65,6 @@ class TestcaseListPanel(project: Project, private val pathString: String) : Disp
                             }
                         }
                     }
-                    label("").applyToComponent {
-                        icon = R.icons.memory
-                        scope.launch {
-                            flow.collect {
-                                text = "${it.memoryLimit}MB"
-                            }
-                        }
-                    }
                     placeholder().constraints(pushX)
                 }
             }.apply {
