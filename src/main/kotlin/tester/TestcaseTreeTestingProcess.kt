@@ -1,9 +1,8 @@
 package tester
 
-import common.errors.Err
-import common.errors.errOrNull
 import tester.base.ProcessRunner
-import tester.judge.Verdict
+import tester.errors.ProcessRunnerErr
+import tester.errors.Verdict
 import tester.tree.ResultNode
 import tester.tree.TestNode
 import tester.tree.TreeTestingProcess
@@ -21,36 +20,24 @@ class TestcaseTreeTestingProcess(rootTestNode: TestNode, reporter: Listener) :
      */
     override suspend fun executeLeaf(node: TestNode.Leaf, parent: TestNode.Group): ResultNode.Leaf {
         val process = node.processFactory.createProcess()
+        val expectedOutput = node.expectedOutput.trimByLines()
 
-        val result = runCatching { ProcessRunner.run(process, node.input, parent.timeLimit) }
-
-        val verdict: Verdict
-        var verdictMessage = ""
-        val error = result.errOrNull()
-        if (error != null) {
-            verdict = if (error is Err.TesterErr.TimeoutErr)
-                Verdict.TIME_LIMIT_EXCEEDED
+        val verdict = try {
+            val result = ProcessRunner.run(process, node.input, parent.timeLimit)
+            val actualOutput = result.output.trimByLines()
+            if (!actualOutput.contentEquals(expectedOutput))
+                Verdict.WrongAnswer(expectedOutput, actualOutput, result.executionTime)
             else
-                Verdict.RUNTIME_ERROR
-        } else {
-            val expectedOutput = node.expectedOutput.trimByLines()
-            val actualOutput = result.getOrNull()!!.output.trimByLines()
-
-            if (!actualOutput.contentEquals(expectedOutput)) {
-                verdict = Verdict.WRONG_ANSWER
-                verdictMessage = "Expected Output:\n${node.expectedOutput}"
-            } else
-                verdict = Verdict.CORRECT_ANSWER
+                Verdict.CorrectAnswer(result.output, result.executionTime)
+        } catch (e: Exception) {
+            when (e) {
+                is ProcessRunnerErr.TimeoutErr -> Verdict.TimeLimitErr(e.timeLimit)
+                is ProcessRunnerErr.RuntimeErr -> Verdict.RuntimeErr(e.localizedMessage)
+                else -> Verdict.InternalErr(e)
+            }
         }
 
-        return ResultNode.Leaf(
-            node,
-            verdict,
-            verdictMessage,
-            result.getOrNull()?.output ?: "",
-            result.exceptionOrNull()?.stackTraceToString().takeIf { verdict != Verdict.TIME_LIMIT_EXCEEDED } ?: "",
-            result.getOrNull()?.executionTime ?: parent.timeLimit
-        )
+        return ResultNode.Leaf(node, verdict)
     }
 
     /**
