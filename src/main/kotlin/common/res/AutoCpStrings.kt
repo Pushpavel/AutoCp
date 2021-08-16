@@ -10,6 +10,7 @@ import settings.generalSettings.OpenFileOnGather
 import settings.langSettings.model.BuildConfig
 import tester.base.BuildErr
 import tester.errors.ProcessRunnerErr
+import tester.errors.Verdict
 
 
 object AutoCpStrings {
@@ -173,6 +174,15 @@ object AutoCpStrings {
                 is ProcessRunnerErr.DeadProcessErr -> "Trying to run a process which is already dead, $fileIssue"
                 else -> throw e.err
             }
+
+    // Testing Verdict Strings
+    fun verdictOneLine(verdict: Verdict) = when (verdict) {
+        is Verdict.CorrectAnswer -> "[+] SUCCESS: CORRECT ANSWER"
+        is Verdict.WrongAnswer -> "[-] FAILURE: WRONG ANSWER"
+        is Verdict.TimeLimitErr -> "[-] FAILURE: TIME LIMIT EXCEEDED"
+        is Verdict.RuntimeErr -> "[-] FAILURE: RUNTIME ERROR"
+        is Verdict.InternalErr -> "[+/-] UNKNOWN: COULD NOT JUDGE"
+    }
 }
 
 fun String.failed(): String = "$this Failed"

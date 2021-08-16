@@ -30,10 +30,10 @@ class TreeTestingProcessReporter(private val processHandler: ProcessHandler) : T
     override fun leafFinish(node: ResultNode.Leaf) {
         val nodeName = node.sourceNode.name
         if (node.verdict is tester.errors.Verdict.CorrectAnswer) {
-            testStdOut(nodeName).addAttribute("out", node.verdict.output.let {
-                if (it.endsWith('\n')) it
-                else it + '\n'
-            }).apply()
+            testStdOut(nodeName).addAttribute(
+                "out",
+                node.verdict.output + '\n' + R.strings.verdictOneLine(node.verdict) + '\n'
+            ).apply()
 
             testFinished(nodeName)
                 .addAttribute("duration", node.verdict.executionTime.toString())
@@ -43,10 +43,23 @@ class TreeTestingProcessReporter(private val processHandler: ProcessHandler) : T
         }
 
         when (node.verdict) {
+            is tester.errors.Verdict.WrongAnswer -> {
+                testStdOut(nodeName).addAttribute("out", node.verdict.actualOutput + '\n').apply()
+
+                testFailed(nodeName)
+                    .addAttribute("message", R.strings.verdictOneLine(node.verdict))
+                    .addAttribute("type", "comparisonFailure")
+                    .addAttribute("actual", node.verdict.actualOutput)
+                    .addAttribute("expected", node.verdict.expectedOutput)
+                    .apply()
+
+                testFinished(nodeName)
+                    .addAttribute("duration", node.verdict.executionTime.toString())
+                    .apply()
+            }
             is tester.errors.Verdict.InternalErr -> TODO()
             is tester.errors.Verdict.RuntimeErr -> TODO()
             is tester.errors.Verdict.TimeLimitErr -> TODO()
-            is tester.errors.Verdict.WrongAnswer -> TODO()
             else -> throw NoReachErr
         }
     }
