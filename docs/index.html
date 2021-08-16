@@ -96,6 +96,11 @@
         ]
     }
 </script>
+<script>
+    if (typeof navigator.serviceWorker !== 'undefined') {
+        navigator.serviceWorker.register('sw.js')
+    }
+</script>
 
 <!-- Plugins -->
 <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
