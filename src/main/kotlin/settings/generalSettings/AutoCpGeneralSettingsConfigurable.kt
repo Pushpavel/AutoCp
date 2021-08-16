@@ -20,7 +20,7 @@ class AutoCpGeneralSettingsConfigurable : BoundConfigurable("AutoCp") {
 
             row("Preferred Language") {
                 simpleComboBoxView(
-                    langSettings.languages,
+                    langSettings.languages.values.toList(),
                     { it.langId == generalSettings.getPreferredLang()?.langId },
                     { generalSettings.preferredLangId = it?.langId },
                     Lang.cellRenderer()

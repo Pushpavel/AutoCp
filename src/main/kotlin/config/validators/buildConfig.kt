@@ -16,7 +16,7 @@ fun getValidBuildConfig(solutionFile: SolutionFile, buildConfigId: String?): Bui
     // get lang of the solutionFile
     val fileType = FileTypeManager.getInstance().getFileTypeByFileName(fileName)
     val language = LanguageUtil.getFileTypeLanguage(fileType)
-    val lang = AutoCpLangSettings.instance.languages.firstOrNull { it.langId == language?.id } ?: throw NoReachErr
+    val lang = AutoCpLangSettings.instance.languages[language?.id] ?: throw NoReachErr
 
     return lang.getBuildConfig(buildConfigId) ?: throw NoBuildConfigErr(lang)
 }
