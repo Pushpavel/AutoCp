@@ -5,9 +5,12 @@ import com.intellij.execution.process.ProcessOutputTypes
 import com.intellij.execution.testframework.sm.ServiceMessageBuilder
 import com.intellij.execution.testframework.sm.ServiceMessageBuilder.*
 import common.errors.Err
+import common.errors.NoReachErr
 import common.errors.presentableString
-import tester.judge.Verdict
-import tester.judge.Verdict.Companion.presentableString
+import common.res.R
+import settings.langSettings.model.BuildConfig
+import tester.base.BuildErr
+import tester.base.ProcessRunner
 import tester.tree.ResultNode
 import tester.tree.TestNode
 import tester.tree.TreeTestingProcess
@@ -26,36 +29,68 @@ class TreeTestingProcessReporter(private val processHandler: ProcessHandler) : T
 
     override fun leafFinish(node: ResultNode.Leaf) {
         val nodeName = node.sourceNode.name
-        if (node.output.isNotEmpty())
-            testStdOut(nodeName)
-                .addAttribute("out", node.output.let {
-                    if (it.endsWith('\n')) it
-                    else it + '\n'
-                })
+        if (node.verdict is tester.errors.Verdict.CorrectAnswer) {
+            testStdOut(nodeName).addAttribute(
+                "out",
+                node.verdict.output + '\n' + R.strings.verdictOneLine(node.verdict) + '\n'
+            ).apply()
+
+            testFinished(nodeName)
+                .addAttribute("duration", node.verdict.executionTime.toString())
                 .apply()
 
-        if (node.error.isNotEmpty())
-            testStdErr(nodeName)
-                .addAttribute("out", node.error)
-                .addAttribute("message", node.verdict.presentableString())
-                .apply()
-
-        val verdictString = node.verdict.presentableString()
-        when (node.verdict) {
-            Verdict.CORRECT_ANSWER -> testStdOut(nodeName).addAttribute("out", "\n" + verdictString + "\n\n").apply()
-            else -> {
-                if (node.verdictError.isNotEmpty())
-                    testStdErr(nodeName)
-                        .addAttribute("out", node.verdictError)
-                        .apply()
-
-                testFailed(nodeName).addAttribute("message", verdictString + "\n").apply()
-            }
+            return
         }
 
-        testFinished(nodeName)
-            .addAttribute("duration", node.executionTime.toString())
-            .apply()
+        when (node.verdict) {
+            is tester.errors.Verdict.WrongAnswer -> {
+                testStdOut(nodeName).addAttribute("out", node.verdict.actualOutput + '\n').apply()
+
+                testFailed(nodeName)
+                    .addAttribute("message", R.strings.verdictOneLine(node.verdict))
+                    .addAttribute("type", "comparisonFailure")
+                    .addAttribute("actual", node.verdict.actualOutput)
+                    .addAttribute("expected", node.verdict.expectedOutput)
+                    .apply()
+
+                testFinished(nodeName)
+                    .addAttribute("duration", node.verdict.executionTime.toString())
+                    .apply()
+            }
+            is tester.errors.Verdict.RuntimeErr -> {
+
+                testStdOut(nodeName)
+                    .addAttribute("out", node.verdict.output + '\n')
+                    .apply()
+
+                testFailed(nodeName)
+                    .addAttribute("message", R.strings.verdictOneLine(node.verdict))
+                    .addAttribute("details", node.verdict.errMsg)
+                    .apply()
+
+                testFinished(nodeName)
+                    .apply()
+            }
+            is tester.errors.Verdict.TimeLimitErr -> {
+                testFailed(nodeName)
+                    .addAttribute("message", R.strings.verdictOneLine(node.verdict))
+                    .apply()
+
+                testFinished(nodeName)
+                    .addAttribute("duration", node.verdict.timeLimit.toString())
+                    .apply()
+            }
+            is tester.errors.Verdict.InternalErr -> {
+                testFailed(nodeName)
+                    .addAttribute("message", R.strings.verdictOneLine(node.verdict))
+                    .addAttribute("details", R.strings.defaultFileIssue(node.verdict.err))
+                    .apply()
+
+                testFinished(nodeName)
+                    .apply()
+            }
+            else -> throw NoReachErr
+        }
     }
 
     override fun groupStart(node: TestNode.Group) {
@@ -66,8 +101,32 @@ class TreeTestingProcessReporter(private val processHandler: ProcessHandler) : T
         testSuiteFinished(node.sourceNode.name).apply()
     }
 
+    override fun compileStart(configName: String, buildConfig: BuildConfig) {
+        processHandler.notifyTextAvailable(
+            R.strings.startCompilingMsg(configName, buildConfig) + "\n",
+            ProcessOutputTypes.STDOUT
+        )
+    }
+
+    override fun compileFinish(result: Result<ProcessRunner.CapturedResults>) {
+        when {
+            result.isSuccess -> {
+                val r = result.getOrThrow()
+                val msg = R.strings.compileSuccessMsg(r.output, r.executionTime)
+                processHandler.notifyTextAvailable(msg + "\n", ProcessOutputTypes.STDOUT)
+            }
+            result.isFailure -> {
+                val msg = when (val e = result.exceptionOrNull()!!) {
+                    is BuildErr -> R.strings.buildErrMsg(e)
+                    else -> throw e
+                }
+                processHandler.notifyTextAvailable(msg + "\n", ProcessOutputTypes.STDERR)
+            }
+        }
+    }
+
+
     override fun testingProcessStartErrored(error: Err) {
-        testsStarted()
         processHandler.notifyTextAvailable(
             error.presentableString() + "\n", ProcessOutputTypes.STDERR
         )

@@ -1,6 +1,7 @@
 package settings.generalSettings
 
 import com.intellij.openapi.components.*
+import com.jetbrains.rd.util.firstOrNull
 import settings.langSettings.AutoCpLangSettings
 import settings.langSettings.model.Lang
 
@@ -14,17 +15,12 @@ import settings.langSettings.model.Lang
 @Service
 class AutoCpGeneralSettings : PersistentStateComponent<AutoCpGeneralSettings> {
     // TODO: set this default based on IDE
-    var preferredLangId: String? = AutoCpLangSettings.instance.languages.firstOrNull()?.langId
+    var preferredLangId: String? = AutoCpLangSettings.instance.languages.firstOrNull()?.value?.langId
     var shouldStartGatheringOnStart = true
     var openFilesOnGather = OpenFileOnGather.ONLY_FIRST
 
     fun getPreferredLang(): Lang? {
-        return AutoCpLangSettings.instance.languages.run {
-            if (preferredLangId != null)
-                firstOrNull { it.langId == preferredLangId } ?: firstOrNull()
-            else
-                firstOrNull()
-        }
+        return AutoCpLangSettings.instance.languages.run { this[preferredLangId] ?: firstOrNull()?.value }
     }
 
     override fun getState() = this

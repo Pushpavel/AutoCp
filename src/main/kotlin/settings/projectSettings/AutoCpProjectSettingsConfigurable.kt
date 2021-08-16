@@ -26,7 +26,7 @@ class AutoCpProjectSettingsConfigurable(project: Project) : BoundConfigurable("P
 
                 row("Preferred Language") {
                     simpleComboBoxView(
-                        langSettings.languages,
+                        langSettings.languages.values.toList(),
                         { it.langId == projectSettings.guessPreferredLang()?.langId },
                         { projectSettings.preferredLangId = it?.langId },
                         Lang.cellRenderer()

@@ -5,9 +5,10 @@ import com.intellij.openapi.options.BoundConfigurable
 import com.intellij.ui.layout.CCFlags
 import com.intellij.ui.layout.LCFlags
 import com.intellij.ui.layout.panel
+import com.jetbrains.rd.util.firstOrNull
 import common.helpers.isItemsEqual
-import settings.langSettings.ui.LangSettingsPanel
 import common.ui.dsl.registerDslCallbacks
+import settings.langSettings.ui.LangSettingsPanel
 
 class AutoCpLangSettingsConfigurable : BoundConfigurable("Languages") {
 
@@ -20,20 +21,20 @@ class AutoCpLangSettingsConfigurable : BoundConfigurable("Languages") {
 
                 onReset {
                     component.apply {
-                        langListModel.replaceAll(settings.languages)
-                        sideList.setSelectedValue(settings.languages.firstOrNull(), false)
+                        langListModel.replaceAll(settings.languages.values.toList())
+                        sideList.setSelectedValue(settings.languages.firstOrNull()?.value, false)
                     }
                 }
 
                 registerDslCallbacks()
 
                 onIsModified {
-                    !component.langListModel.items.isItemsEqual(settings.languages)
+                    !component.langListModel.items.isItemsEqual(settings.languages.values)
                 }
 
                 onApply {
                     component.apply {
-                        settings.languages = langListModel.items
+                        settings.languages = langListModel.items.associateBy { it.langId }
                     }
                 }
             }

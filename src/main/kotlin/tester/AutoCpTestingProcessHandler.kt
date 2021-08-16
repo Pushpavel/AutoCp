@@ -1,17 +1,18 @@
 package tester
 
-import common.errors.Err.TesterErr.SolutionFileErr
-import common.errors.mapToErr
+import common.res.R
 import config.AutoCpConfig
-import database.autoCp
+import config.validators.NoBuildConfigErr
+import config.validators.SolutionFilePathErr
+import config.validators.getValidBuildConfig
+import config.validators.getValidSolutionFile
 import database.models.SolutionFile
+import settings.langSettings.model.BuildConfig
 import tester.base.SolutionProcessFactory
 import tester.base.TestingProcessHandler
 import tester.tree.TestNode
 import kotlin.io.path.Path
-import kotlin.io.path.exists
 import kotlin.io.path.nameWithoutExtension
-import kotlin.io.path.pathString
 
 /**
  * [TestingProcessHandler] implementation that creates a [TestcaseTreeTestingProcess] for execution
@@ -19,35 +20,37 @@ import kotlin.io.path.pathString
 class AutoCpTestingProcessHandler(private val config: AutoCpConfig) : TestingProcessHandler() {
 
     private val reporter = TreeTestingProcessReporter(this)
-    private val db = config.project.autoCp()
 
-    override suspend fun createTestingProcess() = runCatching {
-        // get and validate SolutionFile from config
-        val solutionFile = getValidSolutionFile()
+    override suspend fun createTestingProcess(): TestcaseTreeTestingProcess? {
+        try {
+            // get and validate SolutionFile from config
+            val solutionFile = getValidSolutionFile(config.project, config.name, config.solutionFilePath)
 
-        // Build Executable from Solution File
-        val processFactory = SolutionProcessFactory.buildFromConfig(config)
+            // validate buildConfig
+            val buildConfig = getValidBuildConfig(solutionFile, config.buildConfigId)
 
-        // Build Test tree
-        val rootNode = solutionFileToTestNode(solutionFile, processFactory)
+            // Build Executable from Solution File and BuildConfig
+            val processFactory = compileIntoProcessFactory(solutionFile, buildConfig) ?: return null
 
-        // create a TestingProcess from the Problem and Test Tree
-        return@runCatching TestcaseTreeTestingProcess(rootNode, reporter)
-    }.onFailure {
-        reporter.testingProcessStartErrored(it.mapToErr())
-    }.getOrNull()
+            // Build Test tree
+            val rootNode = solutionFileToTestNode(solutionFile, processFactory)
 
-    private fun getValidSolutionFile(): SolutionFile {
-        // fixme: this validation logic is duplicated with config package
-        // fixme: Path may throw if solutionFilePath is in invalid format
-        val solutionPath = Path(config.solutionFilePath)
+            // create a TestingProcess from the Problem and Test Tree
+            return TestcaseTreeTestingProcess(rootNode, reporter)
+        } catch (err: Exception) {
+            reportTestingStartErr(err)
+            return null
+        }
+    }
 
-        if (!solutionPath.exists())
-            throw SolutionFileErr("Solution File \"${solutionPath.pathString}\" does not exists")
-
-
-        return db.solutionFiles[config.solutionFilePath]
-            ?: throw SolutionFileErr("Solution File \"${solutionPath.pathString}\" is not associated with any problem.")
+    private suspend fun compileIntoProcessFactory(
+        solutionFile: SolutionFile,
+        buildConfig: BuildConfig
+    ): SolutionProcessFactory? {
+        reporter.compileStart(config.name, buildConfig)
+        val result = runCatching { SolutionProcessFactory.from(solutionFile, buildConfig) }
+        reporter.compileFinish(result.map { it.second })
+        return result.getOrNull()?.first
     }
 
 
@@ -62,5 +65,15 @@ class AutoCpTestingProcessHandler(private val config: AutoCpConfig) : TestingPro
             leafNodes,
             processFactory
         )
+    }
+
+    private fun reportTestingStartErr(err: Exception) {
+        val message = when (err) {
+            is SolutionFilePathErr -> R.strings.solutionFilePathErrMsg(err)
+            is NoBuildConfigErr -> R.strings.noBuildConfigFoundMsg(err)
+            else -> throw err
+        }
+
+        reporter.testingProcessError(message)
     }
 }
