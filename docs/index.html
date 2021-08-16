@@ -97,7 +97,7 @@
     }
 </script>
 <script>
-    if (typeof navigator.serviceWorker !== 'undefined') {
+    if (typeof navigator.serviceWorker !== 'undefined' && location.hostname !== "localhost") {
         navigator.serviceWorker.register('sw.js')
     }
 </script>
