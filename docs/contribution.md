@@ -1,5 +1,3 @@
-# Contributing to ```AutoCp```
-
 First off, thanks for taking the time to contribute! Your help is essential for keeping this project great. 🎉🎉🎉
 
 ### How can I help?
@@ -49,4 +47,4 @@ touch
 
 ### License
 
-By contributing, you agree that your contributions will be licensed under its [MIT License](LICENSE).
+By contributing, you agree that your contributions will be licensed under its [MIT License](../LICENSE).
