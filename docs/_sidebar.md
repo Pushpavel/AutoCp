@@ -1,9 +1,7 @@
-- [Home](/)
+- [Installation](/docs/installation.md)
 
-- [Installation](installation.md)
+- [Getting started](/docs/getting-started.md)
 
-- [Getting started](getting-started.md)
+- [Contributing](/CONTRIBUTION.md)
 
-- [Contributing](contribution.md)
-
-- [Changelog](CHANGELOG.md)
+- [Changelog](/CHANGELOG.md)

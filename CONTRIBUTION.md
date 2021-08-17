@@ -1,7 +1,7 @@
 # Contributing to AutoCp
 
-First off, thanks for taking the time to contribute! Your help is essential for keeping this project great. 🎉🎉🎉
-If you need help, reach out to [discussions](https://github.com/Pushpavel/AutoCp/discussions/8?sort=new).
+First off, thanks for taking the time to contribute! Your help is essential for keeping this project great. 🎉🎉🎉 If
+you need help, reach out to [discussions](https://github.com/Pushpavel/AutoCp/discussions/8?sort=new).
 
 ## How can I help?
 
@@ -16,4 +16,5 @@ If you need help, reach out to [discussions](https://github.com/Pushpavel/AutoCp
 
 ## License
 
-By contributing, you agree that your contributions will be licensed under its [MIT License](../LICENSE).
+By contributing, you agree that your contributions will be licensed under
+its [MIT License](https://github.com/Pushpavel/AutoCp/blob/gh-pages/LICENSE).

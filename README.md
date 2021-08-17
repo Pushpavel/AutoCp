@@ -37,7 +37,7 @@ See [documentation](https://pushpavel.github.io/AutoCp/) for how to get started 
 
 See something that's wrong or unclear?, Pull requests are welcome 😀
 
-Read the [contributing guide](docs/contribution.md) to learn how you can take part in improving ```AutoCp```
+Read the [contributing guide](CONTRIBUTION.md) to learn how you can take part in improving ```AutoCp```
 
 ### License
 
