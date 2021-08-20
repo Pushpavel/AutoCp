@@ -1,4 +1,4 @@
-## New Language Support
+## Language Support
 
 Languages used for competitive programming must be setup for compiling and file templates to work. It can be set up
 here.
@@ -9,6 +9,8 @@ here.
 
 ➕ button opens a dialog to select programming languages supported by your IDE. Start typing with the list in focus to
 search.
+
+### Properties
 
 #### File Template
 
