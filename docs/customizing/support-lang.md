@@ -5,11 +5,6 @@ here.
 
 <kbd>Settings/Preferences</kbd> > <kbd>Tools</kbd> > <kbd>AutoCp</kbd> > <kbd>Languages</kbd>
 
-#### Add Programming Language
-
-➕ button opens a dialog to select programming languages supported by your IDE. Start typing with the list in focus to
-search.
-
 ### Properties
 
 #### File Template
@@ -20,4 +15,5 @@ into the IDE. For customizing or creating new file templates [refer this](/docs/
 
 #### Default Build Configuration
 
-TODO
+This build configuration is set by default while creating a AutoCp run configuration for a solution file. More
+on [build configuration](/docs/customizing/support-build-config.md).
