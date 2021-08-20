@@ -4,6 +4,9 @@
 
 - [Changelog](/CHANGELOG.md)
 
+- **Customizing**
+    - [File Templates](/docs/customizing/file-template.md)
+
 - **Contributing**
     - [Introduction](/CONTRIBUTION.md)
     - [Git Guidelines](/docs/contributing/git.md)

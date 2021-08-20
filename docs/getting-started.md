@@ -25,45 +25,9 @@ files are generated inside a folder named like ```<judge> - <category/contest>``
 
 !> Moving or renaming files will unlink the solution file to its problem. This restriction will be removed
 
-## ```.autocp``` file
+#### ```.autocp``` file at the root of the project
 
 This file stores the problems and testcases. It is very crucial to this plugin and should not be touched.
-
-## Custom File Template
-
-AutoCp comes with few file templates optimized for competitive programming.
-
-If you wish to customize you can,
-
-- __Edit existing file templates__
-
-  <kbd>Settings/Preferences</kbd> > <kbd>Editor</kbd> > <kbd>File and code templates</kbd> > <kbd>Other</kbd>
-  tab > <kbd>AutoCp Templates</kbd>
-
-- __Create new file templates__
-
-  <kbd>Settings/Preferences</kbd> > <kbd>Editor</kbd> > <kbd>File and code templates</kbd> > <kbd>Files</kbd>
-  tab > <kbd>+</kbd>
-
-  Also, change file template for your programming language in
-
-  <kbd>Settings/Preferences</kbd> > <kbd>Tools</kbd> > <kbd>AutoCp</kbd> > <kbd>Languages</kbd>
-
-Refer IDE docs on [File Templates](https://www.jetbrains.com/help/clion/settings-file-and-code-templates.html) for
-syntax. If you do not use its special capabilities, you can simply wrap your custom template with ```#[[```
-and ```]]#```
-
-__example__
-
-```
-#[[
-int main() {
-    
-}
-]]#
-```
-
-!> ```#[[``` causes a newline.
 
 ## Limitations
 
