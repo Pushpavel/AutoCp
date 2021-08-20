@@ -2,8 +2,8 @@
 
 - [Getting started](/docs/getting-started.md)
 
-- [Contributing](/CONTRIBUTION.md)
-  
-    - [Git Guidelines](/docs/contributing/git.md) 
-
 - [Changelog](/CHANGELOG.md)
+
+- **Contributing**
+    - [Introduction](/CONTRIBUTION.md)
+    - [Git Guidelines](/docs/contributing/git.md)
