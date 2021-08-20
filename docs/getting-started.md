@@ -29,16 +29,7 @@ files are generated inside a folder named like ```<judge> - <category/contest>``
 
 This file stores the problems and testcases. It is very crucial to this plugin and should not be touched.
 
-## Limitations
-
-Hopefully, these limitations will be removed soon.
-
-- Memory Limit is ignored.
-- Strict File Structure
-- No Debugging through AutoCp
-- Only files created by AutoCp can be run by AutoCp
-
-## Help ? 😀
+## Issues and feature requests
 
 - If you've noticed a bug or have a feature request,
   consider [opening a new issue](https://github.com/Pushpavel/AutoCp/issues/new/choose).

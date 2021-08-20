@@ -10,9 +10,19 @@ an [issue](https://github.com/Pushpavel/AutoCp/issues/new/choose) on our GitHub 
 
 ![CLION Screenshot](/docs/_assets/Screenshot.png)
 
+#### Limitations
+
+Hopefully, these limitations will be removed soon.
+
+- Memory Limit is ignored.
+- Strict File Structure
+- No Debugging through AutoCp
+- Only files created by AutoCp can be run by AutoCp
+
 #### License
 
-The scripts and documentation in this project are released under the [MIT License](https://github.com/Pushpavel/AutoCp/blob/gh-pages/LICENSE)
+The scripts and documentation in this project are released under
+the [MIT License](https://github.com/Pushpavel/AutoCp/blob/gh-pages/LICENSE)
 
 
 ---
