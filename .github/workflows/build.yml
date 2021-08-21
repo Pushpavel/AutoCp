@@ -197,6 +197,9 @@ jobs:
   releaseDraft:
     name: Release Draft
     if: github.event_name != 'pull_request' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/eap')
+    concurrency:
+      group: releaseDraft
+      cancel-in-progress: true
     needs: [ build, verify ]
     runs-on: ubuntu-latest
     steps:

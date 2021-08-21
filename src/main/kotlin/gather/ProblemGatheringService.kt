@@ -105,7 +105,12 @@ class ProblemGatheringService(val project: Project) {
 
         val fileTemplate = lang.getFileTemplate() ?: throw GenerateFileErr.FileTemplateMissingErr(lang, problem)
 
-        val fileName = fileTemplate.constructFileNameWithExt(problem.name)
+        val fileName = fileTemplate.constructFileNameWithExt(
+            problem.name
+                .replace(' ', '_')
+                .replace('-', '_')
+                .replace("[^0-9a-zA-Z_]".toRegex(), "")
+        )
 
         val filePath = Paths.get(rootPsiDir.virtualFile.path, fileName).pathString
 

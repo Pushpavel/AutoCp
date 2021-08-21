@@ -4,13 +4,11 @@
 
 See instructions [here](installation.md)
 
-#### Gather the problems
+#### Generate solution files
 
-- In the IDE, open  <kbd>Tools</kbd> > <kbd>Gather Problems</kbd> Dialog.
-
-- Open the problem/ contest page in the browser and press the parse button of competitive companion browser extension.
-
-- AutoCp will gather the problems and generates the boilerplate files.
+With the IDE project already open, Open the problem/ contest page in the browser and press the competitive companion
+button in the browser. This will generate files with default file template. You can change the programming language
+in <kbd>Settings/Preferences</kbd> > <kbd>Tools</kbd> > <kbd>AutoCp</kbd> before generating the files.
 
 #### Edit testcases
 
@@ -21,64 +19,17 @@ currently selected file.
 
 Right-click the solution file and run using AutoCp.
 
-## ```.autocp``` file
-
-This file stores the problems and testcases you gathered using <kbd>Gather Problems</kbd> Action. It is very crucial to
-this plugin and should not be touched.
-
 ## File Structure
 
-<kbd>Gather Problems</kbd> Action generates solution files inside a folder named by
-the ```<judge> - <category/contest>``` that the problem belongs to.
+files are generated inside a folder named like ```<judge> - <category/contest>``` that the problem belongs to.
 
 !> Moving or renaming files will unlink the solution file to its problem. This restriction will be removed
 
-## Custom File Template
+#### ```.autocp``` file at the root of the project
 
-AutoCp comes with few file templates optimized for competitive programming.
+This file stores the problems and testcases. It is very crucial to this plugin and should not be touched.
 
-If you wish to customize you can,
-
-- __Edit existing file templates__
-
-  <kbd>Settings/Preferences</kbd> > <kbd>Editor</kbd> > <kbd>File and code templates</kbd> > <kbd>Other</kbd>
-  tab > <kbd>AutoCp Templates</kbd>
-
-- __Create new file templates__
-
-  <kbd>Settings/Preferences</kbd> > <kbd>Editor</kbd> > <kbd>File and code templates</kbd> > <kbd>Files</kbd>
-  tab > <kbd>+</kbd>
-
-  Also, change file template for your programming language in
-
-  <kbd>Settings/Preferences</kbd> > <kbd>Tools</kbd> > <kbd>AutoCp</kbd> > <kbd>Languages</kbd>
-
-Refer IDE docs on [File Templates](https://www.jetbrains.com/help/clion/settings-file-and-code-templates.html) for
-syntax. If you do not use its special capabilities, you can simply wrap your custom template with ```#[[```
-and ```]]#```
-
-__example__
-
-```
-#[[
-int main() {
-    
-}
-]]#
-```
-
-!> ```#[[``` causes a newline.
-
-## Limitations
-
-Hopefully, these limitations will be removed soon.
-
-- Memory Limit is ignored.
-- Strict File Structure
-- No Debugging through AutoCp
-- Only files created by AutoCp can be run by AutoCp
-
-## Help ? 😀
+## Issues and feature requests
 
 - If you've noticed a bug or have a feature request,
   consider [opening a new issue](https://github.com/Pushpavel/AutoCp/issues/new/choose).

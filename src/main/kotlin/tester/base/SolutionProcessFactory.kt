@@ -1,7 +1,7 @@
 package tester.base
 
+import com.intellij.execution.Platform
 import com.intellij.execution.configurations.GeneralCommandLine
-import com.jetbrains.cidr.toolchains.OSType
 import database.models.SolutionFile
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -16,8 +16,8 @@ import kotlin.io.path.pathString
 /**
  * Factory Class for creating sub [Process]es of an executable created from buildFromConfig function
  */
-class SolutionProcessFactory(private val executablePath: String) {
-    fun createProcess(): Process {
+class SolutionProcessFactory(private val executablePath: String) : ProcessFactory {
+    override fun createProcess(): Process {
         return GeneralCommandLine().withExePath(executablePath).createProcess()
     }
 
@@ -28,20 +28,19 @@ class SolutionProcessFactory(private val executablePath: String) {
         suspend fun from(
             solutionFile: SolutionFile,
             buildConfig: BuildConfig
-        ): Pair<SolutionProcessFactory, ProcessRunner.CapturedResults> {
+        ): Pair<ProcessFactory, ProcessRunner.CapturedResults> {
             val tempDir = withContext(Dispatchers.IO) {
                 @Suppress("BlockingMethodInNonBlockingContext")
                 Files.createTempDirectory("AutoCp")
             }
-
-            val executableExtension = if (OSType.getCurrent() == OSType.WIN) ".exe" else ""
+            val executableExtension = if (Platform.current() == Platform.WINDOWS) ".exe" else ""
 
             val outputPath = Paths.get(
                 tempDir.pathString,
                 Path(solutionFile.pathString).nameWithoutExtension + executableExtension
             )
 
-            val command = buildConfig.constructBuildCommand(solutionFile.pathString, outputPath.pathString)
+            val command = buildConfig.constructCommand(solutionFile.pathString, outputPath.pathString)
             val commandList = splitCommandString(command)
             val result: ProcessRunner.CapturedResults
 

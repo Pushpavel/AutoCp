@@ -8,6 +8,8 @@ import config.validators.getValidBuildConfig
 import config.validators.getValidSolutionFile
 import database.models.SolutionFile
 import settings.langSettings.model.BuildConfig
+import tester.base.ExecuteProcessFactory
+import tester.base.ProcessFactory
 import tester.base.SolutionProcessFactory
 import tester.base.TestingProcessHandler
 import tester.tree.TestNode
@@ -46,15 +48,20 @@ class AutoCpTestingProcessHandler(private val config: AutoCpConfig) : TestingPro
     private suspend fun compileIntoProcessFactory(
         solutionFile: SolutionFile,
         buildConfig: BuildConfig
-    ): SolutionProcessFactory? {
-        reporter.compileStart(config.name, buildConfig)
-        val result = runCatching { SolutionProcessFactory.from(solutionFile, buildConfig) }
-        reporter.compileFinish(result.map { it.second })
-        return result.getOrNull()?.first
+    ): ProcessFactory? {
+        return if (buildConfig.doesCommandHaveOutPath()) {
+            reporter.compileStart(config.name, buildConfig)
+            val result = runCatching { SolutionProcessFactory.from(solutionFile, buildConfig) }
+            reporter.compileFinish(result.map { it.second })
+            result.getOrNull()?.first
+        } else {
+            reporter.commandReady(config.name, buildConfig)
+            ExecuteProcessFactory.from(solutionFile, buildConfig)
+        }
     }
 
 
-    private fun solutionFileToTestNode(solutionFile: SolutionFile, processFactory: SolutionProcessFactory): TestNode {
+    private fun solutionFileToTestNode(solutionFile: SolutionFile, processFactory: ProcessFactory): TestNode {
         val leafNodes = solutionFile.testcases.map {
             TestNode.Leaf(it.name, it.input, it.output, processFactory)
         }

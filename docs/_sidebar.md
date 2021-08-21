@@ -1,7 +1,16 @@
-- [Home](/)
+- [Installation](/docs/installation.md)
 
-- [Installation](installation.md)
+- [Getting started](/docs/getting-started.md)
 
-- [Getting started](getting-started.md)
+- **Customizing**
+    - [File Templates](/docs/customizing/file-template.md)
+    - [Language Support](/docs/customizing/support-lang.md)
+    - [Build Configuration](/docs/customizing/support-build-config.md)
 
-- [Changelog](CHANGELOG.md)
+- **Contributing**
+    - [Introduction](/CONTRIBUTION.md)
+    - [Git Guidelines](/docs/contributing/git.md)
+    - [Language Support](/docs/contributing/default-langs.md)
+    - [File Templates](/docs/contributing/file-templates.md)
+  
+- [Changelog](/CHANGELOG.md)

@@ -74,7 +74,7 @@ changelog {
     version.set(properties("pluginVersion"))
     header.set(version)
     groups.set(emptyList())
-    path.set("docs/CHANGELOG.md")
+    path.set("CHANGELOG.md")
     headerParserRegex.set(Regex("""v[0-9]+\.[0-9]+\.[0-9]+(-eap\.[1-9]+)?"""))
 }
 
@@ -139,7 +139,10 @@ tasks {
         // pluginVersion is based on the SemVer (https://semver.org) and supports pre-release labels, like 2.1.7-alpha.3
         // Specify pre-release label to publish the plugin in a custom Release Channel automatically. Read more:
         // https://plugins.jetbrains.com/docs/intellij/deployment.html#specifying-a-release-channel
-        channels.set(listOf(properties("pluginVersion").split('-').getOrElse(1) { "default" }.split('.').first()))
+        if (properties("pluginVersion").contains('-'))
+            channels.set(listOf("default", "eap"))
+        else
+            channels.set(listOf("default"))
     }
 
     runIde {

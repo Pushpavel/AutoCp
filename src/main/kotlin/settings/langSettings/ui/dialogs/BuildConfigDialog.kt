@@ -18,8 +18,9 @@ class BuildConfigDialog(
     create: Boolean
 ) : DialogWrapper(false) {
     var name = buildConfig.name
+
     @Suppress("MemberVisibilityCanBePrivate")
-    var buildCommand = buildConfig.buildCommand
+    var commandTemplate = buildConfig.commandTemplate
 
     init {
         title = if (create)
@@ -36,12 +37,18 @@ class BuildConfigDialog(
                 textField(::name, 12)
                     .withValidation { validateName(it.text) }
             }
-            row("Build Command Template:") {
-                expandableTextField(::buildCommand)
+            row("Command Template:") {
+                expandableTextField(::commandTemplate)
                     .constraints(CCFlags.growX)
                     .applyToComponent { MacrosDialog.addTextFieldExtension(this) }
                     .withValidation { validateBuildCommand(it.text) }
-                    .comment("AutoCp uses this template to construct a command that builds an executable on which your testcases are tested")
+                    .comment(
+                        "AutoCp uses this template to construct a command that builds an executable " +
+                                "on which your testcases are tested, " +
+                                "@in in this template string would be replaced with path to solution file with quotes " +
+                                "and @out will be replaced with output path for the executable." +
+                                "@out can be ignored if executing this command does not produce any executable."
+                    )
             }
         }
     }.also { it.reset() }
@@ -49,10 +56,8 @@ class BuildConfigDialog(
     fun showAndGetConfig(): BuildConfig? {
         val confirm = showAndGet()
 
-
-
         return if (confirm)
-            BuildConfig(buildConfig.id, name, buildCommand)
+            BuildConfig(buildConfig.id, name, commandTemplate)
         else
             null
     }
@@ -62,19 +67,17 @@ class BuildConfigDialog(
         if (name.isBlank())
             return error("Must not be empty")
 
-        if (nameEnforcer.buildUniqueName(name) != name)
+        if (name != buildConfig.name && nameEnforcer.buildUniqueName(name) != name)
             return error("\"$name\" already exists")
 
         return null
     }
 
-    private fun ValidationInfoBuilder.validateBuildCommand(buildCommand: String): ValidationInfo? {
-        val input = buildCommand.contains(AutoCpGeneralSettings.INPUT_PATH_KEY)
-        val output = buildCommand.contains(AutoCpGeneralSettings.OUTPUT_PATH_KEY)
+    private fun ValidationInfoBuilder.validateBuildCommand(commandTemplate: String): ValidationInfo? {
+        val input = commandTemplate.contains(AutoCpGeneralSettings.INPUT_PATH_KEY)
 
         val errorMessage = when {
             !input -> "${AutoCpGeneralSettings.INPUT_PATH_KEY} missing, This will be replaced with path to solution file ex- \"C:\\solution.cpp\""
-            !output -> "${AutoCpGeneralSettings.OUTPUT_PATH_KEY} missing, This will be replaced with path for the executable ex- \"C:\\temp\\output.exe\""
             else -> null
         }
 

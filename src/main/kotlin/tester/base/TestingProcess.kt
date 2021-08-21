@@ -11,6 +11,7 @@ interface TestingProcess {
     suspend fun execute()
 
     interface Listener {
+        fun commandReady(configName: String, buildConfig: BuildConfig)
         fun compileStart(configName: String, buildConfig: BuildConfig)
         fun compileFinish(result: Result<ProcessRunner.CapturedResults>)
         fun testingProcessStartErrored(error: Err)
