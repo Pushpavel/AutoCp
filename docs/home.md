@@ -8,7 +8,22 @@ Problems and Contests from these [contest websites](https://github.com/jmerle/co
 are supported. If you come across bugs or have feature requests, please raise
 an [issue](https://github.com/Pushpavel/AutoCp/issues/new/choose) on our GitHub repository.
 
-![CLION Screenshot](_assets/Screenshot.png)
+![CLION Screenshot](/docs/_assets/Screenshot.png)
+
+#### Limitations
+
+Hopefully, these limitations will be removed soon.
+
+- Memory Limit is ignored.
+- Strict File Structure
+- No Debugging through AutoCp
+- Only files created by AutoCp can be run by AutoCp
+
+#### License
+
+The scripts and documentation in this project are released under
+the [MIT License](https://github.com/Pushpavel/AutoCp/blob/gh-pages/LICENSE)
+
 
 ---
 Plugin based on the [IntelliJ Platform Plugin Template][template].

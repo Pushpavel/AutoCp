@@ -1,12 +1,13 @@
 <!DOCTYPE html>
+<!--suppress ALL -->
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
-    <title>Document</title>
+    <title>AutoCp</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-    <meta name="description" content="Description">
-    <link rel="icon" href="_assets/logo.svg">
+    <meta name="description" content="Competitive Programming Plugin for Intellij-Based IDEs">
+    <link rel="icon" href="docs/_assets/logo.svg?">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
     <!-- Theme: Simple Dark -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify-themeable@0/dist/css/theme-simple-dark.css">
@@ -65,10 +66,11 @@
     window.$docsify = {
         name: 'AutoCp',
         repo: 'Pushpavel/AutoCp',
-        coverpage: true,
-        loadSidebar: true,
-        relativePath: true,
-        subMaxLevel: 2,
+        coverpage: 'docs/_coverpage.md',
+        homepage: 'docs/home.md',
+        loadSidebar: 'docs/_sidebar.md',
+        ext: '.md',
+        relativePath: false,
         auto2top: true,
         copyCode: {
             buttonText: 'copy',
@@ -82,17 +84,22 @@
         plugins: [
             function (hook, vm) {
                 hook.beforeEach(function (html) {
-                    if (["CHANGELOG.md", "README.md"].includes(vm.route.file))
+                    if (["CHANGELOG.md", "docs/home.md"].includes(vm.route.file))
                         return html
-                    const url = 'https://github.com/Pushpavel/AutoCp/edit/docs/docs/' + vm.route.file;
+                    const url = 'https://github.com/Pushpavel/AutoCp/edit/gh-pages/' + vm.route.file;
                     const editHtml = '<div id="edit-page-link">\n' +
                         '\n' +
-                        '[<img id="github-icon" src="_assets/github-icon.svg"> Edit page](' + url + ') Last modified: {docsify-updated}\n' +
+                        '[<img id="github-icon" src="docs/_assets/github-icon.svg"> Edit page](' + url + ') Last modified: {docsify-updated}\n' +
                         '</div>\n\n'
                     return editHtml + html;
                 });
             },
         ]
+    }
+</script>
+<script>
+    if (typeof navigator.serviceWorker !== 'undefined' && location.hostname !== "localhost") {
+        navigator.serviceWorker.register('docs/sw.js')
     }
 </script>
 

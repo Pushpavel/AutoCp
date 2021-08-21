@@ -1,6 +1,23 @@
 <!-- Keep a Changelog guide -> https://keepachangelog.com -->
 ?> All notable changes to this project will be documented in this page.
 
+## [Unreleased]
+## v0.5.0-eap.4
+
+### Added
+
+- Time constraints are displayed on the top of Testcase list
+- settings tab in the AutoCp tool window
+
+### Changed
+
+- Shows link to diff viewer to compare expected output with actual output
+
+### Fixed
+
+- Executables are suffixed with ```.exe``` which is not an executable in linux or mac
+- Testing Process is not exiting
+
 ## v0.5.0-eap.3
 
 ### Added
@@ -29,7 +46,7 @@
 ### Changed
 
 - New Testcase viewer UI, Settings UI, Run configuration UI and Generate Solutions Dialog UI
-- Moved settings to <kbd>Tool</kbd> > <kbd>AutoCp</kbd>
+- Moved settings to ```Tool``` > ```AutoCp```
 - ```@in``` and ```@out``` as placeholders for input and output path for constructing build commands
 
 ### Fixed
