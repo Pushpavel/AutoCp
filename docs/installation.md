@@ -1,5 +1,3 @@
-!> At the moment, only pre-release versions of the plugin are available
-
 ## Install Plugin
 
 ?> Manually installing the plugin would give you the latest version at least 2 days earlier than IDE built-in plugin
@@ -7,7 +5,7 @@ system
 
 - __Using IDE built-in plugin system:__
 
-    1. Add pre-release channel _(required)_
+    1. Add pre-release channel _(optional)_
 
       <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>⚙️</kbd> > <kbd>Manage Plugin Repositories...</kbd>
       and add the below url to the list
