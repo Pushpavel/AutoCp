@@ -1,0 +1,16 @@
+#**
+ * C++ Competitive Programming Template
+ * https://www.geeksforgeeks.org/fast-io-for-competitive-programming/
+ *
+ *###
+#[[#include]]#<bits/stdc++.h>
+
+#[[#define]]# fastio ios_base::sync_with_stdio(false);cin.tie(0)
+
+using namespace std;
+
+int main() {
+    fastio;
+    
+    return 0;
+}

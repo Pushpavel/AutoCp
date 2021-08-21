@@ -196,7 +196,10 @@ jobs:
   # If accepted and published, release workflow would be triggered
   releaseDraft:
     name: Release Draft
-    if: github.event_name != 'pull_request'
+    if: github.event_name != 'pull_request' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/eap')
+    concurrency:
+      group: releaseDraft
+      cancel-in-progress: true
     needs: [ build, verify ]
     runs-on: ubuntu-latest
     steps:
@@ -226,6 +229,7 @@ jobs:
           body: ${{ needs.build.outputs.changelog }}
           commit: ${{ github.ref }}
           draft: true
+          prerelease: ${{ github.ref == 'refs/heads/eap' }}
 
       # Download plugin artifact provided by the previous job
       - name: Download Artifact

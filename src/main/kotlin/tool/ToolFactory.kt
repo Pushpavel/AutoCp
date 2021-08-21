@@ -1,14 +1,24 @@
 package tool
 
 import com.intellij.openapi.fileEditor.FileEditorManager
-import com.intellij.openapi.fileEditor.FileEditorManagerEvent
-import com.intellij.openapi.fileEditor.FileEditorManagerListener
-import com.intellij.openapi.options.ShowSettingsUtil
 import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.util.Disposer
+import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.openapi.wm.ToolWindow
 import com.intellij.openapi.wm.ToolWindowFactory
-import com.intellij.ui.content.Content
+import com.intellij.ui.content.ContentManagerEvent
+import com.intellij.ui.content.ContentManagerListener
+import common.helpers.onFileSelectionChange
+import common.helpers.pathString
+import common.helpers.properties
+import common.helpers.toolWindowSelectedTabIndex
+import database.autoCp
+import tool.ui.AssociateFilePanel
+import tool.ui.SolutionFileSettingsPanel
+import tool.ui.TestcaseListPanel
+import kotlin.io.path.Path
+import kotlin.io.path.name
 
 
 /**
@@ -16,32 +26,72 @@ import com.intellij.ui.content.Content
  */
 class ToolFactory : ToolWindowFactory, DumbAware {
 
+
     override fun createToolWindowContent(project: Project, toolWindow: ToolWindow) {
+        // use this for developing settings ui
+        // ShowSettingsUtil.getInstance().showSettingsDialog(project, "Languages")
 
-        val viewer = ProblemViewer()
-        var oldContent: Content? = null
+        val contentManager = toolWindow.contentManager
+        val db = project.autoCp()
 
-        // replacing content of toolWindow on changes
-        viewer.setContentListener { newContent ->
-            oldContent?.let { content -> toolWindow.contentManager.removeContent(content, false) }
-            newContent?.let { content -> toolWindow.contentManager.addContent(content) }
-            oldContent = newContent
+        val tabIndexSaver = object : ContentManagerListener {
+            override fun selectionChanged(event: ContentManagerEvent) {
+                if (event.operation == ContentManagerEvent.ContentOperation.add)
+                    project.properties.toolWindowSelectedTabIndex = event.index
+            }
+        }
+        val editorManager = FileEditorManager.getInstance(project)
+
+        var callback: ((VirtualFile?) -> Unit) = {}
+
+        callback = callback@{ file: VirtualFile? ->
+            contentManager.removeContentManagerListener(tabIndexSaver)
+            contentManager.removeAllContents(true)
+
+            if (file == null || !file.isValid || !editorManager.isFileOpen(file))
+                return@callback
+
+            if (!db.solutionFiles.containsKey(file.pathString)) {
+                val ui = AssociateFilePanel(Path(file.pathString).name) {
+                    db.addSolutionFile(file.pathString, null)
+                    callback(file)
+                }
+                val content = contentManager.factory.createContent(ui.component, file.presentableName, false)
+                contentManager.addContent(content)
+                project.properties.toolWindowSelectedTabIndex = 0
+                return@callback
+            }
+
+            val ui = TestcaseListPanel(project, file.pathString)
+            val settingsPanel = SolutionFileSettingsPanel(project, file.pathString) { callback(file) }
+
+            val content = contentManager.factory.createContent(ui.component, file.presentableName, false)
+            val settingsContent = contentManager.factory.createContent(settingsPanel.component, "Settings", false)
+
+            Disposer.register(content, ui)
+            Disposer.register(settingsContent, settingsPanel)
+
+            val selectedIndex = project.properties.toolWindowSelectedTabIndex
+
+            val contents = listOf(
+                content,
+                settingsContent
+            )
+
+            contentManager.addContent(contents[selectedIndex])
+            contents.forEachIndexed { index, it ->
+                if (index != selectedIndex)
+                    contentManager.addContent(it, index)
+            }
+
+            // save selected tab index
+            contentManager.addContentManagerListener(tabIndexSaver)
         }
 
-        val specFileAdapter = SpecFileAdapter(project, viewer)
 
-        // initial selected files
-        val editorManager = FileEditorManager.getInstance(project)
-        specFileAdapter.followFiles(editorManager.selectedFiles.toList())
+        project.onFileSelectionChange { callback(it) }
 
-        // further selected files
-        project.messageBus.connect().subscribe(
-            FileEditorManagerListener.FILE_EDITOR_MANAGER,
-            object : FileEditorManagerListener {
-                override fun selectionChanged(event: FileEditorManagerEvent) {
-                    specFileAdapter.followFiles(editorManager.selectedFiles.toList())
-                }
-            }
-        )
     }
+
+
 }

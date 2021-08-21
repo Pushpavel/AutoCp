@@ -1,25 +1,20 @@
 package gather.models
 
-import com.google.gson.JsonObject
-import com.intellij.util.containers.OrderedSet
-import com.github.pushpavel.autocp.database.Problem
+import database.models.Problem
+import kotlinx.serialization.Serializable
 
 /**
  * Data class representing the Json Scheme of the data received
  * from Competitive Companion Browser extension
  */
+@Serializable
 data class ProblemJson(
     val name: String,
     val group: String,
     val url: String,
-    val interactive: Boolean,
     val memoryLimit: Long,
     val timeLimit: Long,
     val tests: ArrayList<TestJson>,
-    val testType: String,
-    val input: JsonObject,
-    val output: JsonObject,
-    val languages: JsonObject,
     val batch: BatchJson
 ) {
 
@@ -27,23 +22,19 @@ data class ProblemJson(
 
         // naming testcases
         val testcases = tests.mapIndexed { index, testJson ->
-            testJson.toTestcase("Testcase #$index")
+            testJson.toTestcase("Sample Testcase #${index + 1}")
         }
 
-        // storing additional currently unused properties into a jsonObject for probable future usage.
-        val data = JsonObject()
-
-        data.addProperty("interactive", interactive)
-        data.addProperty("timeLimit", timeLimit)
-        data.addProperty("memoryLimit", memoryLimit)
-        data.addProperty("testType", testType)
-
-        data.add("input", input)
-        data.add("output", output)
-        data.add("languages", languages)
-
-        return Problem(name, group, OrderedSet(testcases), -1, data)
+        return Problem(name, group, url, testcases, memoryLimit, timeLimit)
     }
 
 }
 
+/**
+ * data type of a property in ProblemJson
+ */
+@Serializable
+data class BatchJson(
+    val id: String,
+    val size: Int
+)

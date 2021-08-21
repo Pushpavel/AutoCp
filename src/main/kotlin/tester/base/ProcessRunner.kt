@@ -1,10 +1,8 @@
 package tester.base
 
-import common.awaitAsResult
-import common.errors.Err
-import common.errors.Err.TesterErr.*
+import common.helpers.awaitAsResult
 import kotlinx.coroutines.*
-import java.io.InputStream
+import tester.errors.ProcessRunnerErr
 
 /**
  * Simplifies execution of an Sub [Process]  by handling its input, output and error streams
@@ -13,14 +11,16 @@ import java.io.InputStream
  */
 object ProcessRunner {
 
-    suspend fun run(process: Process, input: String = "", timeLimit: Long = Long.MAX_VALUE) =
-        withContext(Dispatchers.IO) {
+    suspend fun run(process: Process, input: String = "", timeLimit: Long = Long.MAX_VALUE) = coroutineScope {
 
-            val result = runCatching {
-                if (!process.isAlive)
-                    throw Err.InternalErr("ProcessRunner<T>.run: Dead Process provided as argument")
+        val deferred = async(Dispatchers.IO) {
+            if (!process.isAlive)
+                throw ProcessRunnerErr.DeadProcessErr
 
-                setInput(process, input)
+            setInput(process, input)
+
+
+            return@async try {
                 val deferredOutput = readOutputAsync(process)
                 val executionTime = monitorProcess(process, timeLimit)
                 val output = deferredOutput.awaitAsResult()
@@ -29,12 +29,13 @@ object ProcessRunner {
                     output.getOrDefault(""),
                     executionTime
                 )
+            } finally {
+                process.destroy()
             }
-
-            process.destroy()
-
-            return@withContext result
         }
+
+        return@coroutineScope deferred.await()
+    }
 
     private fun setInput(process: Process, input: String) {
         process.outputStream.use {
@@ -45,8 +46,12 @@ object ProcessRunner {
     private suspend fun monitorProcess(process: Process, timeLimit: Long) = coroutineScope {
         val startTime = System.currentTimeMillis()
 
-        withTimeout(timeLimit) {
-            while (process.isAlive) ensureActive()
+        try {
+            withTimeout(timeLimit) {
+                while (process.isAlive) ensureActive()
+            }
+        } catch (e: TimeoutCancellationException) {
+            throw ProcessRunnerErr.TimeoutErr(timeLimit)
         }
 
         return@coroutineScope System.currentTimeMillis() - startTime
@@ -58,7 +63,7 @@ object ProcessRunner {
 
         awaitAll(output, error).let {
             if (it[1].isNotEmpty())
-                throw RuntimeErr(it[1])
+                throw ProcessRunnerErr.RuntimeErr(it[0], it[1])
             it[0]
         }
     }

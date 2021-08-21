@@ -4,20 +4,18 @@ import com.intellij.execution.configurations.ConfigurationFactory
 import com.intellij.execution.configurations.ConfigurationType
 import com.intellij.execution.configurations.ConfigurationTypeBase
 import com.intellij.execution.configurations.RunConfiguration
-import com.intellij.icons.AllIcons
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.NotNullLazyValue
-import common.Constants
-import icons.Icons
+import common.res.R
 
 /**
  * Definition of custom run configuration
  */
 class AutoCpConfigType : ConfigurationTypeBase(
-    id = Constants.FrameworkId,
-    displayName = Constants.FrameworkName,
-    description = Constants.Description,
-    icon = NotNullLazyValue.createValue { Icons.LogoIcon }
+    id = R.strings.runConfigId,
+    displayName = R.strings.runConfigName,
+    description = R.strings.runConfigDescription,
+    icon = NotNullLazyValue.createValue { R.icons.logo16 }
 ) {
     init {
         factory = AutoCpConfigFactory(this)
@@ -34,8 +32,8 @@ class AutoCpConfigType : ConfigurationTypeBase(
  */
 class AutoCpConfigFactory(type: ConfigurationType) : ConfigurationFactory(type) {
     override fun createTemplateConfiguration(project: Project): RunConfiguration {
-        return AutoCpConfig(project, this, Constants.FrameworkName)
+        return AutoCpConfig(project, this, R.strings.runConfigName)
     }
 
-    override fun getId() = Constants.FrameworkId
+    override fun getId() = R.strings.runConfigId
 }

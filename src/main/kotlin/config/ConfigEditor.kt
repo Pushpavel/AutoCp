@@ -1,85 +1,127 @@
 package config
 
-import com.intellij.ide.macro.MacrosDialog
-import com.intellij.openapi.fileChooser.FileChooser
-import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory
 import com.intellij.openapi.options.SettingsEditor
+import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.ui.ComboBox
-import com.intellij.openapi.vfs.VfsUtil
+import com.intellij.openapi.ui.DialogPanel
+import com.intellij.openapi.ui.ValidationInfo
+import com.intellij.openapi.vfs.LocalFileSystem
+import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.ui.CollectionComboBoxModel
-import com.intellij.ui.components.fields.ExtendableTextField
-import com.intellij.ui.layout.CCFlags
+import com.intellij.ui.layout.ValidationInfoBuilder
 import com.intellij.ui.layout.panel
-import settings.AutoCpSettings
-import settings.SolutionLanguage
-import java.nio.file.Path
-import javax.swing.JComponent
+import common.helpers.pathString
+import common.ui.dsl.comboBoxView
+import common.ui.dsl.startValidating
+import common.ui.dsl.withValidation
+import common.ui.helpers.isError
+import database.autoCp
+import settings.langSettings.AutoCpLangSettings
+import settings.langSettings.model.BuildConfig
+import settings.langSettings.model.Lang
+import kotlin.io.path.Path
 
 /**
  * UI Editor of [AutoCpConfig] Run Configuration
  */
-class ConfigEditor(private val project: Project) : SettingsEditor<AutoCpConfig>() {
+class ConfigEditor(project: Project) : SettingsEditor<AutoCpConfig>(), DumbAware {
+    @Suppress("MemberVisibilityCanBePrivate")
+    var solutionFilePath = ""
+    private var buildConfigId: String? = null
 
-    private val solutionFileField = ExtendableTextField()
-    private val solutionLangModel = CollectionComboBoxModel<SolutionLanguage>()
+    private val buildConfigsModel = CollectionComboBoxModel<BuildConfig>()
+
+    private var lang: Lang? = null
+
+    private lateinit var editor: DialogPanel
+    private val db = project.autoCp()
+    private val invalidFields = mutableMapOf<String, Boolean>()
+
+    override fun createEditor() = panel {
+        row("Solution File:") {
+            textFieldWithBrowseButton(::solutionFilePath, "Select Solution File")
+                .withValidation { validateSolutionFilePath(it.text) }
+        }
+        row("Build Configuration:") {
+            comboBoxView(
+                buildConfigsModel,
+                { it.id == buildConfigId },
+                { buildConfigId = it?.id },
+                BuildConfig.cellRenderer()
+            ).withValidation {
+                val info = if (lang != null && buildConfigsModel.isEmpty) {
+                    error("No Build Configuration is setup for ${lang?.getLanguage()?.displayName}")
+                } else null
+
+                invalidFields["buildConfigId"] = info.isError()
+
+                info
+            }
+        }
+    }.also {
+        editor = it
+        it.startValidating(this)
+    }
+
+
+    private fun ValidationInfoBuilder.validateSolutionFilePath(pathString: String): ValidationInfo? {
+        // TODO: replace this validation with [config.validators.getValidSolutionFile]
+        val info = run {
+            if (pathString.isBlank())
+                return@run error("Must not be empty")
+
+            val file: VirtualFile?
+
+            try {
+                file = LocalFileSystem.getInstance().findFileByNioFile(Path(pathString))
+            } catch (e: Exception) {
+                return@run error("Invalid path")
+            }
+
+            if (file?.exists() != true)
+                return@run error("File does not exists")
+
+            lang = AutoCpLangSettings.findLangByFile(file)
+                ?: return@run warning("File's language is not registered in Settings/Preferences > Tools > AutoCp > Languages")
+
+            buildConfigsModel.replaceAll(lang!!.buildConfigs.values.toList())
+
+            if (!db.solutionFiles.containsKey(pathString))
+                return@run warning("AutoCp is not enabled for this file")
+
+            null
+        }
+
+        if (info.isError()) {
+            lang = null
+            buildConfigsModel.removeAll()
+        }
+
+        invalidFields["solutionFilePath"] = info.isError()
+
+        return info
+    }
 
     /**
      * Settings to UI
      */
     override fun resetEditorFrom(s: AutoCpConfig) {
-        solutionFileField.text = s.solutionFilePath
-
-        val settings = AutoCpSettings.instance
-        solutionLangModel.replaceAll(settings.solutionLanguages)
-        solutionLangModel.selectedItem = settings.getLangWithId(s.solutionLangId)
+        solutionFilePath = s.solutionFilePath.pathString
+        buildConfigId = s.buildConfigId
+        editor.reset()
     }
 
     /**
      * UI to Settings
      */
     override fun applyEditorTo(s: AutoCpConfig) {
-        s.solutionFilePath = solutionFileField.text
+        editor.apply()
 
-        val settings = AutoCpSettings.instance
+        if (invalidFields.any { it.value })
+            return
 
-        // verifies if selected lang exists
-        val selectedLang = settings.getLangWithId(solutionLangModel.selected?.id)
-        s.solutionLangId = selectedLang?.id ?: -1
+        s.solutionFilePath = solutionFilePath.pathString
+        s.buildConfigId = buildConfigId
     }
 
-    override fun createEditor(): JComponent {
-        // add macro support
-        MacrosDialog.addTextFieldExtension(solutionFileField)
-
-        // browse button for executable field
-        solutionFileField.addBrowseButton()
-
-        // ui layout
-        return panel {
-            row("Solution File:") {
-                solutionFileField()
-                    .constraints(CCFlags.growX)
-            }
-            row("Solution Language:") {
-                ComboBox(solutionLangModel).apply {
-                    renderer = SolutionLanguage.cellRenderer()
-                }()
-            }
-        }
-    }
-
-    private fun ExtendableTextField.addBrowseButton() {
-        // ensures user can select only one file
-        val solutionFileDescriptor = FileChooserDescriptorFactory
-            .createSingleFileDescriptor()
-
-        this.addBrowseExtension({
-            val preselectPath = Path.of(this.text.ifEmpty { project.basePath })
-            val selectedFile = VfsUtil.findFile(preselectPath, true)
-            FileChooser.chooseFile(solutionFileDescriptor, project, selectedFile) {
-                this.text = it.path
-            }
-        }, this@ConfigEditor)
-    }
 }

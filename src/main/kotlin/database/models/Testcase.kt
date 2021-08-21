@@ -1,18 +1,13 @@
 package database.models
 
-import ui.StringCellRenderer
+import kotlinx.serialization.Serializable
 
 /**
- * Model class representing a single Testcase of a [Problem][com.github.pushpavel.autocp.database.Problem]
+ * Model class representing a single Testcase of a [Problem][database.models.Problem]
  */
+@Serializable
 data class Testcase(
     val name: String,
     val input: String,
     val output: String,
-) {
-    companion object {
-        fun cellRenderer(): StringCellRenderer<Testcase> {
-            return StringCellRenderer { it.name }
-        }
-    }
-}
+)
