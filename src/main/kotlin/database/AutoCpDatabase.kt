@@ -39,6 +39,12 @@ class AutoCpDatabase(
         solutionFilesFlow.value = solutionFiles.toMutableMap().apply { this[path] = solutionFile }
     }
 
+    fun removeSolutionFile(path: String) {
+        solutionFilesFlow.value = solutionFiles.toMutableMap().apply {
+            remove(path)
+        }
+    }
+
     fun updateSolutionFile(solutionFile: SolutionFile) {
         if (!solutionFiles.containsKey(solutionFile.pathString))
             throw Err.InternalErr("trying to update solution File which does not exist")

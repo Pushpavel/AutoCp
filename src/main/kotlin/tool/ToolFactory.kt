@@ -63,7 +63,7 @@ class ToolFactory : ToolWindowFactory, DumbAware {
             }
 
             val ui = TestcaseListPanel(project, file.pathString)
-            val settingsPanel = SolutionFileSettingsPanel(project, file.pathString)
+            val settingsPanel = SolutionFileSettingsPanel(project, file.pathString) { callback(file) }
 
             val content = contentManager.factory.createContent(ui.component, file.presentableName, false)
             val settingsContent = contentManager.factory.createContent(settingsPanel.component, "Settings", false)
