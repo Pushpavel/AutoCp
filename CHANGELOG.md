@@ -2,6 +2,15 @@
 ?> All notable changes to this project will be documented in this page.
 
 ## [Unreleased]
+
+### Changed
+
+- ```@out``` can be ignored in command template if the build configuration does not produce any executable file.
+
+### Fixed
+
+- Name not unique error while editing a build configuration even though it is unique
+
 ## v0.5.0-eap.4
 
 ### Added
