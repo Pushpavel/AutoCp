@@ -10,6 +10,7 @@
 ### Fixed
 
 - Name not unique error while editing a build configuration even though it is unique
+- Problem Names with special characters used as fileNames while generating files causes errors.
 
 ## v0.5.0-eap.4
 
