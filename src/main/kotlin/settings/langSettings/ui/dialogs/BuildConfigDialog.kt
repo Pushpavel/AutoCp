@@ -56,8 +56,6 @@ class BuildConfigDialog(
     fun showAndGetConfig(): BuildConfig? {
         val confirm = showAndGet()
 
-
-
         return if (confirm)
             BuildConfig(buildConfig.id, name, commandTemplate)
         else
@@ -69,7 +67,7 @@ class BuildConfigDialog(
         if (name.isBlank())
             return error("Must not be empty")
 
-        if (nameEnforcer.buildUniqueName(name) != name)
+        if (name != buildConfig.name && nameEnforcer.buildUniqueName(name) != name)
             return error("\"$name\" already exists")
 
         return null
@@ -77,11 +75,9 @@ class BuildConfigDialog(
 
     private fun ValidationInfoBuilder.validateBuildCommand(commandTemplate: String): ValidationInfo? {
         val input = commandTemplate.contains(AutoCpGeneralSettings.INPUT_PATH_KEY)
-//        val output = commandTemplate.contains(AutoCpGeneralSettings.OUTPUT_PATH_KEY)
 
         val errorMessage = when {
             !input -> "${AutoCpGeneralSettings.INPUT_PATH_KEY} missing, This will be replaced with path to solution file ex- \"C:\\solution.cpp\""
-//            !output -> "${AutoCpGeneralSettings.OUTPUT_PATH_KEY} missing, This will be replaced with path for the executable ex- \"C:\\temp\\output.exe\""
             else -> null
         }
 
