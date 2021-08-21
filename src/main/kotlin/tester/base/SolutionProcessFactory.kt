@@ -16,8 +16,8 @@ import kotlin.io.path.pathString
 /**
  * Factory Class for creating sub [Process]es of an executable created from buildFromConfig function
  */
-class SolutionProcessFactory(private val executablePath: String) {
-    fun createProcess(): Process {
+class SolutionProcessFactory(private val executablePath: String) : ProcessFactory {
+    override fun createProcess(): Process {
         return GeneralCommandLine().withExePath(executablePath).createProcess()
     }
 
@@ -28,7 +28,7 @@ class SolutionProcessFactory(private val executablePath: String) {
         suspend fun from(
             solutionFile: SolutionFile,
             buildConfig: BuildConfig
-        ): Pair<SolutionProcessFactory, ProcessRunner.CapturedResults> {
+        ): Pair<ProcessFactory, ProcessRunner.CapturedResults> {
             val tempDir = withContext(Dispatchers.IO) {
                 @Suppress("BlockingMethodInNonBlockingContext")
                 Files.createTempDirectory("AutoCp")
