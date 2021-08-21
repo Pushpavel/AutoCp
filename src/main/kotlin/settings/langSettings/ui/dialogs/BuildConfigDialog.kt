@@ -20,7 +20,7 @@ class BuildConfigDialog(
     var name = buildConfig.name
 
     @Suppress("MemberVisibilityCanBePrivate")
-    var buildCommand = buildConfig.buildCommand
+    var commandTemplate = buildConfig.commandTemplate
 
     init {
         title = if (create)
@@ -38,7 +38,7 @@ class BuildConfigDialog(
                     .withValidation { validateName(it.text) }
             }
             row("Command Template:") {
-                expandableTextField(::buildCommand)
+                expandableTextField(::commandTemplate)
                     .constraints(CCFlags.growX)
                     .applyToComponent { MacrosDialog.addTextFieldExtension(this) }
                     .withValidation { validateBuildCommand(it.text) }
@@ -59,7 +59,7 @@ class BuildConfigDialog(
 
 
         return if (confirm)
-            BuildConfig(buildConfig.id, name, buildCommand)
+            BuildConfig(buildConfig.id, name, commandTemplate)
         else
             null
     }
@@ -75,9 +75,9 @@ class BuildConfigDialog(
         return null
     }
 
-    private fun ValidationInfoBuilder.validateBuildCommand(buildCommand: String): ValidationInfo? {
-        val input = buildCommand.contains(AutoCpGeneralSettings.INPUT_PATH_KEY)
-//        val output = buildCommand.contains(AutoCpGeneralSettings.OUTPUT_PATH_KEY)
+    private fun ValidationInfoBuilder.validateBuildCommand(commandTemplate: String): ValidationInfo? {
+        val input = commandTemplate.contains(AutoCpGeneralSettings.INPUT_PATH_KEY)
+//        val output = commandTemplate.contains(AutoCpGeneralSettings.OUTPUT_PATH_KEY)
 
         val errorMessage = when {
             !input -> "${AutoCpGeneralSettings.INPUT_PATH_KEY} missing, This will be replaced with path to solution file ex- \"C:\\solution.cpp\""

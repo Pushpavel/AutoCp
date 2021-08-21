@@ -118,11 +118,11 @@ class DefaultLangJsonsTest {
             }
 
             @Test
-            fun `BuildConfig buildCommand must be valid`() {
+            fun `BuildConfig commandTemplate must be valid`() {
                 for (lang in langs) {
                     for (config in lang.buildConfigs.values) {
-                        val input = config.buildCommand.contains(AutoCpGeneralSettings.INPUT_PATH_KEY)
-                        val output = config.buildCommand.contains(AutoCpGeneralSettings.OUTPUT_PATH_KEY)
+                        val input = config.commandTemplate.contains(AutoCpGeneralSettings.INPUT_PATH_KEY)
+                        val output = config.commandTemplate.contains(AutoCpGeneralSettings.OUTPUT_PATH_KEY)
 
                         val errorMessage = when {
                             !input -> "${AutoCpGeneralSettings.INPUT_PATH_KEY} missing, This will be replaced with path to solution file ex- \"C:\\solution.cpp\""

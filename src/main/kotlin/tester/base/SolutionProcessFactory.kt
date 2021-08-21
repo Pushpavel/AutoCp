@@ -41,7 +41,7 @@ class SolutionProcessFactory(private val executablePath: String) {
                 Path(solutionFile.pathString).nameWithoutExtension + executableExtension
             )
 
-            val command = buildConfig.constructBuildCommand(solutionFile.pathString, outputPath.pathString)
+            val command = buildConfig.constructCommand(solutionFile.pathString, outputPath.pathString)
             val commandList = splitCommandString(command)
             val result: ProcessRunner.CapturedResults
 

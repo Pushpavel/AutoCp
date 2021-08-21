@@ -9,7 +9,7 @@ import settings.generalSettings.AutoCpGeneralSettings
 data class BuildConfig(
     val id: String,
     val name: String,
-    val buildCommand: String
+    val commandTemplate: String
 ) {
     companion object {
         fun cellRenderer(emptyText: String = "None"): TileCellRenderer<BuildConfig> {
@@ -20,20 +20,20 @@ data class BuildConfig(
         }
     }
 
-    fun constructBuildCommand(inputPath: String, outputPath: String): String {
-        return buildCommand
+    fun constructCommand(inputPath: String, outputPath: String): String {
+        return commandTemplate
             .replace(AutoCpGeneralSettings.INPUT_PATH_KEY, "\"$inputPath\"")
             .replace(AutoCpGeneralSettings.OUTPUT_PATH_KEY, "\"$outputPath\"")
     }
 
-    constructor(m: MutableBuildConfig) : this(m.id, m.name, m.buildCommand)
+    constructor(m: MutableBuildConfig) : this(m.id, m.name, m.commandTemplate)
 }
 
 
 data class MutableBuildConfig(
     var id: String = "",
     var name: String = "",
-    var buildCommand: String = "",
+    var commandTemplate: String = "",
 ) {
-    constructor(c: BuildConfig) : this(c.id, c.name, c.buildCommand)
+    constructor(c: BuildConfig) : this(c.id, c.name, c.commandTemplate)
 }

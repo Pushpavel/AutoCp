@@ -45,7 +45,7 @@
             ]
           },
           {
-            "name": "buildCommand",
+            "name": "commandTemplate",
             "type": "string",
             "description": [
               "template to construct a command that builds an executable",
