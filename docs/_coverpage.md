@@ -1,6 +1,6 @@
 ![AutoCp Plugin Logo](/docs/_assets/logo.svg)
 
-# AutoCp <small>v0.5.0-eap.4</small>
+# AutoCp <small>v0.5.0</small>
 
 > Competitive Programming Plugin for Intellij-Based IDEs
 
