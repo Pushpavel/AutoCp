@@ -11,5 +11,6 @@
     - [Introduction](/CONTRIBUTION.md)
     - [Git Guidelines](/docs/contributing/git.md)
     - [Language Support](/docs/contributing/default-langs.md)
+    - [File Templates](/docs/contributing/file-templates.md)
   
 - [Changelog](/CHANGELOG.md)
