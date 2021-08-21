@@ -160,6 +160,9 @@ object AutoCpStrings {
 
     // Testing Compile Strings
 
+    fun commandReadyMsg(configName: String, config: BuildConfig) = "" +
+            "Ready to execute \"$configName\" using Build Configuration \"${config.name}\" "
+
     fun startCompilingMsg(configName: String, config: BuildConfig) = "" +
             "Building \"$configName\" using Build Configuration \"${config.name}\"..."
 

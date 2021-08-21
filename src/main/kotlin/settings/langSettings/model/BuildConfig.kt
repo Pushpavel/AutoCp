@@ -20,10 +20,19 @@ data class BuildConfig(
         }
     }
 
-    fun constructCommand(inputPath: String, outputPath: String): String {
+    fun doesCommandHaveOutPath(): Boolean {
+        return commandTemplate.contains(AutoCpGeneralSettings.OUTPUT_PATH_KEY)
+    }
+
+    fun constructCommand(inputPath: String, outputPath: String? = null): String {
         return commandTemplate
             .replace(AutoCpGeneralSettings.INPUT_PATH_KEY, "\"$inputPath\"")
-            .replace(AutoCpGeneralSettings.OUTPUT_PATH_KEY, "\"$outputPath\"")
+            .let {
+                if (outputPath != null)
+                    it.replace(AutoCpGeneralSettings.OUTPUT_PATH_KEY, "\"$outputPath\"")
+                else
+                    it
+            }
     }
 
     constructor(m: MutableBuildConfig) : this(m.id, m.name, m.commandTemplate)

@@ -101,6 +101,13 @@ class TreeTestingProcessReporter(private val processHandler: ProcessHandler) : T
         testSuiteFinished(node.sourceNode.name).apply()
     }
 
+    override fun commandReady(configName: String, buildConfig: BuildConfig) {
+        processHandler.notifyTextAvailable(
+            R.strings.commandReadyMsg(configName, buildConfig) + "\n",
+            ProcessOutputTypes.STDOUT
+        )
+    }
+
     override fun compileStart(configName: String, buildConfig: BuildConfig) {
         processHandler.notifyTextAvailable(
             R.strings.startCompilingMsg(configName, buildConfig) + "\n",

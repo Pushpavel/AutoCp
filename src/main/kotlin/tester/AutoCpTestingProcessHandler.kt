@@ -8,6 +8,7 @@ import config.validators.getValidBuildConfig
 import config.validators.getValidSolutionFile
 import database.models.SolutionFile
 import settings.langSettings.model.BuildConfig
+import tester.base.ExecuteProcessFactory
 import tester.base.ProcessFactory
 import tester.base.SolutionProcessFactory
 import tester.base.TestingProcessHandler
@@ -48,10 +49,15 @@ class AutoCpTestingProcessHandler(private val config: AutoCpConfig) : TestingPro
         solutionFile: SolutionFile,
         buildConfig: BuildConfig
     ): ProcessFactory? {
-        reporter.compileStart(config.name, buildConfig)
-        val result = runCatching { SolutionProcessFactory.from(solutionFile, buildConfig) }
-        reporter.compileFinish(result.map { it.second })
-        return result.getOrNull()?.first
+        return if (buildConfig.doesCommandHaveOutPath()) {
+            reporter.compileStart(config.name, buildConfig)
+            val result = runCatching { SolutionProcessFactory.from(solutionFile, buildConfig) }
+            reporter.compileFinish(result.map { it.second })
+            result.getOrNull()?.first
+        } else {
+            reporter.commandReady(config.name, buildConfig)
+            ExecuteProcessFactory.from(solutionFile, buildConfig)
+        }
     }
 
 
