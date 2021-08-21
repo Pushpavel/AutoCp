@@ -1,7 +1,7 @@
 package tester.base
 
+import com.intellij.execution.Platform
 import com.intellij.execution.configurations.GeneralCommandLine
-import com.jetbrains.cidr.toolchains.OSType
 import database.models.SolutionFile
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -33,8 +33,7 @@ class SolutionProcessFactory(private val executablePath: String) : ProcessFactor
                 @Suppress("BlockingMethodInNonBlockingContext")
                 Files.createTempDirectory("AutoCp")
             }
-
-            val executableExtension = if (OSType.getCurrent() == OSType.WIN) ".exe" else ""
+            val executableExtension = if (Platform.current() == Platform.WINDOWS) ".exe" else ""
 
             val outputPath = Paths.get(
                 tempDir.pathString,
