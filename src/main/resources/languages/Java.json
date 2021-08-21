@@ -3,7 +3,7 @@
   "fileTemplateName": null,
   "defaultBuildConfigId": "Java.Java",
   "buildConfigs": {
-    "Python.PyExecute": {
+    "Java.Java": {
       "name": "Java",
       "id": "Java.Java",
       "commandTemplate": "java @in"
