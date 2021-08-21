@@ -13,11 +13,12 @@ To add or modify different build configurations, go to
 
 Name of the build configuration
 
-#### Build Command
+#### Command Template
 
-Template to construct a command that builds an executable. this string must contain ```@in``` and ```@out```.
+Template to construct a command that builds an executable. this string must contain ```@in``` and optionally ```@out```.
 ```@in``` will be replaced with input path of solution file with quotes.
 ```@out``` will be replaced with output path of the executable with quotes.
+```@out``` can be ignored if executing this command does not produce any executable.
 
 Example:
 
