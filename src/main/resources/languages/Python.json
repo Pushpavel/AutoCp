@@ -1,0 +1,12 @@
+{
+  "langId": "Python",
+  "fileTemplateName": null,
+  "defaultBuildConfigId": "Python.PyExecute",
+  "buildConfigs": {
+    "Python.PyExecute": {
+      "name": "PyExecute",
+      "id": "Python.PyExecute",
+      "commandTemplate": "python @in"
+    }
+  }
+}
