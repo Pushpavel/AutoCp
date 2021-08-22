@@ -1,6 +1,5 @@
 package tester.base
 
-import common.errors.Err
 import settings.langSettings.model.BuildConfig
 
 /**
@@ -14,7 +13,6 @@ interface TestingProcess {
         fun commandReady(configName: String, buildConfig: BuildConfig)
         fun compileStart(configName: String, buildConfig: BuildConfig)
         fun compileFinish(result: Result<ProcessRunner.CapturedResults>)
-        fun testingProcessStartErrored(error: Err)
         fun testingProcessError(message: String)
     }
 }

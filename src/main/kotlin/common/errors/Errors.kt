@@ -2,16 +2,5 @@ package common.errors
 
 import common.res.R
 
-sealed class Err(message: String) : Exception(message) {
-    class InternalErr(message: String) : Err(message)
-    sealed class TesterErr(message: String) : Err(message) {
-        class SolutionFileErr(message: String) : TesterErr(message)
-        class BuildErr(message: String) : TesterErr(message)
-        object Cancelled : TesterErr("")
-        object TimeoutErr : TesterErr("")
-        class RuntimeErr(message: String) : TesterErr(message)
-    }
-}
-
 class InternalErr(message: String) : Exception(message)
 object NoReachErr : Exception(R.strings.noReachErrMsg)

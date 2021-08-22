@@ -4,9 +4,7 @@ import com.intellij.execution.process.ProcessHandler
 import com.intellij.execution.process.ProcessOutputTypes
 import com.intellij.execution.testframework.sm.ServiceMessageBuilder
 import com.intellij.execution.testframework.sm.ServiceMessageBuilder.*
-import common.errors.Err
 import common.errors.NoReachErr
-import common.errors.presentableString
 import common.res.R
 import settings.langSettings.model.BuildConfig
 import tester.base.BuildErr
@@ -130,15 +128,6 @@ class TreeTestingProcessReporter(private val processHandler: ProcessHandler) : T
                 processHandler.notifyTextAvailable(msg + "\n", ProcessOutputTypes.STDERR)
             }
         }
-    }
-
-
-    override fun testingProcessStartErrored(error: Err) {
-        processHandler.notifyTextAvailable(
-            error.presentableString() + "\n", ProcessOutputTypes.STDERR
-        )
-
-        processHandler.notifyTextAvailable(error.stackTraceToString(), ProcessOutputTypes.STDERR)
     }
 
     override fun testingProcessError(message: String) {
