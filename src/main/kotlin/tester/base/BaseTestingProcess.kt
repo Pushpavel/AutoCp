@@ -1,6 +1,6 @@
 package tester.base
 
-import common.errors.Err
+import common.errors.InternalErr
 import common.errors.mapToErr
 
 /**
@@ -16,7 +16,7 @@ abstract class BaseTestingProcess : TestingProcess {
 
     override suspend fun execute() {
         if (hasExecuted)
-            throw Err.InternalErr("BaseTestingProcess::execute is called twice")
+            throw InternalErr("BaseTestingProcess::execute is called twice")
         hasExecuted = true
         runCatching {
             executeProcess()
