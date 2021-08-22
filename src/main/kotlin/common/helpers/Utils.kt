@@ -6,16 +6,6 @@ suspend fun <T> Deferred<T>.awaitAsResult() = runCatching {
     this.await()
 }
 
-fun Throwable.causes(): ArrayList<Throwable> {
-    val list = ArrayList<Throwable>()
-    var cause: Throwable? = this
-    while (cause != null) {
-        list.add(cause)
-        cause = cause.cause
-    }
-    return list
-}
-
 fun <T> Collection<T>.isItemsEqual(other: Collection<T>): Boolean {
     if (other.size != this.size)
         return false
