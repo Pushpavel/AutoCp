@@ -31,7 +31,7 @@ class SolutionFileSettingsPanel(project: Project, private val pathString: String
 
     private var solutionFile: SolutionFile? = null
     var timeLimit = 0
-    var resetting = false
+    private var resetting = false
 
     private val scope = mainScope()
 

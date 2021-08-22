@@ -13,7 +13,7 @@ import com.intellij.ui.layout.LCFlags
 import com.intellij.ui.layout.panel
 import common.helpers.UniqueNameEnforcer
 import common.helpers.isItemsEqual
-import common.lang.supportedFileTemplates
+import gather.supportedFileTemplates
 import common.ui.dsl.DslCallbacks
 import common.ui.dsl.comboBoxView
 import common.ui.swing.TileCellRenderer

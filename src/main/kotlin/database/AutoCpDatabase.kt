@@ -1,6 +1,6 @@
 package database
 
-import common.errors.Err
+import common.errors.InternalErr
 import database.models.Problem
 import database.models.SolutionFile
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,7 +21,7 @@ class AutoCpDatabase(
     fun addSolutionFile(path: String, linkedProblemId: Pair<String, String>?) {
         val solutionFile = if (linkedProblemId != null) {
             val problem = problems[linkedProblemId.first]?.get(linkedProblemId.second)
-                ?: throw Err.InternalErr("trying to create solution File for non existing Problem specification")
+                ?: throw InternalErr("trying to create solution File for non existing Problem specification")
 
             SolutionFile(
                 path,
@@ -47,7 +47,7 @@ class AutoCpDatabase(
 
     fun updateSolutionFile(solutionFile: SolutionFile) {
         if (!solutionFiles.containsKey(solutionFile.pathString))
-            throw Err.InternalErr("trying to update solution File which does not exist")
+            throw InternalErr("trying to update solution File which does not exist")
 
         solutionFilesFlow.value = solutionFiles.toMutableMap().apply { this[solutionFile.pathString] = solutionFile }
     }

@@ -9,7 +9,6 @@ import com.intellij.util.io.readText
 import common.res.R
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
-import settings.langSettings.model.BuildConfig
 import settings.langSettings.model.Lang
 import settings.langSettings.model.MutableLang
 
@@ -38,12 +37,6 @@ class AutoCpLangSettings : PersistentStateComponent<LangSettings> {
     companion object {
 
         val instance: AutoCpLangSettings get() = service()
-
-        fun guessBuildConfigById(id: String?, file: VirtualFile?): BuildConfig? {
-            val lang = findLangByFile(file)
-            // TODO: avoid guessing and look into build Configs of other languages too
-            return lang?.getBuildConfig(id)
-        }
 
         fun findLangByFile(file: VirtualFile?): Lang? {
             val fileType = file?.fileType ?: return null
