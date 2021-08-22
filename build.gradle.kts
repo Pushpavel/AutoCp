@@ -140,9 +140,9 @@ tasks {
         // Specify pre-release label to publish the plugin in a custom Release Channel automatically. Read more:
         // https://plugins.jetbrains.com/docs/intellij/deployment.html#specifying-a-release-channel
         if (properties("pluginVersion").contains('-'))
-            channels.set(listOf("default", "eap"))
+            channels.set(listOf("eap"))
         else
-            channels.set(listOf("default"))
+            channels.set(listOf("default", "eap"))
     }
 
     runIde {
