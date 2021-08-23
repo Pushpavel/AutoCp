@@ -110,12 +110,15 @@
                 });
             },
             function (hook, vm) {
-                hook.afterEach(function (html) {
+                hook.doneEach(function (html) {
+                    const el = document.getElementById("installEl");
                     if (vm.route.path == '/') {
-                        const el = document.getElementById("installEl");
-                        el.remove()
                         const container = document.body.querySelector(".cover > .cover-main > p:nth-of-type(2)")
                         container.prepend(el)
+                    } else {
+                        const containers = document.body.getElementsByClassName("installElContainer")
+                        for (var i = 0; i < containers.length; i++)
+                            containers[i].appendChild(el)
                     }
                 })
             }
