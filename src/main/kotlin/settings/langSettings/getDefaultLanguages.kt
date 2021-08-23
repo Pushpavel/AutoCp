@@ -17,8 +17,8 @@ fun getDefaultLanguages(): Map<String, Lang> {
         .map { lang ->
             val buildConfigs = lang.buildConfigs.mapValues {
                 it.value.copy(
-                    buildCommand = applyCommandMacros(it.value.buildCommand),
-                    executeCommand = applyCommandMacros(it.value.executeCommand)
+                    buildCommand = processCommand(it.value.buildCommand),
+                    executeCommand = processCommand(it.value.executeCommand)
                 )
             }
 
@@ -28,13 +28,20 @@ fun getDefaultLanguages(): Map<String, Lang> {
         .associateBy { it.langId }
 }
 
-private fun applyCommandMacros(command: String): String {
+private fun processCommand(command: String): String {
     var c = command
     for (k in getPlatformMacros())
         c = c.replace(k.key, k.value)
-    return c
+    return platformPaths(c)
 }
 
+
+private fun platformPaths(command: String): String {
+    return when (Platform.current()) {
+        Platform.WINDOWS -> command.replace('/', '\\')
+        Platform.UNIX -> command.replace('\\', '/')
+    }
+}
 
 private fun getPlatformMacros(): Map<String, String> {
     return when (Platform.current()) {
