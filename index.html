@@ -12,6 +12,9 @@
     <!-- Theme: Simple Dark -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify-themeable@0/dist/css/theme-simple-dark.css">
 
+    <!-- Intellij Install Button -->
+    <script src="//plugins.jetbrains.com/assets/scripts/mp-widget.js"></script>
+
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-4XJXXBBLK5"></script>
     <script>
@@ -24,6 +27,9 @@
         gtag('js', new Date());
 
         gtag('config', 'G-4XJXXBBLK5');
+
+
+        MarketplaceWidget.setupMarketplaceWidget('install', 17061, "#installEl");
     </script>
 
     <style>
@@ -51,11 +57,20 @@
             margin-right: 2px;
         }
 
+        .cover > .cover-main > p:nth-of-type(2) {
+            display: inline-flex;
+            align-items: center;
+        }
+
+        p > #installEl {
+            margin-right: 16px;
+        }
+
     </style>
 </head>
 <body>
 <div id="app">Please wait...</div>
-
+<div id="installEl"></div>
 <script>
     const formatter = new Intl.DateTimeFormat('en', {
         day: "numeric",
@@ -71,6 +86,7 @@
         loadSidebar: 'docs/_sidebar.md',
         ext: '.md',
         relativePath: false,
+        executeScript: true,
         auto2top: true,
         copyCode: {
             buttonText: 'copy',
@@ -94,6 +110,15 @@
                     return editHtml + html;
                 });
             },
+            function (hook, vm) {
+                hook.afterEach(function (html) {
+                    if (vm.route.path == '/') {
+                        const el = document.getElementById("installEl");
+                        const container = document.body.querySelector(".cover > .cover-main > p:nth-of-type(2)")
+                        container.prepend(el)
+                    }
+                })
+            }
         ]
     }
 </script>
@@ -108,6 +133,7 @@
 <script src="https://unpkg.com/docsify-copy-code@2"></script>
 <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"></script>
 <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/zoom-image.min.js"></script>
+
 </body>
 
 </html>
