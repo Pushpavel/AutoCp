@@ -60,10 +60,9 @@
         .cover > .cover-main > p:nth-of-type(2) {
             display: inline-flex;
             align-items: center;
-        }
-
-        p > #installEl {
-            margin-right: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 16px;
         }
 
     </style>
@@ -114,6 +113,7 @@
                 hook.afterEach(function (html) {
                     if (vm.route.path == '/') {
                         const el = document.getElementById("installEl");
+                        el.remove()
                         const container = document.body.querySelector(".cover > .cover-main > p:nth-of-type(2)")
                         container.prepend(el)
                     }
