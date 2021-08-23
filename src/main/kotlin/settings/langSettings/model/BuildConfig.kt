@@ -1,6 +1,7 @@
 package settings.langSettings.model
 
 import com.intellij.icons.AllIcons
+import common.res.R
 import common.ui.swing.TileCellRenderer
 import kotlinx.serialization.Serializable
 import settings.generalSettings.AutoCpGeneralSettings
@@ -23,6 +24,15 @@ data class BuildConfig(
 
     fun doesCommandHaveOutPath(): Boolean {
         return buildCommand.contains(AutoCpGeneralSettings.OUTPUT_PATH_KEY)
+    }
+
+    fun constructBuildCommand(inputPath: String): String {
+        return buildCommand.replace(R.keys.inputPathMacro, "\"$inputPath\"")
+    }
+
+
+    fun constructExecuteCommand(inputPath: String): String {
+        return executeCommand.replace(R.keys.inputPathMacro, "\"$inputPath\"")
     }
 
     fun constructCommand(inputPath: String, outputPath: String? = null): String {
