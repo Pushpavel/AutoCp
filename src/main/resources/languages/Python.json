@@ -6,8 +6,8 @@
     "Python.PyExecute": {
       "name": "PyExecute",
       "id": "Python.PyExecute",
-      "buildCommand": "python @in",
-      "executeCommand": ""
+      "buildCommand": "",
+      "executeCommand": "python @in"
     }
   }
 }

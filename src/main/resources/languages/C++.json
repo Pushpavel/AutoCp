@@ -6,14 +6,14 @@
     "ObjectiveC.C++ 17": {
       "name": "C++ 17",
       "id": "ObjectiveC.C++ 17",
-      "buildCommand": "g++ @in -o @out -std=c++17",
-      "executeCommand": ""
+      "buildCommand": "g++ @in -o \"./a@exe\" -std=c++17",
+      "executeCommand": "./a@exe"
     },
     "ObjectiveC.C++ 14": {
       "name": "C++ 14",
       "id": "ObjectiveC.C++ 14",
-      "buildCommand": "g++ @in -o @out -std=c++14",
-      "executeCommand": ""
+      "buildCommand": "g++ @in -o  \"./a@exe\"  -std=c++14",
+      "executeCommand": "./a@exe"
     }
   }
 }
