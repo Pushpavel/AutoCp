@@ -6,7 +6,8 @@
     "Java.Java": {
       "name": "Java",
       "id": "Java.Java",
-      "commandTemplate": "java @in"
+      "buildCommand": "java @in",
+      "executeCommand": ""
     }
   }
 }
