@@ -8,6 +8,6 @@ object AutoCpKeys {
     const val inputPathMacro = "@in"
 
     // Command Plugin Macros
-    const val execExtensionMacro = "@exe"
+    const val execExtensionMacro = ".exe"
 
 }
