@@ -21,6 +21,7 @@ class BuildConfigDialog(
 
     @Suppress("MemberVisibilityCanBePrivate")
     var commandTemplate = buildConfig.commandTemplate
+    var executeCommand = buildConfig.executeCommand
 
     init {
         title = if (create)
@@ -57,7 +58,7 @@ class BuildConfigDialog(
         val confirm = showAndGet()
 
         return if (confirm)
-            BuildConfig(buildConfig.id, name, commandTemplate)
+            BuildConfig(buildConfig.id, name, commandTemplate, executeCommand)
         else
             null
     }

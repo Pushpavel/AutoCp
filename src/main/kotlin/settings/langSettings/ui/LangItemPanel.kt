@@ -79,7 +79,7 @@ class LangItemPanel : DslCallbacks {
         }
 
         val listContainer = ToolbarDecorator.createDecorator(jbList).setAddAction {
-            val blank = BuildConfig(System.currentTimeMillis().toString(), "", "")
+            val blank = BuildConfig(System.currentTimeMillis().toString(), "", "","")
             val newBuildConfig = BuildConfigDialog(blank, buildConfigNameEnforcer, true).showAndGetConfig()
             if (newBuildConfig != null) {
                 buildConfigsModel.add(newBuildConfig)

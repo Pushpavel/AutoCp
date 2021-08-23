@@ -9,7 +9,8 @@ import settings.generalSettings.AutoCpGeneralSettings
 data class BuildConfig(
     val id: String,
     val name: String,
-    val commandTemplate: String
+    val commandTemplate: String,
+    val executeCommand: String,
 ) {
     companion object {
         fun cellRenderer(emptyText: String = "None"): TileCellRenderer<BuildConfig> {
@@ -35,7 +36,7 @@ data class BuildConfig(
             }
     }
 
-    constructor(m: MutableBuildConfig) : this(m.id, m.name, m.commandTemplate)
+    constructor(m: MutableBuildConfig) : this(m.id, m.name, m.commandTemplate, m.executeCommand)
 }
 
 
@@ -43,6 +44,7 @@ data class MutableBuildConfig(
     var id: String = "",
     var name: String = "",
     var commandTemplate: String = "",
+    var executeCommand: String = "",
 ) {
     constructor(c: BuildConfig) : this(c.id, c.name, c.commandTemplate)
 }
