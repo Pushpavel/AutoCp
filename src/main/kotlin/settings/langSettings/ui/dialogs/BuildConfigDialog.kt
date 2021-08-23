@@ -18,7 +18,7 @@ class BuildConfigDialog(
     var name = buildConfig.name
 
     @Suppress("MemberVisibilityCanBePrivate")
-    var buildCommand = buildConfig.commandTemplate
+    var buildCommand = buildConfig.buildCommand
     var executeCommand = buildConfig.executeCommand
 
     init {

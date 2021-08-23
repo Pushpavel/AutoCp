@@ -9,7 +9,7 @@ import settings.generalSettings.AutoCpGeneralSettings
 data class BuildConfig(
     val id: String,
     val name: String,
-    val commandTemplate: String,
+    val buildCommand: String,
     val executeCommand: String,
 ) {
     companion object {
@@ -22,11 +22,11 @@ data class BuildConfig(
     }
 
     fun doesCommandHaveOutPath(): Boolean {
-        return commandTemplate.contains(AutoCpGeneralSettings.OUTPUT_PATH_KEY)
+        return buildCommand.contains(AutoCpGeneralSettings.OUTPUT_PATH_KEY)
     }
 
     fun constructCommand(inputPath: String, outputPath: String? = null): String {
-        return commandTemplate
+        return buildCommand
             .replace(AutoCpGeneralSettings.INPUT_PATH_KEY, "\"$inputPath\"")
             .let {
                 if (outputPath != null)
@@ -36,15 +36,15 @@ data class BuildConfig(
             }
     }
 
-    constructor(m: MutableBuildConfig) : this(m.id, m.name, m.commandTemplate, m.executeCommand)
+    constructor(m: MutableBuildConfig) : this(m.id, m.name, m.buildCommand, m.executeCommand)
 }
 
 
 data class MutableBuildConfig(
     var id: String = "",
     var name: String = "",
-    var commandTemplate: String = "",
+    var buildCommand: String = "",
     var executeCommand: String = "",
 ) {
-    constructor(c: BuildConfig) : this(c.id, c.name, c.commandTemplate)
+    constructor(c: BuildConfig) : this(c.id, c.name, c.buildCommand)
 }
