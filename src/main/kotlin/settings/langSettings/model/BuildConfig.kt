@@ -4,7 +4,6 @@ import com.intellij.icons.AllIcons
 import common.res.R
 import common.ui.swing.TileCellRenderer
 import kotlinx.serialization.Serializable
-import settings.generalSettings.AutoCpGeneralSettings
 
 @Serializable
 data class BuildConfig(
@@ -22,10 +21,6 @@ data class BuildConfig(
         }
     }
 
-    fun doesCommandHaveOutPath(): Boolean {
-        return buildCommand.contains(AutoCpGeneralSettings.OUTPUT_PATH_KEY)
-    }
-
     fun constructBuildCommand(inputPath: String, dirPath: String): String {
         return constructCommand(buildCommand, inputPath, dirPath)
     }
@@ -38,17 +33,6 @@ data class BuildConfig(
         return command.replace(R.keys.inputPathMacro, "\"$inputPath\"")
             .replace(R.keys.dirUnquotedPathMacro, dirPath)
             .replace(R.keys.dirPathMacro, "\"$dirPath\"")
-    }
-
-    fun constructCommand(inputPath: String, outputPath: String? = null): String {
-        return buildCommand
-            .replace(AutoCpGeneralSettings.INPUT_PATH_KEY, "\"$inputPath\"")
-            .let {
-                if (outputPath != null)
-                    it.replace(AutoCpGeneralSettings.OUTPUT_PATH_KEY, "\"$outputPath\"")
-                else
-                    it
-            }
     }
 
     constructor(m: MutableBuildConfig) : this(m.id, m.name, m.buildCommand, m.executeCommand)
