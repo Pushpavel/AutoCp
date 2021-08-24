@@ -2,6 +2,16 @@
 ?> All notable changes to this project will be documented in this page.
 
 ## [Unreleased]
+## v0.6.0-eap.1
+
+### Added
+
+- Build Configuration Macros: ```@in```, ```@dir``` and ```$dir```
+
+### Changed
+
+- Build Configuration commandTemplate split into Build Command and Execute Command
+
 ## v0.5.0
 
 ### Added
