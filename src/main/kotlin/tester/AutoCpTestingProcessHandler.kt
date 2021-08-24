@@ -8,10 +8,9 @@ import config.validators.getValidBuildConfig
 import config.validators.getValidSolutionFile
 import database.models.SolutionFile
 import settings.langSettings.model.BuildConfig
-import tester.base.ExecuteProcessFactory
 import tester.base.ProcessFactory
-import tester.base.SolutionProcessFactory
 import tester.base.TestingProcessHandler
+import tester.base.TwoStepProcessFactory
 import tester.tree.TestNode
 import kotlin.io.path.Path
 import kotlin.io.path.nameWithoutExtension
@@ -49,15 +48,10 @@ class AutoCpTestingProcessHandler(private val config: AutoCpConfig) : TestingPro
         solutionFile: SolutionFile,
         buildConfig: BuildConfig
     ): ProcessFactory? {
-        return if (buildConfig.doesCommandHaveOutPath()) {
-            reporter.compileStart(config.name, buildConfig)
-            val result = runCatching { SolutionProcessFactory.from(solutionFile, buildConfig) }
-            reporter.compileFinish(result.map { it.second })
-            result.getOrNull()?.first
-        } else {
-            reporter.commandReady(config.name, buildConfig)
-            ExecuteProcessFactory.from(solutionFile, buildConfig)
-        }
+        reporter.compileStart(config.name, buildConfig)
+        val result = runCatching { TwoStepProcessFactory.from(solutionFile, buildConfig) }
+        reporter.compileFinish(result.map { it.second })
+        return result.getOrNull()?.first
     }
 
 
