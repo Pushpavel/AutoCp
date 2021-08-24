@@ -6,7 +6,7 @@
     "Java.Java": {
       "name": "Java",
       "id": "Java.Java",
-      "buildCommand": "javac @in -d \"$dir\"",
+      "buildCommand": "javac @in -d @dir",
       "executeCommand": "java Main"
     }
   }

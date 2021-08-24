@@ -51,8 +51,9 @@ object AutoCpStrings {
             "So, relative path to executable won't work and should use <b>\$dir</b> to build absolute path.<br>" +
             "Make sure you wrap this absolute path with double quotes.<br><br>" +
             "Macros:<br>" +
-            "<b>@in</b> will be replaced with the absolute path to a solution file with quotes.<br>" +
-            "<b>\$dir</b> will be replaced with the absolute path to the isolated temp directory without quotes." +
+            "<b>@in</b> : absolute path to a solution file with quotes.<br>" +
+            "<b>\$dir</b> : absolute path to the isolated temp directory without quotes.<br>" +
+            "<b>@dir</b> : \"<b>\$dir</b>\"" +
             "</html>"
 
     const val buildCommandLabel = "Build Command"

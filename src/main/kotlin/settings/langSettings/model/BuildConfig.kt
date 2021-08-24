@@ -27,14 +27,17 @@ data class BuildConfig(
     }
 
     fun constructBuildCommand(inputPath: String, dirPath: String): String {
-        return buildCommand.replace(R.keys.inputPathMacro, "\"$inputPath\"")
-            .replace(R.keys.dirPathMacro, dirPath)
+        return constructCommand(buildCommand, inputPath, dirPath)
     }
 
-
     fun constructExecuteCommand(inputPath: String, dirPath: String): String {
-        return executeCommand.replace(R.keys.inputPathMacro, "\"$inputPath\"")
-            .replace(R.keys.dirPathMacro, dirPath)
+        return constructCommand(executeCommand, inputPath, dirPath)
+    }
+
+    private fun constructCommand(command: String, inputPath: String, dirPath: String): String {
+        return command.replace(R.keys.inputPathMacro, "\"$inputPath\"")
+            .replace(R.keys.dirUnquotedPathMacro, dirPath)
+            .replace(R.keys.dirPathMacro, "\"$dirPath\"")
     }
 
     fun constructCommand(inputPath: String, outputPath: String? = null): String {
