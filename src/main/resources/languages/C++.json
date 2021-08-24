@@ -7,13 +7,13 @@
       "name": "C++ 17",
       "id": "ObjectiveC.C++ 17",
       "buildCommand": "g++ @in -o \"./a.exe\" -std=c++17",
-      "executeCommand": "./a.exe"
+      "executeCommand": "$dir/a.exe"
     },
     "ObjectiveC.C++ 14": {
       "name": "C++ 14",
       "id": "ObjectiveC.C++ 14",
       "buildCommand": "g++ @in -o  \"./a.exe\"  -std=c++14",
-      "executeCommand": "./a.exe"
+      "executeCommand": "$dir/a.exe"
     }
   }
 }
