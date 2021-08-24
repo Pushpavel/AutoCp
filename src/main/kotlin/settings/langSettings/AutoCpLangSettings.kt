@@ -1,15 +1,9 @@
 package settings.langSettings
 
-import com.intellij.lang.Language
 import com.intellij.openapi.components.*
 import com.intellij.openapi.fileTypes.LanguageFileType
 import com.intellij.openapi.fileTypes.UnknownFileType
 import com.intellij.openapi.vfs.VirtualFile
-import com.intellij.util.io.readText
-import common.res.R
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.json.Json
-import settings.langSettings.model.BuildConfig
 import settings.langSettings.model.Lang
 import settings.langSettings.model.MutableLang
 
@@ -20,11 +14,7 @@ import settings.langSettings.model.MutableLang
 @Service
 class AutoCpLangSettings : PersistentStateComponent<LangSettings> {
 
-    var languages: Map<String, Lang> = R.files.langJsons
-        .map { it.readText() }
-        .map<String, Lang> { Json.decodeFromString(it) }
-        .filter { Language.findLanguageByID(it.langId) != null }
-        .associateBy { it.langId }
+    var languages: Map<String, Lang> = getDefaultLanguages()
 
     override fun getState(): LangSettings {
         return LangSettings(languages.mapValues { MutableLang(it.value) })
@@ -38,12 +28,6 @@ class AutoCpLangSettings : PersistentStateComponent<LangSettings> {
     companion object {
 
         val instance: AutoCpLangSettings get() = service()
-
-        fun guessBuildConfigById(id: String?, file: VirtualFile?): BuildConfig? {
-            val lang = findLangByFile(file)
-            // TODO: avoid guessing and look into build Configs of other languages too
-            return lang?.getBuildConfig(id)
-        }
 
         fun findLangByFile(file: VirtualFile?): Lang? {
             val fileType = file?.fileType ?: return null

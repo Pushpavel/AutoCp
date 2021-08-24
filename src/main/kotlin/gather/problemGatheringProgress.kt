@@ -18,7 +18,7 @@ class ProgressReporter(
     private val cancelCallback: () -> Unit
 ) : Task.Backgroundable(project, "Gathering problems...") {
 
-    var firstGather: GatheringResult.Gathered? = null
+    private var firstGather: GatheringResult.Gathered? = null
 
     init {
         scope.launch {

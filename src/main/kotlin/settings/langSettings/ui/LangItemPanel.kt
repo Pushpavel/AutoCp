@@ -13,7 +13,7 @@ import com.intellij.ui.layout.LCFlags
 import com.intellij.ui.layout.panel
 import common.helpers.UniqueNameEnforcer
 import common.helpers.isItemsEqual
-import common.lang.supportedFileTemplates
+import gather.supportedFileTemplates
 import common.ui.dsl.DslCallbacks
 import common.ui.dsl.comboBoxView
 import common.ui.swing.TileCellRenderer
@@ -79,7 +79,7 @@ class LangItemPanel : DslCallbacks {
         }
 
         val listContainer = ToolbarDecorator.createDecorator(jbList).setAddAction {
-            val blank = BuildConfig(System.currentTimeMillis().toString(), "", "")
+            val blank = BuildConfig(System.currentTimeMillis().toString(), "", "","")
             val newBuildConfig = BuildConfigDialog(blank, buildConfigNameEnforcer, true).showAndGetConfig()
             if (newBuildConfig != null) {
                 buildConfigsModel.add(newBuildConfig)

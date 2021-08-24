@@ -3,7 +3,7 @@ package settings.langSettings.model
 import com.intellij.ide.fileTemplates.FileTemplate
 import com.intellij.lang.Language
 import com.jetbrains.rd.util.firstOrNull
-import common.lang.supportedFileTemplates
+import gather.supportedFileTemplates
 import common.ui.swing.TileCellRenderer
 import kotlinx.serialization.Serializable
 
