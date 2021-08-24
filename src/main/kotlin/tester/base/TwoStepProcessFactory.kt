@@ -1,6 +1,7 @@
 package tester.base
 
 import com.intellij.execution.configurations.GeneralCommandLine
+import common.helpers.pathString
 import database.models.SolutionFile
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -28,8 +29,8 @@ class TwoStepProcessFactory(private val workingDir: File, private val commandLis
                 Files.createTempDirectory("AutoCp")
             }.toFile()
 
-            val buildCommand = buildConfig.constructBuildCommand(solutionFile.pathString)
-            val executeCommand = buildConfig.constructExecuteCommand(solutionFile.pathString)
+            val buildCommand = buildConfig.constructBuildCommand(solutionFile.pathString, tempDir.path.pathString)
+            val executeCommand = buildConfig.constructExecuteCommand(solutionFile.pathString, tempDir.path.pathString)
 
             val buildCommandList = splitCommandString(buildCommand)
             val executeCommandList = splitCommandString(executeCommand)
@@ -37,13 +38,11 @@ class TwoStepProcessFactory(private val workingDir: File, private val commandLis
             val result: ProcessRunner.CapturedResults
 
             try {
-                val buildProcess =
-                    GeneralCommandLine(buildCommandList).withWorkDirectory(tempDir).createProcess()
+                val buildProcess = GeneralCommandLine(buildCommandList).withWorkDirectory(tempDir).createProcess()
                 result = ProcessRunner.run(buildProcess)
             } catch (e: Exception) {
                 throw BuildErr(e, buildCommand)
             }
-
 
             return Pair(TwoStepProcessFactory(tempDir, executeCommandList), result)
         }

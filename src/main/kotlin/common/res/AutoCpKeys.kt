@@ -6,6 +6,7 @@ object AutoCpKeys {
 
     // Command User Macros
     const val inputPathMacro = "@in"
+    const val dirPathMacro = "\$dir"
 
     // Command Plugin Macros
     const val execExtensionMacro = ".exe"

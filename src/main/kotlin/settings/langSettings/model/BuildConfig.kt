@@ -26,13 +26,15 @@ data class BuildConfig(
         return buildCommand.contains(AutoCpGeneralSettings.OUTPUT_PATH_KEY)
     }
 
-    fun constructBuildCommand(inputPath: String): String {
+    fun constructBuildCommand(inputPath: String, dirPath: String): String {
         return buildCommand.replace(R.keys.inputPathMacro, "\"$inputPath\"")
+            .replace(R.keys.dirPathMacro, dirPath)
     }
 
 
-    fun constructExecuteCommand(inputPath: String): String {
+    fun constructExecuteCommand(inputPath: String, dirPath: String): String {
         return executeCommand.replace(R.keys.inputPathMacro, "\"$inputPath\"")
+            .replace(R.keys.dirPathMacro, dirPath)
     }
 
     fun constructCommand(inputPath: String, outputPath: String? = null): String {
@@ -56,5 +58,5 @@ data class MutableBuildConfig(
     var buildCommand: String = "",
     var executeCommand: String = "",
 ) {
-    constructor(c: BuildConfig) : this(c.id, c.name, c.buildCommand)
+    constructor(c: BuildConfig) : this(c.id, c.name, c.buildCommand, c.executeCommand)
 }
