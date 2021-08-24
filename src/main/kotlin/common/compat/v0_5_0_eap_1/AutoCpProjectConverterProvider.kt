@@ -37,12 +37,14 @@ class AutoCpProjectConverterProvider : ConverterProvider() {
                 val autoCpFile = Paths.get(context.projectBaseDir.pathString, ".autocp")
                 if (!autoCpFile.exists())
                     return false
+                val text = autoCpFile.readText()
 
                 return try {
-                    Json.decodeFromString<AutoCpDB>(autoCpFile.readText())
+                    Json.decodeFromString<AutoCpDB>(text)
                     false
                 } catch (e: Exception) {
-                    true
+                    // ensures we are not deleting json file
+                    text.firstOrNull() != '{'
                 }
             }
 
