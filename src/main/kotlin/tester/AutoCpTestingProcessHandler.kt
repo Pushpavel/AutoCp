@@ -48,9 +48,16 @@ class AutoCpTestingProcessHandler(private val config: AutoCpConfig) : TestingPro
         solutionFile: SolutionFile,
         buildConfig: BuildConfig
     ): ProcessFactory? {
-        reporter.compileStart(config.name, buildConfig)
+        if (buildConfig.buildCommand.isNotBlank())
+            reporter.compileStart(config.name, buildConfig)
+        else
+            reporter.commandReady(config.name, buildConfig)
+
         val result = runCatching { TwoStepProcessFactory.from(solutionFile, buildConfig) }
-        reporter.compileFinish(result.map { it.second })
+
+        if (buildConfig.buildCommand.isNotBlank())
+            reporter.compileFinish(result.map { it.second!! })
+
         return result.getOrNull()?.first
     }
 

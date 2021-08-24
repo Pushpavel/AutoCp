@@ -23,25 +23,26 @@ class TwoStepProcessFactory(private val workingDir: File, private val commandLis
         suspend fun from(
             solutionFile: SolutionFile,
             buildConfig: BuildConfig
-        ): Pair<ProcessFactory, ProcessRunner.CapturedResults> {
+        ): Pair<TwoStepProcessFactory, ProcessRunner.CapturedResults?> {
             val tempDir = withContext(Dispatchers.IO) {
                 @Suppress("BlockingMethodInNonBlockingContext")
                 Files.createTempDirectory("AutoCp")
             }.toFile()
 
-            val buildCommand = buildConfig.constructBuildCommand(solutionFile.pathString, tempDir.path.pathString)
             val executeCommand = buildConfig.constructExecuteCommand(solutionFile.pathString, tempDir.path.pathString)
-
-            val buildCommandList = splitCommandString(buildCommand)
             val executeCommandList = splitCommandString(executeCommand)
 
-            val result: ProcessRunner.CapturedResults
+            var result: ProcessRunner.CapturedResults? = null
+            if (buildConfig.buildCommand.isNotBlank()) {
+                val buildCommand = buildConfig.constructBuildCommand(solutionFile.pathString, tempDir.path.pathString)
+                val buildCommandList = splitCommandString(buildCommand)
 
-            try {
-                val buildProcess = GeneralCommandLine(buildCommandList).withWorkDirectory(tempDir).createProcess()
-                result = ProcessRunner.run(buildProcess)
-            } catch (e: Exception) {
-                throw BuildErr(e, buildCommand)
+                try {
+                    val buildProcess = GeneralCommandLine(buildCommandList).withWorkDirectory(tempDir).createProcess()
+                    result = ProcessRunner.run(buildProcess)
+                } catch (e: Exception) {
+                    throw BuildErr(e, buildCommand)
+                }
             }
 
             return Pair(TwoStepProcessFactory(tempDir, executeCommandList), result)
