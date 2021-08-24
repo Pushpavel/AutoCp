@@ -32,24 +32,17 @@ private fun processCommand(command: String): String {
     var c = command
     for (k in getPlatformMacros())
         c = c.replace(k.key, k.value)
-    return platformPaths(c)
-}
-
-
-private fun platformPaths(command: String): String {
-    return when (Platform.current()) {
-        Platform.WINDOWS -> command.replace('/', '\\')
-        Platform.UNIX -> command.replace('\\', '/')
-    }
+    return c
 }
 
 private fun getPlatformMacros(): Map<String, String> {
     return when (Platform.current()) {
         Platform.WINDOWS -> mapOf(
-            R.keys.execExtensionMacro to ".exe"
+            "/" to "\\",
         )
         Platform.UNIX -> mapOf(
-            R.keys.execExtensionMacro to ""
+            ".exe" to "",
+            "\\" to "/"
         )
     }
 }
