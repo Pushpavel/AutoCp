@@ -8,7 +8,7 @@ import settings.langSettings.model.Lang
 import settings.langSettings.model.MutableLang
 
 @State(
-    name = "settings.Languages",
+    name = "settings.Languages1",
     storages = [Storage("autoCpSettings.xml")]
 )
 @Service
