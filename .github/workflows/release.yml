@@ -5,12 +5,13 @@ name: Release
 on:
   release:
     types: [ published ]
-
 jobs:
 
   # Prepare and publish the plugin to the Marketplace repository
   release:
     name: Publish Plugin
+    # run only if eap branch or main branch with stable release
+    if: (${{ github.event.release.target_commitish }} == 'main' && !github.event.release.prerelease) || ${{ github.event.release.target_commitish }} == 'eap'
     runs-on: ubuntu-latest
     steps:
 
@@ -66,7 +67,24 @@ jobs:
 
       # Push changes
       - name: Push changes
-        uses: ad-m/github-push-action@master
+        uses: ad-m/github-push-action@v0.6.0
         with:
           branch: ${{ github.event.release.target_commitish }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Merge eap > main
+        if: ${{ github.event.release.target_commitish }} == 'eap' && !${{ github.event.release.prerelease }}
+        uses: tukasz/direct-merge-action@master
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          source-branch: eap
+          target-branch: main
+          commit-message: "🔀: Merge branch 'eap' into 'main' [skip-ci]"
+
+      # Push Merged changes
+      - name: Push changes
+        if: github.ref == 'refs/heads/eap' && !${{ github.event.release.prerelease }}
+        uses: ad-m/github-push-action@v0.6.0
+        with:
+          branch: main
           github_token: ${{ secrets.GITHUB_TOKEN }}
