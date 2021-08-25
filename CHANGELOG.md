@@ -2,6 +2,11 @@
 ?> All notable changes to this project will be documented in this page.
 
 ## [Unreleased]
+
+### Fixed
+
+- Compatibility problems with future IDE versions
+
 ## v0.6.0-eap.1
 
 ### Added

@@ -1,6 +1,5 @@
 package settings.langSettings
 
-import com.intellij.ide.ui.fullRow
 import com.intellij.openapi.options.BoundConfigurable
 import com.intellij.ui.layout.CCFlags
 import com.intellij.ui.layout.LCFlags
@@ -15,26 +14,29 @@ class AutoCpLangSettingsConfigurable : BoundConfigurable("Languages") {
     val settings = AutoCpLangSettings.instance
 
     override fun createPanel() = panel(LCFlags.fill) {
-        fullRow {
-            LangSettingsPanel()().apply {
-                constraints(CCFlags.push, CCFlags.grow)
+        row {
+            cell(isFullWidth = true) {
 
-                onReset {
-                    component.apply {
-                        langListModel.replaceAll(settings.languages.values.toList())
-                        sideList.setSelectedValue(settings.languages.firstOrNull()?.value, false)
+                LangSettingsPanel()().apply {
+                    constraints(CCFlags.push, CCFlags.grow)
+
+                    onReset {
+                        component.apply {
+                            langListModel.replaceAll(settings.languages.values.toList())
+                            sideList.setSelectedValue(settings.languages.firstOrNull()?.value, false)
+                        }
                     }
-                }
 
-                registerDslCallbacks()
+                    registerDslCallbacks()
 
-                onIsModified {
-                    !component.langListModel.items.isItemsEqual(settings.languages.values)
-                }
+                    onIsModified {
+                        !component.langListModel.items.isItemsEqual(settings.languages.values)
+                    }
 
-                onApply {
-                    component.apply {
-                        settings.languages = langListModel.items.associateBy { it.langId }
+                    onApply {
+                        component.apply {
+                            settings.languages = langListModel.items.associateBy { it.langId }
+                        }
                     }
                 }
             }
