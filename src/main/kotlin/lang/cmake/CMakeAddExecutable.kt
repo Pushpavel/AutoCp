@@ -39,8 +39,9 @@ class CMakeAddExecutable(val project: Project) : FileGenerationListener {
                 return
             }
         }
-
-        cmakeDoc.insertString(cmakeText.length, "add_executable($name \"${relativePath}\"")
+        runUndoTransparentWriteAction {
+            cmakeDoc.insertString(cmakeText.length, "\nadd_executable($name \"${relativePath}\")")
+        }
     }
 
     private fun VirtualFile.pathRelativeToProject(): String {
