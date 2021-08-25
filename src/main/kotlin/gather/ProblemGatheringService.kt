@@ -123,13 +123,18 @@ class ProblemGatheringService(val project: Project) {
         project.autoCp().addSolutionFile(filePath, Pair(problem.groupName, problem.name))
 
         invokeLater(ModalityState.NON_MODAL) {
-            CreateFileFromTemplateAction.createFileFromTemplate(
+            val psiFile = CreateFileFromTemplateAction.createFileFromTemplate(
                 fileName,
                 fileTemplate,
                 rootPsiDir,
                 null,
                 open
             )
+
+            // fire event on successful file creation
+            psiFile?.virtualFile?.let {
+                project.messageBus.syncPublisher(FileGenerationListener.TOPIC).onGenerated(it)
+            }
 
             ProjectView.getInstance(project).refresh()
         }
