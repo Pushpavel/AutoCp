@@ -139,6 +139,7 @@ jobs:
   # Verify built plugin using IntelliJ Plugin Verifier tool
   verify:
     name: Verify
+    if: github.event_name != 'pull_request' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/eap')
     needs: gradleValidation
     runs-on: ubuntu-latest
     steps:
@@ -194,11 +195,10 @@ jobs:
   # If accepted and published, release workflow would be triggered
   releaseDraft:
     name: Release Draft
-    if: github.event_name != 'pull_request' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/eap')
+    needs: [ build, verify, test ]
     concurrency:
       group: releaseDraft
       cancel-in-progress: true
-    needs: [ build, verify, test ]
     runs-on: ubuntu-latest
     steps:
 
