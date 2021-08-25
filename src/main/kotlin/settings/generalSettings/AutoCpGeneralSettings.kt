@@ -28,13 +28,10 @@ class AutoCpGeneralSettings : PersistentStateComponent<AutoCpGeneralSettings> {
     override fun loadState(state: AutoCpGeneralSettings) {
         preferredLangId = state.preferredLangId
         shouldStartGatheringOnStart = state.shouldStartGatheringOnStart
+        openFilesOnGather = state.openFilesOnGather
     }
 
     companion object {
-        // TODO: move this somewhere else
-        const val INPUT_PATH_KEY = "@in"
-        const val OUTPUT_PATH_KEY = "@out"
-
         val instance: AutoCpGeneralSettings get() = service()
     }
 }

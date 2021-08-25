@@ -45,6 +45,9 @@ object AutoCpStrings {
         OpenFileOnGather.ALL -> "All"
     }
 
+    // Project Settings CMake
+    const val addToCMakeMsg = "Add generated solution files to CMakeLists.txt"
+
     // Build Configuration Dialog strings
     const val commandTemplateDesc = "<html>" +
             "The executable in these commands are run in an isolated temporary directory. But not the command itself.<br>" +
