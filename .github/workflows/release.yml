@@ -63,7 +63,7 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git commit -m "📝: updated CHANGELOG.md for ${{ github.event.release.tag_name }}" -a
+          git commit -m "📝: updated CHANGELOG.md for ${{ github.event.release.tag_name }} [skip-ci]" -a
 
       # Push changes
       - name: Push changes
