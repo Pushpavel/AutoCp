@@ -63,7 +63,7 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git commit -m "📝: updated CHANGELOG.md for ${{ github.event.release.tag_name }} [skip-ci]" -a
+          git commit -m "📝: updated CHANGELOG.md for ${{ github.event.release.tag_name }} [skip ci]" -a
 
       # Push changes
       - name: Push changes
@@ -97,7 +97,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           source-branch: eap
           target-branch: ${{ matrix.branch }}
-          commit-message: "🔀: Merge branch 'eap' into '${{ matrix.branch }}' [skip-ci]"
+          commit-message: "🔀: Merge branch 'eap' into '${{ matrix.branch }}' [skip ci]"
 
       # Push Merged changes
       - name: Push changes
