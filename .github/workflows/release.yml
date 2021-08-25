@@ -88,3 +88,21 @@ jobs:
         with:
           branch: main
           github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      # Merge stable release's documentation to gh-pages
+      - name: Merge eap > gh-pages
+        if: ${{ github.event.release.target_commitish }} == 'eap' && !${{ github.event.release.prerelease }}
+        uses: tukasz/direct-merge-action@master
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          source-branch: eap
+          target-branch: gh-pages
+          commit-message: "🔀: Merge branch 'eap' into 'gh-pages' [skip-ci]"
+
+      # Push Merged changes
+      - name: Push changes
+        if: github.ref == 'refs/heads/eap' && !${{ github.event.release.prerelease }}
+        uses: ad-m/github-push-action@v0.6.0
+        with:
+          branch: gh-pages
+          github_token: ${{ secrets.GITHUB_TOKEN }}
