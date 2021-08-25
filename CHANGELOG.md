@@ -2,6 +2,7 @@
 ?> All notable changes to this project will be documented in this page.
 
 ## [Unreleased]
+## v0.6.1-eap.1
 
 ### Added
 
