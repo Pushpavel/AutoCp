@@ -11,5 +11,5 @@ object AutoCpOthers {
         1327, // cpbooster
     )
 
-    val problemGatheringTimeoutMillis = 30000 // 30 sec
+    const val problemGatheringTimeoutMillis = 30000 // 30 sec
 }

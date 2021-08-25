@@ -1,7 +1,6 @@
 package tester.base
 
-import common.errors.Err
-import common.errors.mapToErr
+import common.errors.InternalErr
 
 /**
  * [TestingProcess] that ensures single execution of this class
@@ -11,16 +10,12 @@ import common.errors.mapToErr
 abstract class BaseTestingProcess : TestingProcess {
     private var hasExecuted = false
 
-
     abstract suspend fun executeProcess()
 
     override suspend fun execute() {
         if (hasExecuted)
-            throw Err.InternalErr("BaseTestingProcess::execute is called twice")
+            throw InternalErr("BaseTestingProcess::execute is called twice")
         hasExecuted = true
-        runCatching {
-            executeProcess()
-
-        }.onFailure { throw it.mapToErr() }
+        executeProcess()
     }
 }

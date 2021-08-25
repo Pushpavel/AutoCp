@@ -23,14 +23,15 @@ import kotlinx.coroutines.launch
 import java.awt.BorderLayout
 import kotlin.io.path.Path
 
-class SolutionFileSettingsPanel(project: Project, private val pathString: String) : Disposable {
+class SolutionFileSettingsPanel(project: Project, private val pathString: String, refreshCallback: () -> Unit) :
+    Disposable {
 
     private val db = project.autoCp()
     private val flow = db.solutionFilesFlow.map { it[pathString] }
 
     private var solutionFile: SolutionFile? = null
     var timeLimit = 0
-    var resetting = false
+    private var resetting = false
 
     private val scope = mainScope()
 
@@ -70,6 +71,12 @@ class SolutionFileSettingsPanel(project: Project, private val pathString: String
                     label("ms")
                 }
                 placeholder().constraints(growX, pushX)
+            }.largeGapAfter()
+            row {
+                button("Remove All Testcases") {
+                    solutionFile?.pathString?.let { it1 -> db.removeSolutionFile(it1) }
+                    refreshCallback()
+                }
             }
         }
     }

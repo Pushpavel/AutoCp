@@ -5,12 +5,13 @@ name: Release
 on:
   release:
     types: [ published ]
-
 jobs:
 
   # Prepare and publish the plugin to the Marketplace repository
   release:
     name: Publish Plugin
+    # run only if eap branch or main branch with stable release
+    if: (github.event.release.target_commitish == 'refs/heads/main' && !github.event.release.prerelease) || github.event.release.target_commitish == 'refs/heads/eap'
     runs-on: ubuntu-latest
     steps:
 
@@ -62,11 +63,46 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git commit -m "📝: updated CHANGELOG.md for ${{ github.event.release.tag_name }}" -a
+          git commit -m "📝: updated CHANGELOG.md for ${{ github.event.release.tag_name }} [skip-ci]" -a
 
       # Push changes
       - name: Push changes
-        uses: ad-m/github-push-action@master
+        uses: ad-m/github-push-action@v0.6.0
         with:
           branch: ${{ github.event.release.target_commitish }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+
+  merge:
+    name: 🔀 Merge eap into ${{ matrix.branch }}
+    if: github.event.release.target_commitish == 'refs/heads/eap'
+    needs: changelog
+    strategy:
+      matrix:
+        branch: [ main, gh-pages, dev ]
+      fail-fast: false
+    runs-on: ubuntu-latest
+    steps:
+      # Check out current repository
+      - name: Fetch Sources
+        if: matrix.branch != 'main' || !github.event.release.prerelease
+        uses: actions/checkout@v2.3.4
+        with:
+          ref: refs/heads/eap
+
+      - name: Merge eap > ${{ matrix.branch }}
+        if: matrix.branch != 'main' || !github.event.release.prerelease
+        uses: tukasz/direct-merge-action@master
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          source-branch: eap
+          target-branch: ${{ matrix.branch }}
+          commit-message: "🔀: Merge branch 'eap' into '${{ matrix.branch }}' [skip-ci]"
+
+      # Push Merged changes
+      - name: Push changes
+        if: matrix.branch != 'main' || !github.event.release.prerelease
+        uses: ad-m/github-push-action@v0.6.0
+        with:
+          branch: ${{ matrix.branch }}
           github_token: ${{ secrets.GITHUB_TOKEN }}

@@ -1,4 +1,5 @@
 import org.jetbrains.changelog.markdownToHTML
+import org.jetbrains.intellij.tasks.RunPluginVerifierTask.FailureLevel
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 fun properties(key: String) = project.findProperty(key).toString()
@@ -19,13 +20,13 @@ plugins {
     // Java support
     id("java")
     // Kotlin support
-    id("org.jetbrains.kotlin.jvm") version "1.5.21"
+    id("org.jetbrains.kotlin.jvm") version "1.5.30"
     // gradle-intellij-plugin - read more: https://github.com/JetBrains/gradle-intellij-plugin
     id("org.jetbrains.intellij") version "1.1.4"
     // gradle-changelog-plugin - read more: https://github.com/JetBrains/gradle-changelog-plugin
     id("org.jetbrains.changelog") version "1.2.1"
 
-    kotlin("plugin.serialization") version "1.5.21"
+    kotlin("plugin.serialization") version "1.5.30"
 }
 
 group = properties("pluginGroup")
@@ -40,7 +41,7 @@ repositories {
 dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:1.5.1")
-    implementation("org.jetbrains.kotlin:kotlin-reflect:1.5.21")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:1.5.30")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.2")
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.2")
@@ -116,6 +117,9 @@ tasks {
 
     runPluginVerifier {
         ideVersions.set(properties("pluginVerifierIdeVersions").split(',').map(String::trim).filter(String::isNotEmpty))
+        val failLevel = FailureLevel.ALL.clone()
+        failLevel.remove(FailureLevel.EXPERIMENTAL_API_USAGES)
+        failureLevel.set(failLevel)
     }
 
     // Configure UI tests plugin
@@ -139,7 +143,10 @@ tasks {
         // pluginVersion is based on the SemVer (https://semver.org) and supports pre-release labels, like 2.1.7-alpha.3
         // Specify pre-release label to publish the plugin in a custom Release Channel automatically. Read more:
         // https://plugins.jetbrains.com/docs/intellij/deployment.html#specifying-a-release-channel
-        channels.set(listOf(properties("pluginVersion").split('-').getOrElse(1) { "default" }.split('.').first()))
+        if (properties("pluginVersion").contains('-'))
+            channels.set(listOf("eap"))
+        else
+            channels.set(listOf("default", "eap"))
     }
 
     runIde {

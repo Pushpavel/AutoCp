@@ -1,4 +1,4 @@
-package common.lang
+package gather
 
 import com.intellij.ide.fileTemplates.FileTemplate
 import com.intellij.ide.fileTemplates.FileTemplateGroupDescriptor

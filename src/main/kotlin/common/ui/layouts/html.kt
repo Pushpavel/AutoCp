@@ -9,10 +9,6 @@ fun html(layChildren: HtmlTag.() -> Unit): String {
     return "<html>" + tag.children.joinToString("") + "</html>"
 }
 
-fun HtmlTag.bold(text: String): Stylable {
-    return tag("p", text)
-}
-
 fun HtmlTag.tag(tag: String, text: String): Stylable {
     val index = children.size
     children.add("<$tag>$text</$tag>")

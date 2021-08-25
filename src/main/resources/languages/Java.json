@@ -1,0 +1,13 @@
+{
+  "langId": "Java",
+  "fileTemplateName": null,
+  "defaultBuildConfigId": "Java.Java",
+  "buildConfigs": {
+    "Java.Java": {
+      "name": "Java",
+      "id": "Java.Java",
+      "buildCommand": "javac @in -d @dir",
+      "executeCommand": "java Main"
+    }
+  }
+}

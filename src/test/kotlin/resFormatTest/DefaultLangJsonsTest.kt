@@ -4,7 +4,6 @@ import common.res.R
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.*
-import settings.generalSettings.AutoCpGeneralSettings
 import settings.langSettings.model.Lang
 import java.nio.file.Path
 import kotlin.io.path.extension
@@ -114,27 +113,6 @@ class DefaultLangJsonsTest {
 
                         "Build Configuration with name \"$duplicateId\" exists for more than one Build Configuration in ${lang.langId}"
                     })
-                }
-            }
-
-            @Test
-            fun `BuildConfig commandTemplate must be valid`() {
-                for (lang in langs) {
-                    for (config in lang.buildConfigs.values) {
-                        val input = config.commandTemplate.contains(AutoCpGeneralSettings.INPUT_PATH_KEY)
-                        val output = config.commandTemplate.contains(AutoCpGeneralSettings.OUTPUT_PATH_KEY)
-
-                        val errorMessage = when {
-                            !input -> "${AutoCpGeneralSettings.INPUT_PATH_KEY} missing, This will be replaced with path to solution file ex- \"C:\\solution.cpp\""
-                            !output -> "${AutoCpGeneralSettings.OUTPUT_PATH_KEY} missing, This will be replaced with path for the executable ex- \"C:\\temp\\output.exe\""
-                            else -> null
-                        }
-
-                        Assertions.assertNull(
-                            errorMessage,
-                            "langId = ${lang.langId}, buildConfig id = ${config.id}, $errorMessage"
-                        )
-                    }
                 }
             }
         }

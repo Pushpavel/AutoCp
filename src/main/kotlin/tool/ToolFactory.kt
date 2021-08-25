@@ -1,8 +1,10 @@
 package tool
 
+import com.intellij.openapi.fileEditor.FileEditorManager
 import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Disposer
+import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.openapi.wm.ToolWindow
 import com.intellij.openapi.wm.ToolWindowFactory
 import com.intellij.ui.content.ContentManagerEvent
@@ -12,8 +14,11 @@ import common.helpers.pathString
 import common.helpers.properties
 import common.helpers.toolWindowSelectedTabIndex
 import database.autoCp
+import tool.ui.AssociateFilePanel
 import tool.ui.SolutionFileSettingsPanel
 import tool.ui.TestcaseListPanel
+import kotlin.io.path.Path
+import kotlin.io.path.name
 
 
 /**
@@ -35,16 +40,30 @@ class ToolFactory : ToolWindowFactory, DumbAware {
                     project.properties.toolWindowSelectedTabIndex = event.index
             }
         }
+        val editorManager = FileEditorManager.getInstance(project)
 
-        project.onFileSelectionChange { file ->
+        var callback: ((VirtualFile?) -> Unit) = {}
+
+        callback = callback@{ file: VirtualFile? ->
             contentManager.removeContentManagerListener(tabIndexSaver)
             contentManager.removeAllContents(true)
 
-            if (file == null || !file.isValid || !db.solutionFiles.containsKey(file.pathString) || !isFileOpen(file))
-                return@onFileSelectionChange
+            if (file == null || !file.isValid || !editorManager.isFileOpen(file))
+                return@callback
+
+            if (!db.solutionFiles.containsKey(file.pathString)) {
+                val ui = AssociateFilePanel(Path(file.pathString).name) {
+                    db.addSolutionFile(file.pathString, null)
+                    callback(file)
+                }
+                val content = contentManager.factory.createContent(ui.component, file.presentableName, false)
+                contentManager.addContent(content)
+                project.properties.toolWindowSelectedTabIndex = 0
+                return@callback
+            }
 
             val ui = TestcaseListPanel(project, file.pathString)
-            val settingsPanel = SolutionFileSettingsPanel(project, file.pathString)
+            val settingsPanel = SolutionFileSettingsPanel(project, file.pathString) { callback(file) }
 
             val content = contentManager.factory.createContent(ui.component, file.presentableName, false)
             val settingsContent = contentManager.factory.createContent(settingsPanel.component, "Settings", false)
@@ -69,6 +88,8 @@ class ToolFactory : ToolWindowFactory, DumbAware {
             contentManager.addContentManagerListener(tabIndexSaver)
         }
 
+
+        project.onFileSelectionChange { callback(it) }
 
     }
 
