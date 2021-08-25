@@ -6,6 +6,7 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.LocalFileSystem
 import com.intellij.openapi.vfs.VirtualFile
 import gather.FileGenerationListener
+import settings.projectSettings.cmake.cmakeSettings
 import java.nio.file.Paths
 import kotlin.io.path.Path
 import kotlin.io.path.invariantSeparatorsPathString
@@ -15,8 +16,11 @@ import kotlin.io.path.relativeTo
 class CMakeAddExecutable(val project: Project) : FileGenerationListener {
 
     val cmakePath = Paths.get(project.basePath!!, "CMakeLists.txt").toFile()
+    val settings = project.cmakeSettings()
 
     override fun onGenerated(file: VirtualFile) {
+        if (!settings.addToCMakeLists) return
+
         val cmakeFile = LocalFileSystem.getInstance().findFileByIoFile(cmakePath) ?: return
         val cmakeDoc = FileDocumentManager.getInstance().getDocument(cmakeFile) ?: return
         val cmakeText = cmakeDoc.text
