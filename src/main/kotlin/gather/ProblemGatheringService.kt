@@ -9,6 +9,7 @@ import com.intellij.openapi.application.runInEdt
 import com.intellij.openapi.application.runReadAction
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.vfs.LocalFileSystem
 import com.intellij.openapi.vfs.VfsUtil
 import com.intellij.psi.PsiManager
 import com.intellij.util.IncorrectOperationException
@@ -32,6 +33,7 @@ import kotlinx.coroutines.launch
 import settings.generalSettings.AutoCpGeneralSettings
 import settings.generalSettings.OpenFileOnGather
 import settings.projectSettings.autoCpProject
+import java.io.File
 import java.nio.file.Paths
 import kotlin.io.path.pathString
 
@@ -117,19 +119,28 @@ class ProblemGatheringService(val project: Project) {
         try {
             rootPsiDir.checkCreateFile(fileName)
         } catch (e: IncorrectOperationException) {
+            // fire event even if file already present
+            val file = LocalFileSystem.getInstance().findFileByIoFile(File(filePath))
+            file?.let { project.messageBus.syncPublisher(FileGenerationListener.TOPIC).onGenerated(it) }
+
             throw GenerateFileErr.FileAlreadyExistsErr(filePath, problem)
         }
 
         project.autoCp().addSolutionFile(filePath, Pair(problem.groupName, problem.name))
 
         invokeLater(ModalityState.NON_MODAL) {
-            CreateFileFromTemplateAction.createFileFromTemplate(
+            val psiFile = CreateFileFromTemplateAction.createFileFromTemplate(
                 fileName,
                 fileTemplate,
                 rootPsiDir,
                 null,
                 open
             )
+
+            // fire event on successful file creation
+            psiFile?.virtualFile?.let {
+                project.messageBus.syncPublisher(FileGenerationListener.TOPIC).onGenerated(it)
+            }
 
             ProjectView.getInstance(project).refresh()
         }

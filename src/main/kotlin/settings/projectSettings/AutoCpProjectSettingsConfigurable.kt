@@ -9,8 +9,9 @@ import common.ui.dsl.simpleComboBoxView
 import common.ui.helpers.isSelected
 import settings.langSettings.AutoCpLangSettings
 import settings.langSettings.model.Lang
+import settings.projectSettings.cmake.cmakeProjectSection
 
-class AutoCpProjectSettingsConfigurable(project: Project) : BoundConfigurable("Project") {
+class AutoCpProjectSettingsConfigurable(val project: Project) : BoundConfigurable("Project") {
     private val langSettings = AutoCpLangSettings.instance
     private val projectSettings = project.autoCpProject()
 
@@ -49,6 +50,8 @@ class AutoCpProjectSettingsConfigurable(project: Project) : BoundConfigurable("P
                     ).comment(R.strings.gatheringServiceOnStartDesc)
                 }.enableIf(box.isSelected())
             }
+
+            cmakeProjectSection(project)
         }
     }
 

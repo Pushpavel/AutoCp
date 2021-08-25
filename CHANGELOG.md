@@ -2,6 +2,16 @@
 ?> All notable changes to this project will be documented in this page.
 
 ## [Unreleased]
+
+### Added
+
+- __CLion__
+    - automated adding solution files into CMakeLists.txt
+
+### Fixed
+
+- Open Files while gathering problems... field in General Settings is not saved
+
 ## v0.6.0
 
 ### Fixed

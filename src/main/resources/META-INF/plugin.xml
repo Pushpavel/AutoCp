@@ -43,4 +43,8 @@
             <add-to-group group-id="ToolsMenu" anchor="first"/>
         </action>
     </actions>
+
+    <projectListeners>
+        <listener class="lang.cmake.CMakeAddExecutable" topic="gather.FileGenerationListener"/>
+    </projectListeners>
 </idea-plugin>
