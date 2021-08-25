@@ -41,6 +41,9 @@ class CMakeAddExecutable(val project: Project) : FileGenerationListener {
 
             matches.forEachIndexed { index, match ->
                 if (match.groupValues[1] == name) {
+                    if (match.groupValues[2] == relativePath)
+                        return@invokeLater
+
                     runUndoTransparentWriteAction {
                         val endIndex = matches.elementAt(index).groups[1]!!.range.last + 1
                         cmakeDoc.insertString(endIndex, " \"${relativePath}\"")

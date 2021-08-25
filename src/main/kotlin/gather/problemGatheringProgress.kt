@@ -63,7 +63,7 @@ class ProgressReporter(
                 }
             }
 
-            while (!indicator.isCanceled && job?.isCancelled == false)
+            while (!indicator.isCanceled && job?.isCompleted == false)
                 delay(100)
 
             if (indicator.isCanceled)
