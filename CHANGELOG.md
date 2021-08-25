@@ -2,6 +2,11 @@
 ?> All notable changes to this project will be documented in this page.
 
 ## [Unreleased]
+
+### Fixed
+
+- Migrating BuildConfigurations from v0.5.0 crashes
+
 ## v0.6.0-eap.2
 
 ### Fixed
