@@ -1,7 +1,6 @@
 package settings.langSettings.ui
 
 import com.intellij.ide.fileTemplates.FileTemplate
-import com.intellij.ide.ui.fullRow
 import com.intellij.openapi.fileTypes.FileTypeManager
 import com.intellij.ui.CollectionComboBoxModel
 import com.intellij.ui.SingleSelectionModel
@@ -13,10 +12,10 @@ import com.intellij.ui.layout.LCFlags
 import com.intellij.ui.layout.panel
 import common.helpers.UniqueNameEnforcer
 import common.helpers.isItemsEqual
-import gather.supportedFileTemplates
 import common.ui.dsl.DslCallbacks
 import common.ui.dsl.comboBoxView
 import common.ui.swing.TileCellRenderer
+import gather.supportedFileTemplates
 import settings.langSettings.model.BuildConfig
 import settings.langSettings.model.Lang
 import settings.langSettings.ui.dialogs.BuildConfigDialog
@@ -66,8 +65,11 @@ class LangItemPanel : DslCallbacks {
 
         titledRow("Build Configurations") {
             subRowIndent = 0
-            fullRow {
-                buildConfigsList()
+            row {
+                cell(isFullWidth = true) {
+
+                    buildConfigsList()
+                }
             }
         }
     }
@@ -79,7 +81,7 @@ class LangItemPanel : DslCallbacks {
         }
 
         val listContainer = ToolbarDecorator.createDecorator(jbList).setAddAction {
-            val blank = BuildConfig(System.currentTimeMillis().toString(), "", "","")
+            val blank = BuildConfig(System.currentTimeMillis().toString(), "", "", "")
             val newBuildConfig = BuildConfigDialog(blank, buildConfigNameEnforcer, true).showAndGetConfig()
             if (newBuildConfig != null) {
                 buildConfigsModel.add(newBuildConfig)

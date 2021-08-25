@@ -1,4 +1,5 @@
 import org.jetbrains.changelog.markdownToHTML
+import org.jetbrains.intellij.tasks.RunPluginVerifierTask.FailureLevel
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 fun properties(key: String) = project.findProperty(key).toString()
@@ -116,6 +117,9 @@ tasks {
 
     runPluginVerifier {
         ideVersions.set(properties("pluginVerifierIdeVersions").split(',').map(String::trim).filter(String::isNotEmpty))
+        val failLevel = FailureLevel.ALL.clone()
+        failLevel.remove(FailureLevel.EXPERIMENTAL_API_USAGES)
+        failureLevel.set(failLevel)
     }
 
     // Configure UI tests plugin
