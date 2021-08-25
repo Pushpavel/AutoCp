@@ -11,7 +11,7 @@ jobs:
   release:
     name: Publish Plugin
     # run only if eap branch or main branch with stable release
-    if: (github.event.release.target_commitish == 'main' && !github.event.release.prerelease) || github.event.release.target_commitish == 'eap'
+    if: (github.event.release.target_commitish == 'refs/heads/main' && !github.event.release.prerelease) || github.event.release.target_commitish == 'refs/heads/eap'
     runs-on: ubuntu-latest
     steps:
 
@@ -75,7 +75,7 @@ jobs:
 
   merge:
     name: 🔀 Merge eap into ${{ matrix.branch }}
-    if: github.event.release.target_commitish == 'eap'
+    if: github.event.release.target_commitish == 'refs/heads/eap'
     needs: changelog
     strategy:
       matrix:
@@ -88,7 +88,7 @@ jobs:
         if: matrix.branch != 'main' || !github.event.release.prerelease
         uses: actions/checkout@v2.3.4
         with:
-          ref: eap
+          ref: refs/heads/eap
 
       - name: Merge eap > ${{ matrix.branch }}
         if: matrix.branch != 'main' || !github.event.release.prerelease
