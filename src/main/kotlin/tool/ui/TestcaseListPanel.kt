@@ -66,6 +66,16 @@ class TestcaseListPanel(project: Project, private val pathString: String) : Disp
                         }
                     }
                     placeholder().constraints(pushX)
+
+                    button("Reset Sample Testcases") {
+                        val file = db.solutionFiles[pathString]
+                        val problem = file?.getLinkedProblem(db)
+                        if (file == null || problem == null) return@button
+                        val testcases = file.testcases.filter { !it.name.contains("Sample Testcase") }.toMutableList()
+                        testcases.addAll(0, problem.sampleTestcases)
+                        val updatedFile = file.copy(testcases = testcases)
+                        db.updateSolutionFile(updatedFile)
+                    }
                 }
             }.apply {
                 border = JBUI.Borders.empty(8, 8, 0, 8)

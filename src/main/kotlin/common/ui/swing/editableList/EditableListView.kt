@@ -76,8 +76,8 @@ class EditableListView<T>(
 
     override fun intervalRemoved(event: ListDataEvent) {
         for (i in event.index0..event.index1) {
-            val it = listPanel.components[i]
-            listPanel.remove(it)
+            val it = listPanel.components[event.index0]
+            listPanel.remove(event.index0)
             itemViewMap.remove(it)?.let { itemView -> Disposer.dispose(itemView) }
         }
         updateUI()
