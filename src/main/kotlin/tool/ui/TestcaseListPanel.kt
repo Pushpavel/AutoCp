@@ -4,6 +4,7 @@ import com.intellij.openapi.Disposable
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Disposer
 import com.intellij.ui.CollectionListModel
+import com.intellij.ui.layout.ComponentPredicate
 import com.intellij.ui.layout.LCFlags
 import com.intellij.ui.layout.applyToComponent
 import com.intellij.ui.layout.panel
@@ -75,7 +76,13 @@ class TestcaseListPanel(project: Project, private val pathString: String) : Disp
                         testcases.addAll(0, problem.sampleTestcases)
                         val updatedFile = file.copy(testcases = testcases)
                         db.updateSolutionFile(updatedFile)
-                    }
+                    }.visibleIf(object : ComponentPredicate() {
+                        override fun invoke() = db.solutionFiles[pathString]?.getLinkedProblem(db) != null
+
+                        override fun addListener(listener: (Boolean) -> Unit) {
+                            scope.launch { flow.collect { listener(invoke()) } }
+                        }
+                    })
                 }
             }.apply {
                 border = JBUI.Borders.empty(8, 8, 0, 8)
