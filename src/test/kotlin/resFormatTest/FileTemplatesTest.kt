@@ -1,6 +1,6 @@
 package resFormatTest
 
-import common.res.R
+import com.github.pushpavel.autocp.common.res.R
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
