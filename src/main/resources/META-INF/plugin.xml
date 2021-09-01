@@ -47,4 +47,7 @@
     <projectListeners>
         <listener class="lang.cmake.CMakeAddExecutable" topic="gather.FileGenerationListener"/>
     </projectListeners>
+    <applicationListeners>
+        <listener class="common.listeners.AutoCpPluginListener" topic="com.intellij.ide.plugins.DynamicPluginListener"/>
+    </applicationListeners>
 </idea-plugin>

@@ -97,6 +97,7 @@ tasks {
         }
         withType<KotlinCompile> {
             kotlinOptions.jvmTarget = it
+            kotlinOptions.freeCompilerArgs = listOf("-Xjvm-default=compatibility")
         }
     }
 
@@ -152,6 +153,7 @@ tasks {
     runIde {
         // workaround for https://stackoverflow.com/questions/60027717/intellij-idea-vm-options
         jvmArgs(
+            "-XX:+UnlockDiagnosticVMOptions",
             "--illegal-access=deny",
             "--add-opens=java.desktop/sun.awt=ALL-UNNAMED",
             "--add-opens=java.desktop/java.awt=ALL-UNNAMED",
