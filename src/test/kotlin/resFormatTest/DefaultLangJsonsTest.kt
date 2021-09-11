@@ -1,10 +1,10 @@
 package resFormatTest
 
-import common.res.R
+import com.github.pushpavel.autocp.common.res.R
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.*
-import settings.langSettings.model.Lang
+import com.github.pushpavel.autocp.settings.langSettings.model.Lang
 import java.nio.file.Path
 import kotlin.io.path.extension
 import kotlin.io.path.nameWithoutExtension
