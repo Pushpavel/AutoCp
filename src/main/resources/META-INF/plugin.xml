@@ -7,44 +7,58 @@
     <resource-bundle>messages.autocp</resource-bundle>
 
     <extensions defaultExtensionNs="com.intellij">
-        <configurationType implementation="config.AutoCpConfigType"/>
-        <runConfigurationProducer implementation="config.AutoCpConfigProducer"/>
+        <configurationType implementation="com.github.pushpavel.autocp.config.AutoCpConfigType"/>
+        <runConfigurationProducer implementation="com.github.pushpavel.autocp.config.AutoCpConfigProducer"/>
         <notificationGroup id="autocp-notifications-group" key="notificationGroup" displayType="BALLOON"/>
 
         <!--    Settings   -->
-        <applicationConfigurable instance="settings.generalSettings.AutoCpGeneralSettingsConfigurable"
-                                 id="tools.autocp"
-                                 groupId="tools"
-                                 displayName="AutoCp"/>
+        <applicationConfigurable
+                instance="com.github.pushpavel.autocp.settings.generalSettings.AutoCpGeneralSettingsConfigurable"
+                id="tools.autocp"
+                groupId="tools"
+                displayName="AutoCp"/>
 
-        <applicationConfigurable instance="settings.langSettings.AutoCpLangSettingsConfigurable"
-                                 id="tools.autocp.languages"
-                                 parentId="tools.autocp"
-                                 displayName="Languages"/>
+        <applicationConfigurable
+                instance="com.github.pushpavel.autocp.settings.langSettings.AutoCpLangSettingsConfigurable"
+                id="tools.autocp.languages"
+                parentId="tools.autocp"
+                displayName="Languages"/>
 
-        <projectConfigurable instance="settings.projectSettings.AutoCpProjectSettingsConfigurable"
-                             id="tools.autocp.project"
-                             parentId="tools.autocp"
-                             displayName="Project"/>
+        <projectConfigurable
+                instance="com.github.pushpavel.autocp.settings.projectSettings.AutoCpProjectSettingsConfigurable"
+                id="tools.autocp.project"
+                parentId="tools.autocp"
+                displayName="Project"/>
 
 
-        <toolWindow factoryClass="tool.ToolFactory" id="AutoCp" icon="AutoCpIcons.logo13" anchor="right"/>
-        <fileTemplateGroup implementation="gather.FileTemplates"/>
-        <fileDocumentManagerListener implementation="database.AutoCpStorageSaver"/>
+        <toolWindow factoryClass="com.github.pushpavel.autocp.tool.ToolFactory" id="AutoCp" icon="AutoCpIcons.logo13"
+                    anchor="right"/>
+        <fileTemplateGroup implementation="com.github.pushpavel.autocp.gather.FileTemplates"/>
+        <fileDocumentManagerListener implementation="com.github.pushpavel.autocp.database.AutoCpStorageSaver"/>
         <fileType name="Autocp Storage File" patterns=".autocp"
-                  implementationClass="database.AutoCpFileType"/>
-        <fileEditorProvider implementation="database.AutoCpFileEditorProvider"/>
-        <project.converterProvider implementation="common.compat.v0_5_0_eap_1.AutoCpProjectConverterProvider"
-                                   id="AutoCp v0.5.0-eap.1"/>
-        <postStartupActivity implementation="gather.ProblemGatheringActivity"/>
+                  implementationClass="com.github.pushpavel.autocp.database.AutoCpFileType"/>
+        <fileEditorProvider implementation="com.github.pushpavel.autocp.database.AutoCpFileEditorProvider"/>
+        <project.converterProvider
+                implementation="com.github.pushpavel.autocp.common.compat.v0_5_0_eap_1.AutoCpProjectConverterProvider"
+                id="AutoCp v0.5.0-eap.1"/>
+        <postStartupActivity implementation="com.github.pushpavel.autocp.gather.ProblemGatheringActivity"/>
     </extensions>
     <actions>
-        <action id="gather.ProblemGatheringAction" class="gather.ProblemGatheringAction">
+        <action id="com.github.pushpavel.autocp.gather.ProblemGatheringAction"
+                class="com.github.pushpavel.autocp.gather.ProblemGatheringAction">
             <add-to-group group-id="ToolsMenu" anchor="first"/>
         </action>
     </actions>
 
     <projectListeners>
-        <listener class="lang.cmake.CMakeAddExecutable" topic="gather.FileGenerationListener"/>
+        <listener class="com.github.pushpavel.autocp.lang.cmake.CMakeAddExecutable"
+                  topic="com.github.pushpavel.autocp.gather.FileGenerationListener"/>
+        <listener class="com.github.pushpavel.autocp.common.analytics.listeners.ProblemGatherListener"
+                  topic="com.github.pushpavel.autocp.gather.FileGenerationListener"
+        />
     </projectListeners>
+    <applicationListeners>
+        <listener class="com.github.pushpavel.autocp.common.listeners.AutoCpPluginListener"
+                  topic="com.intellij.ide.plugins.DynamicPluginListener"/>
+    </applicationListeners>
 </idea-plugin>
