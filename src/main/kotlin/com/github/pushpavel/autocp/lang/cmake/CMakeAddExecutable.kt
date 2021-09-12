@@ -1,5 +1,9 @@
 package com.github.pushpavel.autocp.lang.cmake
 
+import com.github.pushpavel.autocp.database.models.Problem
+import com.github.pushpavel.autocp.gather.FileGenerationListener
+import com.github.pushpavel.autocp.settings.langSettings.model.Lang
+import com.github.pushpavel.autocp.settings.projectSettings.cmake.cmakeSettings
 import com.intellij.openapi.application.ModalityState
 import com.intellij.openapi.application.invokeLater
 import com.intellij.openapi.application.runReadAction
@@ -8,8 +12,6 @@ import com.intellij.openapi.fileEditor.FileDocumentManager
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.LocalFileSystem
 import com.intellij.openapi.vfs.VirtualFile
-import com.github.pushpavel.autocp.gather.FileGenerationListener
-import com.github.pushpavel.autocp.settings.projectSettings.cmake.cmakeSettings
 import java.nio.file.Paths
 import kotlin.io.path.Path
 import kotlin.io.path.invariantSeparatorsPathString
@@ -21,7 +23,7 @@ class CMakeAddExecutable(val project: Project) : FileGenerationListener {
     val cmakePath = Paths.get(project.basePath!!, "CMakeLists.txt").toFile()
     val settings = project.cmakeSettings()
 
-    override fun onGenerated(file: VirtualFile) {
+    override fun onGenerated(file: VirtualFile, problem: Problem, lang: Lang, alreadyGenerated: Boolean) {
 
         if (!settings.addToCMakeLists) return
 

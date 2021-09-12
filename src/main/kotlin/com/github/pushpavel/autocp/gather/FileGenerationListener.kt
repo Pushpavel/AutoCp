@@ -1,5 +1,7 @@
 package com.github.pushpavel.autocp.gather
 
+import com.github.pushpavel.autocp.database.models.Problem
+import com.github.pushpavel.autocp.settings.langSettings.model.Lang
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.util.messages.Topic
 
@@ -8,5 +10,5 @@ interface FileGenerationListener {
         val TOPIC = Topic.create("Solution File Generation", FileGenerationListener::class.java)
     }
 
-    fun onGenerated(file: VirtualFile)
+    fun onGenerated(file: VirtualFile, problem: Problem, lang: Lang, alreadyGenerated: Boolean)
 }
