@@ -31,13 +31,15 @@ See [documentation](https://pushpavel.github.io/AutoCp/) for how to get started 
 - Supports sample Testcase editor
 - Results are presented in Test Runner UI built in the IDE.
 
+This plugin collects anonymous usage data.
 <!-- Plugin description end -->
 
 ### Contributing
 
 See something that's wrong or unclear?, Pull requests are welcome 😀
 
-Read the [contributing guide](https://pushpavel.github.io/AutoCp/#/CONTRIBUTION) to learn how you can take part in improving ```AutoCp```
+Read the [contributing guide](https://pushpavel.github.io/AutoCp/#/CONTRIBUTION) to learn how you can take part in
+improving ```AutoCp```
 
 ### License
 
