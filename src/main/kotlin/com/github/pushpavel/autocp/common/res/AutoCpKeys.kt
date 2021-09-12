@@ -12,11 +12,12 @@ object AutoCpKeys {
     const val dirUnquotedPathMacro = "\$dir"
 
     // Analytics
+    const val analyticsEndPoint = "https://www.google-analytics.com/mp/collect"
+    const val analyticsClientIdKey = "analyticsClientIdKey"
     private val secrets = kotlin.runCatching {
         ResourceBundle.getBundle("messages.secrets")
     }.onFailure { it.printStackTrace() }.getOrNull()
 
-    const val analyticsClientIdKey = "analyticsClientIdKey"
 
     // Sensitive keys
     val analyticsApiSecret = secrets?.getString("analytics_api_secrets")
