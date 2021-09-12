@@ -39,15 +39,19 @@ repositories {
 }
 
 dependencies {
+    val ktor_version = "1.6.3"
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:1.5.1")
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.5.30")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.2")
+    implementation("io.ktor:ktor-client-core:$ktor_version")
+    implementation("io.ktor:ktor-client-java:$ktor_version")
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.2")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.2")
     testImplementation("io.mockk:mockk:1.11.0")
 }
+
 
 buildscript {
     repositories {
@@ -97,6 +101,7 @@ tasks {
         }
         withType<KotlinCompile> {
             kotlinOptions.jvmTarget = it
+            kotlinOptions.freeCompilerArgs = listOf("-Xjvm-default=compatibility")
         }
     }
 
@@ -152,6 +157,7 @@ tasks {
     runIde {
         // workaround for https://stackoverflow.com/questions/60027717/intellij-idea-vm-options
         jvmArgs(
+            "-XX:+UnlockDiagnosticVMOptions",
             "--illegal-access=deny",
             "--add-opens=java.desktop/sun.awt=ALL-UNNAMED",
             "--add-opens=java.desktop/java.awt=ALL-UNNAMED",
