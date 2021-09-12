@@ -2,6 +2,12 @@
 ?> All notable changes to this project will be documented in this page.
 
 ## [Unreleased]
+
+### Added
+
+- Button to reset sample testcases
+- Google Analytics for anonymous usage reporting
+
 ## v0.6.1-eap.1
 
 ### Added
@@ -11,7 +17,7 @@
 
 ### Fixed
 
-- Open Files while gathering problems... field in General Settings is not saved
+- "Open Files while gathering problems..." field in General Settings is not saved
 
 ## v0.6.0
 
