@@ -1,18 +1,5 @@
 package com.github.pushpavel.autocp.gather
 
-import com.intellij.ide.actions.CreateFileFromTemplateAction
-import com.intellij.ide.actions.OpenFileAction
-import com.intellij.ide.projectView.ProjectView
-import com.intellij.openapi.application.ModalityState
-import com.intellij.openapi.application.invokeLater
-import com.intellij.openapi.application.runInEdt
-import com.intellij.openapi.application.runReadAction
-import com.intellij.openapi.components.Service
-import com.intellij.openapi.project.Project
-import com.intellij.openapi.vfs.LocalFileSystem
-import com.intellij.openapi.vfs.VfsUtil
-import com.intellij.psi.PsiManager
-import com.intellij.util.IncorrectOperationException
 import com.github.pushpavel.autocp.common.helpers.*
 import com.github.pushpavel.autocp.common.res.R
 import com.github.pushpavel.autocp.common.res.cancelled
@@ -26,13 +13,26 @@ import com.github.pushpavel.autocp.gather.models.ServerMessage
 import com.github.pushpavel.autocp.gather.models.ServerStatus
 import com.github.pushpavel.autocp.gather.server.ProblemGathering
 import com.github.pushpavel.autocp.gather.server.SimpleLocalServer
+import com.github.pushpavel.autocp.settings.generalSettings.AutoCpGeneralSettings
+import com.github.pushpavel.autocp.settings.generalSettings.OpenFileOnGather
+import com.github.pushpavel.autocp.settings.projectSettings.autoCpProject
+import com.intellij.ide.actions.CreateFileFromTemplateAction
+import com.intellij.ide.actions.OpenFileAction
+import com.intellij.ide.projectView.ProjectView
+import com.intellij.openapi.application.ModalityState
+import com.intellij.openapi.application.invokeLater
+import com.intellij.openapi.application.runInEdt
+import com.intellij.openapi.application.runReadAction
+import com.intellij.openapi.components.Service
+import com.intellij.openapi.project.Project
+import com.intellij.openapi.vfs.LocalFileSystem
+import com.intellij.openapi.vfs.VfsUtil
+import com.intellij.psi.PsiManager
+import com.intellij.util.IncorrectOperationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import com.github.pushpavel.autocp.settings.generalSettings.AutoCpGeneralSettings
-import com.github.pushpavel.autocp.settings.generalSettings.OpenFileOnGather
-import com.github.pushpavel.autocp.settings.projectSettings.autoCpProject
 import java.io.File
 import java.nio.file.Paths
 import kotlin.io.path.pathString
@@ -121,7 +121,9 @@ class ProblemGatheringService(val project: Project) {
         } catch (e: IncorrectOperationException) {
             // fire event even if file already present
             val file = LocalFileSystem.getInstance().findFileByIoFile(File(filePath))
-            file?.let { project.messageBus.syncPublisher(FileGenerationListener.TOPIC).onGenerated(it) }
+            file?.let {
+                project.messageBus.syncPublisher(FileGenerationListener.TOPIC).onGenerated(it, problem, lang, true)
+            }
 
             throw GenerateFileErr.FileAlreadyExistsErr(filePath, problem)
         }
@@ -139,7 +141,7 @@ class ProblemGatheringService(val project: Project) {
 
             // fire event on successful file creation
             psiFile?.virtualFile?.let {
-                project.messageBus.syncPublisher(FileGenerationListener.TOPIC).onGenerated(it)
+                project.messageBus.syncPublisher(FileGenerationListener.TOPIC).onGenerated(it, problem, lang, false)
             }
 
             ProjectView.getInstance(project).refresh()

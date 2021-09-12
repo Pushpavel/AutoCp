@@ -1,9 +1,10 @@
 package com.github.pushpavel.autocp.settings.generalSettings
 
-import com.intellij.openapi.components.*
-import com.jetbrains.rd.util.firstOrNull
+import com.github.pushpavel.autocp.lang.settings.preferredLangBasedOnIDE
 import com.github.pushpavel.autocp.settings.langSettings.AutoCpLangSettings
 import com.github.pushpavel.autocp.settings.langSettings.model.Lang
+import com.intellij.openapi.components.*
+import com.jetbrains.rd.util.firstOrNull
 
 /**
  * Model class for Settings of the plugin that persists across restarts
@@ -15,7 +16,8 @@ import com.github.pushpavel.autocp.settings.langSettings.model.Lang
 @Service
 class AutoCpGeneralSettings : PersistentStateComponent<AutoCpGeneralSettings> {
     // TODO: set this default based on IDE
-    var preferredLangId: String? = AutoCpLangSettings.instance.languages.firstOrNull()?.value?.langId
+    var preferredLangId: String? =
+        AutoCpLangSettings.instance.languages.let { preferredLangBasedOnIDE(it) ?: it.firstOrNull()?.value }?.langId
     var shouldStartGatheringOnStart = true
     var openFilesOnGather = OpenFileOnGather.ONLY_FIRST
 

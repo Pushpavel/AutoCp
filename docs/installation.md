@@ -3,6 +3,13 @@
 ?> Manually installing the plugin would give you the latest version at least 2 days earlier than IDE built-in plugin
 system
 
+- __Using IDE link:__
+  
+  Open your IDE and click the below button
+
+  <div class="installElContainer"></div>
+  <br>
+
 - __Using IDE built-in plugin system:__
 
     1. Add pre-release channel _(optional)_

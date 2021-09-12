@@ -1,11 +1,12 @@
 package com.github.pushpavel.autocp.settings.projectSettings
 
-import com.intellij.openapi.components.*
-import com.intellij.openapi.project.Project
-import com.jetbrains.rd.util.firstOrNull
+import com.github.pushpavel.autocp.lang.settings.preferredLangBasedOnIDE
 import com.github.pushpavel.autocp.settings.generalSettings.AutoCpGeneralSettings
 import com.github.pushpavel.autocp.settings.langSettings.AutoCpLangSettings
 import com.github.pushpavel.autocp.settings.langSettings.model.Lang
+import com.intellij.openapi.components.*
+import com.intellij.openapi.project.Project
+import com.jetbrains.rd.util.firstOrNull
 
 @State(
     name = "settings.Project",
@@ -14,7 +15,9 @@ import com.github.pushpavel.autocp.settings.langSettings.model.Lang
 @Service
 class AutoCpProjectSettings : PersistentStateComponent<AutoCpProjectSettings> {
 
-    var preferredLangId: String? = AutoCpLangSettings.instance.languages.firstOrNull()?.value?.langId
+    var preferredLangId: String? =
+        AutoCpLangSettings.instance.languages.let { preferredLangBasedOnIDE(it) ?: it.firstOrNull()?.value }?.langId
+
     var overridePreferredLang = false
 
     var shouldStartGatheringOnStart = true
