@@ -12,7 +12,7 @@ var PropertiesComponent.toolWindowSelectedTabIndex
     set(value) = setValue(R.keys.toolWindowSelectedTabIndexKey, value, 0)
 
 val PropertiesComponent.analyticsUserId
-    get() = getValue(R.keys.analyticsUserIdKey) ?: UUID.randomUUID().toString().also {
-        setValue(R.keys.analyticsUserIdKey, it)
+    get() = getValue(R.keys.analyticsClientIdKey) ?: UUID.randomUUID().toString().also {
+        setValue(R.keys.analyticsClientIdKey, it)
     }
 

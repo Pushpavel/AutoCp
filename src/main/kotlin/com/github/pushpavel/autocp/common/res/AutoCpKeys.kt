@@ -16,7 +16,7 @@ object AutoCpKeys {
         ResourceBundle.getBundle("messages.secrets")
     }.onFailure { it.printStackTrace() }.getOrNull()
 
-    const val analyticsUserIdKey = "analyticsUserIdKey"
+    const val analyticsClientIdKey = "analyticsClientIdKey"
 
     // Sensitive keys
     val analyticsApiSecret = secrets?.getString("analytics_api_secrets")
