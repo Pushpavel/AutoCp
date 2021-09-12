@@ -13,7 +13,12 @@ var PropertiesComponent.toolWindowSelectedTabIndex
     set(value) = setValue(R.keys.toolWindowSelectedTabIndexKey, value, 0)
 
 val PropertiesComponent.analyticsClientId
-    get() = getValue(R.keys.analyticsClientIdKey) ?: "${Random.nextLong()}.${Date().time}".also {
+    get() = analyticsClientIdOrNull() ?: "${Random.nextLong()}.${Date().time}".also {
         setValue(R.keys.analyticsClientIdKey, it)
     }
+
+fun PropertiesComponent.analyticsClientIdOrNull() = getValue(R.keys.analyticsClientIdKey)
+
+fun PropertiesComponent.unsetAnalyticsClientId() = unsetValue(R.keys.analyticsClientIdKey)
+
 

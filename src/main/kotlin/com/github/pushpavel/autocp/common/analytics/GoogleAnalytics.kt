@@ -3,20 +3,19 @@ package com.github.pushpavel.autocp.common.analytics
 import com.github.pushpavel.autocp.common.helpers.analyticsClientId
 import com.github.pushpavel.autocp.common.helpers.ioScope
 import com.github.pushpavel.autocp.common.res.R
+import com.intellij.ide.plugins.PluginManagerCore
 import com.intellij.ide.util.PropertiesComponent
+import com.intellij.openapi.application.ApplicationInfo
 import com.intellij.openapi.components.Service
-import com.intellij.openapi.components.service
-import com.intellij.openapi.project.Project
+import com.intellij.openapi.extensions.PluginId
+import com.intellij.openapi.util.SystemInfo
 import io.ktor.client.*
 import io.ktor.client.features.observer.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 import kotlinx.coroutines.launch
-import kotlinx.serialization.json.addJsonObject
-import kotlinx.serialization.json.buildJsonObject
-import kotlinx.serialization.json.put
-import kotlinx.serialization.json.putJsonArray
+import kotlinx.serialization.json.*
 
 @Service
 class GoogleAnalytics {
@@ -36,14 +35,30 @@ class GoogleAnalytics {
                 contentType(ContentType.Application.Json)
                 body = buildJsonObject {
                     put("client_id", PropertiesComponent.getInstance().analyticsClientId)
+                    putJsonObject("user_properties") {
+                        putJsonObject("os") {
+                            put("value", SystemInfo.getOsNameAndVersion())
+                        }
+                        putJsonObject("productCode") {
+                            put("value", ApplicationInfo.getInstance().build.productCode)
+                        }
+                        putJsonObject("productVersion") {
+                            put("value", ApplicationInfo.getInstance().build.asStringWithoutProductCodeAndSnapshot())
+                        }
+                        putJsonObject("version") {
+                            put("value", PluginManagerCore.getPlugin(PluginId.getId(R.keys.pluginId))?.version)
+                        }
+                    }
                     put("non_personalized_ads", true)
                     putJsonArray("events") {
                         addJsonObject { event.buildJsonObj(this) }
                     }
-                }.toString().encodeToByteArray()
+                }.toString().also { println(it) }.encodeToByteArray()
             }
         }
     }
-}
 
-fun Project.analytics(): GoogleAnalytics = service()
+    companion object {
+        val instance = GoogleAnalytics()
+    }
+}
