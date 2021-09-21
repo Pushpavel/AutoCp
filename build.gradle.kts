@@ -40,6 +40,7 @@ repositories {
 
 dependencies {
     val ktor_version = "1.6.3"
+
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:1.5.2")
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.5.31")
@@ -52,6 +53,12 @@ dependencies {
     testImplementation("io.mockk:mockk:1.11.0")
 }
 
+configurations {
+    all {
+        // Allows using project dependencies instead of IDE dependencies during compilation and test running
+        resolutionStrategy.sortArtifacts(ResolutionStrategy.SortOrder.DEPENDENCY_FIRST)
+    }
+}
 
 buildscript {
     repositories {
