@@ -1,5 +1,13 @@
 package com.github.pushpavel.autocp.tool
 
+import com.github.pushpavel.autocp.common.helpers.onFileSelectionChange
+import com.github.pushpavel.autocp.common.helpers.pathString
+import com.github.pushpavel.autocp.common.helpers.properties
+import com.github.pushpavel.autocp.common.helpers.toolWindowSelectedTabIndex
+import com.github.pushpavel.autocp.database.autoCp
+import com.github.pushpavel.autocp.tool.ui.AssociateFilePanel
+import com.github.pushpavel.autocp.tool.ui.SolutionFileSettingsPanel
+import com.github.pushpavel.autocp.tool.ui.TestcaseListPanel
 import com.intellij.openapi.fileEditor.FileEditorManager
 import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.project.Project
@@ -9,14 +17,6 @@ import com.intellij.openapi.wm.ToolWindow
 import com.intellij.openapi.wm.ToolWindowFactory
 import com.intellij.ui.content.ContentManagerEvent
 import com.intellij.ui.content.ContentManagerListener
-import com.github.pushpavel.autocp.common.helpers.onFileSelectionChange
-import com.github.pushpavel.autocp.common.helpers.pathString
-import com.github.pushpavel.autocp.common.helpers.properties
-import com.github.pushpavel.autocp.common.helpers.toolWindowSelectedTabIndex
-import com.github.pushpavel.autocp.database.autoCp
-import com.github.pushpavel.autocp.tool.ui.AssociateFilePanel
-import com.github.pushpavel.autocp.tool.ui.SolutionFileSettingsPanel
-import com.github.pushpavel.autocp.tool.ui.TestcaseListPanel
 import kotlin.io.path.Path
 import kotlin.io.path.name
 
