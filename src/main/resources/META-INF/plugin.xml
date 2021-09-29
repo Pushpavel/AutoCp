@@ -42,7 +42,7 @@
                 implementation="com.github.pushpavel.autocp.common.compat.v0_5_0_eap_1.AutoCpProjectConverterProvider"
                 id="AutoCp v0.5.0-eap.1"/>
         <postStartupActivity implementation="com.github.pushpavel.autocp.gather.ProblemGatheringActivity"/>
-        <startupActivity
+        <postStartupActivity
                 implementation="com.github.pushpavel.autocp.common.analytics.listeners.AnalyticsStartupActivity"/>
     </extensions>
     <actions>
