@@ -2,7 +2,7 @@
 
 #### Install plugin
 
-See instructions [here](installation.md)
+See instructions [here](/docs/installation.md)
 
 #### Generate solution files
 
