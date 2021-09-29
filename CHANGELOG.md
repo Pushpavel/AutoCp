@@ -2,6 +2,12 @@
 ?> All notable changes to this project will be documented in this page.
 
 ## [Unreleased]
+
+### Fixed
+
+- Google Analytics fixed reporting issues
+- Updated Dependencies
+
 ## v0.6.5
 
 ### Added
