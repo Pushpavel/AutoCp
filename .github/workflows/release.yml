@@ -28,6 +28,12 @@ jobs:
         with:
           ref: ${{ github.event.release.tag_name }}
 
+      # insert Analytics secrets
+      - name: Applying Analytics Secrets
+        run: |
+          echo "analytics_api_secrets=${{ secrets.ANALYTICS_API_SECRETS }}" > src/main/resources/messages/secrets.properties
+          echo "analytics_measurement_id=${{ secrets.ANALYTICS_MEASUREMENT_ID }}" >> src/main/resources/messages/secrets.properties
+
       # Publish the plugin to the Marketplace
       - name: Publish Plugin
         env:
@@ -98,12 +104,3 @@ jobs:
           source-branch: eap
           target-branch: ${{ matrix.branch }}
           commit-message: "🔀: Merge branch 'eap' into '${{ matrix.branch }}' [skip ci]"
-
-      # Push Merged changes
-      # This step causes error but expected changes are merged
-#      - name: Push changes
-#        if: matrix.branch != 'main' || !github.event.release.prerelease
-#        uses: ad-m/github-push-action@v0.6.0
-#        with:
-#          branch: ${{ matrix.branch }}
-#          github_token: ${{ secrets.GITHUB_TOKEN }}

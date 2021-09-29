@@ -1,8 +1,5 @@
 ## Install Plugin
 
-?> Manually installing the plugin would give you the latest version at least 2 days earlier than IDE built-in plugin
-system
-
 - __Using IDE link:__
   
   Open your IDE and click the below button

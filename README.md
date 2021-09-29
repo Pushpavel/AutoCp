@@ -5,7 +5,7 @@
 
 # AutoCp
 
-Competitive Programming Plugin for Intellij-Based IDEs
+An Open Source Competitive Programming Plugin for Intellij-Based IDEs
 
 ![Build](https://github.com/Pushpavel/autoCP/workflows/Build/badge.svg)
 [![Version](https://img.shields.io/jetbrains/plugin/v/17061.svg)](https://plugins.jetbrains.com/plugin/17061-autocp)
