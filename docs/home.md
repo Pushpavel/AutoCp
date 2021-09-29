@@ -17,7 +17,6 @@ Hopefully, these limitations will be removed soon.
 - Memory Limit is ignored.
 - Strict File Structure
 - No Debugging through AutoCp
-- Only files created by AutoCp can be run by AutoCp
 
 #### License
 

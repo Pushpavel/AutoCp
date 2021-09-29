@@ -125,6 +125,12 @@ jobs:
           echo "::set-output name=changelog::$CHANGELOG"
           echo "::set-output name=artifact::$ARTIFACT"
 
+      # insert Analytics secrets
+      - name: Applying Analytics Secrets
+        run: |
+          echo "analytics_api_secrets=${{ secrets.ANALYTICS_API_SECRETS }}" > src/main/resources/messages/secrets.properties
+          echo "analytics_measurement_id=${{ secrets.ANALYTICS_MEASUREMENT_ID }}" >> src/main/resources/messages/secrets.properties
+
       # Build artifact using buildPlugin Gradle task
       - name: Build Plugin
         run: ./gradlew buildPlugin
