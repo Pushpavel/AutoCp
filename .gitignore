@@ -1,5 +1,5 @@
 .gradle
 .idea
-build
+/build
 out
 src/main/resources/messages/secrets.properties
