@@ -3,7 +3,6 @@
 package com.github.pushpavel.autocp.common.res
 
 import com.github.pushpavel.autocp.build.settings.LangNotConfiguredErr
-import com.github.pushpavel.autocp.config.validators.NoBuildConfigErr
 import com.github.pushpavel.autocp.config.validators.SolutionFilePathErr
 import com.github.pushpavel.autocp.database.models.Problem
 import com.github.pushpavel.autocp.gather.models.GenerateFileErr
@@ -168,15 +167,7 @@ object AutoCpStrings {
                 is SolutionFilePathErr.FileDoesNotExist -> "This file does not exists, ${e.pathString}"
                 is SolutionFilePathErr.FileNotRegistered -> "AutoCp is not enabled for this file, ${e.pathString}"
                 is SolutionFilePathErr.FormatErr -> "It is in invalid format."
-                is SolutionFilePathErr.LangNotRegistered -> "" +
-                        "The programing language of this file is not configured with AutoCp.\n" +
-                        "you can add support for this language at Settings/Preferences > Tools > AutoCp > Languages\n" +
-                        "${e.solutionFile}"
             }
-
-    fun noBuildConfigFoundMsg(e: NoBuildConfigErr) = "" +
-            "No Build Configuration configured for ${e.lang.getLanguage()?.displayName}.\n" +
-            "Fix this issue at Settings/Preferences > Tools > AutoCp > Languages > ${e.lang.getLanguage()?.displayName}"
 
     fun langNotConfiguredErrMsg(e: LangNotConfiguredErr) = "" +
             "File Extension \".${e.extension}\" is not configured\n" +

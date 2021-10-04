@@ -1,13 +1,14 @@
 package com.github.pushpavel.autocp.settings.langSettings.model
 
+import com.github.pushpavel.autocp.common.ui.swing.TileCellRenderer
+import com.github.pushpavel.autocp.gather.supportedFileTemplates
 import com.intellij.ide.fileTemplates.FileTemplate
 import com.intellij.lang.Language
 import com.jetbrains.rd.util.firstOrNull
-import com.github.pushpavel.autocp.gather.supportedFileTemplates
-import com.github.pushpavel.autocp.common.ui.swing.TileCellRenderer
 import kotlinx.serialization.Serializable
 
 @Serializable
+@Deprecated("")
 data class Lang(
     val langId: String,
     val fileTemplateName: String?,

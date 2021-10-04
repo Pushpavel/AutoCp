@@ -5,7 +5,6 @@ import com.github.pushpavel.autocp.build.settings.LangNotConfiguredErr
 import com.github.pushpavel.autocp.build.settings.LangSettings
 import com.github.pushpavel.autocp.common.res.R
 import com.github.pushpavel.autocp.config.AutoCpConfig
-import com.github.pushpavel.autocp.config.validators.NoBuildConfigErr
 import com.github.pushpavel.autocp.config.validators.SolutionFilePathErr
 import com.github.pushpavel.autocp.config.validators.getValidSolutionFile
 import com.github.pushpavel.autocp.database.models.SolutionFile
@@ -80,7 +79,6 @@ class AutoCpTestingProcessHandler(private val config: AutoCpConfig) : TestingPro
 
     private fun reportTestingStartErr(err: Exception) {
         val message = when (err) {
-            is NoBuildConfigErr -> R.strings.noBuildConfigFoundMsg(err)
             is SolutionFilePathErr -> R.strings.solutionFilePathErrMsg(err)
             is LangNotConfiguredErr -> R.strings.langNotConfiguredErrMsg(err)
             else -> throw err

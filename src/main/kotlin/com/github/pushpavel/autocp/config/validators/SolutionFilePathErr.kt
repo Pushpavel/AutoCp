@@ -7,5 +7,4 @@ sealed class SolutionFilePathErr(val configName: String) : Exception() {
     class FormatErr(configName: String, val pathString: String) : SolutionFilePathErr(configName)
     class FileDoesNotExist(configName: String, val pathString: String) : SolutionFilePathErr(configName)
     class FileNotRegistered(configName: String, val pathString: String) : SolutionFilePathErr(configName)
-    class LangNotRegistered(configName: String, val solutionFile: SolutionFile) : SolutionFilePathErr(configName)
 }

@@ -1,11 +1,12 @@
 package com.github.pushpavel.autocp.settings.langSettings.model
 
-import com.intellij.icons.AllIcons
 import com.github.pushpavel.autocp.common.res.R
 import com.github.pushpavel.autocp.common.ui.swing.TileCellRenderer
+import com.intellij.icons.AllIcons
 import kotlinx.serialization.Serializable
 
 @Serializable
+@Deprecated("")
 data class BuildConfig(
     val id: String,
     val name: String,
