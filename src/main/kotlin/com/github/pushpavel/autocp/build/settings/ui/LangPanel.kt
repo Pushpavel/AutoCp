@@ -3,6 +3,7 @@ package com.github.pushpavel.autocp.build.settings.ui
 import com.github.pushpavel.autocp.build.Lang
 import com.github.pushpavel.autocp.common.ui.dsl.DslCallbacks
 import com.intellij.openapi.Disposable
+import com.intellij.openapi.application.runUndoTransparentWriteAction
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.editor.EditorFactory
 import com.intellij.openapi.ui.DialogPanel
@@ -39,11 +40,12 @@ class LangPanel(val model: CollectionListModel<Lang>) : DslCallbacks, Disposable
 
     override fun reset() {
         lang?.let { l ->
-            if (l.buildCommand != buildCommandDoc.text)
-                buildCommandDoc.setText(l.buildCommand ?: "")
-            if (l.executeCommand != executeCommandDoc.text)
-                executeCommandDoc.setText(l.executeCommand)
-
+            runUndoTransparentWriteAction {
+                if (l.buildCommand != buildCommandDoc.text)
+                    buildCommandDoc.setText(l.buildCommand ?: "")
+                if (l.executeCommand != executeCommandDoc.text)
+                    executeCommandDoc.setText(l.executeCommand)
+            }
             lineCommentPrefix = l.lineCommentPrefix
             component.reset()
         }
