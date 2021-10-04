@@ -6,3 +6,9 @@ data class Lang(
     val executeCommand: String,
     val isDefault: Boolean,
 )
+
+data class DefaultLangData(
+    val extension: String,
+    val commands: List<Pair<String?, String>>,
+    val lineCommentPrefix: String
+)
