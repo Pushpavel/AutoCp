@@ -5,7 +5,7 @@ import com.github.pushpavel.autocp.build.Lang
 import java.io.File
 
 
-fun buildDefaultLangs(configs: List<DefaultLangData>): List<Lang> {
+fun buildDefaultLangs(configs: List<DefaultLangData>): Map<String, Lang> {
     val pathExes = buildPathExes()
     return configs.map {
         val commandPair = it.commands.firstOrNull { p ->
@@ -19,9 +19,10 @@ fun buildDefaultLangs(configs: List<DefaultLangData>): List<Lang> {
             it.extension,
             commandPair.first,
             commandPair.second,
+            it.lineCommentPrefix,
             true
         )
-    }
+    }.associateBy { it.extension }
 }
 
 
