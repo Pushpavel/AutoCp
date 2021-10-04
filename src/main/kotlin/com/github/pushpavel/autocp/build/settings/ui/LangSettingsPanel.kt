@@ -35,6 +35,8 @@ class LangSettingsPanel : OnePixelSplitter(false, 0.3F), DslCallbacks {
 //                    langListModel.add(blank)
 //                    sideList.selectedIndex = langListModel.items.size - 1
 //                }
+            }.setRemoveActionUpdater {
+                sideList.selectedValue?.isDefault == false
             }.createPanel()
 
         secondComponent = mainContainer.apply {

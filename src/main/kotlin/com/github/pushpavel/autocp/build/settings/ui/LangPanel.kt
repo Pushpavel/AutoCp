@@ -24,7 +24,11 @@ class LangPanel(val model: CollectionListModel<Lang>) : DslCallbacks, Disposable
     var lineCommentPrefix = ""
 
     val component: DialogPanel = panel {
-        row("Single line comment prefix") { textField(::lineCommentPrefix, 2) }
+        row("Single line comment prefix") {
+            textField(::lineCommentPrefix, 2).apply {
+                onReset { component.isEnabled = lang?.isDefault == false }
+            }
+        }
         row("Build Command") { buildCommandEditor.component(CCFlags.growX) }
         row("Execute Command") { executeCommandEditor.component(CCFlags.growX) }
     }.withBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4))
