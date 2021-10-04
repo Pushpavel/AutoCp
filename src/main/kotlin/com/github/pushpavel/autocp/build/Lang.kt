@@ -1,5 +1,6 @@
 package com.github.pushpavel.autocp.build
 
+import com.github.pushpavel.autocp.common.res.R
 import com.github.pushpavel.autocp.common.ui.swing.TileCellRenderer
 import com.intellij.openapi.fileTypes.FileTypeManager
 import com.intellij.openapi.fileTypes.LanguageFileType
@@ -11,6 +12,23 @@ data class Lang(
     val lineCommentPrefix: String,
     val isDefault: Boolean,
 ) {
+
+
+    fun constructBuildCommand(inputPath: String, dirPath: String): String {
+        if (buildCommand == null) return "internal error"
+        return constructCommand(buildCommand, inputPath, dirPath)
+    }
+
+    fun constructExecuteCommand(inputPath: String, dirPath: String): String {
+        return constructCommand(executeCommand, inputPath, dirPath)
+    }
+
+    private fun constructCommand(command: String, inputPath: String, dirPath: String): String {
+        return command.replace(R.keys.inputPathMacro, "\"$inputPath\"")
+            .replace(R.keys.dirUnquotedPathMacro, dirPath)
+            .replace(R.keys.dirPathMacro, "\"$dirPath\"")
+    }
+
     companion object {
         fun cellRenderer(emptyText: String = "None"): TileCellRenderer<Lang> {
             return TileCellRenderer(emptyText = emptyText) {

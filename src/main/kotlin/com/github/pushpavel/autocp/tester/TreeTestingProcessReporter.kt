@@ -1,17 +1,16 @@
 package com.github.pushpavel.autocp.tester
 
-import com.intellij.execution.process.ProcessHandler
-import com.intellij.execution.process.ProcessOutputTypes
-import com.intellij.execution.testframework.sm.ServiceMessageBuilder
-import com.intellij.execution.testframework.sm.ServiceMessageBuilder.*
 import com.github.pushpavel.autocp.common.errors.NoReachErr
 import com.github.pushpavel.autocp.common.res.R
-import com.github.pushpavel.autocp.settings.langSettings.model.BuildConfig
 import com.github.pushpavel.autocp.tester.base.BuildErr
 import com.github.pushpavel.autocp.tester.base.ProcessRunner
 import com.github.pushpavel.autocp.tester.tree.ResultNode
 import com.github.pushpavel.autocp.tester.tree.TestNode
 import com.github.pushpavel.autocp.tester.tree.TreeTestingProcess
+import com.intellij.execution.process.ProcessHandler
+import com.intellij.execution.process.ProcessOutputTypes
+import com.intellij.execution.testframework.sm.ServiceMessageBuilder
+import com.intellij.execution.testframework.sm.ServiceMessageBuilder.*
 
 /**
  * Class that abstracts formatting and sending output to the console and the TestRunner UI
@@ -99,16 +98,16 @@ class TreeTestingProcessReporter(private val processHandler: ProcessHandler) : T
         testSuiteFinished(node.sourceNode.name).apply()
     }
 
-    override fun commandReady(configName: String, buildConfig: BuildConfig) {
+    override fun commandReady(configName: String) {
         processHandler.notifyTextAvailable(
-            R.strings.commandReadyMsg(configName, buildConfig) + "\n",
+            R.strings.commandReadyMsg(configName) + "\n",
             ProcessOutputTypes.STDOUT
         )
     }
 
-    override fun compileStart(configName: String, buildConfig: BuildConfig) {
+    override fun compileStart(configName: String) {
         processHandler.notifyTextAvailable(
-            R.strings.startCompilingMsg(configName, buildConfig) + "\n",
+            R.strings.startCompilingMsg(configName) + "\n",
             ProcessOutputTypes.STDOUT
         )
     }

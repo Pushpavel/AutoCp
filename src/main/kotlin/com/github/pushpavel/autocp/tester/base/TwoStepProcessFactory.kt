@@ -1,12 +1,13 @@
 package com.github.pushpavel.autocp.tester.base
 
-import com.intellij.execution.configurations.GeneralCommandLine
+import com.github.pushpavel.autocp.build.Lang
 import com.github.pushpavel.autocp.common.helpers.pathString
 import com.github.pushpavel.autocp.database.models.SolutionFile
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import com.github.pushpavel.autocp.settings.langSettings.model.BuildConfig
 import com.github.pushpavel.autocp.tester.utils.splitCommandString
+import com.intellij.execution.configurations.GeneralCommandLine
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.nio.file.Files
 
@@ -22,19 +23,20 @@ class TwoStepProcessFactory(private val workingDir: File, private val commandLis
     companion object {
         suspend fun from(
             solutionFile: SolutionFile,
-            buildConfig: BuildConfig
+            lang: Lang
         ): Pair<TwoStepProcessFactory, ProcessRunner.CapturedResults?> {
+            // TODO: reuse same temp dir to speed up compilations
             val tempDir = withContext(Dispatchers.IO) {
                 @Suppress("BlockingMethodInNonBlockingContext")
                 Files.createTempDirectory("AutoCp")
             }.toFile()
 
-            val executeCommand = buildConfig.constructExecuteCommand(solutionFile.pathString, tempDir.path.pathString)
+            val executeCommand = lang.constructExecuteCommand(solutionFile.pathString, tempDir.path.pathString)
             val executeCommandList = splitCommandString(executeCommand)
 
             var result: ProcessRunner.CapturedResults? = null
-            if (buildConfig.buildCommand.isNotBlank()) {
-                val buildCommand = buildConfig.constructBuildCommand(solutionFile.pathString, tempDir.path.pathString)
+            if (lang.buildCommand != null) {
+                val buildCommand = lang.constructBuildCommand(solutionFile.pathString, tempDir.path.pathString)
                 val buildCommandList = splitCommandString(buildCommand)
 
                 try {

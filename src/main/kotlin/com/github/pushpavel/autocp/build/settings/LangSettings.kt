@@ -30,3 +30,5 @@ class LangSettings : PersistentStateComponent<SerializableLangSettings> {
         val instance = service<LangSettings>()
     }
 }
+
+class LangNotConfiguredErr(val extension: String) : Exception()

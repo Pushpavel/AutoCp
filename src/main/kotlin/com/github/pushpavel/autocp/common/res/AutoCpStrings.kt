@@ -2,12 +2,12 @@
 
 package com.github.pushpavel.autocp.common.res
 
+import com.github.pushpavel.autocp.build.settings.LangNotConfiguredErr
 import com.github.pushpavel.autocp.config.validators.NoBuildConfigErr
 import com.github.pushpavel.autocp.config.validators.SolutionFilePathErr
 import com.github.pushpavel.autocp.database.models.Problem
 import com.github.pushpavel.autocp.gather.models.GenerateFileErr
 import com.github.pushpavel.autocp.settings.generalSettings.OpenFileOnGather
-import com.github.pushpavel.autocp.settings.langSettings.model.BuildConfig
 import com.github.pushpavel.autocp.tester.base.BuildErr
 import com.github.pushpavel.autocp.tester.errors.ProcessRunnerErr
 import com.github.pushpavel.autocp.tester.errors.Verdict
@@ -178,13 +178,17 @@ object AutoCpStrings {
             "No Build Configuration configured for ${e.lang.getLanguage()?.displayName}.\n" +
             "Fix this issue at Settings/Preferences > Tools > AutoCp > Languages > ${e.lang.getLanguage()?.displayName}"
 
+    fun langNotConfiguredErrMsg(e: LangNotConfiguredErr) = "" +
+            "File Extension \".${e.extension}\" is not configured\n" +
+            "Fix this issue at Settings/Preferences > Tools > AutoCp > Languages > +"
+
     // Testing Compile Strings
 
-    fun commandReadyMsg(configName: String, config: BuildConfig) = "" +
-            "Ready to execute \"$configName\" using Build Configuration \"${config.name}\" "
+    fun commandReadyMsg(configName: String) = "" +
+            "Ready to execute \"$configName\""
 
-    fun startCompilingMsg(configName: String, config: BuildConfig) = "" +
-            "Building \"$configName\" using Build Configuration \"${config.name}\"..."
+    fun startCompilingMsg(configName: String) = "" +
+            "Building \"$configName\" ..."
 
     fun compileSuccessMsg(log: String, executionMills: Long) = "" +
             "Build completed in ${executionMills}ms\n" + log
