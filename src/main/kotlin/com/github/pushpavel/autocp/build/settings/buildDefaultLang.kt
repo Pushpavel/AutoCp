@@ -2,12 +2,16 @@ package com.github.pushpavel.autocp.build.settings
 
 import com.github.pushpavel.autocp.build.DefaultLangData
 import com.github.pushpavel.autocp.build.Lang
+import com.intellij.openapi.fileTypes.FileTypeManager
+import com.intellij.openapi.fileTypes.UnknownFileType
 import java.io.File
 
 
 fun buildDefaultLangs(configs: List<DefaultLangData>): Map<String, Lang> {
     val pathExes = buildPathExes()
-    return configs.map {
+    return configs.filter {
+        FileTypeManager.getInstance().getFileTypeByExtension(it.extension) !is UnknownFileType
+    }.map {
         val commandPair = it.commands.firstOrNull { p ->
             val command = p.first ?: return@firstOrNull true
             val index = command.indexOfAny(" .".toCharArray())
