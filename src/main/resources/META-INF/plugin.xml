@@ -58,6 +58,8 @@
         <listener class="com.github.pushpavel.autocp.common.analytics.listeners.ProblemGatherListener"
                   topic="com.github.pushpavel.autocp.gather.FileGenerationListener"
         />
+        <listener class="com.github.pushpavel.autocp.gather.base.ProblemGatheringPipeline"
+                  topic="com.github.pushpavel.autocp.gather.base.ProblemGatheringListener"/>
     </projectListeners>
     <applicationListeners>
         <listener class="com.github.pushpavel.autocp.common.listeners.AutoCpPluginListener"
