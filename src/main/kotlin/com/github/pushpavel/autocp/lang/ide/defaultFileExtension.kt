@@ -3,10 +3,10 @@ package com.github.pushpavel.autocp.lang.ide
 import com.intellij.openapi.application.ApplicationInfo
 
 val defaultFileExtensionBasedOnIDE = when (ApplicationInfo.getInstance().build.productCode) {
-    // TODO: account for edu versions
-    "PY", "DB" -> "py"
+    "PY", "PCA", "PC", "PYA", "PE", "DB", "PD" -> "py"
     "CL" -> "cpp"
-    "IU", "IC", "AI" -> "java"
+    "IU", "IC", "IE", "AI" -> "java"
+    "MPS" -> "c"
     "OC" -> "swift"
     "GO" -> "go"
     "PS" -> "php"
