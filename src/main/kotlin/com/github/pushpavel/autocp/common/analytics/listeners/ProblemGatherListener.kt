@@ -1,10 +1,10 @@
 package com.github.pushpavel.autocp.common.analytics.listeners
 
+import com.github.pushpavel.autocp.build.Lang
 import com.github.pushpavel.autocp.common.analytics.GoogleAnalytics
 import com.github.pushpavel.autocp.common.analytics.events.ProblemGatheredEvent
 import com.github.pushpavel.autocp.database.models.Problem
 import com.github.pushpavel.autocp.gather.FileGenerationListener
-import com.github.pushpavel.autocp.settings.langSettings.model.Lang
 import com.intellij.openapi.vfs.VirtualFile
 
 class ProblemGatherListener : FileGenerationListener {

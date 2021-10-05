@@ -3,7 +3,6 @@ package com.github.pushpavel.autocp.tester.base
 import com.github.pushpavel.autocp.build.Lang
 import com.github.pushpavel.autocp.common.helpers.pathString
 import com.github.pushpavel.autocp.database.models.SolutionFile
-import com.github.pushpavel.autocp.settings.langSettings.model.BuildConfig
 import com.github.pushpavel.autocp.tester.utils.splitCommandString
 import com.intellij.execution.configurations.GeneralCommandLine
 import kotlinx.coroutines.Dispatchers
@@ -12,8 +11,8 @@ import java.io.File
 import java.nio.file.Files
 
 /**
- * Factory Class for creating [Process] of created from [BuildConfig.executeCommand]
- * [BuildConfig.buildCommand] is while creating this Factory
+ * Factory Class for creating [Process] of created from [Lang.executeCommand]
+ * [Lang.buildCommand] is while creating this Factory
  */
 class TwoStepProcessFactory(private val workingDir: File, private val commandList: List<String>) : ProcessFactory {
     override fun createProcess(): Process {

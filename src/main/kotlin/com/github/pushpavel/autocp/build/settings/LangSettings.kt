@@ -2,6 +2,7 @@ package com.github.pushpavel.autocp.build.settings
 
 import com.github.pushpavel.autocp.build.Lang
 import com.github.pushpavel.autocp.common.res.R
+import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.*
 
 @State(
@@ -17,13 +18,13 @@ class LangSettings : PersistentStateComponent<SerializableLangSettings> {
     fun updateLangs(langs: Map<String, Lang>) {
         _langs.clear()
         _langs.putAll(langs)
+        ApplicationManager.getApplication().messageBus.syncPublisher(LangSettingsListener.TOPIC).langsUpdated(_langs)
     }
 
     override fun getState() = serializeLangSettings(langs, defaultLangs)
 
     override fun loadState(state: SerializableLangSettings) {
-        _langs.clear()
-        _langs.putAll(deserializeLangSettings(state, defaultLangs))
+        updateLangs(deserializeLangSettings(state, defaultLangs))
     }
 
     companion object {

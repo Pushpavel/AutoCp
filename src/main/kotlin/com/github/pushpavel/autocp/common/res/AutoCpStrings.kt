@@ -94,13 +94,6 @@ object AutoCpStrings {
     fun fileAlreadyExistsMsg(e: GenerateFileErr.FileAlreadyExistsErr) = "" +
             "File already exists.\nPath to file: ${e.filePath}"
 
-    fun fileTemplateMissingMsg(e: GenerateFileErr.FileTemplateMissingErr) = "" +
-            "Your Preferred language \"${e.lang.getLanguage()?.displayName}\" does not have a File Template. " +
-            "Please check at Settings/Preference > Tools > AutoCp > Languages > " +
-            "${e.lang.getLanguage()?.displayName} > File Template\n\n" +
-            "For creating a new template, go to Settings/Preference > Editor > File and code templates > Files tab > +"
-
-
     // Problem Gathering Service Server strings
     const val serverTitle = "Problem Gathering Service"
     const val serverRunningMsg = "" +

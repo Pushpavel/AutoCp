@@ -1,8 +1,8 @@
 package com.github.pushpavel.autocp.common.analytics.events
 
+import com.github.pushpavel.autocp.build.Lang
 import com.github.pushpavel.autocp.common.analytics.Event
 import com.github.pushpavel.autocp.database.models.Problem
-import com.github.pushpavel.autocp.settings.langSettings.model.Lang
 import kotlinx.serialization.json.JsonObjectBuilder
 import kotlinx.serialization.json.put
 import kotlinx.serialization.json.putJsonObject
@@ -20,11 +20,7 @@ data class ProblemGatheredEvent(
             if (category != null)
                 put("category", category)
 
-            put("langId", lang.langId)
-            lang.getDefaultBuildConfig()?.let {
-                put("defaultBuildConfigId", it.id)
-                put("defaultBuildConfigName", it.name)
-            }
+            put("fileExtension", lang.extension)
         }
     }
 

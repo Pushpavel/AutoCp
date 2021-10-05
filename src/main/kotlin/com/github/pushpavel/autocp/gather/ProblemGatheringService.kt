@@ -1,5 +1,6 @@
 package com.github.pushpavel.autocp.gather
 
+import com.github.pushpavel.autocp.build.settings.LangSettings
 import com.github.pushpavel.autocp.common.helpers.*
 import com.github.pushpavel.autocp.common.res.R
 import com.github.pushpavel.autocp.common.res.cancelled
@@ -103,9 +104,9 @@ class ProblemGatheringService(val project: Project) {
         val rootPath = Paths.get(project.basePath!!, problem.groupName)
         val rootDir = VfsUtil.createDirectories(rootPath.pathString)
         val rootPsiDir = runReadAction { PsiManager.getInstance(project).findDirectory(rootDir)!! }
-        val lang = project.autoCpProject().guessPreferredLang() ?: throw GenerateFileErr.LangNotConfiguredErr(problem)
-
-        val fileTemplate = lang.getFileTemplate() ?: throw GenerateFileErr.FileTemplateMissingErr(lang, problem)
+        val extension = project.autoCpProject().defaultFileExtension
+        val lang = LangSettings.instance.langs[extension] ?: throw GenerateFileErr.LangNotConfiguredErr(problem)
+        val fileTemplate = FileTemplates.cpTemplateFromExtension(extension, project)
 
         val fileName = fileTemplate.constructFileNameWithExt(
             problem.name
@@ -226,10 +227,6 @@ class ProblemGatheringService(val project: Project) {
             is GatheringResult.Interrupted -> {
                 when (it.err) {
                     is GenerateFileErr -> when (it.err) {
-                        is GenerateFileErr.FileTemplateMissingErr -> notifyErr(
-                            R.strings.fileGenFailedTitle(it.err.problem.name),
-                            R.strings.fileTemplateMissingMsg(it.err)
-                        )
                         is GenerateFileErr.LangNotConfiguredErr -> notifyErr(
                             R.strings.fileGenFailedTitle(it.err.problem.name),
                             R.strings.langNotConfiguredMsg
