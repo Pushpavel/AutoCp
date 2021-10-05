@@ -1,5 +1,7 @@
 # Language Support
 
+!> Information here is outdated, will be updated soon
+
 A new language can be supported by adding it in settings, [learn more](/docs/customizing/support-lang.md). To make this
 setting available by default, a [json](https://www.w3schools.com/js/js_json_intro.asp) file of that settings should be
 placed in plugin's source code at ```src/main/resources/languages``` folder.

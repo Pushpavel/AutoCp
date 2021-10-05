@@ -1,5 +1,7 @@
 ## Build Configuration
 
+!> Information here is outdated, will be updated soon
+
 A Build Configuration mainly contains a build command, and an execute command.
 
 To add or modify different build configurations, go to

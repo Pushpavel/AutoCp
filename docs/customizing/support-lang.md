@@ -1,5 +1,7 @@
 ## Language Support
 
+!> Information here is outdated, will be updated soon
+
 Languages used for competitive programming must be setup for compiling and file templates to work. It can be set up
 here.
 

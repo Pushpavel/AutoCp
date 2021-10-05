@@ -21,6 +21,8 @@ Right-click the solution file and run using AutoCp.
 
 ## File Structure
 
+!> Information here is outdated, will be updated soon
+
 files are generated inside a folder named like ```<judge> - <category/contest>``` that the problem belongs to.
 
 !> Moving or renaming files will unlink the solution file to its problem. This restriction will be removed
