@@ -2,12 +2,11 @@
 
 package com.github.pushpavel.autocp.common.res
 
-import com.github.pushpavel.autocp.config.validators.NoBuildConfigErr
+import com.github.pushpavel.autocp.build.settings.LangNotConfiguredErr
 import com.github.pushpavel.autocp.config.validators.SolutionFilePathErr
 import com.github.pushpavel.autocp.database.models.Problem
 import com.github.pushpavel.autocp.gather.models.GenerateFileErr
 import com.github.pushpavel.autocp.settings.generalSettings.OpenFileOnGather
-import com.github.pushpavel.autocp.settings.langSettings.model.BuildConfig
 import com.github.pushpavel.autocp.tester.base.BuildErr
 import com.github.pushpavel.autocp.tester.errors.ProcessRunnerErr
 import com.github.pushpavel.autocp.tester.errors.Verdict
@@ -95,13 +94,6 @@ object AutoCpStrings {
     fun fileAlreadyExistsMsg(e: GenerateFileErr.FileAlreadyExistsErr) = "" +
             "File already exists.\nPath to file: ${e.filePath}"
 
-    fun fileTemplateMissingMsg(e: GenerateFileErr.FileTemplateMissingErr) = "" +
-            "Your Preferred language \"${e.lang.getLanguage()?.displayName}\" does not have a File Template. " +
-            "Please check at Settings/Preference > Tools > AutoCp > Languages > " +
-            "${e.lang.getLanguage()?.displayName} > File Template\n\n" +
-            "For creating a new template, go to Settings/Preference > Editor > File and code templates > Files tab > +"
-
-
     // Problem Gathering Service Server strings
     const val serverTitle = "Problem Gathering Service"
     const val serverRunningMsg = "" +
@@ -168,23 +160,19 @@ object AutoCpStrings {
                 is SolutionFilePathErr.FileDoesNotExist -> "This file does not exists, ${e.pathString}"
                 is SolutionFilePathErr.FileNotRegistered -> "AutoCp is not enabled for this file, ${e.pathString}"
                 is SolutionFilePathErr.FormatErr -> "It is in invalid format."
-                is SolutionFilePathErr.LangNotRegistered -> "" +
-                        "The programing language of this file is not configured with AutoCp.\n" +
-                        "you can add support for this language at Settings/Preferences > Tools > AutoCp > Languages\n" +
-                        "${e.solutionFile}"
             }
 
-    fun noBuildConfigFoundMsg(e: NoBuildConfigErr) = "" +
-            "No Build Configuration configured for ${e.lang.getLanguage()?.displayName}.\n" +
-            "Fix this issue at Settings/Preferences > Tools > AutoCp > Languages > ${e.lang.getLanguage()?.displayName}"
+    fun langNotConfiguredErrMsg(e: LangNotConfiguredErr) = "" +
+            "File Extension \".${e.extension}\" is not configured\n" +
+            "Fix this issue at Settings/Preferences > Tools > AutoCp > Languages > +"
 
     // Testing Compile Strings
 
-    fun commandReadyMsg(configName: String, config: BuildConfig) = "" +
-            "Ready to execute \"$configName\" using Build Configuration \"${config.name}\" "
+    fun commandReadyMsg(configName: String) = "" +
+            "Ready to execute \"$configName\""
 
-    fun startCompilingMsg(configName: String, config: BuildConfig) = "" +
-            "Building \"$configName\" using Build Configuration \"${config.name}\"..."
+    fun startCompilingMsg(configName: String) = "" +
+            "Building \"$configName\" ..."
 
     fun compileSuccessMsg(log: String, executionMills: Long) = "" +
             "Build completed in ${executionMills}ms\n" + log

@@ -19,7 +19,7 @@
                 displayName="AutoCp"/>
 
         <applicationConfigurable
-                instance="com.github.pushpavel.autocp.settings.langSettings.AutoCpLangSettingsConfigurable"
+                instance="com.github.pushpavel.autocp.build.settings.ui.LangSettingsConfigurable"
                 id="tools.autocp.languages"
                 parentId="tools.autocp"
                 displayName="Languages"/>

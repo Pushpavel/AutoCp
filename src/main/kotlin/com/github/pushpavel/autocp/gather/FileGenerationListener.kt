@@ -1,7 +1,7 @@
 package com.github.pushpavel.autocp.gather
 
+import com.github.pushpavel.autocp.build.Lang
 import com.github.pushpavel.autocp.database.models.Problem
-import com.github.pushpavel.autocp.settings.langSettings.model.Lang
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.util.messages.Topic
 

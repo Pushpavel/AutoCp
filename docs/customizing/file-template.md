@@ -1,5 +1,7 @@
 ## Custom File Template
 
+!> Information here is outdated, will be updated soon
+
 AutoCp comes with few file templates optimized for competitive programming.
 
 If you wish to customize you can,
