@@ -1,5 +1,7 @@
 # Contributing File Templates
 
+!> Information here is outdated, will be updated soon
+
 File templates are used to avoid boilerplate code while generating the files. They can be easily bundled with the plugin
 by the following.
 

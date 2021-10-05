@@ -1,8 +1,8 @@
 package com.github.pushpavel.autocp.lang.cmake
 
+import com.github.pushpavel.autocp.build.Lang
 import com.github.pushpavel.autocp.database.models.Problem
 import com.github.pushpavel.autocp.gather.FileGenerationListener
-import com.github.pushpavel.autocp.settings.langSettings.model.Lang
 import com.github.pushpavel.autocp.settings.projectSettings.cmake.cmakeSettings
 import com.intellij.openapi.application.ModalityState
 import com.intellij.openapi.application.invokeLater

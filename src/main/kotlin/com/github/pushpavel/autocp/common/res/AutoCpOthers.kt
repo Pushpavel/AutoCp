@@ -1,5 +1,7 @@
 package com.github.pushpavel.autocp.common.res
 
+import com.github.pushpavel.autocp.build.DefaultLangData
+
 object AutoCpOthers {
     val competitiveCompanionPorts = listOf(
         27121, // Competitive Programming Helper
@@ -12,4 +14,38 @@ object AutoCpOthers {
     )
 
     const val problemGatheringTimeoutMillis = 30000 // 30 sec
+
+    // TODO: process commands to be platform independent
+    val defaultLangs = listOf(
+        DefaultLangData(
+            "c",
+            listOf(
+                Pair("gcc @in -o \"./a.exe\"", "\"\$dir/a.exe\""),
+                Pair("clang @in -o \"./a.exe\"", "\"\$dir/a.exe\""),
+            ),
+            "//"
+        ),
+        DefaultLangData(
+            "cpp",
+            listOf(
+                Pair("g++ @in -o \"./a.exe\" -std=c++17", "\"\$dir/a.exe\""),
+                Pair("clang++ @in -o \"./a.exe\" -std=c++17", "\"\$dir/a.exe\""),
+            ),
+            "//"
+        ),
+        DefaultLangData(
+            "java",
+            listOf(
+                Pair("javac @in -d @dir", "java Main"),
+            ),
+            "//"
+        ),
+        DefaultLangData(
+            "py",
+            listOf(
+                Pair(null, "python @in"),
+            ),
+            "#"
+        ),
+    )
 }

@@ -1,11 +1,10 @@
 package com.github.pushpavel.autocp.config.validators
 
+import com.github.pushpavel.autocp.database.autoCp
+import com.github.pushpavel.autocp.database.models.SolutionFile
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.LocalFileSystem
 import com.intellij.openapi.vfs.VirtualFile
-import com.github.pushpavel.autocp.database.autoCp
-import com.github.pushpavel.autocp.database.models.SolutionFile
-import com.github.pushpavel.autocp.settings.langSettings.AutoCpLangSettings
 import kotlin.io.path.Path
 import kotlin.io.path.pathString
 
@@ -31,9 +30,5 @@ fun getValidSolutionFile(project: Project, configName: String, path: String): So
     if (!db.solutionFiles.containsKey(pathString))
         throw SolutionFilePathErr.FileNotRegistered(configName, pathString)
 
-    val solutionFile = db.solutionFiles[pathString]!!
-
-    AutoCpLangSettings.findLangByFile(file) ?: throw SolutionFilePathErr.LangNotRegistered(configName, solutionFile)
-
-    return solutionFile
+    return db.solutionFiles[pathString]!!
 }

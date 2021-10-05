@@ -11,6 +11,9 @@ object AutoCpKeys {
     const val dirPathMacro = "@dir"
     const val dirUnquotedPathMacro = "\$dir"
 
+    // File template keys
+    const val fileTemplateName = "CP_TEMPLATE"
+
     // Analytics
     const val analyticsEndPoint = "https://www.google-analytics.com/mp/collect"
     const val analyticsClientIdKey = "$pluginId.analyticsClientIdKey"
