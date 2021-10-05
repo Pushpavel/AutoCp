@@ -1,5 +1,6 @@
 package com.github.pushpavel.autocp.settings.projectSettings
 
+import com.github.pushpavel.autocp.lang.ide.defaultFileExtensionBasedOnIDE
 import com.intellij.openapi.components.*
 import com.intellij.openapi.project.Project
 
@@ -9,9 +10,8 @@ import com.intellij.openapi.project.Project
 )
 @Service
 class AutoCpProjectSettings : PersistentStateComponent<AutoCpProjectSettings> {
-    // TODO: set this default based on IDE
-    var defaultFileExtension = ".cpp"
 
+    var defaultFileExtension = defaultFileExtensionBasedOnIDE
 
     override fun getState() = this
     override fun loadState(state: AutoCpProjectSettings) {
