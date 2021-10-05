@@ -7,7 +7,7 @@ import com.intellij.ui.layout.panel
 
 class AutoCpProjectSettingsConfigurable(val project: Project) : BoundConfigurable("Project") {
     private val projectSettings = project.autoCpProject()
-    var extension = ""
+    var extension = projectSettings.defaultFileExtension
 
     override fun createPanel() = panel {
         titledRow("Solution File Generation") {
@@ -15,11 +15,14 @@ class AutoCpProjectSettingsConfigurable(val project: Project) : BoundConfigurabl
                 textField(::extension, 2)
                     .onReset { extension = projectSettings.defaultFileExtension }
                     .onIsModified { extension != projectSettings.defaultFileExtension }
-                        // TODO: validate
                     .onApply {
-                        // TODO: adjust leading dot
                         if (extension.isNotBlank())
-                            projectSettings.defaultFileExtension = extension.trim()
+                            projectSettings.defaultFileExtension = extension.trim().replace(".", "")
+                    }.withValidationOnInput {
+                        if (it.text.isNotBlank())
+                            null
+                        else
+                            error("Should not be empty")
                     }
             }
             cmakeProjectSection(project)
