@@ -5,6 +5,7 @@ import com.github.pushpavel.autocp.common.res.R
 import com.github.pushpavel.autocp.gather.models.ProblemJson
 import com.intellij.openapi.Disposable
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.decodeFromString
@@ -40,6 +41,7 @@ object ProblemGatheringBridge : Disposable {
                             } catch (e: SerializationException) {
                                 BatchProcessor.interruptBatch(ProblemGatheringErr.JsonErr)
                             }
+                            while (BatchProcessor.isCurrentBatchBlocking()) delay(100)
                         }
                     } finally {
                         BatchProcessor.interruptBatch()

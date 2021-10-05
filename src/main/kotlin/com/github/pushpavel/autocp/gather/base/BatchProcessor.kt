@@ -44,4 +44,6 @@ object BatchProcessor {
         parsedProblems.clear()
         currentBatch = null
     }
+
+    fun isCurrentBatchBlocking() = currentBatch != null && currentBatch?.size == parsedProblems.size
 }

@@ -12,10 +12,12 @@ import com.intellij.openapi.project.Project
 class AutoCpProjectSettings : PersistentStateComponent<AutoCpProjectSettings> {
 
     var defaultFileExtension = defaultFileExtensionBasedOnIDE
+    var askBeforeFileGeneration = true
 
     override fun getState() = this
     override fun loadState(state: AutoCpProjectSettings) {
         defaultFileExtension = state.defaultFileExtension
+        askBeforeFileGeneration = state.askBeforeFileGeneration
     }
 }
 
