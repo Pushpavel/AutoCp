@@ -12,6 +12,8 @@ object AutoCpNotifications {
             "All ports supported by competitive companion browser extension is busy\n" +
                     "Ports:\n" + e.ports.joinToString("\n") { it.toString() }
         )
+        ProblemGatheringErr.JsonErr -> TODO()
+        ProblemGatheringErr.TimeoutErr -> TODO()
     }
 
     fun problemGatheringUncaught(e: Exception) = notifyWarn(
