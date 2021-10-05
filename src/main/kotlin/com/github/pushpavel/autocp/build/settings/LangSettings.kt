@@ -11,7 +11,7 @@ import com.intellij.openapi.components.*
 )
 @Service
 class LangSettings : PersistentStateComponent<SerializableLangSettings> {
-    private val defaultLangs = buildDefaultLangs(R.others.defaultLangs)
+    val defaultLangs = buildDefaultLangs(R.others.defaultLangs)
     private val _langs = defaultLangs.toMutableMap()
     val langs: Map<String, Lang> get() = _langs
 

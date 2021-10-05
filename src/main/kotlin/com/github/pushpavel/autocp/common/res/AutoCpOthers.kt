@@ -15,7 +15,6 @@ object AutoCpOthers {
 
     const val problemGatheringTimeoutMillis = 30000 // 30 sec
 
-    // TODO: process commands to be platform independent
     val defaultLangs = listOf(
         DefaultLangData(
             "c",

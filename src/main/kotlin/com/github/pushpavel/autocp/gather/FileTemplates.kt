@@ -1,5 +1,6 @@
 package com.github.pushpavel.autocp.gather
 
+import com.github.pushpavel.autocp.build.settings.LangSettings
 import com.github.pushpavel.autocp.common.res.R
 import com.intellij.ide.fileTemplates.FileTemplate
 import com.intellij.ide.fileTemplates.FileTemplateGroupDescriptor
@@ -10,22 +11,21 @@ import com.intellij.lang.LanguageUtil
 import com.intellij.openapi.fileTypes.FileTypeManager
 import com.intellij.openapi.fileTypes.LanguageFileType
 import com.intellij.openapi.project.Project
-import kotlin.io.path.name
 
 class FileTemplates : FileTemplateGroupDescriptorFactory {
     override fun getFileTemplatesDescriptor(): FileTemplateGroupDescriptor {
         val group = FileTemplateGroupDescriptor(GROUP_NAME, R.icons.logo16)
 
         // adding file templates in resources/fileTemplates/j2ee supported by the current IDE
-        // TODO: get extensions from default lang Settings
-        R.files.fileTemplates.map { it.fileName.name.run { split('.')[1] } }.filter { extension ->
-            val fileType = FileTypeManager.getInstance().getFileTypeByExtension(extension)
-            if (fileType !is LanguageFileType)
-                false
-            else
-                fileType.language != Language.ANY && LanguageUtil.isFileLanguage(fileType.language)
+        LangSettings.instance.defaultLangs.map { it.key }
+            .filter { extension ->
+                val fileType = FileTypeManager.getInstance().getFileTypeByExtension(extension)
+                if (fileType !is LanguageFileType)
+                    false
+                else
+                    fileType.language != Language.ANY && LanguageUtil.isFileLanguage(fileType.language)
 
-        }.forEach { group.addTemplate("${R.keys.fileTemplateName}.${it}") }
+            }.forEach { group.addTemplate("${R.keys.fileTemplateName}.${it}") }
 
         return group
     }
@@ -49,9 +49,8 @@ class FileTemplates : FileTemplateGroupDescriptorFactory {
         }
 
         fun cpTemplateFromExtension(extension: String, project: Project): FileTemplate {
-            // TODO: check if null works
-            return cpTemplateFromExtensionOrNull(extension, project) ?: FileTemplateManager.getInstance(project)
-                .getDefaultTemplate("abc.$extension")
+            return cpTemplateFromExtensionOrNull(extension, project)
+                ?: FileTemplateManager.getInstance(project).addTemplate("abc.$extension", extension)
         }
     }
 }

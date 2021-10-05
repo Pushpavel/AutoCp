@@ -86,6 +86,7 @@ class LangSettingsPanel : OnePixelSplitter(false, 0.3F), DslCallbacks {
             if (index != -1)
                 sideList.selectedIndex = index
             else {
+                extension = extension.trim().replace(".", "")
                 langListModel.add(Lang(extension, null, "", "//", false))
                 sideList.selectedIndex = langListModel.items.size - 1
             }
