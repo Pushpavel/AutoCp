@@ -53,7 +53,7 @@
     </actions>
 
     <projectListeners>
-        <listener class="com.github.pushpavel.autocp.lang.cmake.CMakeAddExecutable"
+        <listener class="com.github.pushpavel.autocp.extend.cmake.CMakeAddExecutable"
                   topic="com.github.pushpavel.autocp.gather.FileGenerationListener"/>
         <listener class="com.github.pushpavel.autocp.common.analytics.listeners.ProblemGatherListener"
                   topic="com.github.pushpavel.autocp.gather.FileGenerationListener"

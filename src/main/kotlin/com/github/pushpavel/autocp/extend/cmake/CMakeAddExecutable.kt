@@ -1,4 +1,4 @@
-package com.github.pushpavel.autocp.lang.cmake
+package com.github.pushpavel.autocp.extend.cmake
 
 import com.github.pushpavel.autocp.build.Lang
 import com.github.pushpavel.autocp.database.models.Problem

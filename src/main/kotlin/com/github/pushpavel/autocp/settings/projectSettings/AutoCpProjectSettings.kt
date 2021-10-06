@@ -1,6 +1,6 @@
 package com.github.pushpavel.autocp.settings.projectSettings
 
-import com.github.pushpavel.autocp.lang.ide.defaultFileExtensionBasedOnIDE
+import com.github.pushpavel.autocp.extend.ide.defaultFileExtensionBasedOnIDE
 import com.intellij.openapi.components.*
 import com.intellij.openapi.project.Project
 
