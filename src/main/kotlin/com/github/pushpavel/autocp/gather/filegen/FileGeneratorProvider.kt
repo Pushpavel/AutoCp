@@ -5,6 +5,7 @@ import com.intellij.openapi.project.Project
 
 class FileGeneratorProvider(project: Project) {
     private val registeredFileGenerators = listOf<FileGenerator>(
+        JavaFileGenerator(project),
         DefaultFileGenerator(project)
     )
 
