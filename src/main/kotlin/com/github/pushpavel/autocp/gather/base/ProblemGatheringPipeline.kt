@@ -8,6 +8,7 @@ import com.github.pushpavel.autocp.settings.generalSettings.AutoCpGeneralSetting
 import com.github.pushpavel.autocp.settings.generalSettings.OpenFileOnGather
 import com.github.pushpavel.autocp.settings.projectSettings.autoCpProject
 import com.intellij.ide.actions.OpenFileAction
+import com.intellij.ide.projectView.ProjectView
 import com.intellij.openapi.application.ModalityState
 import com.intellij.openapi.application.invokeLater
 import com.intellij.openapi.application.runInEdt
@@ -76,6 +77,7 @@ class ProblemGatheringPipeline(val project: Project) : ProblemGatheringListener 
                     problemQueue.remove(),
                     batch
                 )
+                ProjectView.getInstance(project).refresh()
 
                 if (openFile && file != null)
                     OpenFileAction.openFile(file, project)
