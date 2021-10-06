@@ -14,6 +14,7 @@ object AutoCpNotifications {
         )
         ProblemGatheringErr.JsonErr -> TODO()
         ProblemGatheringErr.TimeoutErr -> TODO()
+        ProblemGatheringErr.Cancellation -> TODO()
     }
 
     fun problemGatheringUncaught(e: Exception) = notifyWarn(

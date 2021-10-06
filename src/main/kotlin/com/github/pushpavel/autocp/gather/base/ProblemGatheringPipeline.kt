@@ -10,6 +10,8 @@ import com.github.pushpavel.autocp.settings.projectSettings.autoCpProject
 import com.intellij.ide.actions.OpenFileAction
 import com.intellij.openapi.application.ModalityState
 import com.intellij.openapi.application.invokeLater
+import com.intellij.openapi.application.runInEdt
+import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.project.Project
 import com.jetbrains.rd.util.Queue
 
@@ -18,6 +20,8 @@ import com.jetbrains.rd.util.Queue
  */
 class ProblemGatheringPipeline(val project: Project) : ProblemGatheringListener {
 
+    private val log = Logger.getInstance(ProblemGatheringPipeline::class.java)
+
     private var flush = false
     private var fileGenerator: FileGenerator? = null
     private val problemQueue = Queue<Problem>()
@@ -25,19 +29,23 @@ class ProblemGatheringPipeline(val project: Project) : ProblemGatheringListener 
     private var currentBatch: BatchJson? = null
 
     override fun onBatchStart(problem: Problem, batch: BatchJson) {
-        val confirm = showProblemGatheringDialog(project, problem.groupName)
-        if (!confirm) {
-            BatchProcessor.interruptBatch(ProblemGatheringErr.Cancellation)
-            return
-        }
+        runInEdt {
+            log.debug("Showing Problem Gathering dialog...", batch, problem)
+            val confirm = showProblemGatheringDialog(project, problem.groupName)
+            if (!confirm) {
+                log.debug("Cancelling batch", batch, problem)
+                BatchProcessor.interruptBatch(ProblemGatheringErr.Cancellation)
+                return@runInEdt
+            }
+            fileGenerator =
+                fileGeneratorProvider.getSupportedFileGenerator(project.autoCpProject().defaultFileExtension)
 
-        fileGenerator = fileGeneratorProvider.getSupportedFileGenerator(project.autoCpProject().defaultFileExtension)
-
-        flushProblemQueue(batch)
-        if (problemQueue.size == batch.size) {
-            BatchProcessor.interruptBatch()
-            flush = false
-            fileGenerator = null
+            flushProblemQueue(batch)
+            if (problemQueue.size == batch.size) {
+                BatchProcessor.interruptBatch()
+                flush = false
+                fileGenerator = null
+            }
         }
     }
 
@@ -53,18 +61,16 @@ class ProblemGatheringPipeline(val project: Project) : ProblemGatheringListener 
     }
 
     private fun flushProblemQueue(batch: BatchJson) {
-        flush = true
 
-        while (problemQueue.isNotEmpty()) {
-            val openFile = when (AutoCpGeneralSettings.instance.openFilesOnGather) {
-                OpenFileOnGather.NONE -> false
-                OpenFileOnGather.ONLY_FIRST -> currentBatch != batch
-                OpenFileOnGather.ALL -> true
-            }
-            currentBatch = batch
-
-            invokeLater(ModalityState.NON_MODAL) {
-
+        invokeLater(ModalityState.NON_MODAL) {
+            flush = true
+            while (problemQueue.isNotEmpty()) {
+                val openFile = when (AutoCpGeneralSettings.instance.openFilesOnGather) {
+                    OpenFileOnGather.NONE -> false
+                    OpenFileOnGather.ONLY_FIRST -> currentBatch != batch
+                    OpenFileOnGather.ALL -> true
+                }
+                currentBatch = batch
                 val file = fileGenerator?.generateFile(
                     project.autoCpProject().defaultFileExtension,
                     problemQueue.remove(),

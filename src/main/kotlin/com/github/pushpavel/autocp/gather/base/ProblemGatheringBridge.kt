@@ -3,8 +3,9 @@ package com.github.pushpavel.autocp.gather.base
 import com.github.pushpavel.autocp.common.helpers.ioScope
 import com.github.pushpavel.autocp.common.res.R
 import com.github.pushpavel.autocp.gather.models.ProblemJson
-import com.intellij.openapi.Disposable
-import kotlinx.coroutines.cancel
+import com.intellij.openapi.project.Project
+import com.intellij.openapi.startup.StartupActivity
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.serialization.SerializationException
@@ -15,11 +16,11 @@ import java.net.SocketTimeoutException
 /**
  * Bridge between Competitive Companion extension and [BatchProcessor]
  */
-object ProblemGatheringBridge : Disposable {
+class ProblemGatheringBridge : StartupActivity {
     private val scope = ioScope()
     private val serializer = Json { ignoreUnknownKeys = true }
 
-    init {
+    override fun runActivity(project: Project) {
         // initialize server
         scope.launch {
             try {
@@ -28,35 +29,32 @@ object ProblemGatheringBridge : Disposable {
                 ).await() ?: throw ProblemGatheringErr.AllPortsTakenErr(R.others.competitiveCompanionPorts)
 
                 serverSocket.use {
-                    try {
-                        while (true) {
-                            try {
-                                val message = listenForMessage(
+                    while (true) {
+                        try {
+                            coroutineScope {
+                                val message = listenForMessageAsync(
                                     serverSocket, R.others.problemGatheringTimeoutMillis
-                                ).await() ?: continue
+                                ).await() ?: return@coroutineScope
+
                                 val json = serializer.decodeFromString<ProblemJson>(message)
                                 BatchProcessor.onJsonReceived(json)
-                            } catch (e: SocketTimeoutException) {
-                                BatchProcessor.interruptBatch(ProblemGatheringErr.TimeoutErr)
-                            } catch (e: SerializationException) {
-                                BatchProcessor.interruptBatch(ProblemGatheringErr.JsonErr)
                             }
-                            while (BatchProcessor.isCurrentBatchBlocking()) delay(100)
+                        } catch (e: SocketTimeoutException) {
+                            BatchProcessor.interruptBatch(ProblemGatheringErr.TimeoutErr)
+                        } catch (e: SerializationException) {
+                            BatchProcessor.interruptBatch(ProblemGatheringErr.JsonErr)
                         }
-                    } finally {
-                        BatchProcessor.interruptBatch()
+
+                        while (BatchProcessor.isCurrentBatchBlocking()) delay(100)
                     }
                 }
-
-
             } catch (e: ProblemGatheringErr) {
                 R.notify.problemGatheringErr(e)
             } catch (e: Exception) {
                 R.notify.problemGatheringUncaught(e)
+            } finally {
+                BatchProcessor.interruptBatch()
             }
         }
     }
-
-    override fun dispose() = scope.cancel()
-
 }

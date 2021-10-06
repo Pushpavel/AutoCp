@@ -11,8 +11,8 @@ var dontAskBeforeFileGeneration = false
 
 fun showProblemGatheringDialog(project: Project, groupName: String): Boolean {
     val projectSettings = project.autoCpProject()
-    extension = ""
-    dontAskBeforeFileGeneration = false
+    extension = projectSettings.defaultFileExtension
+    dontAskBeforeFileGeneration = !projectSettings.askBeforeFileGeneration
 
     val dialog = object : DialogWrapper(project, false) {
         init {

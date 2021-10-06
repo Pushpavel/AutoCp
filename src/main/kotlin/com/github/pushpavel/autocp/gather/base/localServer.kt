@@ -40,10 +40,9 @@ fun CoroutineScope.openServerSocketAsync(ports: List<Int>) = async(Dispatchers.I
 /**
  * Blocks till a connection is available and returns the message sent to the [serverSocket]
  */
-fun CoroutineScope.listenForMessage(serverSocket: ServerSocket, timeout: Int) = async(Dispatchers.IO) {
+fun CoroutineScope.listenForMessageAsync(serverSocket: ServerSocket, timeout: Int) = async(Dispatchers.IO) {
+    serverSocket.soTimeout = timeout
     serverSocket.accept().use {
-        // TODO: shouldn't below line be above accept() call ?
-        serverSocket.soTimeout = timeout
         val inputStream = it.getInputStream()
         val request = readFromStream(inputStream)
         val strings = request.split("\n\n".toPattern(), 2).toTypedArray()
