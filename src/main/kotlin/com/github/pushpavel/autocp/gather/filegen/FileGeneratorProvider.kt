@@ -1,11 +1,12 @@
 package com.github.pushpavel.autocp.gather.filegen
 
 import com.github.pushpavel.autocp.common.errors.NoReachErr
+import com.intellij.openapi.project.Project
 
-object FileGeneratorProvider {
-    private val registeredFileGenerators = mutableListOf<FileGenerator>(DefaultFileGenerator())
-
-    fun registerFileGenerator(g: FileGenerator) = registeredFileGenerators.add(0, g)
+class FileGeneratorProvider(project: Project) {
+    private val registeredFileGenerators = listOf<FileGenerator>(
+        DefaultFileGenerator(project)
+    )
 
     fun getSupportedFileGenerator(extension: String): FileGenerator {
         for (g in registeredFileGenerators)

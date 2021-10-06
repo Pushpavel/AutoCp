@@ -106,7 +106,7 @@ class ProblemGatheringService(val project: Project) {
         val rootPsiDir = runReadAction { PsiManager.getInstance(project).findDirectory(rootDir)!! }
         val extension = project.autoCpProject().defaultFileExtension
         val lang = LangSettings.instance.langs[extension] ?: throw GenerateFileErr.LangNotConfiguredErr(problem)
-        val fileTemplate = FileTemplates.cpTemplateFromExtension(extension, project)
+        val fileTemplate = FileTemplates.cpTemplateForExtension(extension, project)
 
         val fileName = fileTemplate.constructFileNameWithExt(
             problem.name
