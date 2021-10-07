@@ -5,6 +5,7 @@ import java.util.*
 object AutoCpKeys {
     const val pluginId = "com.github.pushpavel.autocp"
     const val toolWindowSelectedTabIndexKey = "$pluginId.toolWindowSelectedTabIndex"
+    const val autoCpFileVersionNumber = 1
 
     // Command User Macros
     const val inputPathMacro = "@in"

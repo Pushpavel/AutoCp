@@ -1,14 +1,6 @@
 package com.github.pushpavel.autocp.common.compat.v0_5_0_eap_1
 
 import com.intellij.conversion.*
-import com.github.pushpavel.autocp.database.AutoCpDB
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.json.Json
-import java.nio.file.Paths
-import kotlin.io.path.deleteIfExists
-import kotlin.io.path.exists
-import kotlin.io.path.pathString
-import kotlin.io.path.readText
 
 class AutoCpProjectConverterProvider : ConverterProvider() {
     override fun getConversionDescription(): String {
@@ -29,29 +21,6 @@ class AutoCpProjectConverterProvider : ConverterProvider() {
                         settings.runConfigurations.removeIf { it.name == "autoCP" }
                     }
                 }
-            }
-
-
-            // Does .autocp need to be deleted
-            override fun isConversionNeeded(): Boolean {
-                val autoCpFile = Paths.get(context.projectBaseDir.pathString, ".autocp")
-                if (!autoCpFile.exists())
-                    return false
-                val text = autoCpFile.readText()
-
-                return try {
-                    Json.decodeFromString<AutoCpDB>(text)
-                    false
-                } catch (e: Exception) {
-                    // ensures we are not deleting json file
-                    text.firstOrNull() != '{'
-                }
-            }
-
-            // Deletes .autocp
-            override fun processingFinished() {
-                val autoCpFile = Paths.get(context.projectBaseDir.pathString, ".autocp")
-                autoCpFile.deleteIfExists()
             }
         }
     }
