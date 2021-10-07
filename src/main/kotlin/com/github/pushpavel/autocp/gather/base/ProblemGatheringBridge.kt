@@ -3,6 +3,7 @@ package com.github.pushpavel.autocp.gather.base
 import com.github.pushpavel.autocp.common.helpers.ioScope
 import com.github.pushpavel.autocp.common.res.R
 import com.github.pushpavel.autocp.gather.models.ProblemJson
+import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.startup.StartupActivity
 import kotlinx.coroutines.coroutineScope
@@ -16,7 +17,7 @@ import java.net.SocketTimeoutException
 /**
  * Bridge between Competitive Companion extension and [BatchProcessor]
  */
-class ProblemGatheringBridge : StartupActivity {
+class ProblemGatheringBridge : StartupActivity, DumbAware {
     private val scope = ioScope()
     private val serializer = Json { ignoreUnknownKeys = true }
 
