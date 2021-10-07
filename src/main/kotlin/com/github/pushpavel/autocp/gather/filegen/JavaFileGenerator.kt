@@ -37,14 +37,14 @@ class JavaFileGenerator(project: Project) : DefaultFileGenerator(project) {
 
     override fun generateFile(extension: String, problem: Problem, batch: BatchJson): VirtualFile? {
         return super.generateFile(extension, problem, batch)?.also {
-            val m = ModuleUtil.findModuleForFile(it.parent, project)
-            if (m != null) {
-                val f = ProjectRootManager.getInstance(project).fileIndex.getContentRootForFile(it.parent)
-                val model = m.rootManager.modifiableModel
-                model.contentEntries.firstOrNull { c -> c.file == f }?.addExcludeFolder(it.parent)
-                model.commit()
-            }
             runWriteAction {
+                val m = ModuleUtil.findModuleForFile(it.parent, project)
+                if (m != null) {
+                    val f = ProjectRootManager.getInstance(project).fileIndex.getContentRootForFile(it.parent)
+                    val model = m.rootManager.modifiableModel
+                    model.contentEntries.firstOrNull { c -> c.file == f }?.addExcludeFolder(it.parent)
+                    model.commit()
+                }
                 if (ModuleManager.getInstance(project).findModuleByName(it.parent.name) == null) {
                     val module = ModuleManager.getInstance(project)
                         .newModule(
@@ -56,7 +56,6 @@ class JavaFileGenerator(project: Project) : DefaultFileGenerator(project) {
                     contentEntry.addSourceFolder(it.parent, JavaSourceRootType.SOURCE)
                     model.inheritSdk()
                     model.commit()
-                    println("inner")
                 }
             }
         }
