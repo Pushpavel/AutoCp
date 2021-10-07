@@ -5,8 +5,13 @@
 
 ### Added
 
+- Confirmation dialog before generating files
 - __Java__
-    - new module is created for each solution file generated
+    - New module is created for each solution file generated
+
+### Removed
+
+- problem gathering success notifications
 
 ## v0.7.0-eap.1
 
