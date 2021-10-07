@@ -1,6 +1,7 @@
 package com.github.pushpavel.autocp.build.settings.ui
 
 import com.github.pushpavel.autocp.build.Lang
+import com.github.pushpavel.autocp.common.res.R
 import com.github.pushpavel.autocp.common.ui.dsl.DslCallbacks
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.application.runUndoTransparentWriteAction
@@ -29,8 +30,18 @@ class LangPanel(val model: CollectionListModel<Lang>) : DslCallbacks, Disposable
                 onReset { component.isEnabled = lang?.isDefault == false }
             }
         }
-        row("Build Command") { buildCommandEditor.component(CCFlags.growX) }
-        row("Execute Command") { executeCommandEditor.component(CCFlags.growX) }
+        row("Build Command") {
+            buildCommandEditor
+                .component(CCFlags.growX)
+                .comment(R.strings.buildCommandComment)
+        }
+
+        row("Execute Command") {
+            executeCommandEditor
+                .component(CCFlags.growX)
+                .comment(R.strings.executeCommandComment)
+        }
+        commentRow(R.strings.commandTemplateDesc)
     }.withBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4))
 
 
