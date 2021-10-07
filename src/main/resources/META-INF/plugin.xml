@@ -49,11 +49,15 @@
         <listener class="com.github.pushpavel.autocp.extend.cmake.CMakeAddExecutable"
                   topic="com.github.pushpavel.autocp.gather.filegen.FileGenerationListener"/>
         <listener class="com.github.pushpavel.autocp.common.analytics.listeners.ProblemGatherListener"
-                  topic="com.github.pushpavel.autocp.gather.filegen.FileGenerationListener"
-        />
+                  topic="com.github.pushpavel.autocp.gather.filegen.FileGenerationListener"/>
+        <listener class="com.github.pushpavel.autocp.database.listeners.GeneratedSolutionFileAdder"
+                  topic="com.github.pushpavel.autocp.gather.filegen.FileGenerationListener"/>
+
         <listener class="com.github.pushpavel.autocp.gather.base.ProblemGatheringPipeline"
                   topic="com.github.pushpavel.autocp.gather.base.ProblemGatheringListener"/>
         <listener class="com.github.pushpavel.autocp.gather.ProblemGatheringProgressReporting"
+                  topic="com.github.pushpavel.autocp.gather.base.ProblemGatheringListener"/>
+        <listener class="com.github.pushpavel.autocp.database.listeners.GatheredProblemAdder"
                   topic="com.github.pushpavel.autocp.gather.base.ProblemGatheringListener"/>
     </projectListeners>
     <applicationListeners>
