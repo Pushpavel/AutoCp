@@ -45,13 +45,6 @@
                 implementation="com.github.pushpavel.autocp.common.analytics.listeners.AnalyticsStartupActivity"/>
         <postStartupActivity implementation="com.github.pushpavel.autocp.gather.base.ProblemGatheringBridge"/>
     </extensions>
-    <actions>
-        <action id="com.github.pushpavel.autocp.gather.ProblemGatheringAction"
-                class="com.github.pushpavel.autocp.gather.ProblemGatheringAction">
-            <add-to-group group-id="ToolsMenu" anchor="first"/>
-        </action>
-    </actions>
-
     <projectListeners>
         <listener class="com.github.pushpavel.autocp.extend.cmake.CMakeAddExecutable"
                   topic="com.github.pushpavel.autocp.gather.FileGenerationListener"/>
