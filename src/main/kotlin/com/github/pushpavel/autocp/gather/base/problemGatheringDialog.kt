@@ -1,5 +1,6 @@
 package com.github.pushpavel.autocp.gather.base
 
+import com.github.pushpavel.autocp.common.res.R
 import com.github.pushpavel.autocp.settings.projectSettings.autoCpProject
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.DialogWrapper
@@ -22,6 +23,7 @@ fun showProblemGatheringDialog(project: Project, groupName: String): Boolean {
         }
 
         override fun createCenterPanel() = panel(LCFlags.fill) {
+            row {}.comment(R.strings.problemGatheringDialogMsg)
             row("File Extension") {
                 textField(::extension, 2)
                     .focused()
@@ -38,11 +40,7 @@ fun showProblemGatheringDialog(project: Project, groupName: String): Boolean {
                     }
             }
             row {
-                checkBox(
-                    "Don't ask again",
-                    ::dontAskBeforeFileGeneration,
-                    "You can always change these settings at Settings/Preferences > Tools > AutoCp > Project"
-                )
+                checkBox("Don't ask again", ::dontAskBeforeFileGeneration)
                     .onReset { dontAskBeforeFileGeneration = !projectSettings.askBeforeFileGeneration }
                     .onIsModified { dontAskBeforeFileGeneration == projectSettings.askBeforeFileGeneration }
                     .onApply { projectSettings.askBeforeFileGeneration = !dontAskBeforeFileGeneration }

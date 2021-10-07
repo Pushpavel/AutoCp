@@ -31,6 +31,9 @@ object AutoCpStrings {
             "Error message:\n${e.localizedMessage}\n" +
             "Stacktrace:\n${e.stackTraceToString()}"
 
+    // problemGatheringDialog strings
+    const val problemGatheringDialogMsg = "You can always change these settings at Settings/Preferences > Tools > AutoCp > Project"
+
     // Settings strings
     const val projectSettingsOverrideMsg = "Some of these settings could be overridden at Tools > AutoCp > Project"
 
