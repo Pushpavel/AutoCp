@@ -1,6 +1,6 @@
 package com.github.pushpavel.autocp.config.validators
 
-import com.github.pushpavel.autocp.database.autoCp
+import com.github.pushpavel.autocp.database.SolutionFiles
 import com.github.pushpavel.autocp.database.models.SolutionFile
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.LocalFileSystem
@@ -25,10 +25,10 @@ fun getValidSolutionFile(project: Project, configName: String, path: String): So
     if (file?.exists() != true)
         throw SolutionFilePathErr.FileDoesNotExist(configName, pathString)
 
-    val db = project.autoCp()
+    val solutionFiles = SolutionFiles.getInstance(project)
 
-    if (!db.solutionFiles.containsKey(pathString))
+    if (pathString !in solutionFiles)
         throw SolutionFilePathErr.FileNotRegistered(configName, pathString)
 
-    return db.solutionFiles[pathString]!!
+    return solutionFiles[pathString]!!
 }

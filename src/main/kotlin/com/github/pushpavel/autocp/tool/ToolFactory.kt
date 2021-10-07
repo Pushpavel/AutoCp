@@ -4,6 +4,7 @@ import com.github.pushpavel.autocp.common.helpers.onFileSelectionChange
 import com.github.pushpavel.autocp.common.helpers.pathString
 import com.github.pushpavel.autocp.common.helpers.properties
 import com.github.pushpavel.autocp.common.helpers.toolWindowSelectedTabIndex
+import com.github.pushpavel.autocp.database.SolutionFiles
 import com.github.pushpavel.autocp.database.autoCp
 import com.github.pushpavel.autocp.tool.ui.AssociateFilePanel
 import com.github.pushpavel.autocp.tool.ui.SolutionFileSettingsPanel
@@ -32,7 +33,7 @@ class ToolFactory : ToolWindowFactory, DumbAware {
         // ShowSettingsUtil.getInstance().showSettingsDialog(project, "Languages")
 
         val contentManager = toolWindow.contentManager
-        val db = project.autoCp()
+        val solutionFiles = SolutionFiles.getInstance(project)
 
         val tabIndexSaver = object : ContentManagerListener {
             override fun selectionChanged(event: ContentManagerEvent) {
@@ -50,10 +51,9 @@ class ToolFactory : ToolWindowFactory, DumbAware {
 
             if (file == null || !file.isValid || !editorManager.isFileOpen(file))
                 return@callback
-
-            if (!db.solutionFiles.containsKey(file.pathString)) {
+            if (file.pathString !in solutionFiles) {
                 val ui = AssociateFilePanel(Path(file.pathString).name) {
-                    db.addSolutionFile(file.pathString, null)
+                    solutionFiles.upsertFile(Path(file.path))
                     callback(file)
                 }
                 val content = contentManager.factory.createContent(ui.component, file.presentableName, false)

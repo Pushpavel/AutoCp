@@ -1,6 +1,7 @@
 package com.github.pushpavel.autocp.database.models
 
-import com.github.pushpavel.autocp.database.AutoCpDatabase
+import com.github.pushpavel.autocp.database.autoCp
+import com.intellij.openapi.project.Project
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -11,8 +12,8 @@ data class SolutionFile(
     val timeLimit: Long = 1000,
 ) {
 
-    fun getLinkedProblem(db: AutoCpDatabase): Problem? {
+    fun getLinkedProblem(project: Project): Problem? {
         if (linkedProblemId == null) return null
-        return db.problems[linkedProblemId.first]?.get(linkedProblemId.second)
+        return project.autoCp().problems[linkedProblemId.first]?.get(linkedProblemId.second)
     }
 }

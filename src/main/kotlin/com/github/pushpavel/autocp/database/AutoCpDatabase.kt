@@ -1,6 +1,5 @@
 package com.github.pushpavel.autocp.database
 
-import com.github.pushpavel.autocp.common.errors.InternalErr
 import com.github.pushpavel.autocp.database.models.Problem
 import com.github.pushpavel.autocp.database.models.SolutionFile
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -10,7 +9,6 @@ class AutoCpDatabase(
     val solutionFilesFlow: MutableStateFlow<Map<String, SolutionFile>>
 ) {
     val problems get() = problemsFlow.value
-    val solutionFiles get() = solutionFilesFlow.value
 
     fun updateProblem(problem: Problem) {
         val group = this.problems[problem.groupName]?.toMutableMap() ?: mutableMapOf()
@@ -18,37 +16,7 @@ class AutoCpDatabase(
         this.problemsFlow.value = problems.toMutableMap().apply { this[problem.groupName] = group }
     }
 
-    fun addSolutionFile(path: String, linkedProblemId: Pair<String, String>?) {
-        val solutionFile = if (linkedProblemId != null) {
-            val problem = problems[linkedProblemId.first]?.get(linkedProblemId.second)
-                ?: throw InternalErr("trying to create solution File for non existing Problem specification")
-
-            SolutionFile(
-                path,
-                linkedProblemId,
-                problem.sampleTestcases.toList(),
-                problem.timeLimit
-            )
-        } else
-            SolutionFile(
-                path,
-                linkedProblemId,
-                listOf()
-            )
-
-        solutionFilesFlow.value = solutionFiles.toMutableMap().apply { this[path] = solutionFile }
-    }
-
-    fun removeSolutionFile(path: String) {
-        solutionFilesFlow.value = solutionFiles.toMutableMap().apply {
-            remove(path)
-        }
-    }
-
-    fun updateSolutionFile(solutionFile: SolutionFile) {
-        if (!solutionFiles.containsKey(solutionFile.pathString))
-            throw InternalErr("trying to update solution File which does not exist")
-
-        solutionFilesFlow.value = solutionFiles.toMutableMap().apply { this[solutionFile.pathString] = solutionFile }
+    fun modifySolutionFiles(action: MutableMap<String, SolutionFile>.() -> Unit) {
+        solutionFilesFlow.value = solutionFilesFlow.value.toMutableMap().apply(action)
     }
 }

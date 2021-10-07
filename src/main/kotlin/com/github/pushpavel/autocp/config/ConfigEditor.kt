@@ -4,7 +4,7 @@ import com.github.pushpavel.autocp.common.helpers.pathString
 import com.github.pushpavel.autocp.common.ui.dsl.startValidating
 import com.github.pushpavel.autocp.common.ui.dsl.withValidation
 import com.github.pushpavel.autocp.common.ui.helpers.isError
-import com.github.pushpavel.autocp.database.autoCp
+import com.github.pushpavel.autocp.database.SolutionFiles
 import com.intellij.openapi.options.SettingsEditor
 import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.project.Project
@@ -24,7 +24,7 @@ class ConfigEditor(project: Project) : SettingsEditor<AutoCpConfig>(), DumbAware
     var solutionFilePath = ""
 
     private lateinit var editor: DialogPanel
-    private val db = project.autoCp()
+    private val solutionFiles = SolutionFiles.getInstance(project)
     private val invalidFields = mutableMapOf<String, Boolean>()
 
     override fun createEditor() = panel {
@@ -55,7 +55,7 @@ class ConfigEditor(project: Project) : SettingsEditor<AutoCpConfig>(), DumbAware
             if (file?.exists() != true)
                 return@run error("File does not exists")
 
-            if (!db.solutionFiles.containsKey(pathString))
+            if (pathString !in solutionFiles)
                 return@run warning("AutoCp is not enabled for this file")
 
             null

@@ -37,7 +37,7 @@ class AutoCpStorage(project: Project) {
         AutoCpDatabase(MutableStateFlow(db.problems), MutableStateFlow(db.solutionFiles))
     }
 
-    val serializableDatabase get() = database.run { AutoCpDB(problems, solutionFiles) }
+    val serializableDatabase get() = database.run { AutoCpDB(problems, solutionFilesFlow.value) }
 
 }
 
