@@ -47,9 +47,9 @@
     </extensions>
     <projectListeners>
         <listener class="com.github.pushpavel.autocp.extend.cmake.CMakeAddExecutable"
-                  topic="com.github.pushpavel.autocp.gather.FileGenerationListener"/>
+                  topic="com.github.pushpavel.autocp.gather.filegen.FileGenerationListener"/>
         <listener class="com.github.pushpavel.autocp.common.analytics.listeners.ProblemGatherListener"
-                  topic="com.github.pushpavel.autocp.gather.FileGenerationListener"
+                  topic="com.github.pushpavel.autocp.gather.filegen.FileGenerationListener"
         />
         <listener class="com.github.pushpavel.autocp.gather.base.ProblemGatheringPipeline"
                   topic="com.github.pushpavel.autocp.gather.base.ProblemGatheringListener"/>

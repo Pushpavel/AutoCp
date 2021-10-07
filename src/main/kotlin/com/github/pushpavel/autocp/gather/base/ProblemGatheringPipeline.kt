@@ -1,6 +1,7 @@
 package com.github.pushpavel.autocp.gather.base
 
 import com.github.pushpavel.autocp.database.models.Problem
+import com.github.pushpavel.autocp.gather.filegen.FileGenerationListener
 import com.github.pushpavel.autocp.gather.filegen.FileGenerator
 import com.github.pushpavel.autocp.gather.filegen.FileGeneratorProvider
 import com.github.pushpavel.autocp.gather.models.BatchJson
@@ -28,6 +29,7 @@ class ProblemGatheringPipeline(val project: Project) : ProblemGatheringListener 
     private val problemQueue = Queue<Problem>()
     private val fileGeneratorProvider = FileGeneratorProvider(project)
     private var currentBatch: BatchJson? = null
+    private val subscriber by lazy { project.messageBus.syncPublisher(FileGenerationListener.TOPIC) }
 
     override fun onBatchStart(problem: Problem, batch: BatchJson) {
         runInEdt {
@@ -62,25 +64,32 @@ class ProblemGatheringPipeline(val project: Project) : ProblemGatheringListener 
     }
 
     private fun flushProblemQueue(batch: BatchJson) {
-
+        val extension = project.autoCpProject().defaultFileExtension
         invokeLater(ModalityState.NON_MODAL) {
             flush = true
             while (problemQueue.isNotEmpty()) {
-                val openFile = when (AutoCpGeneralSettings.instance.openFilesOnGather) {
-                    OpenFileOnGather.NONE -> false
-                    OpenFileOnGather.ONLY_FIRST -> currentBatch != batch
-                    OpenFileOnGather.ALL -> true
-                }
-                currentBatch = batch
-                val file = fileGenerator?.generateFile(
-                    project.autoCpProject().defaultFileExtension,
-                    problemQueue.remove(),
-                    batch
-                )
-                ProjectView.getInstance(project).refresh()
+                val problem = problemQueue.remove()
+                try {
+                    val openFile = when (AutoCpGeneralSettings.instance.openFilesOnGather) {
+                        OpenFileOnGather.NONE -> false
+                        OpenFileOnGather.ONLY_FIRST -> currentBatch != batch
+                        OpenFileOnGather.ALL -> true
+                    }
 
-                if (openFile && file != null)
-                    OpenFileAction.openFile(file, project)
+                    currentBatch = batch
+
+                    val file = fileGenerator?.generateFile(extension, problem, batch)
+                    ProjectView.getInstance(project).refresh()
+
+                    if (openFile && file != null)
+                        OpenFileAction.openFile(file, project)
+
+                    if (file != null)
+                        subscriber.onGenerated(file, problem, batch, extension)
+
+                } catch (e: Exception) {
+                    subscriber.onError(e, problem, batch, extension)
+                }
             }
         }
 
