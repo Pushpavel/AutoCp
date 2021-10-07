@@ -13,6 +13,7 @@ import com.intellij.ide.projectView.ProjectView
 import com.intellij.openapi.application.ModalityState
 import com.intellij.openapi.application.invokeLater
 import com.intellij.openapi.application.runInEdt
+import com.intellij.openapi.application.runWriteAction
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.project.Project
 import com.jetbrains.rd.util.Queue
@@ -77,15 +78,17 @@ class ProblemGatheringPipeline(val project: Project) : ProblemGatheringListener 
                     }
 
                     currentBatch = batch
+                    runWriteAction {
 
-                    val file = fileGenerator?.generateFile(extension, problem, batch)
-                    ProjectView.getInstance(project).refresh()
+                        val file = fileGenerator?.generateFile(extension, problem, batch)
+                        ProjectView.getInstance(project).refresh()
 
-                    if (openFile && file != null)
-                        OpenFileAction.openFile(file, project)
+                        if (openFile && file != null)
+                            OpenFileAction.openFile(file, project)
 
-                    if (file != null)
-                        subscriber.onGenerated(file, problem, batch, extension)
+                        if (file != null)
+                            subscriber.onGenerated(file, problem, batch, extension)
+                    }
 
                 } catch (e: Exception) {
                     subscriber.onError(e, problem, batch, extension)
