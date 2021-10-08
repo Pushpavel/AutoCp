@@ -1,4 +1,4 @@
-package com.github.pushpavel.autocp.lang.ide
+package com.github.pushpavel.autocp.extend.ide
 
 import com.intellij.openapi.application.ApplicationInfo
 

@@ -41,23 +41,24 @@
         <project.converterProvider
                 implementation="com.github.pushpavel.autocp.common.compat.v0_5_0_eap_1.AutoCpProjectConverterProvider"
                 id="AutoCp v0.5.0-eap.1"/>
-        <postStartupActivity implementation="com.github.pushpavel.autocp.gather.ProblemGatheringActivity"/>
         <postStartupActivity
                 implementation="com.github.pushpavel.autocp.common.analytics.listeners.AnalyticsStartupActivity"/>
+        <postStartupActivity implementation="com.github.pushpavel.autocp.gather.base.ProblemGatheringBridge"/>
     </extensions>
-    <actions>
-        <action id="com.github.pushpavel.autocp.gather.ProblemGatheringAction"
-                class="com.github.pushpavel.autocp.gather.ProblemGatheringAction">
-            <add-to-group group-id="ToolsMenu" anchor="first"/>
-        </action>
-    </actions>
-
     <projectListeners>
-        <listener class="com.github.pushpavel.autocp.lang.cmake.CMakeAddExecutable"
-                  topic="com.github.pushpavel.autocp.gather.FileGenerationListener"/>
+        <listener class="com.github.pushpavel.autocp.extend.cmake.CMakeAddExecutable"
+                  topic="com.github.pushpavel.autocp.gather.filegen.FileGenerationListener"/>
         <listener class="com.github.pushpavel.autocp.common.analytics.listeners.ProblemGatherListener"
-                  topic="com.github.pushpavel.autocp.gather.FileGenerationListener"
-        />
+                  topic="com.github.pushpavel.autocp.gather.filegen.FileGenerationListener"/>
+        <listener class="com.github.pushpavel.autocp.database.listeners.GeneratedSolutionFileAdder"
+                  topic="com.github.pushpavel.autocp.gather.filegen.FileGenerationListener"/>
+
+        <listener class="com.github.pushpavel.autocp.gather.base.ProblemGatheringPipeline"
+                  topic="com.github.pushpavel.autocp.gather.base.ProblemGatheringListener"/>
+        <listener class="com.github.pushpavel.autocp.gather.ProblemGatheringProgressReporting"
+                  topic="com.github.pushpavel.autocp.gather.base.ProblemGatheringListener"/>
+        <listener class="com.github.pushpavel.autocp.database.listeners.GatheredProblemAdder"
+                  topic="com.github.pushpavel.autocp.gather.base.ProblemGatheringListener"/>
     </projectListeners>
     <applicationListeners>
         <listener class="com.github.pushpavel.autocp.common.listeners.AutoCpPluginListener"

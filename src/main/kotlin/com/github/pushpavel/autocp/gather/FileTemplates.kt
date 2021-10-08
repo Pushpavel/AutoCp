@@ -48,7 +48,7 @@ class FileTemplates : FileTemplateGroupDescriptorFactory {
             }
         }
 
-        fun cpTemplateFromExtension(extension: String, project: Project): FileTemplate {
+        fun cpTemplateForExtension(extension: String, project: Project): FileTemplate {
             return cpTemplateFromExtensionOrNull(extension, project)
                 ?: FileTemplateManager.getInstance(project).addTemplate("abc.$extension", extension)
         }

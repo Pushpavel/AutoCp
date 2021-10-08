@@ -1,5 +1,13 @@
 package com.github.pushpavel.autocp.tool.ui
 
+import com.github.pushpavel.autocp.common.helpers.mainScope
+import com.github.pushpavel.autocp.common.res.R
+import com.github.pushpavel.autocp.common.ui.helpers.allowOnlyPositiveIntegers
+import com.github.pushpavel.autocp.common.ui.helpers.onChange
+import com.github.pushpavel.autocp.common.ui.layouts.html
+import com.github.pushpavel.autocp.common.ui.layouts.tag
+import com.github.pushpavel.autocp.database.SolutionFiles
+import com.github.pushpavel.autocp.database.models.SolutionFile
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.fileTypes.FileTypeManager
 import com.intellij.openapi.project.Project
@@ -7,27 +15,18 @@ import com.intellij.openapi.ui.DialogPanel
 import com.intellij.ui.layout.applyToComponent
 import com.intellij.ui.layout.panel
 import com.intellij.util.ui.components.BorderLayoutPanel
-import com.github.pushpavel.autocp.common.helpers.mainScope
-import com.github.pushpavel.autocp.common.res.R
-import com.github.pushpavel.autocp.common.ui.helpers.allowOnlyPositiveIntegers
-import com.github.pushpavel.autocp.common.ui.helpers.onChange
-import com.github.pushpavel.autocp.common.ui.layouts.html
-import com.github.pushpavel.autocp.common.ui.layouts.tag
-import com.github.pushpavel.autocp.database.autoCp
-import com.github.pushpavel.autocp.database.models.SolutionFile
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.awt.BorderLayout
 import kotlin.io.path.Path
 
-class SolutionFileSettingsPanel(project: Project, private val pathString: String, refreshCallback: () -> Unit) :
+class SolutionFileSettingsPanel(project: Project, pathString: String, refreshCallback: () -> Unit) :
     Disposable {
 
-    private val db = project.autoCp()
-    private val flow = db.solutionFilesFlow.map { it[pathString] }
+    private val solutionFiles = SolutionFiles.getInstance(project)
+    private val flow = solutionFiles.listenFlow(pathString)
 
     private var solutionFile: SolutionFile? = null
     var timeLimit = 0
@@ -74,7 +73,7 @@ class SolutionFileSettingsPanel(project: Project, private val pathString: String
             }.largeGapAfter()
             row {
                 button("Remove All Testcases") {
-                    solutionFile?.pathString?.let { it1 -> db.removeSolutionFile(it1) }
+                    solutionFile?.pathString?.let { it1 -> solutionFiles.remove(it1) }
                     refreshCallback()
                 }
             }
@@ -99,7 +98,7 @@ class SolutionFileSettingsPanel(project: Project, private val pathString: String
 
             solutionFile = it.copy(timeLimit = timeLimit.toLong())
 
-            db.updateSolutionFile(solutionFile!!)
+            solutionFiles.update(solutionFile!!)
         }
     }
 

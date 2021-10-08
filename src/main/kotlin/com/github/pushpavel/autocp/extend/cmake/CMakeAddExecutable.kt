@@ -1,8 +1,9 @@
-package com.github.pushpavel.autocp.lang.cmake
+package com.github.pushpavel.autocp.extend.cmake
 
-import com.github.pushpavel.autocp.build.Lang
 import com.github.pushpavel.autocp.database.models.Problem
-import com.github.pushpavel.autocp.gather.FileGenerationListener
+import com.github.pushpavel.autocp.gather.filegen.FileGenerationListener
+import com.github.pushpavel.autocp.gather.models.BatchJson
+import com.github.pushpavel.autocp.gather.models.GenerateFileErr
 import com.github.pushpavel.autocp.settings.projectSettings.cmake.cmakeSettings
 import com.intellij.openapi.application.ModalityState
 import com.intellij.openapi.application.invokeLater
@@ -11,6 +12,7 @@ import com.intellij.openapi.application.runUndoTransparentWriteAction
 import com.intellij.openapi.fileEditor.FileDocumentManager
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.LocalFileSystem
+import com.intellij.openapi.vfs.VfsUtil
 import com.intellij.openapi.vfs.VirtualFile
 import java.nio.file.Paths
 import kotlin.io.path.Path
@@ -23,7 +25,19 @@ class CMakeAddExecutable(val project: Project) : FileGenerationListener {
     val cmakePath = Paths.get(project.basePath!!, "CMakeLists.txt").toFile()
     val settings = project.cmakeSettings()
 
-    override fun onGenerated(file: VirtualFile, problem: Problem, lang: Lang, alreadyGenerated: Boolean) {
+    override fun onGenerated(file: VirtualFile, problem: Problem, batch: BatchJson, extension: String) {
+        addToCmake(file)
+    }
+
+    override fun onError(e: Exception, problem: Problem, batch: BatchJson, extension: String) {
+        if (e is GenerateFileErr.FileAlreadyExistsErr) {
+            val file = VfsUtil.findFile(Path(e.filePath), true)
+            if (file != null)
+                addToCmake(file)
+        }
+    }
+
+    private fun addToCmake(file: VirtualFile) {
 
         if (!settings.addToCMakeLists) return
 

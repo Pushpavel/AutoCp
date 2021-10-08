@@ -1,5 +1,7 @@
 package com.github.pushpavel.autocp.database
 
+import com.github.pushpavel.autocp.common.compat.base.AutoCpFileConversion
+import com.github.pushpavel.autocp.common.res.R
 import com.intellij.openapi.application.runReadAction
 import com.intellij.openapi.application.runWriteAction
 import com.intellij.openapi.components.Service
@@ -9,6 +11,8 @@ import com.intellij.openapi.fileEditor.FileDocumentManagerListener
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.project.ProjectManager
 import com.intellij.openapi.vfs.LocalFileSystem
+import com.intellij.util.io.exists
+import com.intellij.util.io.readText
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
@@ -18,26 +22,30 @@ import kotlin.io.path.Path
 
 
 @Service
-class AutoCpStorage(project: Project) {
+class AutoCpStorage(val project: Project) {
 
     val database by lazy {
-        val path = Paths.get(project.basePath!!, ".autocp")
-        val virtualFile = LocalFileSystem.getInstance().findFileByNioFile(path)
+        val converter = AutoCpFileConversion(project)
+        converter.convert()
 
-        val db = if (virtualFile?.isValid == true) {
-            runReadAction {
-                val document = FileDocumentManager.getInstance().getDocument(virtualFile)!!
-                // TODO: show error notification for document null due to file association changes
-                Json.decodeFromString(document.text)
-                // TODO: show error notification for .autocp in invalid format
-            }
+        val path = Paths.get(project.basePath!!, ".autocp")
+
+        val db = if (path.exists()) {
+            runReadAction { Json.decodeFromString(path.readText()) }
         } else
-            AutoCpDB()
+            AutoCpDB(R.keys.autoCpFileVersionNumber)
 
         AutoCpDatabase(MutableStateFlow(db.problems), MutableStateFlow(db.solutionFiles))
     }
 
-    val serializableDatabase get() = database.run { AutoCpDB(problems, solutionFiles) }
+    val serializableDatabase
+        get() = database.run {
+            AutoCpDB(
+                R.keys.autoCpFileVersionNumber,
+                problems,
+                solutionFilesFlow.value
+            )
+        }
 
 }
 
@@ -82,4 +90,4 @@ class AutoCpStorageSaver : FileDocumentManagerListener {
 
 fun Project.autoCp(): AutoCpDatabase = service<AutoCpStorage>().database
 
-val DEFAULT_AUTO_CP_DB = AutoCpDB()
+val DEFAULT_AUTO_CP_DB = AutoCpDB(R.keys.autoCpFileVersionNumber)

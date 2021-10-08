@@ -5,6 +5,7 @@ import com.github.pushpavel.autocp.common.helpers.pathString
 import com.github.pushpavel.autocp.database.models.SolutionFile
 import com.github.pushpavel.autocp.tester.utils.splitCommandString
 import com.intellij.execution.configurations.GeneralCommandLine
+import com.intellij.openapi.project.Project
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -21,6 +22,7 @@ class TwoStepProcessFactory(private val workingDir: File, private val commandLis
 
     companion object {
         suspend fun from(
+            project: Project,
             solutionFile: SolutionFile,
             lang: Lang
         ): Pair<TwoStepProcessFactory, ProcessRunner.CapturedResults?> {
@@ -30,12 +32,12 @@ class TwoStepProcessFactory(private val workingDir: File, private val commandLis
                 Files.createTempDirectory("AutoCp")
             }.toFile()
 
-            val executeCommand = lang.constructExecuteCommand(solutionFile.pathString, tempDir.path.pathString)
+            val executeCommand = lang.constructExecuteCommand(project, solutionFile.pathString, tempDir.path.pathString)
             val executeCommandList = splitCommandString(executeCommand)
 
             var result: ProcessRunner.CapturedResults? = null
             if (lang.buildCommand != null) {
-                val buildCommand = lang.constructBuildCommand(solutionFile.pathString, tempDir.path.pathString)
+                val buildCommand = lang.constructBuildCommand(project, solutionFile.pathString, tempDir.path.pathString)
                 val buildCommandList = splitCommandString(buildCommand)
 
                 try {
