@@ -9,7 +9,7 @@ data class InstallEvent(val version: String) : Event {
     override fun JsonObjectBuilder.buildJson() {
         put("name", "install")
         putJsonObject("params") {
-            put("version", version)
+            put("installedVersion", version)
         }
     }
 }
@@ -18,7 +18,7 @@ class UninstallEvent(val version: String) : Event {
     override fun JsonObjectBuilder.buildJson() {
         put("name", "uninstall")
         putJsonObject("params") {
-            put("version", version)
+            put("uninstalledVersion", version)
         }
     }
 }
@@ -27,7 +27,7 @@ class UpdateEvent(val version: String) : Event {
     override fun JsonObjectBuilder.buildJson() {
         put("name", "update")
         putJsonObject("params") {
-            put("version", version)
+            put("updatedVersion", version)
         }
     }
 }

@@ -21,6 +21,7 @@ class AutoCpGeneralSettingsConfigurable : BoundConfigurable("AutoCp") {
                     TileCellRenderer { text = it.presentable() }
                 )
             }
+            FileGenerationRootRow().placeUI(this)
         }
     }
 }

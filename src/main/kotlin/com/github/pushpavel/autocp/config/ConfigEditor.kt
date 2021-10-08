@@ -4,27 +4,24 @@ import com.github.pushpavel.autocp.common.helpers.pathString
 import com.github.pushpavel.autocp.common.ui.dsl.startValidating
 import com.github.pushpavel.autocp.common.ui.dsl.withValidation
 import com.github.pushpavel.autocp.common.ui.helpers.isError
-import com.github.pushpavel.autocp.database.autoCp
+import com.github.pushpavel.autocp.config.validators.SolutionFilePathErr
+import com.github.pushpavel.autocp.config.validators.getValidSolutionFile
 import com.intellij.openapi.options.SettingsEditor
 import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.DialogPanel
 import com.intellij.openapi.ui.ValidationInfo
-import com.intellij.openapi.vfs.LocalFileSystem
-import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.ui.layout.ValidationInfoBuilder
 import com.intellij.ui.layout.panel
-import kotlin.io.path.Path
 
 /**
  * UI Editor of [AutoCpConfig] Run Configuration
  */
-class ConfigEditor(project: Project) : SettingsEditor<AutoCpConfig>(), DumbAware {
+class ConfigEditor(val project: Project, val config: AutoCpConfig) : SettingsEditor<AutoCpConfig>(), DumbAware {
     @Suppress("MemberVisibilityCanBePrivate")
     var solutionFilePath = ""
 
     private lateinit var editor: DialogPanel
-    private val db = project.autoCp()
     private val invalidFields = mutableMapOf<String, Boolean>()
 
     override fun createEditor() = panel {
@@ -39,30 +36,21 @@ class ConfigEditor(project: Project) : SettingsEditor<AutoCpConfig>(), DumbAware
 
 
     private fun ValidationInfoBuilder.validateSolutionFilePath(pathString: String): ValidationInfo? {
-        // TODO: replace this validation with [config.validators.getValidSolutionFile]
-        val info = run {
-            if (pathString.isBlank())
-                return@run error("Must not be empty")
-
-            val file: VirtualFile?
-
-            try {
-                file = LocalFileSystem.getInstance().findFileByNioFile(Path(pathString))
-            } catch (e: Exception) {
-                return@run error("Invalid path")
-            }
-
-            if (file?.exists() != true)
-                return@run error("File does not exists")
-
-            if (!db.solutionFiles.containsKey(pathString))
-                return@run warning("AutoCp is not enabled for this file")
-
+        val info = try {
+            getValidSolutionFile(project, config.name, pathString)
             null
+        } catch (e: SolutionFilePathErr) {
+            when (e) {
+                is SolutionFilePathErr.BlankPathErr -> error("Must not be empty")
+                is SolutionFilePathErr.FileDoesNotExist -> error("File does not exists")
+                is SolutionFilePathErr.FileNotRegistered -> warning("AutoCp is not enabled for this file")
+                is SolutionFilePathErr.FormatErr -> error("Invalid path")
+            }
+        } catch (e: Exception) {
+            error("Unknown error")
         }
 
         invalidFields["solutionFilePath"] = info.isError()
-
         return info
     }
 

@@ -6,6 +6,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class AutoCpDB(
+    val version: Int,
     val problems: Map<String, Map<String, Problem>> = mapOf(),
     val solutionFiles: Map<String, SolutionFile> = mapOf(),
 )

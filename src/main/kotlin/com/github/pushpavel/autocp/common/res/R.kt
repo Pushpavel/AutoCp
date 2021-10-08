@@ -7,5 +7,6 @@ object R {
     val keys = AutoCpKeys
     val icons = AutoCpIcons
     val files = AutoCpFiles
+    val notify = AutoCpNotifications
     val others = AutoCpOthers
 }

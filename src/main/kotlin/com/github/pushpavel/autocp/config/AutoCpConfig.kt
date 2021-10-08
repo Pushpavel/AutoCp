@@ -22,13 +22,13 @@ class AutoCpConfig(project: Project, factory: ConfigurationFactory, name: String
     /**
      * Returns [RunProfileState] that defines the execution of this Run Configuration
      */
-    override fun getState(executor: Executor, environment: ExecutionEnvironment) = AutoCpRunState(this)
+    override fun getState(executor: Executor, environment: ExecutionEnvironment) = AutoCpRunState(project, this)
 
 
     /**
      * Returns UI Editor for this Run Configuration
      */
-    override fun getConfigurationEditor() = ConfigEditor(project)
+    override fun getConfigurationEditor() = ConfigEditor(project, this)
 
 
     /**
