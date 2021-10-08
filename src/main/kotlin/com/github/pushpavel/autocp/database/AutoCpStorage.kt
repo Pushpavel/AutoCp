@@ -31,11 +31,7 @@ class AutoCpStorage(val project: Project) {
         val path = Paths.get(project.basePath!!, ".autocp")
 
         val db = if (path.exists()) {
-            runReadAction {
-                // TODO: show error notification for document null due to file association changes
-                Json.decodeFromString(path.readText())
-                // TODO: show error notification for .autocp in invalid format
-            }
+            runReadAction { Json.decodeFromString(path.readText()) }
         } else
             AutoCpDB(R.keys.autoCpFileVersionNumber)
 

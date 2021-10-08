@@ -126,37 +126,12 @@ object AutoCpStrings {
     // Problem Gathering Service Gathering strings
     const val problemGatheringTitle = "Problem Gathering"
 
-    const val competitiveCompanionJsonFormatErrMsg =
-        "The Problem sent by competitive companion was not parsed correctly. This was not supposed to happen, $fileIssue"
 
     fun gatheredReport(problems: List<Problem>, total: Int?): String {
         if (total == null) return ""
         return "(${problems.size}/${total}) problems gathered.\n" +
                 problems.joinToString(separator = "\n") { "\t" + it.name }
     }
-
-    fun allProblemsGatheredMsg(problems: List<Problem>, total: Int) = "" +
-            "All problems gathered from ${problems.first().groupName}\n\n" +
-            gatheredReport(problems, total)
-
-
-    fun gatheringProblemsCancelled(problems: List<Problem>, total: Int) = "" +
-            "You have cancelled.\n\n" +
-            gatheredReport(problems, total)
-
-    fun gatheringJsonErrMsg(problems: List<Problem>, total: Int?) = "" +
-            competitiveCompanionJsonFormatErrMsg + "\n\n" +
-            gatheredReport(problems, total)
-
-
-    fun gatheringProblemTimeout(problems: List<Problem>, total: Int?) = "" +
-            "Competitive companion has not responded for too long. You should try again.\n" +
-            "This could happen due to below reasons\n" +
-            "\t1.Competitive companion is shutdown (you may have closed the browser tab)\n" +
-            "\t2.you clicked competitive companion button before AutoCp started listening.\n" +
-            "if these were not the reason, $fileIssue\n\n" +
-            gatheredReport(problems, total)
-
 
     // Testing Process Strings
 

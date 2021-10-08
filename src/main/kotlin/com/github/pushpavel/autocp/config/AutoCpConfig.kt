@@ -28,7 +28,7 @@ class AutoCpConfig(project: Project, factory: ConfigurationFactory, name: String
     /**
      * Returns UI Editor for this Run Configuration
      */
-    override fun getConfigurationEditor() = ConfigEditor(project)
+    override fun getConfigurationEditor() = ConfigEditor(project, this)
 
 
     /**

@@ -12,9 +12,22 @@ object AutoCpNotifications {
             "All ports supported by competitive companion browser extension is busy\n" +
                     "Ports:\n" + e.ports.joinToString("\n") { it.toString() }
         )
-        ProblemGatheringErr.JsonErr -> TODO()
-        ProblemGatheringErr.TimeoutErr -> TODO()
-        ProblemGatheringErr.Cancellation -> TODO()
+        ProblemGatheringErr.JsonErr -> notifyErr(
+            "Generating File Failed",
+            "The Problem sent by competitive companion was not parsed correctly. " +
+                    "This was not supposed to happen, ${AutoCpStrings.fileIssue}"
+        )
+        ProblemGatheringErr.TimeoutErr -> notifyErr(
+            "Generating File Failed",
+            "Competitive companion has not responded for too long. You should try again.\n" +
+                    "This could happen due to below reasons\n" +
+                    "\t1.Competitive companion is shutdown (you may have closed the browser tab)\n" +
+                    "\t2.you clicked competitive companion button before AutoCp started listening.\n" +
+                    "if these were not the reason, ${AutoCpStrings.fileIssue}\n"
+        )
+        ProblemGatheringErr.Cancellation -> {
+            // ignored
+        }
     }
 
     fun problemGatheringUncaught(e: Exception) = notifyWarn(
