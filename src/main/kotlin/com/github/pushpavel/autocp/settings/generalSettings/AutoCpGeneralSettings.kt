@@ -17,7 +17,12 @@ class AutoCpGeneralSettings : PersistentStateComponent<AutoCpGeneralSettings> {
 
 
     fun constructFileGenerationRoot(groupName: String): String {
-        return fileGenerationRoot.replace(R.keys.groupNameMacro, groupName)
+        return fileGenerationRoot
+            .replace(
+                R.keys.groupNameMacro,
+                groupName
+                    .replace("[^0-9a-zA-Z_\\- ]".toRegex(), "")
+            )
     }
 
     override fun getState() = this

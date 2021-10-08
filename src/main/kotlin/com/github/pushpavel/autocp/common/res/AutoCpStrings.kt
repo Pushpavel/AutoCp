@@ -40,7 +40,7 @@ object AutoCpStrings {
 
 
     // General Settings strings
-    const val openFilesOnGatherText = "Open files while gathering problems from competitive companion"
+    const val openFilesOnGatherText = "Open files after generating"
 
     fun OpenFileOnGather.presentable() = when (this) {
         OpenFileOnGather.NONE -> "None"

@@ -2,14 +2,12 @@ package com.github.pushpavel.autocp.gather.base
 
 import com.github.pushpavel.autocp.common.res.R
 import com.github.pushpavel.autocp.settings.generalSettings.AutoCpGeneralSettings
+import com.github.pushpavel.autocp.settings.generalSettings.FileGenerationRootRow
 import com.github.pushpavel.autocp.settings.projectSettings.autoCpProject
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.DialogWrapper
 import com.intellij.ui.layout.LCFlags
 import com.intellij.ui.layout.panel
-import java.nio.file.InvalidPathException
-import kotlin.io.path.Path
-import kotlin.io.path.pathString
 
 var extension = ""
 var rootDir = ""
@@ -47,28 +45,8 @@ fun showProblemGatheringDialog(project: Project, groupName: String): Boolean {
                             error("Should not be empty")
                     }
             }
-            row("File Generation Root") {
-                textField(::rootDir)
-                    .onReset { rootDir = generalSettings.fileGenerationRoot }
-                    .onIsModified { rootDir != generalSettings.fileGenerationRoot }
-                    .onApply {
-                        try {
-                            generalSettings.fileGenerationRoot = if (rootDir.isNotBlank())
-                                Path(rootDir).pathString
-                            else ""
-                        } catch (e: InvalidPathException) {
-                            // ignored
-                        }
-                    }.withValidationOnInput {
-                        try {
-                            if (it.text.isNotBlank())
-                                Path(it.text)
-                            null
-                        } catch (e: InvalidPathException) {
-                            error(e.localizedMessage)
-                        }
-                    }.comment(R.strings.fileGenerationRootComment)
-            }
+            FileGenerationRootRow().placeUI(this)
+
             row {
                 checkBox("Don't ask again", ::dontAskBeforeFileGeneration)
                     .onReset { dontAskBeforeFileGeneration = !projectSettings.askBeforeFileGeneration }

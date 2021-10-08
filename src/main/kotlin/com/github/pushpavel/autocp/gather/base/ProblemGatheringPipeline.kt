@@ -91,6 +91,7 @@ class ProblemGatheringPipeline(val project: Project) : ProblemGatheringListener 
                     }
 
                 } catch (e: Exception) {
+                    e.printStackTrace()
                     subscriber.onError(e, problem, batch, extension)
                 }
             }

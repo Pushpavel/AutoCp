@@ -1,11 +1,11 @@
 package com.github.pushpavel.autocp.gather.filegen
 
-import com.github.pushpavel.autocp.common.helpers.ioScope
 import com.github.pushpavel.autocp.common.helpers.pathString
 import com.github.pushpavel.autocp.database.models.Problem
 import com.github.pushpavel.autocp.gather.FileTemplates
 import com.github.pushpavel.autocp.gather.models.BatchJson
 import com.github.pushpavel.autocp.gather.models.GenerateFileErr
+import com.github.pushpavel.autocp.settings.generalSettings.AutoCpGeneralSettings
 import com.intellij.ide.actions.CreateFileFromTemplateAction
 import com.intellij.ide.fileTemplates.FileTemplate
 import com.intellij.openapi.application.runReadAction
@@ -16,16 +16,18 @@ import com.intellij.psi.PsiDirectory
 import com.intellij.psi.PsiManager
 import com.intellij.util.IncorrectOperationException
 import java.nio.file.Paths
+import kotlin.io.path.Path
 import kotlin.io.path.pathString
 
-val scope = ioScope()
-
 open class DefaultFileGenerator(val project: Project) : FileGenerator {
+
+    val generalSettings = AutoCpGeneralSettings.instance
 
     override fun isSupported(extension: String) = true
 
     open fun getRootPsiDir(groupName: String): PsiDirectory {
-        val rootPath = Paths.get(project.basePath!!, groupName)
+        val relPath = generalSettings.constructFileGenerationRoot(groupName).pathString
+        val rootPath = Paths.get(Path(project.basePath!!).pathString, relPath)
         val rootDir = VfsUtil.createDirectories(rootPath.pathString)
         return runReadAction { PsiManager.getInstance(project).findDirectory(rootDir)!! }
     }
