@@ -15,7 +15,7 @@ import kotlin.io.path.pathString
 @Service
 class SolutionFiles(val project: Project) {
     private val db = project.autoCp()
-    private val solutionFiles = db.solutionFilesFlow.value
+    private val solutionFiles get() = db.solutionFilesFlow.value
 
     operator fun contains(pathString: String): Boolean {
         val path = relativePath(pathString)

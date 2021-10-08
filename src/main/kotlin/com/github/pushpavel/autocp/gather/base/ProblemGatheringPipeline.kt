@@ -11,10 +11,9 @@ import com.github.pushpavel.autocp.settings.projectSettings.autoCpProject
 import com.intellij.ide.actions.OpenFileAction
 import com.intellij.ide.projectView.ProjectView
 import com.intellij.openapi.application.ModalityState
-import com.intellij.openapi.application.invokeLater
 import com.intellij.openapi.application.runInEdt
-import com.intellij.openapi.application.runWriteAction
 import com.intellij.openapi.diagnostic.Logger
+import com.intellij.openapi.project.DumbService
 import com.intellij.openapi.project.Project
 import com.jetbrains.rd.util.Queue
 
@@ -66,35 +65,34 @@ class ProblemGatheringPipeline(val project: Project) : ProblemGatheringListener 
 
     private fun flushProblemQueue(batch: BatchJson) {
         val extension = project.autoCpProject().defaultFileExtension
-        invokeLater(ModalityState.NON_MODAL) {
-            flush = true
-            while (problemQueue.isNotEmpty()) {
-                val problem = problemQueue.remove()
+        flush = true
+        while (problemQueue.isNotEmpty()) {
+            val problem = problemQueue.remove()
+            val openFile = when (AutoCpGeneralSettings.instance.openFilesOnGather) {
+                OpenFileOnGather.NONE -> false
+                OpenFileOnGather.ONLY_FIRST -> currentBatch != batch
+                OpenFileOnGather.ALL -> true
+            }
+
+            currentBatch = batch
+
+            DumbService.getInstance(project).smartInvokeLater({
                 try {
-                    val openFile = when (AutoCpGeneralSettings.instance.openFilesOnGather) {
-                        OpenFileOnGather.NONE -> false
-                        OpenFileOnGather.ONLY_FIRST -> currentBatch != batch
-                        OpenFileOnGather.ALL -> true
-                    }
+                    val file = fileGenerator?.generateFile(extension, problem, batch)
+                    ProjectView.getInstance(project).refresh()
 
-                    currentBatch = batch
-                    runWriteAction {
+                    if (file != null)
+                        subscriber.onGenerated(file, problem, batch, extension)
 
-                        val file = fileGenerator?.generateFile(extension, problem, batch)
-                        ProjectView.getInstance(project).refresh()
+                    if (openFile && file != null)
+                        OpenFileAction.openFile(file, project)
 
-                        if (openFile && file != null)
-                            OpenFileAction.openFile(file, project)
-
-                        if (file != null)
-                            subscriber.onGenerated(file, problem, batch, extension)
-                    }
 
                 } catch (e: Exception) {
                     e.printStackTrace()
                     subscriber.onError(e, problem, batch, extension)
                 }
-            }
+            }, ModalityState.NON_MODAL)
         }
 
     }
