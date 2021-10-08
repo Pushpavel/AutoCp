@@ -32,7 +32,8 @@ object AutoCpStrings {
             "Stacktrace:\n${e.stackTraceToString()}"
 
     // problemGatheringDialog strings
-    const val problemGatheringDialogMsg = "You can always change these settings at Settings/Preferences > Tools > AutoCp > Project"
+    const val problemGatheringDialogMsg =
+        "You can always change these settings at Settings/Preferences > Tools > AutoCp > Project"
 
     // Settings strings
     const val projectSettingsOverrideMsg = "Some of these settings could be overridden at Tools > AutoCp > Project"
@@ -47,6 +48,11 @@ object AutoCpStrings {
         OpenFileOnGather.ALL -> "All"
     }
 
+    const val fileGenerationRootComment = "Relative to project root<br><br>" +
+            "Macros:<br>" +
+            "<b>${R.keys.groupNameMacro}</b> : name of the contest or category name"
+
+
     // Project Settings CMake
     const val addToCMakeMsg = "Add generated solution files to CMakeLists.txt"
 
@@ -56,9 +62,9 @@ object AutoCpStrings {
             "So, relative path to executable won't work and should use <b>\$dir</b> to build absolute path.<br>" +
             "Make sure you wrap this absolute path with double quotes.<br><br>" +
             "Macros:<br>" +
-            "<b>@in</b> : absolute path to a solution file with quotes.<br>" +
-            "<b>\$dir</b> : absolute path to the isolated temp directory without quotes.<br>" +
-            "<b>@dir</b> : \"<b>\$dir</b>\"" +
+            "<b>${R.keys.inputPathMacro}</b> : absolute path to a solution file with quotes.<br>" +
+            "<b>${R.keys.dirUnquotedPathMacro}</b> : absolute path to the isolated temp directory without quotes.<br>" +
+            "<b>${R.keys.dirPathMacro}</b> : \"<b>\$dir</b>\"" +
             "</html>"
 
     const val buildCommandComment = "Run once before testing begins, usually should compile or generate an executable"

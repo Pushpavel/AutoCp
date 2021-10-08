@@ -12,6 +12,9 @@ object AutoCpKeys {
     const val dirPathMacro = "@dir"
     const val dirUnquotedPathMacro = "\$dir"
 
+    // Other Macros
+    const val groupNameMacro = "\$groupName"
+
     // File template keys
     const val fileTemplateName = "CP_TEMPLATE"
 
