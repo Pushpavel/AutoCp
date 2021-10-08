@@ -13,6 +13,10 @@
 
 - problem gathering success notifications
 
+### Changed
+
+- Can only enable files with file extensions configured in Settings/Preferences > Tools > AutoCp > Languages
+
 ## v0.7.0-eap.1
 
 ### Changed
