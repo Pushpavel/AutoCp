@@ -4,6 +4,10 @@ import com.github.pushpavel.autocp.common.res.R
 import com.github.pushpavel.autocp.common.ui.swing.TileCellRenderer
 import com.intellij.openapi.fileTypes.FileTypeManager
 import com.intellij.openapi.fileTypes.LanguageFileType
+import com.intellij.openapi.project.Project
+import java.nio.file.Paths
+import kotlin.io.path.Path
+import kotlin.io.path.pathString
 
 data class Lang(
     val extension: String,
@@ -14,17 +18,20 @@ data class Lang(
 ) {
 
 
-    fun constructBuildCommand(inputPath: String, dirPath: String): String {
+    fun constructBuildCommand(project: Project, inputPath: String, dirPath: String): String {
         if (buildCommand == null) return "internal error"
-        return constructCommand(buildCommand, inputPath, dirPath)
+        return constructCommand(project, buildCommand, inputPath, dirPath)
     }
 
-    fun constructExecuteCommand(inputPath: String, dirPath: String): String {
-        return constructCommand(executeCommand, inputPath, dirPath)
+    fun constructExecuteCommand(project: Project, inputPath: String, dirPath: String): String {
+        return constructCommand(project, executeCommand, inputPath, dirPath)
     }
 
-    private fun constructCommand(command: String, inputPath: String, dirPath: String): String {
-        return command.replace(R.keys.inputPathMacro, "\"$inputPath\"")
+    private fun constructCommand(project: Project, command: String, inputPath: String, dirPath: String): String {
+        val relPath = Path(inputPath)
+        val path = Paths.get(Path(project.basePath!!).pathString, relPath.pathString)
+
+        return command.replace(R.keys.inputPathMacro, "\"${path.pathString}\"")
             .replace(R.keys.dirUnquotedPathMacro, dirPath)
             .replace(R.keys.dirPathMacro, "\"$dirPath\"")
     }

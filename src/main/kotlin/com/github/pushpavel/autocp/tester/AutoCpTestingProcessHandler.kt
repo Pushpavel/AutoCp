@@ -12,6 +12,7 @@ import com.github.pushpavel.autocp.tester.base.ProcessFactory
 import com.github.pushpavel.autocp.tester.base.TestingProcessHandler
 import com.github.pushpavel.autocp.tester.base.TwoStepProcessFactory
 import com.github.pushpavel.autocp.tester.tree.TestNode
+import com.intellij.openapi.project.Project
 import kotlin.io.path.Path
 import kotlin.io.path.extension
 import kotlin.io.path.nameWithoutExtension
@@ -19,7 +20,7 @@ import kotlin.io.path.nameWithoutExtension
 /**
  * [TestingProcessHandler] implementation that creates a [TestcaseTreeTestingProcess] for execution
  */
-class AutoCpTestingProcessHandler(private val config: AutoCpConfig) : TestingProcessHandler() {
+class AutoCpTestingProcessHandler(val project: Project, private val config: AutoCpConfig) : TestingProcessHandler() {
 
     private val reporter = TreeTestingProcessReporter(this)
 
@@ -55,7 +56,7 @@ class AutoCpTestingProcessHandler(private val config: AutoCpConfig) : TestingPro
         else
             reporter.commandReady(config.name)
 
-        val result = runCatching { TwoStepProcessFactory.from(solutionFile, lang) }
+        val result = runCatching { TwoStepProcessFactory.from(project, solutionFile, lang) }
 
         if (lang.buildCommand != null)
             reporter.compileFinish(result.map { it.second!! })
