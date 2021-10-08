@@ -1,11 +1,11 @@
 package com.github.pushpavel.autocp.tool
 
+import com.github.pushpavel.autocp.build.settings.LangSettings
 import com.github.pushpavel.autocp.common.helpers.onFileSelectionChange
 import com.github.pushpavel.autocp.common.helpers.pathString
 import com.github.pushpavel.autocp.common.helpers.properties
 import com.github.pushpavel.autocp.common.helpers.toolWindowSelectedTabIndex
 import com.github.pushpavel.autocp.database.SolutionFiles
-import com.github.pushpavel.autocp.database.autoCp
 import com.github.pushpavel.autocp.tool.ui.AssociateFilePanel
 import com.github.pushpavel.autocp.tool.ui.SolutionFileSettingsPanel
 import com.github.pushpavel.autocp.tool.ui.TestcaseListPanel
@@ -51,7 +51,7 @@ class ToolFactory : ToolWindowFactory, DumbAware {
 
             if (file == null || !file.isValid || !editorManager.isFileOpen(file))
                 return@callback
-            if (file.pathString !in solutionFiles) {
+            if (file.pathString !in solutionFiles && file.pathString in LangSettings.instance.langs) {
                 val ui = AssociateFilePanel(Path(file.pathString).name) {
                     solutionFiles.upsertFile(Path(file.path))
                     callback(file)
