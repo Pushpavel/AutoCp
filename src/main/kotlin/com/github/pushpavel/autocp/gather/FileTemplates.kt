@@ -6,10 +6,8 @@ import com.intellij.ide.fileTemplates.FileTemplate
 import com.intellij.ide.fileTemplates.FileTemplateGroupDescriptor
 import com.intellij.ide.fileTemplates.FileTemplateGroupDescriptorFactory
 import com.intellij.ide.fileTemplates.FileTemplateManager
-import com.intellij.lang.Language
-import com.intellij.lang.LanguageUtil
 import com.intellij.openapi.fileTypes.FileTypeManager
-import com.intellij.openapi.fileTypes.LanguageFileType
+import com.intellij.openapi.fileTypes.UnknownFileType
 import com.intellij.openapi.project.Project
 
 class FileTemplates : FileTemplateGroupDescriptorFactory {
@@ -20,12 +18,8 @@ class FileTemplates : FileTemplateGroupDescriptorFactory {
         LangSettings.instance.defaultLangs.map { it.key }
             .filter { extension ->
                 val fileType = FileTypeManager.getInstance().getFileTypeByExtension(extension)
-                if (fileType !is LanguageFileType)
-                    false
-                else
-                    fileType.language != Language.ANY && LanguageUtil.isFileLanguage(fileType.language)
-
-            }.forEach { group.addTemplate("${R.keys.fileTemplateName}_${it.uppercase()}") }
+                fileType !is UnknownFileType
+            }.forEach { group.addTemplate("${R.keys.fileTemplateName}_${it.uppercase()}.$it") }
 
         return group
     }
@@ -35,7 +29,7 @@ class FileTemplates : FileTemplateGroupDescriptorFactory {
         const val GROUP_NAME = "AutoCp Templates"
 
         private fun cpTemplateFromExtensionOrNull(extension: String, project: Project): FileTemplate? {
-            val templateName = "${R.keys.fileTemplateName}_${extension.uppercase()}"
+            val templateName = "${R.keys.fileTemplateName}_${extension.uppercase()}.$extension"
             val m = FileTemplateManager.getInstance(project)
             return try {
                 m.getInternalTemplate(templateName)
@@ -50,7 +44,8 @@ class FileTemplates : FileTemplateGroupDescriptorFactory {
 
         fun cpTemplateForExtension(extension: String, project: Project): FileTemplate {
             return cpTemplateFromExtensionOrNull(extension, project)
-                ?: FileTemplateManager.getInstance(project).addTemplate("abc.$extension", extension)
+                ?: FileTemplateManager.getInstance(project)
+                    .addTemplate("${R.keys.fileTemplateName}_${extension.uppercase()}.$extension", extension)
         }
     }
 }
