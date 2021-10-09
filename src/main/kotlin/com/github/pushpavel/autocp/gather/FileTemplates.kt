@@ -25,7 +25,7 @@ class FileTemplates : FileTemplateGroupDescriptorFactory {
                 else
                     fileType.language != Language.ANY && LanguageUtil.isFileLanguage(fileType.language)
 
-            }.forEach { group.addTemplate("${R.keys.fileTemplateName}.${it}") }
+            }.forEach { group.addTemplate("${R.keys.fileTemplateName}_${it.uppercase()}") }
 
         return group
     }
@@ -35,7 +35,7 @@ class FileTemplates : FileTemplateGroupDescriptorFactory {
         const val GROUP_NAME = "AutoCp Templates"
 
         private fun cpTemplateFromExtensionOrNull(extension: String, project: Project): FileTemplate? {
-            val templateName = "${R.keys.fileTemplateName}.${extension}"
+            val templateName = "${R.keys.fileTemplateName}_${extension.uppercase()}"
             val m = FileTemplateManager.getInstance(project)
             return try {
                 m.getInternalTemplate(templateName)
