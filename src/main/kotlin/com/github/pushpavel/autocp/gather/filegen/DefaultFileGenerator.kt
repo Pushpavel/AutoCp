@@ -1,13 +1,14 @@
 package com.github.pushpavel.autocp.gather.filegen
 
 import com.github.pushpavel.autocp.common.helpers.pathString
+import com.github.pushpavel.autocp.common.res.R
 import com.github.pushpavel.autocp.database.models.Problem
 import com.github.pushpavel.autocp.gather.FileTemplates
 import com.github.pushpavel.autocp.gather.models.BatchJson
 import com.github.pushpavel.autocp.gather.models.GenerateFileErr
 import com.github.pushpavel.autocp.settings.generalSettings.AutoCpGeneralSettings
-import com.intellij.ide.actions.CreateFileFromTemplateAction
 import com.intellij.ide.fileTemplates.FileTemplate
+import com.intellij.ide.fileTemplates.FileTemplateManager
 import com.intellij.openapi.application.runReadAction
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VfsUtil
@@ -64,12 +65,19 @@ open class DefaultFileGenerator(val project: Project) : FileGenerator {
             )
         }
 
-        val psiFile = CreateFileFromTemplateAction.createFileFromTemplate(
+        FileTemplateManager.getInstance(project).defaultProperties.apply {
+            setProperty(R.keys.problemNameVar, problem.name)
+            setProperty(R.keys.groupNameVar, problem.groupName)
+        }
+
+        val psiFile = FileTemplates.createFileFromTemplate(
             fileName,
             fileTemplate,
             parentPsiDir,
-            null,
-            false
+            mapOf(
+                R.keys.problemNameVar to problem.name,
+                R.keys.groupNameVar to problem.groupName
+            )
         )
 
         return psiFile?.virtualFile
