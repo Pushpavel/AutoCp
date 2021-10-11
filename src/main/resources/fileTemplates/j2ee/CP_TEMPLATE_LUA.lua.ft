@@ -1,8 +1,1 @@
-#**
- * lua Competitive Programming Template
- *
- * wrap the code like #[[ code ]]# so that it is generated as it is
- *###
-#[[
-    
-]]#
+//  ${PROBLEM_NAME}

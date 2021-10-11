@@ -76,6 +76,7 @@ class FileTemplates : FileTemplateGroupDescriptorFactory {
             } catch (e: ParseException) {
                 throw IncorrectOperationException("Error parsing Velocity template: " + e.message, e as Throwable)
             } catch (e: IncorrectOperationException) {
+                // TODO: notify this and parse exception as it may have user errors
                 throw e
             } catch (e: Exception) {
                 e.printStackTrace()
