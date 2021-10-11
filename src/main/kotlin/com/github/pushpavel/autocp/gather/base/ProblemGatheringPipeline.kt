@@ -6,6 +6,7 @@ import com.github.pushpavel.autocp.gather.filegen.FileGenerationListener
 import com.github.pushpavel.autocp.gather.filegen.FileGenerator
 import com.github.pushpavel.autocp.gather.filegen.FileGeneratorProvider
 import com.github.pushpavel.autocp.gather.models.BatchJson
+import com.github.pushpavel.autocp.gather.models.GenerateFileErr
 import com.github.pushpavel.autocp.settings.generalSettings.AutoCpGeneralSettings
 import com.github.pushpavel.autocp.settings.generalSettings.OpenFileOnGather
 import com.github.pushpavel.autocp.settings.projectSettings.autoCpProject
@@ -16,7 +17,9 @@ import com.intellij.openapi.application.runInEdt
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.project.DumbService
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.vfs.VfsUtil
 import com.jetbrains.rd.util.Queue
+import kotlin.io.path.Path
 
 /**
  * Handles [showProblemGatheringDialog] , File Generation Delegation and clearing current Batch
@@ -94,7 +97,12 @@ class ProblemGatheringPipeline(val project: Project) : ProblemGatheringListener 
 
 
                 } catch (e: Exception) {
-                    // TODO: open file if file already exists error is raised
+                    // opens file even if it was generated already
+                    if (openFile && e is GenerateFileErr.FileAlreadyExistsErr) {
+                        val file = VfsUtil.findFile(Path(e.filePath), true)
+                        if (file != null)
+                            OpenFileAction.openFile(file, project)
+                    }
 
                     e.printStackTrace()
                     subscriber.onError(e, problem, batch, extension)
