@@ -8,7 +8,6 @@ import com.github.pushpavel.autocp.gather.models.BatchJson
 import com.github.pushpavel.autocp.gather.models.GenerateFileErr
 import com.github.pushpavel.autocp.settings.generalSettings.AutoCpGeneralSettings
 import com.intellij.ide.fileTemplates.FileTemplate
-import com.intellij.ide.fileTemplates.FileTemplateManager
 import com.intellij.openapi.application.runReadAction
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VfsUtil
@@ -65,18 +64,16 @@ open class DefaultFileGenerator(val project: Project) : FileGenerator {
             )
         }
 
-        FileTemplateManager.getInstance(project).defaultProperties.apply {
-            setProperty(R.keys.problemNameVar, problem.name)
-            setProperty(R.keys.groupNameVar, problem.groupName)
-        }
-
+        val groupName = problem.groupName.split('-').getOrNull(1)?.trim()
+        val onlineJudge = problem.groupName.split('-')[0].trim()
         val psiFile = FileTemplates.createFileFromTemplate(
             fileName,
             fileTemplate,
             parentPsiDir,
             mapOf(
                 R.keys.problemNameVar to problem.name,
-                R.keys.groupNameVar to problem.groupName
+                R.keys.onlineJudgeVar to onlineJudge,
+                R.keys.groupNameVar to (groupName ?: ""),
             )
         )
 
