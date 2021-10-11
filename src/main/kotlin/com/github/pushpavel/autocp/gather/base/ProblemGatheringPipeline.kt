@@ -1,5 +1,6 @@
 package com.github.pushpavel.autocp.gather.base
 
+import com.github.pushpavel.autocp.common.errors.NoReachErr
 import com.github.pushpavel.autocp.database.models.Problem
 import com.github.pushpavel.autocp.gather.filegen.FileGenerationListener
 import com.github.pushpavel.autocp.gather.filegen.FileGenerator
@@ -78,10 +79,11 @@ class ProblemGatheringPipeline(val project: Project) : ProblemGatheringListener 
             }
 
             currentBatch = batch
+            val fileGen = fileGenerator ?: throw NoReachErr
 
             DumbService.getInstance(project).smartInvokeLater({
                 try {
-                    val file = fileGenerator?.generateFile(extension, problem, batch)
+                    val file = fileGen.generateFile(extension, problem, batch)
                     ProjectView.getInstance(project).refresh()
 
                     if (file != null)
