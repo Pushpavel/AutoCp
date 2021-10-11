@@ -43,8 +43,11 @@ class ProblemGatheringPipeline(val project: Project) : ProblemGatheringListener 
             fileGenerator =
                 fileGeneratorProvider.getSupportedFileGenerator(project.autoCpProject().defaultFileExtension)
 
+            val preComplete = problemQueue.size == batch.size
+
             flushProblemQueue(batch)
-            if (problemQueue.size == batch.size) {
+
+            if (preComplete) {
                 BatchProcessor.interruptBatch()
                 flush = false
                 fileGenerator = null
