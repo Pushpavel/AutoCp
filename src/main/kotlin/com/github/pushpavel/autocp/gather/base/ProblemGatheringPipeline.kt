@@ -94,6 +94,8 @@ class ProblemGatheringPipeline(val project: Project) : ProblemGatheringListener 
 
 
                 } catch (e: Exception) {
+                    // TODO: open file if file already exists error is raised
+
                     e.printStackTrace()
                     subscriber.onError(e, problem, batch, extension)
                 }

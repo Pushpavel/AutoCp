@@ -3,6 +3,7 @@ package com.github.pushpavel.autocp.common.res
 import com.github.pushpavel.autocp.common.helpers.notifyErr
 import com.github.pushpavel.autocp.common.helpers.notifyWarn
 import com.github.pushpavel.autocp.gather.base.ProblemGatheringErr
+import com.intellij.util.IncorrectOperationException
 import java.net.SocketException
 
 object AutoCpNotifications {
@@ -36,5 +37,11 @@ object AutoCpNotifications {
             is SocketException -> "cancelled"
             else -> R.strings.defaultFileIssue(e)
         }
+    )
+
+    fun fileGenerationIncorrectOperation(e: IncorrectOperationException) = notifyErr(
+        "File could not be generated due to file template issue",
+        e.localizedMessage + "\n\n" +
+                "If the error above is unexpected, ${R.strings.fileIssue}"
     )
 }

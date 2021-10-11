@@ -48,6 +48,8 @@
     <projectListeners>
         <listener class="com.github.pushpavel.autocp.extend.cmake.CMakeAddExecutable"
                   topic="com.github.pushpavel.autocp.gather.filegen.FileGenerationListener"/>
+        <listener class="com.github.pushpavel.autocp.gather.filegen.FileGenerationIssueHandler"
+                  topic="com.github.pushpavel.autocp.gather.filegen.FileGenerationListener"/>
         <listener class="com.github.pushpavel.autocp.common.analytics.listeners.ProblemGatherListener"
                   topic="com.github.pushpavel.autocp.gather.filegen.FileGenerationListener"/>
         <listener class="com.github.pushpavel.autocp.database.listeners.GeneratedSolutionFileAdder"
