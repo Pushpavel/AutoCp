@@ -2,13 +2,19 @@
 
 #### Install plugin
 
-See instructions [here](/docs/installation.md)
+Open your IDE and click below button.
+
+  <div class="installElContainer"></div>
+<br>
+
+[...more ways to install](installation.md)
 
 #### Generate solution files
 
 With the IDE project already open, Open the problem/ contest page in the browser and press the competitive companion
-button in the browser. This will generate files with default file template. You can change the programming language
-in <kbd>Settings/Preferences</kbd> > <kbd>Tools</kbd> > <kbd>AutoCp</kbd> before generating the files.
+button in the browser. This opens a dialog where u can change the file extension, and the files will be generated with a
+file template according to the file extension in <kbd>Settings/ Preferences</kbd> > <kbd>Editor</kbd> > <kbd>File and
+Code Templates</kbd> > <kbd> Other Templates </kbd> > <kbd>AutoCp Templates</kbd>
 
 #### Edit testcases
 
@@ -18,14 +24,6 @@ currently selected file.
 #### Check the solution
 
 Right-click the solution file and run using AutoCp.
-
-## File Structure
-
-!> Information here is outdated, will be updated soon
-
-files are generated inside a folder named like ```<judge> - <category/contest>``` that the problem belongs to.
-
-!> Moving or renaming files will unlink the solution file to its problem. This restriction will be removed
 
 #### ```.autocp``` file at the root of the project
 
