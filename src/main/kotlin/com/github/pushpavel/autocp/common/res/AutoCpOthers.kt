@@ -22,7 +22,6 @@ object AutoCpOthers {
                 Pair("gcc @in -o \"./a.exe\"", "\"\$dir/a.exe\""),
                 Pair("clang @in -o \"./a.exe\"", "\"\$dir/a.exe\""),
             ),
-            "//"
         ),
         DefaultLangData(
             "cpp",
@@ -30,21 +29,43 @@ object AutoCpOthers {
                 Pair("g++ @in -o \"./a.exe\" -std=c++17", "\"\$dir/a.exe\""),
                 Pair("clang++ @in -o \"./a.exe\" -std=c++17", "\"\$dir/a.exe\""),
             ),
-            "//"
         ),
         DefaultLangData(
             "java",
             listOf(
                 Pair("javac @in -d @dir", "java Main"),
             ),
-            "//"
         ),
         DefaultLangData(
             "py",
             listOf(
                 Pair(null, "python @in"),
             ),
-            "#"
+        ),
+        DefaultLangData(
+            "kt",
+            listOf(
+                Pair("kotlinc @in -include-runtime -d solution.jar", "java -jar solution.jar"),
+            ),
+        ),
+        DefaultLangData(
+            "rs",
+            listOf(
+                Pair("rustc @in -o a.exe", "\"\$dir/a.exe\""),
+            ),
+        ),
+        DefaultLangData(
+            "cs",
+            listOf(
+                Pair("csc @in /out:a.exe", "\"\$dir/a.exe\""),
+            ),
+        ),
+        DefaultLangData(
+            "js",
+            listOf(
+                Pair(null, "d8 @in"),
+                Pair(null, "node @in"),
+            ),
         ),
     )
 }

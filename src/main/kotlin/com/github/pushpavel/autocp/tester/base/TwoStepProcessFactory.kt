@@ -26,7 +26,6 @@ class TwoStepProcessFactory(private val workingDir: File, private val commandLis
             solutionFile: SolutionFile,
             lang: Lang
         ): Pair<TwoStepProcessFactory, ProcessRunner.CapturedResults?> {
-            // TODO: reuse same temp dir to speed up compilations
             val tempDir = withContext(Dispatchers.IO) {
                 @Suppress("BlockingMethodInNonBlockingContext")
                 Files.createTempDirectory("AutoCp")

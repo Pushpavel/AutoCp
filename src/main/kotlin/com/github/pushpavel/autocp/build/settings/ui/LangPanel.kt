@@ -25,14 +25,8 @@ class LangPanel(val model: CollectionListModel<Lang>) : DslCallbacks, Disposable
         editorFactory.createEditor(buildCommandDoc).apply { customizeEditor() }
     private val executeCommandEditor =
         editorFactory.createEditor(executeCommandDoc).apply { customizeEditor() }
-    var lineCommentPrefix = ""
 
     val component: DialogPanel = panel {
-        row("Single line comment prefix") {
-            textField(::lineCommentPrefix, 2).apply {
-                onReset { component.isEnabled = lang?.isDefault == false }
-            }
-        }
         row("Build Command") {
             buildCommandEditor
                 .component(CCFlags.growX)
@@ -69,7 +63,6 @@ class LangPanel(val model: CollectionListModel<Lang>) : DslCallbacks, Disposable
                 if (l.executeCommand != executeCommandDoc.text)
                     executeCommandDoc.setText(l.executeCommand)
             }
-            lineCommentPrefix = l.lineCommentPrefix
             component.reset()
         }
     }
@@ -78,7 +71,6 @@ class LangPanel(val model: CollectionListModel<Lang>) : DslCallbacks, Disposable
         return lang != null
                 && (lang!!.buildCommand != buildCommandDoc.text.takeIf { it.isNotBlank() }?.trim()
                 || lang!!.executeCommand != executeCommandDoc.text.trim()
-                || lang!!.lineCommentPrefix != lineCommentPrefix.trim()
                 )
     }
 
@@ -86,7 +78,6 @@ class LangPanel(val model: CollectionListModel<Lang>) : DslCallbacks, Disposable
         lang = lang?.copy(
             buildCommand = buildCommandDoc.text.takeIf { it.isNotBlank() }?.trim(),
             executeCommand = executeCommandDoc.text.trim(),
-            lineCommentPrefix = lineCommentPrefix.trim()
         )
     }
 

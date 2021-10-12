@@ -10,7 +10,7 @@ interface FileGenerationListener {
         val TOPIC = Topic.create("Solution File Generation", FileGenerationListener::class.java)
     }
 
-    fun onGenerated(file: VirtualFile, problem: Problem, batch: BatchJson, extension: String)
+    fun onGenerated(file: VirtualFile, problem: Problem, batch: BatchJson, extension: String) {}
 
     fun onError(e: Exception, problem: Problem, batch: BatchJson, extension: String) {}
 }
