@@ -34,7 +34,6 @@ fun buildDefaultLangs(configs: List<DefaultLangData>): Map<String, Lang> {
             it.extension,
             commandPair.first,
             commandPair.second,
-            it.lineCommentPrefix,
             true
         )
     }.associateBy { it.extension }
