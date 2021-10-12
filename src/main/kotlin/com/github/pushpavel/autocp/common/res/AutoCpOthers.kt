@@ -55,6 +55,12 @@ object AutoCpOthers {
             ),
         ),
         DefaultLangData(
+            "cs",
+            listOf(
+                Pair("csc @in /out:a.exe", "\"\$dir/a.exe\""),
+            ),
+        ),
+        DefaultLangData(
             "js",
             listOf(
                 Pair(null, "d8 @in"),
