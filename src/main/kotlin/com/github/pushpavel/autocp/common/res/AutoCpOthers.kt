@@ -43,6 +43,12 @@ object AutoCpOthers {
             ),
         ),
         DefaultLangData(
+            "kt",
+            listOf(
+                Pair("kotlinc @in -include-runtime -d solution.jar", "java -jar solution.jar"),
+            ),
+        ),
+        DefaultLangData(
             "js",
             listOf(
                 Pair(null, "d8 @in"),
