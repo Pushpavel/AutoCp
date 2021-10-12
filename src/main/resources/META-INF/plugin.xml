@@ -4,7 +4,6 @@
     <!-- Product and plugin compatibility requirements -->
     <!-- https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
     <depends>com.intellij.modules.platform</depends>
-    <depends>com.intellij.modules.clion.cmake</depends>
     <resource-bundle>messages.autocp</resource-bundle>
 
     <extensions defaultExtensionNs="com.intellij">
