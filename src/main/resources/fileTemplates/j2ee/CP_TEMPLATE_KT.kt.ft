@@ -1,0 +1,5 @@
+//  ${PROBLEM_NAME}
+
+fun main(args: Array<String>) {
+    $END
+}

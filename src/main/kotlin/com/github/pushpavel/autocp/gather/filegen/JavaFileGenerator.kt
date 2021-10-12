@@ -3,6 +3,7 @@ package com.github.pushpavel.autocp.gather.filegen
 import com.github.pushpavel.autocp.common.helpers.pathString
 import com.github.pushpavel.autocp.database.models.Problem
 import com.github.pushpavel.autocp.gather.models.BatchJson
+import com.github.pushpavel.autocp.gather.models.GenerateFileErr
 import com.intellij.openapi.application.runReadAction
 import com.intellij.openapi.application.runWriteAction
 import com.intellij.openapi.module.ModuleManager
@@ -16,6 +17,7 @@ import com.intellij.psi.PsiDirectory
 import com.intellij.psi.PsiManager
 import org.jetbrains.jps.model.java.JavaSourceRootType
 import java.nio.file.Paths
+import kotlin.io.path.Path
 import kotlin.io.path.pathString
 
 class JavaFileGenerator(project: Project) : DefaultFileGenerator(project) {
@@ -36,28 +38,39 @@ class JavaFileGenerator(project: Project) : DefaultFileGenerator(project) {
     }
 
     override fun generateFile(extension: String, problem: Problem, batch: BatchJson): VirtualFile? {
-        return super.generateFile(extension, problem, batch)?.also {
-            runWriteAction {
-                val m = ModuleUtil.findModuleForFile(it.parent, project)
-                if (m != null) {
-                    val f = ProjectRootManager.getInstance(project).fileIndex.getContentRootForFile(it.parent)
-                    val model = m.rootManager.modifiableModel
-                    model.contentEntries.firstOrNull { c -> c.file == f }?.addExcludeFolder(it.parent)
-                    model.commit()
+        var file: VirtualFile? = null
+
+        try {
+            file = super.generateFile(extension, problem, batch)
+        } catch (e: GenerateFileErr.FileAlreadyExistsErr) {
+            file = VfsUtil.findFile(Path(e.filePath), true)
+            throw e
+        } finally {
+            if (file != null)
+                runWriteAction {
+                    val parent = file.parent
+                    val m = ModuleUtil.findModuleForFile(parent, project)
+                    if (m != null) {
+                        val f = ProjectRootManager.getInstance(project).fileIndex.getContentRootForFile(parent)
+                        val model = m.rootManager.modifiableModel
+                        model.contentEntries.firstOrNull { c -> c.file == f }?.addExcludeFolder(parent)
+                        model.commit()
+                    }
+                    if (ModuleManager.getInstance(project).findModuleByName(parent.name) == null) {
+                        val module = ModuleManager.getInstance(project)
+                            .newModule(
+                                Paths.get(parent.pathString, "${parent.nameWithoutExtension}.iml"),
+                                "JAVA_MODULE"
+                            )
+                        val model = module.rootManager.modifiableModel
+                        val contentEntry = model.addContentEntry(parent)
+                        contentEntry.addSourceFolder(parent, JavaSourceRootType.SOURCE)
+                        model.inheritSdk()
+                        model.commit()
+                    }
                 }
-                if (ModuleManager.getInstance(project).findModuleByName(it.parent.name) == null) {
-                    val module = ModuleManager.getInstance(project)
-                        .newModule(
-                            Paths.get(it.parent.pathString, "${it.parent.nameWithoutExtension}.iml"),
-                            "JAVA_MODULE"
-                        )
-                    val model = module.rootManager.modifiableModel
-                    val contentEntry = model.addContentEntry(it.parent)
-                    contentEntry.addSourceFolder(it.parent, JavaSourceRootType.SOURCE)
-                    model.inheritSdk()
-                    model.commit()
-                }
-            }
+
         }
+        return file
     }
 }

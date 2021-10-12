@@ -3,6 +3,16 @@
 
 ## [Unreleased]
 
+## v0.7.0
+### Added
+- Default build commands & File templates for c, c++, java, python, kotlin, rust, c# and javascript.
+- Added predefined variable to File templates such as ```PROBLEM_NAME```, ```PROBLEM_GROUP_NAME```
+  & ```ONLINE_JUDGE_NAME```
+
+### Fixed
+- __CLion__
+    - add_executable line is added to CMakeLists.txt even if it already exists
+
 ## v0.7.0-eap.2
 ### Added
 - Confirmation dialog before generating files

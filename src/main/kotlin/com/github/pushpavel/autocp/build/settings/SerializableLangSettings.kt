@@ -10,7 +10,6 @@ data class SerializableLang(
     var extension: String = "",
     var buildCommand: String? = null,
     var executeCommand: String = "",
-    val lineCommentPrefix: String
 )
 
 fun serializeLangSettings(langs: Map<String, Lang>, defaultLangs: Map<String, Lang>): SerializableLangSettings {
@@ -24,7 +23,6 @@ fun serializeLangSettings(langs: Map<String, Lang>, defaultLangs: Map<String, La
                 it.value.extension,
                 it.value.buildCommand,
                 it.value.executeCommand,
-                it.value.lineCommentPrefix
             )
         }
     )
@@ -37,7 +35,6 @@ fun deserializeLangSettings(settings: SerializableLangSettings, defaultLangs: Ma
             it.value.extension,
             it.value.buildCommand,
             it.value.executeCommand,
-            it.value.lineCommentPrefix,
             defaultLangs.containsKey(it.key)
         )
     })

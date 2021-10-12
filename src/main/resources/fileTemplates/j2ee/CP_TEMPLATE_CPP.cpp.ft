@@ -1,0 +1,10 @@
+//  ${PROBLEM_NAME}
+
+#[[#include]]#<bits/stdc++.h>
+
+using namespace std;
+
+int main() {
+    $END
+    return 0;
+}
