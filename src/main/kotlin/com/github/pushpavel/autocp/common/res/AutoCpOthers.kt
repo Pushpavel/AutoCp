@@ -49,6 +49,12 @@ object AutoCpOthers {
             ),
         ),
         DefaultLangData(
+            "rs",
+            listOf(
+                Pair("rustc @in -o a.exe", "\"\$dir/a.exe\""),
+            ),
+        ),
+        DefaultLangData(
             "js",
             listOf(
                 Pair(null, "d8 @in"),
