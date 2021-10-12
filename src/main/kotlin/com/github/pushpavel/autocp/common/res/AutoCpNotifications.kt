@@ -7,6 +7,11 @@ import com.intellij.util.IncorrectOperationException
 import java.net.SocketException
 
 object AutoCpNotifications {
+    fun couldNotWriteToAutoCpFile() = notifyErr(
+        "Could not write to .autocp file",
+        "This may be caused by a file association change, ${R.strings.fileIssue}"
+    )
+
     fun problemGatheringErr(e: ProblemGatheringErr) = when (e) {
         is ProblemGatheringErr.AllPortsTakenErr -> notifyErr(
             "Connection with competitive companion failed",
