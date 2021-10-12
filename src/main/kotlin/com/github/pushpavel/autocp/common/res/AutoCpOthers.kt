@@ -42,5 +42,12 @@ object AutoCpOthers {
                 Pair(null, "python @in"),
             ),
         ),
+        DefaultLangData(
+            "js",
+            listOf(
+                Pair(null, "d8 @in"),
+                Pair(null, "node @in"),
+            ),
+        ),
     )
 }
