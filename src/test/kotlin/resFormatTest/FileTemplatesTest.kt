@@ -20,7 +20,7 @@ class FileTemplatesTest {
     fun `file name must be in proper format`() {
         fileTemplatePaths.forEach {
             Assertions.assertTrue(
-                Regex("${R.keys.fileTemplateName}_[A-Z0-9]\\.[a-z0-9]+\\.(ft|html)").matchEntire(it.fileName.toString()) != null,
+                Regex("${R.keys.fileTemplateName}_[A-Z0-9]+\\.[a-z0-9]+\\.(ft|html)").matchEntire(it.fileName.toString()) != null,
                 "\"${it.fileName}\" is not in the format ${R.keys.fileTemplateName}_{languageFileExtensionInCapitals}.{languageFileExtension}.(ft | html)"
             )
         }
