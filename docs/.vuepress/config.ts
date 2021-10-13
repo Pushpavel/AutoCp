@@ -11,5 +11,6 @@ export default defineUserConfig<DefaultThemeOptions>({
     description: "An Open Source Competitive Programming Plugin for Intellij-Based IDEs",
     themeConfig: {logo: "/assets/logo.svg"},
     templateDev: path.resolve(__dirname, "template.html"),
+    templateSSR: path.resolve(__dirname, "template.html"),
     plugins: ['@vuepress/plugin-search']
 });
