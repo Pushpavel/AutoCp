@@ -22,6 +22,8 @@ features:
     details: AutoCp uses the built in Tests UI of the IDE to display results.
   - title: Open Source
     details: AutoCp and this documentation is licensed under MIT license.
+footer: MIT Licensed | Copyright © 2021 Pushpavel Janakiraman
+
 ---
 
 <div style="display:flex;justify-content:center;align-items:center;flex-direction:column;">
