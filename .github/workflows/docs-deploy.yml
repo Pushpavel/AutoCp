@@ -19,6 +19,9 @@ jobs:
           cache: "npm"
           cache-dependency-path: docs/package-lock.json
 
+      - name: Install npm dependencies  
+        run: cd docs && npm install
+
       # run build script
       - name: Build VuePress site
         run: cd docs && npm run build
