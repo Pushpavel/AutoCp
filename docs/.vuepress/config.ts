@@ -6,8 +6,8 @@ export default defineUserConfig<DefaultThemeOptions>({
   base: "/AutoCp/",
   bundler: "@vuepress/bundler-vite",
   head: [
-    ["link", { rel: "icon", herf: "/assets/logo.svg" }],
-    ["script",{ src: "https://plugins.jetbrains.com/assets/scripts/mp-widget.js" }],
+    ["link", { rel: "icon", href: "/AutoCp/assets/logo.svg?" }],
+    ["script",{ src: "//plugins.jetbrains.com/assets/scripts/mp-widget.js" }],
     ["script",{},`MarketplaceWidget.setupMarketplaceWidget('install', 17061, "#installBtn");`]
   ],
 
