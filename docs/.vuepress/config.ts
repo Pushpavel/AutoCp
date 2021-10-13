@@ -5,7 +5,11 @@ export default defineUserConfig<DefaultThemeOptions>({
   lang: "en-US",
   base: "/AutoCp/",
   bundler: "@vuepress/bundler-vite",
-  head: [["link", { rel: "icon", herf: "/AutoCp/assets/logo.svg" }]],
+  head: [
+    ["link", { rel: "icon", herf: "/AutoCp/assets/logo.svg" }],
+    ["script",{ src: "https://plugins.jetbrains.com/assets/scripts/mp-widget.js" }],
+    ["script",{},`MarketplaceWidget.setupMarketplaceWidget('install', 17061, "#installBtn");`]
+  ],
 
   title: "AutoCp",
   description:
