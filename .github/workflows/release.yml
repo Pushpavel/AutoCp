@@ -85,7 +85,7 @@ jobs:
     needs: changelog
     strategy:
       matrix:
-        branch: [ main, gh-pages, dev ]
+        branch: [ main, docs, dev ]
       fail-fast: false
     runs-on: ubuntu-latest
     steps:
