@@ -6,7 +6,7 @@ you need help, reach out to [discussions](https://github.com/Pushpavel/AutoCp/di
 ## How can I help?
 
 - Writing tutorials or blog posts, improving the documentation.
-- Pull requests are Great and are actively welcomed 😃, it could be simple grammar fixes to adding new features
+- Pull requests are Great and are actively welcomed 😃, it could be simple grammar fixes to adding new features (Please [see this](https://pushpavel.github.io/AutoCp/#/docs/contributing/git) before working on something significant)
 
 ## Resources
 

@@ -7,7 +7,7 @@
     - [Language Support](/docs/customizing/support-lang.md)
 
 - **Contributing**
-    - [Introduction](/CONTRIBUTION.md)
+    - [Introduction](/CONTRIBUTING.md)
     - [Git Guidelines](/docs/contributing/git.md)
   
 - [Changelog](/CHANGELOG.md)

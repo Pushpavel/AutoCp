@@ -10,6 +10,7 @@ If you have never created a pull request before, welcome
 - __Keep your change as focused as possible__. If there are multiple changes you would like to make that are not
   dependent upon each other, consider submitting them as separate pull requests.
 - __Prefer ```dev``` branch__ to develop features and non-critical fixes.
+- __Perfer ```gh-pages``` branch__ for editing documentation.
 
 ## Branching
 
