@@ -24,9 +24,9 @@ features:
     details: AutoCp and this documentation is licensed under MIT license.
 ---
 
-<div style="display:flex;justify-content:center;align-items:center;">
+<div style="display:flex;justify-content:center;align-items:center;flex-direction:column;">
 
 ### Open your IDE and install AutoCp in just _1_ click.
 
-<div id="installBtn"></div>
+<div id="installBtn" style="padding-bottom: 33px;"></div>
 </div>
