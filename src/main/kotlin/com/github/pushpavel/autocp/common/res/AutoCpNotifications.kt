@@ -3,9 +3,15 @@ package com.github.pushpavel.autocp.common.res
 import com.github.pushpavel.autocp.common.helpers.notifyErr
 import com.github.pushpavel.autocp.common.helpers.notifyWarn
 import com.github.pushpavel.autocp.gather.base.ProblemGatheringErr
+import com.intellij.util.IncorrectOperationException
 import java.net.SocketException
 
 object AutoCpNotifications {
+    fun couldNotWriteToAutoCpFile() = notifyErr(
+        "Could not write to .autocp file",
+        "This may be caused by a file association change, ${R.strings.fileIssue}"
+    )
+
     fun problemGatheringErr(e: ProblemGatheringErr) = when (e) {
         is ProblemGatheringErr.AllPortsTakenErr -> notifyErr(
             "Connection with competitive companion failed",
@@ -36,5 +42,11 @@ object AutoCpNotifications {
             is SocketException -> "cancelled"
             else -> R.strings.defaultFileIssue(e)
         }
+    )
+
+    fun fileGenerationIncorrectOperation(e: IncorrectOperationException) = notifyErr(
+        "File could not be generated due to file template issue",
+        e.localizedMessage + "\n\n" +
+                "If the error above is unexpected, ${R.strings.fileIssue}"
     )
 }

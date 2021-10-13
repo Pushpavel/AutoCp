@@ -2,15 +2,15 @@ package com.github.pushpavel.autocp.gather
 
 import com.github.pushpavel.autocp.build.settings.LangSettings
 import com.github.pushpavel.autocp.common.res.R
-import com.intellij.ide.fileTemplates.FileTemplate
-import com.intellij.ide.fileTemplates.FileTemplateGroupDescriptor
-import com.intellij.ide.fileTemplates.FileTemplateGroupDescriptorFactory
-import com.intellij.ide.fileTemplates.FileTemplateManager
-import com.intellij.lang.Language
-import com.intellij.lang.LanguageUtil
+import com.intellij.ide.actions.CreateFileAction.MkDirs
+import com.intellij.ide.fileTemplates.*
 import com.intellij.openapi.fileTypes.FileTypeManager
-import com.intellij.openapi.fileTypes.LanguageFileType
+import com.intellij.openapi.fileTypes.UnknownFileType
 import com.intellij.openapi.project.Project
+import com.intellij.psi.PsiDirectory
+import com.intellij.psi.PsiFile
+import com.intellij.util.IncorrectOperationException
+import org.apache.velocity.runtime.parser.ParseException
 
 class FileTemplates : FileTemplateGroupDescriptorFactory {
     override fun getFileTemplatesDescriptor(): FileTemplateGroupDescriptor {
@@ -20,12 +20,8 @@ class FileTemplates : FileTemplateGroupDescriptorFactory {
         LangSettings.instance.defaultLangs.map { it.key }
             .filter { extension ->
                 val fileType = FileTypeManager.getInstance().getFileTypeByExtension(extension)
-                if (fileType !is LanguageFileType)
-                    false
-                else
-                    fileType.language != Language.ANY && LanguageUtil.isFileLanguage(fileType.language)
-
-            }.forEach { group.addTemplate("${R.keys.fileTemplateName}.${it}") }
+                fileType !is UnknownFileType
+            }.forEach { group.addTemplate("${R.keys.fileTemplateName}_${it.uppercase()}.$it") }
 
         return group
     }
@@ -35,7 +31,7 @@ class FileTemplates : FileTemplateGroupDescriptorFactory {
         const val GROUP_NAME = "AutoCp Templates"
 
         private fun cpTemplateFromExtensionOrNull(extension: String, project: Project): FileTemplate? {
-            val templateName = "${R.keys.fileTemplateName}.${extension}"
+            val templateName = "${R.keys.fileTemplateName}_${extension.uppercase()}.$extension"
             val m = FileTemplateManager.getInstance(project)
             return try {
                 m.getInternalTemplate(templateName)
@@ -50,7 +46,42 @@ class FileTemplates : FileTemplateGroupDescriptorFactory {
 
         fun cpTemplateForExtension(extension: String, project: Project): FileTemplate {
             return cpTemplateFromExtensionOrNull(extension, project)
-                ?: FileTemplateManager.getInstance(project).addTemplate("abc.$extension", extension)
+                ?: FileTemplateManager.getInstance(project)
+                    .addTemplate("${R.keys.fileTemplateName}_${extension.uppercase()}.$extension", extension)
         }
+
+        fun createFileFromTemplate(
+            _name: String?,
+            template: FileTemplate,
+            _dir: PsiDirectory,
+            props: Map<String, Any>
+        ): PsiFile? {
+            var name = _name
+            var dir = _dir
+            if (name != null) {
+                val mkdirs = MkDirs(name, dir)
+                name = mkdirs.newName
+                dir = mkdirs.directory
+            }
+            val project = dir.project
+            try {
+                return FileTemplateUtil.createFromTemplate(
+                    template,
+                    name,
+                    FileTemplateManager.getInstance(project).defaultProperties.apply {
+                        putAll(props)
+                    },
+                    dir
+                ).containingFile
+            } catch (e: ParseException) {
+                throw IncorrectOperationException("Error parsing Velocity template: " + e.message, e as Throwable)
+            } catch (e: IncorrectOperationException) {
+                throw e
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+            return null
+        }
+
     }
 }

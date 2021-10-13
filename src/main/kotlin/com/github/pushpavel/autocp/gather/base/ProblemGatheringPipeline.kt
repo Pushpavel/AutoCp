@@ -1,10 +1,12 @@
 package com.github.pushpavel.autocp.gather.base
 
+import com.github.pushpavel.autocp.common.errors.NoReachErr
 import com.github.pushpavel.autocp.database.models.Problem
 import com.github.pushpavel.autocp.gather.filegen.FileGenerationListener
 import com.github.pushpavel.autocp.gather.filegen.FileGenerator
 import com.github.pushpavel.autocp.gather.filegen.FileGeneratorProvider
 import com.github.pushpavel.autocp.gather.models.BatchJson
+import com.github.pushpavel.autocp.gather.models.GenerateFileErr
 import com.github.pushpavel.autocp.settings.generalSettings.AutoCpGeneralSettings
 import com.github.pushpavel.autocp.settings.generalSettings.OpenFileOnGather
 import com.github.pushpavel.autocp.settings.projectSettings.autoCpProject
@@ -15,7 +17,9 @@ import com.intellij.openapi.application.runInEdt
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.project.DumbService
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.vfs.VfsUtil
 import com.jetbrains.rd.util.Queue
+import kotlin.io.path.Path
 
 /**
  * Handles [showProblemGatheringDialog] , File Generation Delegation and clearing current Batch
@@ -43,8 +47,11 @@ class ProblemGatheringPipeline(val project: Project) : ProblemGatheringListener 
             fileGenerator =
                 fileGeneratorProvider.getSupportedFileGenerator(project.autoCpProject().defaultFileExtension)
 
+            val preComplete = problemQueue.size == batch.size
+
             flushProblemQueue(batch)
-            if (problemQueue.size == batch.size) {
+
+            if (preComplete) {
                 BatchProcessor.interruptBatch()
                 flush = false
                 fileGenerator = null
@@ -75,10 +82,11 @@ class ProblemGatheringPipeline(val project: Project) : ProblemGatheringListener 
             }
 
             currentBatch = batch
+            val fileGen = fileGenerator ?: throw NoReachErr
 
             DumbService.getInstance(project).smartInvokeLater({
                 try {
-                    val file = fileGenerator?.generateFile(extension, problem, batch)
+                    val file = fileGen.generateFile(extension, problem, batch)
                     ProjectView.getInstance(project).refresh()
 
                     if (file != null)
@@ -89,6 +97,13 @@ class ProblemGatheringPipeline(val project: Project) : ProblemGatheringListener 
 
 
                 } catch (e: Exception) {
+                    // opens file even if it was generated already
+                    if (openFile && e is GenerateFileErr.FileAlreadyExistsErr) {
+                        val file = VfsUtil.findFile(Path(e.filePath), true)
+                        if (file != null)
+                            OpenFileAction.openFile(file, project)
+                    }
+
                     e.printStackTrace()
                     subscriber.onError(e, problem, batch, extension)
                 }

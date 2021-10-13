@@ -13,7 +13,7 @@ class BatchGatherEvent(val groupName: String, val extension: String, val problem
             put("site", grp[0].trim())
             val category = grp.getOrNull(1)?.trim()
             if (category != null)
-                put("groupName", category)
+                put("category", category)
 
             put("fileExtension", extension)
             put("problemCount", problemCount)

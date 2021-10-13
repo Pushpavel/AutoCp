@@ -11,7 +11,6 @@ import com.intellij.openapi.application.runReadAction
 import com.intellij.openapi.application.runUndoTransparentWriteAction
 import com.intellij.openapi.fileEditor.FileDocumentManager
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.vfs.LocalFileSystem
 import com.intellij.openapi.vfs.VfsUtil
 import com.intellij.openapi.vfs.VirtualFile
 import java.nio.file.Paths
@@ -22,7 +21,7 @@ import kotlin.io.path.relativeTo
 
 class CMakeAddExecutable(val project: Project) : FileGenerationListener {
 
-    val cmakePath = Paths.get(project.basePath!!, "CMakeLists.txt").toFile()
+    val cmakePath = Paths.get(project.basePath!!, "CMakeLists.txt")
     val settings = project.cmakeSettings()
 
     override fun onGenerated(file: VirtualFile, problem: Problem, batch: BatchJson, extension: String) {
@@ -43,7 +42,7 @@ class CMakeAddExecutable(val project: Project) : FileGenerationListener {
 
         invokeLater(ModalityState.NON_MODAL) {
 
-            val cmakeFile = LocalFileSystem.getInstance().findFileByIoFile(cmakePath)
+            val cmakeFile = VfsUtil.findFile(cmakePath, true)
                 ?: return@invokeLater
             val cmakeDoc = runReadAction { FileDocumentManager.getInstance().getDocument(cmakeFile) }
                 ?: return@invokeLater
@@ -52,7 +51,7 @@ class CMakeAddExecutable(val project: Project) : FileGenerationListener {
             val relativePath = file.pathRelativeToProject()
             val name = file.nameWithoutExtension
 
-            val regex = "add_executable\\s*\\(\\s*(\\S+)(?:\\s+(?:\"([^\"]+)|([^ \"]+))\\s*)?".toRegex()
+            val regex = "add_executable\\s*\\(\\s*(\\S+)(?:\\s+(?:\"([^\"]+)|([^\\s)\"]+))\\s*)?".toRegex()
             val matches = regex.findAll(cmakeText)
 
             matches.forEachIndexed { index, match ->

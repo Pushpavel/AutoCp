@@ -2,6 +2,7 @@ package com.github.pushpavel.autocp.database
 
 import com.github.pushpavel.autocp.common.compat.base.AutoCpFileConversion
 import com.github.pushpavel.autocp.common.res.R
+import com.intellij.ide.actions.CreateFileAction
 import com.intellij.openapi.application.runReadAction
 import com.intellij.openapi.application.runWriteAction
 import com.intellij.openapi.components.Service
@@ -10,7 +11,8 @@ import com.intellij.openapi.fileEditor.FileDocumentManager
 import com.intellij.openapi.fileEditor.FileDocumentManagerListener
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.project.ProjectManager
-import com.intellij.openapi.vfs.LocalFileSystem
+import com.intellij.openapi.vfs.VfsUtil
+import com.intellij.psi.PsiManager
 import com.intellij.util.io.exists
 import com.intellij.util.io.readText
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,6 +21,7 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.nio.file.Paths
 import kotlin.io.path.Path
+import kotlin.io.path.pathString
 
 
 @Service
@@ -54,19 +57,18 @@ class AutoCpStorageSaver : FileDocumentManagerListener {
     override fun beforeAllDocumentsSaving() {
         ProjectManager.getInstanceIfCreated()?.openProjects?.forEach { project ->
 
-            val path = Paths.get(project.basePath!!, ".autocp")
-            var virtualFile = LocalFileSystem.getInstance().findFileByNioFile(path)
+            val path = Paths.get(Path(project.basePath!!).pathString, ".autocp")
+            var virtualFile = VfsUtil.findFile(path, true)
             val db = project.service<AutoCpStorage>().serializableDatabase
 
 
-            if (virtualFile?.isValid != true) {
-                if (DEFAULT_AUTO_CP_DB != db) {
-                    val projectRoot =
-                        LocalFileSystem.getInstance().findFileByNioFile(Path(project.basePath!!)) ?: return
+            if (virtualFile?.isValid != true && DEFAULT_AUTO_CP_DB != db) {
+                val projectRoot = VfsUtil.findFile(Path(project.basePath!!), true) ?: return
 
-                    runWriteAction {
-                        virtualFile = projectRoot.createChildData(FileDocumentManager.getInstance(), ".autocp")
-                    }
+                runWriteAction {
+                    val psiDir = PsiManager.getInstance(project).findDirectory(projectRoot) ?: return@runWriteAction
+                    CreateFileAction.MkDirs(".autocp", psiDir)
+                    virtualFile = VfsUtil.findFile(path, true)
                 }
             }
 
@@ -77,10 +79,12 @@ class AutoCpStorageSaver : FileDocumentManagerListener {
             runReadAction {
                 val document = FileDocumentManager.getInstance().getDocument(virtualFile!!)
 
-                //TODO: check if document is null and warn user about file associations change for .autocp
-
+                if (document == null) {
+                    R.notify.couldNotWriteToAutoCpFile()
+                    return@runReadAction
+                }
                 runWriteAction {
-                    document?.setText(Json.encodeToString(db))
+                    document.setText(Json.encodeToString(db))
                 }
             }
         }

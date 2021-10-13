@@ -4,8 +4,6 @@ package com.github.pushpavel.autocp.common.res
 
 import com.github.pushpavel.autocp.build.settings.LangNotConfiguredErr
 import com.github.pushpavel.autocp.config.validators.SolutionFilePathErr
-import com.github.pushpavel.autocp.database.models.Problem
-import com.github.pushpavel.autocp.gather.models.GenerateFileErr
 import com.github.pushpavel.autocp.settings.generalSettings.OpenFileOnGather
 import com.github.pushpavel.autocp.tester.base.BuildErr
 import com.github.pushpavel.autocp.tester.errors.ProcessRunnerErr
@@ -74,65 +72,6 @@ object AutoCpStrings {
     // Common Err strings
     const val noReachErrMsg = "Execution should not have reached this line, $fileIssue"
 
-
-    // Problem Gathering Action strings
-    const val startGatheringText = "Start problem gathering service"
-    const val stopGatheringText = "Stop problem gathering service"
-
-    const val startGatheringDesc =
-        "Start an AutoCp service that listens for problem data coming from competitive companion browser extension"
-
-    const val stopGatheringDesc =
-        "Stops an AutoCp service that is listening for problem data coming from competitive companion browser extension"
-
-    const val gatheringServiceOnStart = "Start problem gathering service when project loads"
-    const val gatheringServiceOnStartDesc = "" +
-            "problem gathering service listens for problem data coming " +
-            "from competitive companion browser extension to " +
-            "generate files."
-
-    // Solution File Generation Messages
-    fun fileGenFailedTitle(name: String) = "$name file is not created"
-
-    const val langNotConfiguredMsg = "" +
-            "No Programming Language is configured with AutoCp. " +
-            "Please configure languages that you use at Settings/Preference > Tools > AutoCp > Languages"
-
-    fun fileAlreadyExistsMsg(e: GenerateFileErr.FileAlreadyExistsErr) = "" +
-            "File already exists.\nPath to file: ${e.filePath}"
-
-    // Problem Gathering Service Server strings
-    const val serverTitle = "Problem Gathering Service"
-    const val serverRunningMsg = "" +
-            "Started AutoCp Problem Gathering Service...\n" +
-            "Open the problem/ contest page in the browser and " +
-            "press the Competitive companion button to generate solution files.\n\n" +
-            "You can start/stop this service at Tools > $stopGatheringText\n" +
-            "To prevent starting this service on project load, go to Settings/Preferences > Tools > AutoCp"
-
-    const val serverStoppedMsg = "Service has been stopped. " +
-            "Use Tools > $startGatheringText to start it."
-
-    fun portTakenMsg(port: Int) = "Port $port is already in use."
-
-    fun portRetryMsg(port: Int) = "Retrying with port $port..."
-
-    fun allPortFailedMsg() = "" +
-            "Could not find a free port to use with competitive companion. " +
-            "You may be running multiple instances of AutoCp installed IDEs or other tools that use competitive companion. " +
-            "Try closing other programs or restarting your pc. If this issue still occurs, " + fileIssue
-
-
-    // Problem Gathering Service Gathering strings
-    const val problemGatheringTitle = "Problem Gathering"
-
-
-    fun gatheredReport(problems: List<Problem>, total: Int?): String {
-        if (total == null) return ""
-        return "(${problems.size}/${total}) problems gathered.\n" +
-                problems.joinToString(separator = "\n") { "\t" + it.name }
-    }
-
     // Testing Process Strings
 
     fun solutionFilePathErrMsg(e: SolutionFilePathErr) = "" +
@@ -177,8 +116,5 @@ object AutoCpStrings {
         is Verdict.InternalErr -> "[+/-] UNKNOWN: COULD NOT JUDGE"
     }
 }
-
-fun String.failed(): String = "$this Failed"
-fun String.cancelled(): String = "$this Cancelled"
 
 fun String.success(): String = "$this Successful"

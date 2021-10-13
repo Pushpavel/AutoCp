@@ -6,7 +6,6 @@ import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import java.nio.file.Path
-import kotlin.io.path.extension
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class FileTemplatesTest {
@@ -18,18 +17,11 @@ class FileTemplatesTest {
     }
 
     @Test
-    fun `only ft files must be present in fileTemplates j2ee directory`() {
-        fileTemplatePaths.forEach {
-            Assertions.assertEquals(it.extension, "ft", "${it.fileName} is not a ft file")
-        }
-    }
-
-    @Test
     fun `file name must be in proper format`() {
         fileTemplatePaths.forEach {
             Assertions.assertTrue(
-                Regex("${R.keys.fileTemplateName}\\.[A-Za-z0-9]+\\.ft").matchEntire(it.fileName.toString()) != null,
-                "\"${it.fileName}\" is not in the format ${R.keys.fileTemplateName}.{languageFileExtension}.ft"
+                Regex("${R.keys.fileTemplateName}_[A-Z0-9]+\\.[a-z0-9]+\\.(ft|html)").matchEntire(it.fileName.toString()) != null,
+                "\"${it.fileName}\" is not in the format ${R.keys.fileTemplateName}_{languageFileExtensionInCapitals}.{languageFileExtension}.(ft | html)"
             )
         }
     }
