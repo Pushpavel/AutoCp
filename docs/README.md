@@ -28,5 +28,6 @@ features:
 
 ### Open your IDE and install AutoCp in just _1_ click.
 
-<div id="installBtn" style="padding-bottom: 33px;"></div>
+<div id="installBtn" style="padding-bottom: 32px;"></div>
 </div>
+
