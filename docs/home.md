@@ -15,7 +15,6 @@ an [issue](https://github.com/Pushpavel/AutoCp/issues/new/choose) on our GitHub 
 Hopefully, these limitations will be removed soon.
 
 - Memory Limit is ignored.
-- Strict File Structure
 - No Debugging through AutoCp
 
 #### License
