@@ -15,7 +15,10 @@ export default defineUserConfig<DefaultThemeOptions>({
     theme: path.resolve(__dirname, "./theme"),
     themeConfig: {
         logo: "/assets/logo.svg",
-        navbar: [{text: "Guide", link: "/guide/"}],
+        navbar: [{text: "Guide", link: "/guide/"}, {
+            text: "Changelog",
+            link: "https://github.com/Pushpavel/AutoCp/blob/dev/CHANGELOG.md"
+        }],
         repoLink: "https://github.com/Pushpavel/AutoCp",
         marketplaceLink: "https://plugins.jetbrains.com/plugin/17061-autocp",
         sidebar: sidebarConfig,
