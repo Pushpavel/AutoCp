@@ -1,0 +1,1 @@
+const t={key:"v-0efe29b3",path:"/tutorials/",title:"Tutorials",lang:"en-US",frontmatter:{},excerpt:"",headers:[],filePathRelative:"tutorials/README.md",git:{updatedTime:1634231134e3}};export{t as data};
