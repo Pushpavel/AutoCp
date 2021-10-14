@@ -1,6 +1,7 @@
 import {defineUserConfig} from "vuepress";
 import type {DefaultThemeOptions} from "vuepress";
 import {path} from "@vuepress/utils"
+import {sidebarConfig} from "./configs/sidebar";
 
 export default defineUserConfig<DefaultThemeOptions>({
     lang: "en-US",
@@ -16,6 +17,7 @@ export default defineUserConfig<DefaultThemeOptions>({
         logo: "/assets/logo.svg",
         navbar: [{text: "Guide", link: "/guide/"}],
         repoLink: "https://github.com/Pushpavel/AutoCp",
-        marketplaceLink: "https://plugins.jetbrains.com/plugin/17061-autocp"
+        marketplaceLink: "https://plugins.jetbrains.com/plugin/17061-autocp",
+        sidebar: sidebarConfig
     },
 });

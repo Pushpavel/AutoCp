@@ -1,5 +1,8 @@
 # Getting Started
 
+If you come across bugs or have feature requests, please raise
+an [issue](https://github.com/Pushpavel/AutoCp/issues/new/choose) on our GitHub repository.
+
 ## Prerequisites
 
 #### Competitive Companion
