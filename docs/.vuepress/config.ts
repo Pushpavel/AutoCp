@@ -23,6 +23,7 @@ export default defineUserConfig<DefaultThemeOptions>({
         marketplaceLink: "https://plugins.jetbrains.com/plugin/17061-autocp",
         sidebar: sidebarConfig,
         editLink: true,
+        contributors: false,
         docsRepo: "https://github.com/Pushpavel/AutoCp",
         docsBranch: 'docs',
         docsDir: 'docs',
