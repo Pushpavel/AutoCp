@@ -12,5 +12,5 @@ export default defineUserConfig<DefaultThemeOptions>({
     templateDev: path.resolve(__dirname, "template.dev.html"),
     templateSSR: path.resolve(__dirname, "template.html"),
     plugins: ['@vuepress/plugin-search'],
-    themeConfig: {logo: "/assets/logo.svg"},
+    themeConfig: {logo: "/assets/logo.svg", navbar: [{text: "Guide", link: "/guide/"}]},
 });
