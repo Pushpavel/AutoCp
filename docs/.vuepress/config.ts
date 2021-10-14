@@ -1,7 +1,6 @@
 import {defineUserConfig} from "vuepress";
 import type {DefaultThemeOptions} from "vuepress";
-
-const path = require("path");
+import {path} from "@vuepress/utils"
 
 export default defineUserConfig<DefaultThemeOptions>({
     lang: "en-US",
@@ -12,5 +11,11 @@ export default defineUserConfig<DefaultThemeOptions>({
     templateDev: path.resolve(__dirname, "template.dev.html"),
     templateSSR: path.resolve(__dirname, "template.html"),
     plugins: ['@vuepress/plugin-search'],
-    themeConfig: {logo: "/assets/logo.svg", navbar: [{text: "Guide", link: "/guide/"}]},
+    theme: path.resolve(__dirname, "./theme"),
+    themeConfig: {
+        logo: "/assets/logo.svg",
+        navbar: [{text: "Guide", link: "/guide/"}],
+        repoLink: "https://github.com/Pushpavel/AutoCp",
+        marketplaceLink: "https://plugins.jetbrains.com/plugin/17061-autocp"
+    },
 });
