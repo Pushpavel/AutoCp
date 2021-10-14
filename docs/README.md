@@ -2,6 +2,7 @@
 home: true
 heroImage: /assets/logo128.svg
 heroText: AutoCp Plugin
+tagline: Open Source Competitive Programming Plugin for Intellij-Based IDEs
 actions:
   - text: Get Started
     link: /guide/getting-started.html
