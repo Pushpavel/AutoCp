@@ -51,7 +51,9 @@ class ToolFactory : ToolWindowFactory, DumbAware {
 
             if (file == null || !file.isValid || !editorManager.isFileOpen(file))
                 return@callback
-            if (file.pathString !in solutionFiles && file.pathString in LangSettings.instance.langs) {
+            if (file.pathString !in solutionFiles) {
+                if (file.extension !in LangSettings.instance.langs)
+                    return@callback
                 val ui = AssociateFilePanel(Path(file.pathString).name) {
                     solutionFiles.upsertFile(Path(file.path))
                     callback(file)
