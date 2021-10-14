@@ -3,9 +3,9 @@ package com.github.pushpavel.autocp.settings.generalSettings
 import com.github.pushpavel.autocp.common.res.R
 import com.intellij.ui.layout.Row
 import com.intellij.ui.layout.RowBuilder
-import com.intellij.util.io.isDirectory
 import java.nio.file.InvalidPathException
 import kotlin.io.path.Path
+import kotlin.io.path.extension
 import kotlin.io.path.pathString
 
 class FileGenerationRootRow {
@@ -28,12 +28,11 @@ class FileGenerationRootRow {
                 }.withValidationOnInput {
                     try {
                         val p = Path(it.text)
-                        if (p.isAbsolute)
-                            error("Should not be an absolute path")
-                        else if (!p.isDirectory())
-                            error("Should correspond to a directory")
-                        else
-                            null
+                        when {
+                            p.isAbsolute -> error("Should not be an absolute path")
+                            p.extension != "" -> error("Should correspond to a directory")
+                            else -> null
+                        }
                     } catch (e: InvalidPathException) {
                         error(e.localizedMessage)
                     }
