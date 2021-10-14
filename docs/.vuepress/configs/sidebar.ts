@@ -9,6 +9,7 @@ export const sidebarConfig: SidebarConfig = {
                 '/guide/getting-started.md',
                 '/guide/usage.md',
                 '/guide/file-templates.md',
+                '/guide/commands.md',
             ]
         }
     ]
