@@ -18,6 +18,11 @@ export default defineUserConfig<DefaultThemeOptions>({
         navbar: [{text: "Guide", link: "/guide/"}],
         repoLink: "https://github.com/Pushpavel/AutoCp",
         marketplaceLink: "https://plugins.jetbrains.com/plugin/17061-autocp",
-        sidebar: sidebarConfig
+        sidebar: sidebarConfig,
+        editLink: true,
+        docsRepo: "https://github.com/Pushpavel/AutoCp",
+        docsBranch: 'docs',
+        docsDir: 'docs',
+        lastUpdated: true,
     },
 });
