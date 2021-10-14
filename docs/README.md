@@ -11,7 +11,7 @@ actions:
     type: secondary
 features:
   - title: Productive
-    details: With an IDE optimized for Competitive Programming, you can start coding in little to no time.
+    details: With an IDE optimized for Competitive Programming, you can start coding your solutions in little to no time.
   - title: Multi-Language
     details: Supports almost any programming language, build tool and Intellij-Based IDE.
   - title: File Templates
