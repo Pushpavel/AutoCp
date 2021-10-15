@@ -1,0 +1,6 @@
+const e={key:"v-0efe29b3",path:"/tutorials/",title:"Tutorials",lang:"en-US",frontmatter:{},excerpt:"",headers:[],filePathRelative:"tutorials/README.md",git:{updatedTime:1634231134e3},content:`# Tutorials
+
+This section of the documentation covers how to tackle common scenarios and problems.
+`,contentRendered:`<h1 id="tutorials" tabindex="-1"><a class="header-anchor" href="#tutorials" aria-hidden="true">#</a> Tutorials</h1>
+<p>This section of the documentation covers how to tackle common scenarios and problems.</p>
+`,date:"0000-00-00",deps:[],hoistedTags:[],links:[],pathInferred:"/tutorials/",pathLocale:"/",permalink:null,slug:"README",filePath:"/home/runner/work/AutoCp/AutoCp/docs/tutorials/README.md",componentFilePath:"/home/runner/work/AutoCp/AutoCp/docs/.vuepress/.temp/pages/tutorials/index.html.vue",componentFilePathRelative:"pages/tutorials/index.html.vue",componentFileChunkName:"v-0efe29b3",dataFilePath:"/home/runner/work/AutoCp/AutoCp/docs/.vuepress/.temp/pages/tutorials/index.html.js",dataFilePathRelative:"pages/tutorials/index.html.js",dataFileChunkName:"v-0efe29b3",htmlFilePath:"/home/runner/work/AutoCp/AutoCp/docs/.vuepress/dist/tutorials/index.html",htmlFilePathRelative:"tutorials/index.html",lastUpdated:"October 14, 2021"};export{e as data};
