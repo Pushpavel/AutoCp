@@ -20,7 +20,7 @@ for Intellij-Based IDEs actions:
 
 ### Open your IDE and install AutoCp in just _1_ click.
 
-<InstallButton style="padding-bottom: 32px"/>
+<InstallButton style="padding-bottom: 32px"></InstallButton>
 
 </div>
 
