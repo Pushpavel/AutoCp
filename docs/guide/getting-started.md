@@ -17,7 +17,7 @@ an [issue](https://github.com/Pushpavel/AutoCp/issues/new/choose) on our GitHub 
 
 Open your IDE and install AutoCp by clicking the button below.
 
-<div id="installBtn" style="padding-bottom: 32px;"></div>
+<InstallButton></InstallButton>
 
 ### From IDE Settings
 
