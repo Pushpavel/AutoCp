@@ -1,5 +1,10 @@
 <template>
   <Layout>
+
+    <template #page-top>
+      <PageHook/>
+    </template>
+
     <template #navbar-after>
       <a class="icon-link" :href="marketplaceLink" title="Jetbrains Marketplace" target=”_blank”>
         <svg focusable="false" width="20px" height="20px" style="padding: 6px;" viewBox="0 0 700 700">
@@ -37,6 +42,7 @@
 import Layout from '@vuepress/theme-default/lib/client/layouts/Layout.vue'
 import {useThemeData} from '@vuepress/plugin-theme-data/lib/client';
 import {computed} from 'vue';
+import PageHook from "../components/PageHook.vue";
 
 const theme = useThemeData()
 const repoLink = computed(() => theme.value?.repoLink)
@@ -44,6 +50,7 @@ const marketplaceLink = computed(() => theme.value?.marketplaceLink)
 
 export default {
   components: {
+    PageHook,
     Layout,
   },
   setup() {
