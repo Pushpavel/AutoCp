@@ -29,7 +29,7 @@ jobs:
     steps:
       # Check out current repository
       - name: Fetch Sources
-        uses: actions/checkout@v2.3.4
+        uses: actions/checkout@v2.3.5
 
       # Validate wrapper
       - name: Gradle Wrapper Validation
@@ -50,7 +50,7 @@ jobs:
 
       # Check out current repository
       - name: Fetch Sources
-        uses: actions/checkout@v2.3.4
+        uses: actions/checkout@v2.3.5
 
       # Cache Gradle dependencies
       - name: Setup Gradle Dependencies Cache
@@ -94,7 +94,7 @@ jobs:
 
       # Check out current repository
       - name: Fetch Sources
-        uses: actions/checkout@v2.3.4
+        uses: actions/checkout@v2.3.5
 
       # Cache Gradle Dependencies
       - name: Setup Gradle Dependencies Cache
@@ -162,7 +162,7 @@ jobs:
 
       # Check out current repository
       - name: Fetch Sources
-        uses: actions/checkout@v2.3.4
+        uses: actions/checkout@v2.3.5
 
       # Cache Gradle Dependencies
       - name: Setup Gradle Dependencies Cache
@@ -212,7 +212,7 @@ jobs:
     steps:
       # Check out current repository
       - name: Fetch Sources
-        uses: actions/checkout@v2.3.4
+        uses: actions/checkout@v2.3.5
 
       # Remove old release drafts by using the curl request for the releases with draft flag and same tag_name
       - name: Remove Old Release Drafts
