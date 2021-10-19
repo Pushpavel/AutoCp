@@ -17,7 +17,7 @@ an [issue](https://github.com/Pushpavel/AutoCp/issues/new/choose) on our GitHub 
 
 Open your IDE and install AutoCp by clicking the button below.
 
-<div id="installBtn" style="padding-bottom: 32px;"></div>
+<InstallButton></InstallButton>
 
 ### From IDE Settings
 
@@ -66,9 +66,49 @@ AutoCp will look for popular compilers or interpreters of your programming langu
 and sets up the commands and file templates automatically.If it could not find anything, you might be required to set
 this up yourself.
 
-<!-- TODO: add programming languages build tool table -->
-
 ::: tip
 
 AutoCp plugin is not bundled with any build tool.
 :::
+
+#### Default Build Tools
+
+This list only includes the already setup programming languages and build tools. You could easily set this up manually
+for your programming language or build tool by adding [Commands](commands.md) of your build tool.
+
+| Programming Language | Build Tools |
+| --------- | ------- |
+| C | [gcc][gcc], [clang][clang] |
+| C++ | [g++][g++], [clang++][clang++] |
+| Java | [javac][javac] |
+| Python | [python][python] |
+| Kotlin | [kotlinc][kotlinc] |
+| Rust | [rustc][rustc] | 
+| C# | [csc][csc] |
+| Javascript | [d8][d8], [node][node] |
+
+Didn't find your programming language or build tool ? File
+an [issue](https://github.com/Pushpavel/AutoCp/issues/new/choose) to add it.
+
+
+[gcc]: https://gcc.gnu.org/install/binaries.html
+
+[clang]: https://clang.llvm.org
+
+[g++]: https://www.cs.odu.edu/~zeil/cs250PreTest/latest/Public/installingACompiler/
+
+[clang++]: https://www.ics.uci.edu/~pattis/common/handouts/macclion/clang.html
+
+[javac]: https://en.wikipedia.org/wiki/Javac
+
+[python]: https://www.python.org/downloads/
+
+[kotlinc]: https://kotlinlang.org/docs/command-line.html
+
+[rustc]: https://www.rust-lang.org/tools/install
+
+[csc]: https://dotnet.microsoft.com/download
+
+[d8]: https://v8.dev/
+
+[node]: https://nodejs.org/en/download/
