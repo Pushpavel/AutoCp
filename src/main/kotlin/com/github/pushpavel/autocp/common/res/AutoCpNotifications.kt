@@ -28,7 +28,7 @@ object AutoCpNotifications {
             "Competitive companion has not responded for too long. You should try again.\n" +
                     "This could happen due to below reasons\n" +
                     "\t1.Competitive companion is shutdown (you may have closed the browser tab)\n" +
-                    "\t2.you clicked competitive companion button before AutoCp started listening.\n" +
+                    "\t2.you clicked competitive companion button before AutoCp started listening. you can try again.\n" +
                     "if these were not the reason, ${AutoCpStrings.fileIssue}\n"
         )
         ProblemGatheringErr.Cancellation -> {
