@@ -26,7 +26,6 @@ object AutoCpKeys {
     // Analytics
     const val analyticsEndPoint = "https://www.google-analytics.com/mp/collect"
     const val analyticsClientIdKey = "$pluginId.analyticsClientIdKey"
-    const val isUpdatingKey = "$pluginId.isUpdating"
     private val secrets = kotlin.runCatching {
         ResourceBundle.getBundle("messages.secrets")
     }.onFailure { it.printStackTrace() }.getOrNull()
