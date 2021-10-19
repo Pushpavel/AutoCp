@@ -38,7 +38,7 @@ This plugin collects anonymous usage data.
 
 See something that's wrong or unclear?, Pull requests are welcome 😀
 
-Read the [contributing guide](https://pushpavel.github.io/AutoCp/#/CONTRIBUTING) to learn how you can take part in
+Read the [contributing guide](https://github.com/Pushpavel/AutoCp/blob/dev/CONTRIBUTING.md) to learn how you can take part in
 improving ```AutoCp```
 
 ### License

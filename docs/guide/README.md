@@ -3,13 +3,13 @@
 AutoCp is a plugin for productive competitive programming contests. It generates files from templates and judges your
 solutions against testcases gathered from the problem webpage
 via [Competitive Companion](https://github.com/jmerle/competitive-companion#install) extension. Learn what AutoCp is
-about on the [homepage](../README.md).
+about on the [homepage](../README.md). Your feedback to <jpushpavel@gmail.com> is appreciated. [star](https://github.com/Pushpavel/AutoCp) the repo on github if you like it.
 
 ![CLion Screenshot](../assets/CLionScreenshot.png)
 
 #### About Plugin
 
-Plugin based on the [IntelliJ Platform Plugin Template][https://github.com/JetBrains/intellij-platform-plugin-template].
+Plugin based on the [IntelliJ Platform Plugin Template](https://github.com/JetBrains/intellij-platform-plugin-template).
 
 #### About Documentation
 

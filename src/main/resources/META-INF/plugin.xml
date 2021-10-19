@@ -1,12 +1,18 @@
 <idea-plugin>
     <name>AutoCp</name>
-    <vendor email="jpushpavel@gmail.com">Pushpavel Janakiraman</vendor>
+    <vendor email="jpushpavel@gmail.com" url="https://pushpavel.github.io/AutoCp/">Pushpavel Janakiraman</vendor>
     <!-- Product and plugin compatibility requirements -->
     <!-- https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
     <depends>com.intellij.modules.platform</depends>
     <resource-bundle>messages.autocp</resource-bundle>
 
+    <actions>
+        <action class="com.github.pushpavel.autocp.config.actions.RunAutoCpAction">
+            <keyboard-shortcut first-keystroke="alt X" keymap="$default"/>
+        </action>
+    </actions>
     <extensions defaultExtensionNs="com.intellij">
+
         <configurationType implementation="com.github.pushpavel.autocp.config.AutoCpConfigType"/>
         <runConfigurationProducer implementation="com.github.pushpavel.autocp.config.AutoCpConfigProducer"/>
         <notificationGroup id="autocp-notifications-group" key="notificationGroup" displayType="BALLOON"/>
@@ -41,8 +47,6 @@
         <project.converterProvider
                 implementation="com.github.pushpavel.autocp.common.compat.v0_5_0_eap_1.AutoCpProjectConverterProvider"
                 id="AutoCp v0.5.0-eap.1"/>
-        <postStartupActivity
-                implementation="com.github.pushpavel.autocp.common.analytics.listeners.AnalyticsStartupActivity"/>
         <postStartupActivity implementation="com.github.pushpavel.autocp.gather.base.ProblemGatheringBridge"/>
     </extensions>
     <projectListeners>

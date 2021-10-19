@@ -17,7 +17,3 @@ val PropertiesComponent.analyticsClientId
         ?: "${Random.nextLong()}.${Date().time}".also {
             setValue(R.keys.analyticsClientIdKey, it)
         }
-
-var PropertiesComponent.isUpdating
-    get() = getBoolean(R.keys.isUpdatingKey, false)
-    set(value) = setValue(R.keys.isUpdatingKey, value, false)

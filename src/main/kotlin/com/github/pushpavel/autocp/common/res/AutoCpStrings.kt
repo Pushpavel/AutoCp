@@ -17,7 +17,7 @@ object AutoCpStrings {
 
 
     // File Issue notes
-    const val fileIssue = "please file an issue (https://github.com/Pushpavel/AutoCp/issues/new/choose)"
+    const val fileIssue = "please file an <a herf=\"https://github.com/Pushpavel/AutoCp/issues/new/choose\">issue</a>"
 
     fun defaultFileIssue(e: Exception) = "" +
             "An error had occurred. If it is not expected, $fileIssue\n\n" +
