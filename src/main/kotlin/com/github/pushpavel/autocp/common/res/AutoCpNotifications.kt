@@ -55,4 +55,11 @@ object AutoCpNotifications {
             "You may have not escaped a file template directive like #define which is also a valid c++ syntax\n\n" +
             "You can <a href=\"https://velocity.apache.org/engine/2.0/vtl-reference.html\" >refer</a> more about velocity file template syntax\n" +
             "Or if you do not use any file template specific syntax, simply wrap the entire file template within #[[template]]#"
+
+    fun noConfigInContext() = notifyErr(
+        "Can't run file with with AutoCp",
+        "These may be the reasons:\n" +
+                "this file is not enabled with AutoCp. open View > ToolWindows > AutoCp to do so.\n" +
+                "Or this file's extension is not configured with AutoCp. go to Settings/Preferences > Tools > AutoCp > Languages to do so."
+    )
 }

@@ -6,7 +6,13 @@
     <depends>com.intellij.modules.platform</depends>
     <resource-bundle>messages.autocp</resource-bundle>
 
+    <actions>
+        <action class="com.github.pushpavel.autocp.config.actions.RunAutoCpAction">
+            <keyboard-shortcut first-keystroke="alt X" keymap="$default"/>
+        </action>
+    </actions>
     <extensions defaultExtensionNs="com.intellij">
+
         <configurationType implementation="com.github.pushpavel.autocp.config.AutoCpConfigType"/>
         <runConfigurationProducer implementation="com.github.pushpavel.autocp.config.AutoCpConfigProducer"/>
         <notificationGroup id="autocp-notifications-group" key="notificationGroup" displayType="BALLOON"/>
