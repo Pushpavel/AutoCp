@@ -49,4 +49,10 @@ object AutoCpNotifications {
         e.localizedMessage + "\n\n" +
                 "If the error above is unexpected, ${R.strings.fileIssue}"
     )
+
+    const val velocityNullPointerMsg = "AutoCp does not have enough info on the issue. \n" +
+            "You may have missed arguments for a file template directive like #parse directive without arguments\n" +
+            "You may have not escaped a file template directive like #define which is also a valid c++ syntax\n\n" +
+            "You can <a href=\"https://velocity.apache.org/engine/2.0/vtl-reference.html\" >refer</a> more about velocity file template syntax\n" +
+            "Or if you do not use any file template specific syntax, simply wrap the entire file template within #[[template]]#"
 }

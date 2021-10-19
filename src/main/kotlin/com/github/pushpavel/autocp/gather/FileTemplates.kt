@@ -74,9 +74,11 @@ class FileTemplates : FileTemplateGroupDescriptorFactory {
                     dir
                 ).containingFile
             } catch (e: ParseException) {
-                throw IncorrectOperationException("Error parsing Velocity template: " + e.message, e as Throwable)
+                throw IncorrectOperationException("Error parsing file template: " + e.message, e as Throwable)
             } catch (e: IncorrectOperationException) {
                 throw e
+            } catch (e: NullPointerException) {
+                throw IncorrectOperationException(R.notify.velocityNullPointerMsg)
             } catch (e: Exception) {
                 e.printStackTrace()
             }
