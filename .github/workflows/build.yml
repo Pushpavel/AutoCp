@@ -1,9 +1,10 @@
 # GitHub Actions Workflow created for testing and preparing the plugin release in following steps:
 # - validate Gradle Wrapper,
-# - run test and verifyPlugin tasks,
-# - run buildPlugin task and prepare artifact for the further tests,
-# - run IntelliJ Plugin Verifier,
-# - create a draft release.
+# - run 'test' and 'verifyPlugin' tasks,
+# - run Qodana inspections,
+# - run 'buildPlugin' task and prepare artifact for the further tests,
+# - run 'runPluginVerifier' task,
+# - create a release.
 #
 # Workflow is triggered on push and pull_request events.
 #
@@ -14,14 +15,46 @@
 name: Build
 on:
   push:
-    branches-ignore:
-      - gh-pages
-      - docs
+    # TODO: change to main branch
+    branches: [ dev ]
   pull_request:
-    branches-ignore:
-      - gh-pages
-      - docs
+
 jobs:
+
+  # Extract Properties for other jobs to use
+  properties:
+    name: Extract Properties
+    runs-on: ubuntu-latest
+    outputs:
+      name: ${{ steps.properties.outputs.name }}
+      version: ${{ steps.properties.outputs.version }}
+      changelog: ${{ steps.properties.outputs.changelog }}
+      shouldRelease: ${{ contains(github.event.head_commit.message, '[release]') }}
+      shouldVerify: ${{ job.outputs.shouldRelease || github.event_name == 'pull_request' }}
+      prerelease: ${{ contains(job.outputs.version,'-eap') }}
+    steps:
+      # Check out current repository
+      - name: Fetch Sources
+        uses: actions/checkout@v2.3.5
+
+      # Set environment variables
+      - name: Export Properties
+        id: properties
+        shell: bash
+        run: |
+          PROPERTIES="$(./gradlew properties --console=plain -q)"
+          VERSION="$(echo "$PROPERTIES" | grep "^version:" | cut -f2- -d ' ')"
+          NAME="$(echo "$PROPERTIES" | grep "^pluginName:" | cut -f2- -d ' ')"
+          CHANGELOG="$(./gradlew getChangelog --unreleased --no-header --console=plain -q)"
+          CHANGELOG="${CHANGELOG//'%'/'%25'}"
+          CHANGELOG="${CHANGELOG//$'\n'/'%0A'}"
+          CHANGELOG="${CHANGELOG//$'\r'/'%0D'}"
+
+          echo "::set-output name=version::$VERSION"
+          echo "::set-output name=name::$NAME"
+          echo "::set-output name=changelog::$CHANGELOG"
+
+
   # Run Gradle Wrapper Validation Action to verify the wrapper's checksum
   gradleValidation:
     name: Gradle Wrapper
@@ -53,6 +86,25 @@ jobs:
           java-version: 11
           cache: gradle
 
+      # Run tests
+      - name: Run Tests
+        run: ./gradlew test
+
+      # Collect Tests Result of failed tests
+      - name: Collect Tests Result
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: tests-result
+          path: ${{ github.workspace }}/build/reports/tests
+
+  # Run code inspections only on pull_requests as it takes a long time
+  qodana:
+    name: Qodana
+    if: needs.properties.outputs.shouldVerify
+    needs: [ properties, gradleValidation ]
+    runs-on: ubuntu-latest
+    steps:
       # Check out current repository
       - name: Fetch Sources
         uses: actions/checkout@v2.3.5
@@ -64,8 +116,47 @@ jobs:
           path: ~/.gradle/caches
           key: ${{ runner.os }}-gradle-caches-${{ hashFiles('**/*.gradle', '**/*.gradle.kts', 'gradle.properties') }}
 
-      # Cache Gradle Wrapper
-      - name: Setup Gradle Wrapper Cache
+      # Run Qodana inspections
+      - name: Qodana - Code Inspection
+        uses: JetBrains/qodana-action@v2.1-eap
+
+      # Collect Qodana Result
+      - name: Collect Qodana Result
+        uses: actions/upload-artifact@v2
+        with:
+          name: qodana-result
+          path: ${{ github.workspace }}/qodana
+
+
+  # Verify plugin using IntelliJ Plugin Verifier tool only on pull_requests as it takes a long time
+  verify:
+    name: Verify
+    if: needs.properties.outputs.shouldVerify
+    needs: [ properties, gradleValidation ]
+    runs-on: ubuntu-latest
+    steps:
+      # Check out current repository
+      - name: Fetch Sources
+        uses: actions/checkout@v2.3.5
+
+      # Setup Java 11 environment for the next steps
+      - name: Setup Java
+        uses: actions/setup-java@v2
+        with:
+          distribution: zulu
+          java-version: 11
+          cache: gradle
+
+      # Set environment variables
+      - name: Export Properties
+        id: properties
+        shell: bash
+        run: |
+          echo "::set-output name=pluginVerifierHomeDir::~/.pluginVerifier"
+          ./gradlew listProductsReleases # prepare list of IDEs for Plugin Verifier
+
+      # Cache Plugin Verifier IDEs
+      - name: Setup Plugin Verifier IDEs Cache
         uses: actions/cache@v2.1.6
         with:
           path: ${{ steps.properties.outputs.pluginVerifierHomeDir }}/ides
@@ -86,13 +177,8 @@ jobs:
   # Build plugin and provide the artifact for the next workflow jobs
   build:
     name: Build
-    needs: gradleValidation
+    needs: [ properties, gradleValidation ]
     runs-on: ubuntu-latest
-    outputs:
-      name: ${{ steps.properties.outputs.name }}
-      version: ${{ steps.properties.outputs.version }}
-      changelog: ${{ steps.properties.outputs.changelog }}
-      artifact: ${{ steps.properties.outputs.artifact }}
     steps:
 
       # Check out current repository
@@ -107,43 +193,6 @@ jobs:
           java-version: 11
           cache: gradle
 
-      # Check out current repository
-      - name: Fetch Sources
-        uses: actions/checkout@v2.3.5
-
-      # Cache Gradle Dependencies
-      - name: Setup Gradle Dependencies Cache
-        uses: actions/cache@v2.1.6
-        with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-caches-${{ hashFiles('**/*.gradle', '**/*.gradle.kts', 'gradle.properties') }}
-
-      # Cache Gradle Wrapper
-      - name: Setup Gradle Wrapper Cache
-        uses: actions/cache@v2.1.6
-        with:
-          path: ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
-
-      # Set environment variables
-      - name: Export Properties
-        id: properties
-        shell: bash
-        run: |
-          PROPERTIES="$(./gradlew properties --console=plain -q)"
-          VERSION="$(echo "$PROPERTIES" | grep "^version:" | cut -f2- -d ' ')"
-          NAME="$(echo "$PROPERTIES" | grep "^pluginName:" | cut -f2- -d ' ')"
-          CHANGELOG="$(./gradlew getChangelog --unreleased --no-header --console=plain -q)"
-          CHANGELOG="${CHANGELOG//'%'/'%25'}"
-          CHANGELOG="${CHANGELOG//$'\n'/'%0A'}"
-          CHANGELOG="${CHANGELOG//$'\r'/'%0D'}"
-          ARTIFACT="${NAME}-${VERSION}.zip"
-
-          echo "::set-output name=version::$VERSION"
-          echo "::set-output name=name::$NAME"
-          echo "::set-output name=changelog::$CHANGELOG"
-          echo "::set-output name=artifact::$ARTIFACT"
-
       # insert Analytics secrets
       - name: Applying Analytics Secrets
         run: |
@@ -154,48 +203,10 @@ jobs:
       - name: Build Plugin
         run: ./gradlew buildPlugin
 
-      # Upload plugin artifact to make it available in the next jobs
-      - name: Upload artifact
-        uses: actions/upload-artifact@v2.2.4
-        with:
-          name: plugin-artifact
-          path: ./build/distributions/${{ steps.properties.outputs.artifact }}
-
-  # Verify built plugin using IntelliJ Plugin Verifier tool
-  verify:
-    name: Verify
-    if: github.event_name != 'pull_request' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/eap')
-    needs: gradleValidation
-    runs-on: ubuntu-latest
-    steps:
-      # Setup Java 11 environment for the next steps
-      - name: Setup Java
-        uses: actions/setup-java@v2
-        with:
-          distribution: zulu
-          java-version: 11
-
-      # Check out current repository
-      - name: Fetch Sources
-        uses: actions/checkout@v2.3.5
-
-      # Cache Gradle Dependencies
-      - name: Setup Gradle Dependencies Cache
-        uses: actions/cache@v2.1.6
-        with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-caches-${{ hashFiles('**/*.gradle', '**/*.gradle.kts', 'gradle.properties') }}
-
-      # Cache Gradle Wrapper
-      - name: Setup Gradle Wrapper Cache
-        uses: actions/cache@v2.1.6
-        with:
-          path: ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
-
-      # Set environment variables
-      - name: Export Properties
-        id: properties
+      # Prepare plugin archive content for creating artifact
+      - name: Prepare Plugin Artifact
+        if: needs.properties.outputs.shouldRelease
+        id: artifact
         shell: bash
         run: |
           cd ${{ github.workspace }}/build/distributions
@@ -204,24 +215,22 @@ jobs:
 
           echo "::set-output name=filename::$FILENAME"
 
-      # Cache Plugin Verifier IDEs
-      - name: Setup Plugin Verifier IDEs Cache
-        uses: actions/cache@v2.1.6
+      # Store already-built plugin as an artifact for downloading
+      - name: Upload artifact
+        if: needs.properties.outputs.shouldRelease
+        uses: actions/upload-artifact@v2.2.4
         with:
           name: ${{ steps.artifact.outputs.filename }}
           path: ./build/distributions/content/*/*
 
-      # Run IntelliJ Plugin Verifier action using GitHub Action
-      - name: Verify Plugin
-        run: ./gradlew runPluginVerifier -Pplugin.verifier.home.dir=${{ steps.properties.outputs.pluginVerifierHomeDir }}
 
-  # Prepare a draft release for GitHub Releases page for the manual verification
-  # If accepted and published, release workflow would be triggered
-  releaseDraft:
-    name: Release Draft
-    needs: [build, verify, test]
+  # Publish a release for GitHub Releases page which in turn triggers release workflow
+  release:
+    name: Release
+    if: needs.properties.outputs.shouldRelease
+    needs: [ properties, build, verify, test, qodana ]
     concurrency:
-      group: releaseDraft
+      group: release
       cancel-in-progress: true
     runs-on: ubuntu-latest
     steps:
@@ -229,43 +238,15 @@ jobs:
       - name: Fetch Sources
         uses: actions/checkout@v2.3.5
 
-      # Remove old release drafts by using the curl request for the releases with draft flag and same tag_name
-      - name: Remove Old Release Drafts
+      # Create new release
+      - name: Create Release Draft
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          curl -H "Authorization: Bearer $GITHUB_TOKEN" https://api.github.com/repos/$GITHUB_REPOSITORY/releases \
-            | tr '\r\n' ' ' \
-            | jq '.[] | select(.draft == true) | .id' \
-            | xargs -I '{}' \
-          curl -X DELETE -H "Authorization: Bearer $GITHUB_TOKEN" https://api.github.com/repos/$GITHUB_REPOSITORY/releases/{}
-
-      # Create new release draft - which is not publicly visible and requires manual acceptance
-      - name: Create Release Draft
-        id: createDraft
-        uses: ncipollo/release-action@v1
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          tag: ${{ needs.build.outputs.version }}
-          body: ${{ needs.build.outputs.changelog }}
-          commit: ${{ github.ref }}
-          draft: true
-          prerelease: ${{ github.ref == 'refs/heads/eap' }}
-
-      # Download plugin artifact provided by the previous job
-      - name: Download Artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: plugin-artifact
-
-      # Upload artifact as a release asset
-      - name: Upload Release Asset
-        id: upload-release-asset
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.createDraft.outputs.upload_url }}
-          asset_path: ./${{ needs.build.outputs.artifact }}
-          asset_name: ${{ needs.build.outputs.artifact }}
-          asset_content_type: application/zip
+          gh release create ${{ needs.properties.outputs.version }} \
+            ${{ needs.properties.outputs.prerelease && '--prerelease' || '' }} \
+            --title "${{ needs.build.outputs.version }}" \
+            --notes "$(cat << 'EOM'
+          ${{ needs.build.outputs.changelog }}
+          EOM
+          )"
