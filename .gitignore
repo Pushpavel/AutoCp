@@ -4,3 +4,7 @@
 build
 out
 src/main/resources/messages/secrets.properties
+
+# these file/folders are to be tracked in docs related branches
+docs
+.nojekyll
