@@ -30,12 +30,20 @@ jobs:
       version: ${{ steps.properties.outputs.version }}
       changelog: ${{ steps.properties.outputs.changelog }}
       shouldRelease: ${{ contains(github.event.head_commit.message, '[release]') }}
-      shouldVerify: ${{ job.outputs.shouldRelease || github.event_name == 'pull_request' }}
-      prerelease: ${{ contains(job.outputs.version,'-eap') }}
+      shouldVerify: ${{ jobs.properties.outputs.shouldRelease || github.event_name == 'pull_request' }}
+      prerelease: ${{ contains(jobs.properties.outputs.version,'-eap') }}
     steps:
       # Check out current repository
       - name: Fetch Sources
         uses: actions/checkout@v2.3.5
+
+      # Setup Java 11 environment for the next steps
+      - name: Setup Java
+        uses: actions/setup-java@v2
+        with:
+          distribution: zulu
+          java-version: 11
+          cache: gradle
 
       # Set environment variables
       - name: Export Properties
