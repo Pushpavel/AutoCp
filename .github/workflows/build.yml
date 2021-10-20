@@ -105,36 +105,6 @@ jobs:
           name: tests-result
           path: ${{ github.workspace }}/build/reports/tests
 
-  # Run code inspections only on pull_requests as it takes a long time
-  qodana:
-    name: Qodana
-    if: needs.properties.outputs.shouldVerify == 'true'
-    needs: [ properties, gradleValidation ]
-    runs-on: ubuntu-latest
-    steps:
-      # Check out current repository
-      - name: Fetch Sources
-        uses: actions/checkout@v2.3.5
-
-      # Cache Gradle dependencies
-      - name: Setup Gradle Dependencies Cache
-        uses: actions/cache@v2.1.6
-        with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-caches-${{ hashFiles('**/*.gradle', '**/*.gradle.kts', 'gradle.properties') }}
-
-      # Run Qodana inspections
-      - name: Qodana - Code Inspection
-        uses: JetBrains/qodana-action@v2.1-eap
-
-      # Collect Qodana Result
-      - name: Collect Qodana Result
-        uses: actions/upload-artifact@v2
-        with:
-          name: qodana-result
-          path: ${{ github.workspace }}/qodana
-
-
   # Verify plugin using IntelliJ Plugin Verifier tool only on pull_requests as it takes a long time
   verify:
     name: Verify
