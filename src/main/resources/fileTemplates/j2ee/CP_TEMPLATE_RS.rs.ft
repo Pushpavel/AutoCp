@@ -1,7 +1,0 @@
-//  ${PROBLEM_NAME}
-
-use std::io::{self};
-
-fn main() {
-    $END
-}

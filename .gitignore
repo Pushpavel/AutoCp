@@ -1,6 +1,9 @@
-.gradle
-.idea
-.qodana
-build
-out
-src/main/resources/messages/secrets.properties
+# these files/folders are to be tracked in documentation related branches
+*
+!*/
+!/.gitignore
+!/docs/**
+!/.github/.gitignore
+!/.nojekyll
+!/LICENSE
+!/README.md

@@ -1,8 +1,0 @@
-//  ${PROBLEM_NAME}
-
-#[[#include]]#<stdio.h>
-
-int main(){
-    $END
-    return 0;
-}
