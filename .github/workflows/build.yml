@@ -28,8 +28,8 @@ jobs:
       name: ${{ steps._properties.outputs.name }}
       version: ${{ steps._properties.outputs.version }}
       changelog: ${{ steps._properties.outputs.changelog }}
-      shouldRelease: ${{ contains(github.event.head_commit.message, '[release]') }}
-      shouldVerify: ${{ contains(github.event.head_commit.message, '[release]') || github.event_name == 'pull_request' }}
+      shouldRelease: ${{ steps._properties.outputs.shouldRelease }}
+      shouldVerify: ${{ (steps._properties.outputs.shouldRelease || github.event_name == 'pull_request') && steps._properties.outputs.skipVerify == 'false' }}
       prerelease: ${{ contains(steps._properties.outputs.version,'-eap') }}
     steps:
       # Check out current repository
@@ -57,9 +57,14 @@ jobs:
           CHANGELOG="${CHANGELOG//$'\n'/'%0A'}"
           CHANGELOG="${CHANGELOG//$'\r'/'%0D'}"
 
+          SKIP_VERIFY="$(echo '${{ github.event.head_commit.message }}' | grep -Eq "\[\s*(skip|no)\s+verify\s*\]" && echo 'true' || 'false' )"
+          SHOULD_RELEASE="$(echo '${{ github.event.head_commit.message }}' | grep -Eq "\[\s*release\s*\]" && echo 'true' || 'false' )"
+
           echo "::set-output name=version::$VERSION"
           echo "::set-output name=name::$NAME"
           echo "::set-output name=changelog::$CHANGELOG"
+          echo "::set-output name=skipVerify::$SKIP_VERIFY"
+          echo "::set-output name=shouldRelease::$SHOULD_RELEASE"
 
 
   # Run Gradle Wrapper Validation Action to verify the wrapper's checksum
