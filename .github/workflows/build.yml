@@ -1,5 +1,5 @@
 # GitHub Actions Workflow created for testing and preparing the plugin release in following steps:
-# - export properties
+# - compute properties
 # - validate Gradle Wrapper,
 # - run 'test' task,
 # - run 'runPluginVerifier' task,
@@ -20,49 +20,22 @@ on:
 
 jobs:
 
-  # Extract Properties for other jobs to use
+  # Compute Properties for other jobs to use
   properties:
-    name: Extract Properties
+    name: Compute Properties
     runs-on: ubuntu-latest
     outputs:
-      name: ${{ steps._properties.outputs.name }}
-      version: ${{ steps._properties.outputs.version }}
-      changelog: ${{ steps._properties.outputs.changelog }}
-      shouldRelease: ${{ steps._properties.outputs.shouldRelease }}
-      shouldVerify: ${{ (steps._properties.outputs.shouldRelease || github.event_name == 'pull_request') && steps._properties.outputs.skipVerify == 'false' }}
-      prerelease: ${{ contains(steps._properties.outputs.version,'-eap') }}
+      shouldRelease: ${{ steps._properties.outputs.shouldRelease == 'true' && github.ref == 'refs/heads/main' }}
+      shouldVerify: ${{ ((steps._properties.outputs.shouldRelease == 'true' && github.ref == 'refs/heads/main') || github.event_name == 'pull_request') && steps._properties.outputs.skipVerify == 'false' }}
     steps:
-      # Check out current repository
-      - name: Fetch Sources
-        uses: actions/checkout@v2.3.5
-
-      # Setup Java 11 environment for the next steps
-      - name: Setup Java
-        uses: actions/setup-java@v2
-        with:
-          distribution: zulu
-          java-version: 11
-          cache: gradle
-
       # Set environment variables
       - name: Export Properties
         id: _properties
         shell: bash
         run: |
-          PROPERTIES="$(./gradlew properties --console=plain -q)"
-          VERSION="$(echo "$PROPERTIES" | grep "^version:" | cut -f2- -d ' ')"
-          NAME="$(echo "$PROPERTIES" | grep "^pluginName:" | cut -f2- -d ' ')"
-          CHANGELOG="$(./gradlew getChangelog --unreleased --no-header --console=plain -q)"
-          CHANGELOG="${CHANGELOG//'%'/'%25'}"
-          CHANGELOG="${CHANGELOG//$'\n'/'%0A'}"
-          CHANGELOG="${CHANGELOG//$'\r'/'%0D'}"
-
           SKIP_VERIFY="$(echo '${{ github.event.head_commit.message }}' | grep -Eq "\[\s*(skip|no)\s+verify\s*\]" && echo 'true' || 'false' )"
           SHOULD_RELEASE="$(echo '${{ github.event.head_commit.message }}' | grep -Eq "\[\s*release\s*\]" && echo 'true' || 'false' )"
 
-          echo "::set-output name=version::$VERSION"
-          echo "::set-output name=name::$NAME"
-          echo "::set-output name=changelog::$CHANGELOG"
           echo "::set-output name=skipVerify::$SKIP_VERIFY"
           echo "::set-output name=shouldRelease::$SHOULD_RELEASE"
 
@@ -161,6 +134,11 @@ jobs:
     name: Build
     needs: [ properties, gradleValidation ]
     runs-on: ubuntu-latest
+    outputs:
+      name: ${{ steps._properties.outputs.name }}
+      version: ${{ steps._properties.outputs.version }}
+      changelog: ${{ steps._properties.outputs.changelog }}
+      prerelease: ${{ contains(steps._properties.outputs.version,'-eap') }}
     steps:
 
       # Check out current repository
@@ -184,6 +162,24 @@ jobs:
       # Build artifact using buildPlugin Gradle task
       - name: Build Plugin
         run: ./gradlew buildPlugin
+
+      # Set environment variables
+      - name: Export Properties
+        if: needs.properties.outputs.shouldRelease == 'true'
+        id: _properties
+        shell: bash
+        run: |
+          PROPERTIES="$(./gradlew properties --console=plain -q)"
+          VERSION="$(echo "$PROPERTIES" | grep "^version:" | cut -f2- -d ' ')"
+          NAME="$(echo "$PROPERTIES" | grep "^pluginName:" | cut -f2- -d ' ')"
+          CHANGELOG="$(./gradlew getChangelog --unreleased --no-header --console=plain -q)"
+          CHANGELOG="${CHANGELOG//'%'/'%25'}"
+          CHANGELOG="${CHANGELOG//$'\n'/'%0A'}"
+          CHANGELOG="${CHANGELOG//$'\r'/'%0D'}"
+
+          echo "::set-output name=version::$VERSION"
+          echo "::set-output name=name::$NAME"
+          echo "::set-output name=changelog::$CHANGELOG"
 
       # Prepare plugin archive content for creating artifact
       - name: Prepare Plugin Artifact
@@ -225,10 +221,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release create ${{ needs.properties.outputs.version }} \
-            ${{ (needs.properties.outputs.prerelease == 'true') && '--prerelease ' || '' }} \
-            --title "${{ needs.properties.outputs.version }}" \
+          gh release create ${{ needs.build.outputs.version }} \
+            ${{ (needs.build.outputs.prerelease == 'true') && '--prerelease ' || '' }} \
+            --title "${{ needs.build.outputs.version }}" \
             --notes "$(cat << 'EOM'
-          ${{ needs.properties.outputs.changelog }}
+          ${{ needs.build.outputs.changelog }}
           EOM
           )"
