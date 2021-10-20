@@ -15,8 +15,7 @@
 name: Build
 on:
   push:
-    # TODO: change to main branch
-    branches: [ dev ]
+    branches: [ main ]
   pull_request:
 
 jobs:

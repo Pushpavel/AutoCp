@@ -5,6 +5,7 @@ name: Release
 on:
   release:
     types: [ published ]
+
 jobs:
 
   # Prepare and publish the plugin to the Marketplace repository
@@ -27,17 +28,32 @@ jobs:
           java-version: 11
           cache: gradle
 
-      # Check out current repository
-      - name: Fetch Sources
-        uses: actions/checkout@v2.3.5
-        with:
-          ref: ${{ github.event.release.tag_name }}
-
-      # insert Analytics secrets
+      # Insert Analytics secrets
       - name: Applying Analytics Secrets
         run: |
           echo "analytics_api_secrets=${{ secrets.ANALYTICS_API_SECRETS }}" > src/main/resources/messages/secrets.properties
           echo "analytics_measurement_id=${{ secrets.ANALYTICS_MEASUREMENT_ID }}" >> src/main/resources/messages/secrets.properties
+
+      # Output changelog from release body
+      - name: Export Properties
+        id: properties
+        shell: bash
+        run: |
+          CHANGELOG="$(cat << 'EOM' | sed -e 's/^[[:space:]]*$//g' -e '/./,$!d'
+          ${{ github.event.release.body }}
+          EOM
+          )"
+
+          echo "::set-output name=changelog::$CHANGELOG"
+
+      # Update Unreleased section with the current release note
+      - name: Patch Changelog
+        if: ${{ steps.properties.outputs.changelog != '' }}
+        run: |
+          ./gradlew patchChangelog --release-note "$(cat << 'EOM'
+          ${{ steps.properties.outputs.changelog }}
+          EOM
+          )"
 
       # Publish the plugin to the Marketplace
       - name: Publish Plugin
@@ -52,25 +68,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-      # Setup Java 11 environment for the next steps
-      - name: Setup Java
-        uses: actions/setup-java@v2
-        with:
-          distribution: zulu
-          java-version: 11
-
-      # Check out current repository
-      - name: Fetch Sources
-        uses: actions/checkout@v2.3.5
-        with:
-          ref: ${{ github.event.release.tag_name }}
-
-      # Update Unreleased section with the current version
-      - name: Patch Changelog
-        run: ./gradlew patchChangelog
-
-      # Commit patched Changelog
-      - name: Commit files
+      # Push changelog update
+      - name: Push changelog update
+        if: ${{ steps.properties.outputs.changelog != '' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           VERSION="${{ github.event.release.tag_name }}"
 
