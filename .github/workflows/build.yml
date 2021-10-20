@@ -1,9 +1,9 @@
 # GitHub Actions Workflow created for testing and preparing the plugin release in following steps:
+# - export properties
 # - validate Gradle Wrapper,
-# - run 'test' and 'verifyPlugin' tasks,
-# - run Qodana inspections,
-# - run 'buildPlugin' task and prepare artifact for the further tests,
+# - run 'test' task,
 # - run 'runPluginVerifier' task,
+# - run 'buildPlugin' task and prepare artifact for the further tests,
 # - create a release.
 #
 # Workflow is triggered on push and pull_request events.
@@ -210,7 +210,7 @@ jobs:
   release:
     name: Release
     if: needs.properties.outputs.shouldRelease == 'true'
-    needs: [ properties, build, verify, test, qodana ]
+    needs: [ properties, build, verify, test ]
     concurrency:
       group: release
       cancel-in-progress: true
