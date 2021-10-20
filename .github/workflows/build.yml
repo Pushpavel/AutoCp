@@ -26,12 +26,12 @@ jobs:
     name: Extract Properties
     runs-on: ubuntu-latest
     outputs:
-      name: ${{ steps.properties.outputs.name }}
-      version: ${{ steps.properties.outputs.version }}
-      changelog: ${{ steps.properties.outputs.changelog }}
+      name: ${{ steps._properties.outputs.name }}
+      version: ${{ steps._properties.outputs.version }}
+      changelog: ${{ steps._properties.outputs.changelog }}
       shouldRelease: ${{ contains(github.event.head_commit.message, '[release]') }}
       shouldVerify: ${{ contains(github.event.head_commit.message, '[release]') || github.event_name == 'pull_request' }}
-      prerelease: ${{ contains(steps.properties.outputs.version,'-eap') }}
+      prerelease: ${{ contains(steps._properties.outputs.version,'-eap') }}
     steps:
       # Check out current repository
       - name: Fetch Sources
@@ -47,7 +47,7 @@ jobs:
 
       # Set environment variables
       - name: Export Properties
-        id: properties
+        id: _properties
         shell: bash
         run: |
           PROPERTIES="$(./gradlew properties --console=plain -q)"
@@ -109,7 +109,7 @@ jobs:
   # Run code inspections only on pull_requests as it takes a long time
   qodana:
     name: Qodana
-    if: needs.properties.outputs.shouldVerify
+    if: needs.properties.outputs.shouldVerify == 'true'
     needs: [ properties, gradleValidation ]
     runs-on: ubuntu-latest
     steps:
@@ -139,7 +139,7 @@ jobs:
   # Verify plugin using IntelliJ Plugin Verifier tool only on pull_requests as it takes a long time
   verify:
     name: Verify
-    if: needs.properties.outputs.shouldVerify
+    if: needs.properties.outputs.shouldVerify == 'true'
     needs: [ properties, gradleValidation ]
     runs-on: ubuntu-latest
     steps:
@@ -213,7 +213,7 @@ jobs:
 
       # Prepare plugin archive content for creating artifact
       - name: Prepare Plugin Artifact
-        if: needs.properties.outputs.shouldRelease
+        if: needs.properties.outputs.shouldRelease == 'true'
         id: artifact
         shell: bash
         run: |
@@ -225,7 +225,7 @@ jobs:
 
       # Store already-built plugin as an artifact for downloading
       - name: Upload artifact
-        if: needs.properties.outputs.shouldRelease
+        if: needs.properties.outputs.shouldRelease == 'true'
         uses: actions/upload-artifact@v2.2.4
         with:
           name: ${{ steps.artifact.outputs.filename }}
@@ -235,7 +235,7 @@ jobs:
   # Publish a release for GitHub Releases page which in turn triggers release workflow
   release:
     name: Release
-    if: needs.properties.outputs.shouldRelease
+    if: needs.properties.outputs.shouldRelease == 'true'
     needs: [ properties, build, verify, test, qodana ]
     concurrency:
       group: release
@@ -252,7 +252,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh release create ${{ needs.properties.outputs.version }} \
-            ${{ needs.properties.outputs.prerelease && '--prerelease' || '' }} \
+            ${{ (needs.properties.outputs.prerelease == 'true') && '--prerelease' || '' }} \
             --title "${{ needs.build.outputs.version }}" \
             --notes "$(cat << 'EOM'
           ${{ needs.build.outputs.changelog }}
