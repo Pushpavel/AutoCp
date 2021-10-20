@@ -15,9 +15,7 @@
 name: Build
 on:
   push:
-    branches: [ main ]
   pull_request:
-
 jobs:
 
   # Compute Properties for other jobs to use
@@ -29,6 +27,7 @@ jobs:
       shouldVerify: ${{ ((steps._properties.outputs.shouldRelease == 'true' && github.ref == 'refs/heads/main') || github.event_name == 'pull_request') && steps._properties.outputs.skipVerify == 'false' }}
     steps:
       # Set environment variables
+      # fixme: what if [release][no verify] at same commit
       - name: Export Properties
         id: _properties
         shell: bash
