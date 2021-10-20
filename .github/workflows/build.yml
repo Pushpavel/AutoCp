@@ -55,7 +55,7 @@ jobs:
   # Run test Gradle tasks
   test:
     name: Test
-    needs: gradleValidation
+    needs: [ properties, gradleValidation ]
     runs-on: ubuntu-latest
     steps:
       # Check out current repository
