@@ -251,9 +251,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh release create ${{ needs.properties.outputs.version }} \
-            ${{ (needs.properties.outputs.prerelease == 'true') && '--prerelease' || '' }} \
-            --title "${{ needs.build.outputs.version }}" \
+            ${{ (needs.properties.outputs.prerelease == 'true') && '--prerelease ' || '' }} \
+            --title "${{ needs.properties.outputs.version }}" \
             --notes "$(cat << 'EOM'
-          ${{ needs.build.outputs.changelog }}
+          ${{ needs.properties.outputs.changelog }}
           EOM
           )"
