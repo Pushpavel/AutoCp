@@ -20,8 +20,8 @@ If you have never created a pull request before, welcome
 - __Keep your change as focused as possible__. If there are multiple changes you would like to make that are not
   dependent upon each other, consider submitting them as separate pull requests.
 
-- After forking the repo, create your branch from any of the below branches
-    - __```dev``` branch__ - for plugin work.
+- open pull requests only against these branches.
+    - __```main``` branch__ - for plugin work.
     - __```docs``` branch__ - for documentation work.
 
 ## Resources
