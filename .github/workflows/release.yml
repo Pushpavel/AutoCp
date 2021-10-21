@@ -5,8 +5,6 @@ name: Release
 on:
   release:
     types: [ published ]
-  push:
-    branches: [ fix/continous-deployment ]
 
 jobs:
 
@@ -42,12 +40,7 @@ jobs:
         shell: bash
         run: |
           CHANGELOG="$(cat << 'EOM'
-          ### Added
-            - Shortcut to run with AutoCp (default: <kbd>ALT</kbd> + <kbd>X</kbd>)
-
-          ### Fixed
-            - [#49](https://github.com/Pushpavel/AutoCp/issues/49) - File generation does not notify user if error is due to
-              argument missing in velocity file template.
+          ${{ github.event.release.body }}
           EOM
           )"
           CHANGELOG="${CHANGELOG//'%'/'%25'}"
@@ -67,21 +60,19 @@ jobs:
 
       # Publish the plugin to the Marketplace
       - name: Publish Plugin
-        if: ${{ false }}
         env:
           PUBLISH_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
         run: ./gradlew publishPlugin
 
       # Upload artifact as a release asset
       - name: Upload Release Asset
-        if: ${{ false }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: gh release upload ${{ github.event.release.tag_name }} ./build/distributions/*
 
       # Push changelog update
       - name: Push changelog update
-        if: ${{ steps.properties.outputs.changelog != '' && false }}
+        if: ${{ steps.properties.outputs.changelog != ''}}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -89,6 +80,9 @@ jobs:
 
           git config user.email "action@github.com"
           git config user.name "GitHub Action"
+
+          git checkout main
+          git add CHANGELOG.md
 
           git commit -am "📝: update CHANGELOG.md for $VERSION [skip ci]"
           git push origin main
