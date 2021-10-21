@@ -218,7 +218,7 @@ jobs:
       # Create new release
       - name: Create Release Draft
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         run: |
           gh release create ${{ needs.build.outputs.version }} \
             ${{ (needs.build.outputs.prerelease == 'true') && '--prerelease ' || '' }} \
