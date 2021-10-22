@@ -14,6 +14,7 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.DialogPanel
 import com.intellij.ui.layout.applyToComponent
 import com.intellij.ui.layout.panel
+import com.intellij.ui.layout.toBinding
 import com.intellij.util.ui.components.BorderLayoutPanel
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.collect
@@ -63,7 +64,7 @@ class SolutionFileSettingsPanel(project: Project, pathString: String, refreshCal
             row {
                 cell {
                     label("").applyToComponent { icon = R.icons.clock }
-                    intTextField(::timeLimit).applyToComponent {
+                    intTextField((::timeLimit).toBinding()).applyToComponent {
                         allowOnlyPositiveIntegers()
                         document.onChange { apply() }
                     }
