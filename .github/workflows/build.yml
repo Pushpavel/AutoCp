@@ -35,7 +35,6 @@ jobs:
         }}
     steps:
       # Set environment variables
-      # fixme: what if [release][no verify] at same commit
       - name: Export Properties
         id: _properties
         shell: bash
