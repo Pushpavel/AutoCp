@@ -2,6 +2,7 @@ package com.github.pushpavel.autocp.tool.ui
 
 import com.github.pushpavel.autocp.common.helpers.mainScope
 import com.github.pushpavel.autocp.common.res.R
+import com.github.pushpavel.autocp.common.ui.dsl.intTextFieldCompat
 import com.github.pushpavel.autocp.common.ui.helpers.allowOnlyPositiveIntegers
 import com.github.pushpavel.autocp.common.ui.helpers.onChange
 import com.github.pushpavel.autocp.common.ui.layouts.html
@@ -64,7 +65,7 @@ class SolutionFileSettingsPanel(project: Project, pathString: String, refreshCal
             row {
                 cell {
                     label("").applyToComponent { icon = R.icons.clock }
-                    intTextField((::timeLimit).toBinding()).applyToComponent {
+                    intTextFieldCompat((::timeLimit).toBinding()).applyToComponent {
                         allowOnlyPositiveIntegers()
                         document.onChange { apply() }
                     }
