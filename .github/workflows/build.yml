@@ -213,7 +213,11 @@ jobs:
   # Publish a release for GitHub Releases page which in turn triggers release workflow
   release:
     name: Release
-    if: needs.properties.outputs.shouldRelease == 'true'
+    if: ${{
+      always()
+      && needs.properties.outputs.shouldRelease == 'true'
+      && !contains(needs.*.result, 'failure')
+      }}
     needs: [ properties, build, verify, test ]
     concurrency:
       group: release
