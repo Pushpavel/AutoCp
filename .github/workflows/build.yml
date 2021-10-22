@@ -39,7 +39,7 @@ jobs:
         id: _properties
         shell: bash
         run: |
-          SKIP_VERIFY="$(echo '${{ github.event.head_commit.message }}' | grep -Eq "\[\s*(skip|no)\s+verify\s*\]" && echo 'true' || echo 'false' )"
+          SKIP_VERIFY="$(echo '${{ github.event.head_commit.message }}' | grep -Eq "\[\s*(skip|no)(\s*|-|_)verify\s*\]" && echo 'true' || echo 'false' )"
           SHOULD_VERIFY="$(echo '${{ github.event.head_commit.message }}' | grep -Eq "\[\s*verify\s*\]" && echo 'true' || echo 'false' )"
           SHOULD_RELEASE="$(echo '${{ github.event.head_commit.message }}' | grep -Eq "\[\s*release\s*\]" && echo 'true' || echo 'false' )"
 
