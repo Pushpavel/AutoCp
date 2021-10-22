@@ -24,7 +24,15 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       shouldRelease: ${{ steps._properties.outputs.shouldRelease == 'true' && github.ref == 'refs/heads/main' }}
-      shouldVerify: ${{ ((steps._properties.outputs.shouldRelease == 'true' && github.ref == 'refs/heads/main') || github.event_name == 'pull_request') && steps._properties.outputs.skipVerify == 'false' }}
+      shouldVerify:
+        ${{
+        (
+        (steps._properties.outputs.shouldRelease == 'true' && github.ref == 'refs/heads/main')
+        || github.event_name == 'pull_request'
+        )
+        && steps._properties.outputs.skipVerify == 'false'
+        || steps._properties.outputs.shouldVerify == 'true'
+        }}
     steps:
       # Set environment variables
       # fixme: what if [release][no verify] at same commit
@@ -33,9 +41,11 @@ jobs:
         shell: bash
         run: |
           SKIP_VERIFY="$(echo '${{ github.event.head_commit.message }}' | grep -Eq "\[\s*(skip|no)\s+verify\s*\]" && echo 'true' || echo 'false' )"
+          SHOULD_VERIFY="$(echo '${{ github.event.head_commit.message }}' | grep -Eq "\[\s*verify\s*\]" && echo 'true' || echo 'false' )"
           SHOULD_RELEASE="$(echo '${{ github.event.head_commit.message }}' | grep -Eq "\[\s*release\s*\]" && echo 'true' || echo 'false' )"
 
           echo "::set-output name=skipVerify::$SKIP_VERIFY"
+          echo "::set-output name=shouldVerify::$SHOULD_VERIFY"
           echo "::set-output name=shouldRelease::$SHOULD_RELEASE"
 
 
