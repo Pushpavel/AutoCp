@@ -84,7 +84,7 @@ jobs:
           git checkout main
           git add CHANGELOG.md
 
-          git commit -am "📝: update CHANGELOG.md for $VERSION [skip ci]"
+          git commit -am "📝: patch CHANGELOG.md for $VERSION [skip ci]"
           git push origin main
 
   merge:
