@@ -3,53 +3,76 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- [#51](https://github.com/Pushpavel/AutoCp/issues/49) - ```.autocp``` file is not created and testcases are lost on IDE
+  restart.
+
 ## v0.7.2
+
 ### Added
+
 - Shortcut to run with AutoCp (default: <kbd>ALT</kbd> + <kbd>X</kbd>)
 
 ### Fixed
+
 - [#49](https://github.com/Pushpavel/AutoCp/issues/49) - File generation does not notify user if error is due to
   argument missing in velocity file template.
 
 ## v0.1.1
+
 ### Added
+
 - Initial Release 🎉🎉😀
 
 ## v0.5.0-eap.2
+
 ### Fixed
+
 - Compatibility problems with IntelliJ IDEA Ultimate
 
 ## v0.5.0-eap.1
+
 ### Added
+
 - File Templates support
 - Restricted languages with IDE supported languages
 
 ### Changed
+
 - New Testcase viewer UI, Settings UI, Run configuration UI and Generate Solutions Dialog UI
 - Moved settings to ```Tool``` > ```AutoCp```
 - ```@in``` and ```@out``` as placeholders for input and output path for constructing build commands
 
 ### Fixed
+
 - .autocp file is created unnecessarily in every project
 - Build Errors were incorrectly reported as internal errors
 
 ## v0.5.0-eap.4
+
 ### Added
+
 - Time constraints are displayed on the top of Testcase list
 - settings tab in the AutoCp tool window
 
 ### Changed
+
 - Shows link to diff viewer to compare expected output with actual output
 
 ### Fixed
+
 - Executables are suffixed with ```.exe``` which is not an executable in linux or mac
 - Testing Process is not exiting
 
 ## v0.5.0-eap.3
+
 ### Added
+
 - Problem Gathering Service to replace problem gathering and generating dialogs
 - Project specific overrides at ```Settings/Preference``` > ```Tools``` > ```AutoCp``` > ```Project```
 
 ### Removed
+
 - Gather Problems Action (```Tools``` > ```Gather Problems```)
 - Generate Files Dialog
