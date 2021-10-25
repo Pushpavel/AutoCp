@@ -10,9 +10,11 @@ import com.intellij.execution.runners.ExecutionUtil
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.CommonDataKeys
+import com.intellij.openapi.project.DumbAware
 
 
-class RunAutoCpAction : AnAction("Run with AutoCp", "Run the currently focused file with AutoCp", R.icons.logo13) {
+class RunAutoCpAction : AnAction("Run with AutoCp", "Run the currently focused file with AutoCp", R.icons.logo13),
+    DumbAware {
     override fun actionPerformed(e: AnActionEvent) {
         try {
             val configProducer = RunConfigurationProducer.getInstance(AutoCpConfigProducer::class.java)
@@ -36,4 +38,6 @@ class RunAutoCpAction : AnAction("Run with AutoCp", "Run the currently focused f
     override fun update(e: AnActionEvent) {
         e.presentation.isEnabled = e.project != null && e.getData(CommonDataKeys.VIRTUAL_FILE) != null
     }
+
+
 }
