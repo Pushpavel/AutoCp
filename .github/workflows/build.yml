@@ -219,6 +219,7 @@ jobs:
       always()
       && needs.properties.outputs.shouldRelease == 'true'
       && !contains(needs.*.result, 'failure')
+      && !contains(needs.*.result, 'cancelled')
       }}
     needs: [ properties, build, verify, test ]
     concurrency:
