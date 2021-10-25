@@ -2,7 +2,6 @@ package com.github.pushpavel.autocp.database
 
 import com.github.pushpavel.autocp.common.compat.base.AutoCpFileConversion
 import com.github.pushpavel.autocp.common.res.R
-import com.intellij.ide.actions.CreateFileAction
 import com.intellij.openapi.application.runReadAction
 import com.intellij.openapi.application.runWriteAction
 import com.intellij.openapi.components.Service
@@ -67,8 +66,7 @@ class AutoCpStorageSaver : FileDocumentManagerListener {
 
                 runWriteAction {
                     val psiDir = PsiManager.getInstance(project).findDirectory(projectRoot) ?: return@runWriteAction
-                    CreateFileAction.MkDirs(".autocp", psiDir)
-                    virtualFile = VfsUtil.findFile(path, true)
+                    virtualFile = psiDir.createFile(".autocp").virtualFile
                 }
             }
 
