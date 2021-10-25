@@ -15,9 +15,9 @@
 name: Build
 on:
   push:
-    branches: [ '*' ]
+    branches: [ '**' ]
   pull_request:
-    branches: [ '*' ]
+    branches: [ '**' ]
 jobs:
 
   # Compute Properties for other jobs to use
