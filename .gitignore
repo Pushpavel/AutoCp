@@ -1,5 +1,6 @@
 .gradle
 .idea
-/build
+.qodana
+build
 out
 src/main/resources/messages/secrets.properties
