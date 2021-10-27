@@ -2,7 +2,7 @@
 
 ::: tip
 
-If you haven't already, please look at [Getting Started](getting-started.md)
+If you haven't already, have a look at [Getting Started](getting-started.md)
 for installation and configuration.
 :::
 
@@ -28,6 +28,6 @@ Open Testcase viewer
 
 ## Judging Solution
 
-Open your solution file and run by right-clicking on it.
+Open your solution file and run by right-clicking on it (<kbd>Alt</kbd> + <kbd>X</kbd>).
 
 ![Screenshot of green ticks in CLion](../assets/CLionScreenshot.png)
