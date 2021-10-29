@@ -66,8 +66,4 @@
         <listener class="com.github.pushpavel.autocp.database.listeners.GatheredProblemAdder"
                   topic="com.github.pushpavel.autocp.gather.base.ProblemGatheringListener"/>
     </projectListeners>
-    <applicationListeners>
-        <listener class="com.github.pushpavel.autocp.common.listeners.AutoCpPluginListener"
-                  topic="com.intellij.ide.plugins.DynamicPluginListener"/>
-    </applicationListeners>
 </idea-plugin>
