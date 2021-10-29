@@ -86,29 +86,3 @@ jobs:
 
           git commit -am "📝: patch CHANGELOG.md for $VERSION [skip ci]"
           git push origin main
-
-  merge:
-    name: 🔀 Merge eap into ${{ matrix.branch }}
-    if: github.event.release.target_commitish == 'refs/heads/eap'
-    needs: changelog
-    strategy:
-      matrix:
-        branch: [ main, docs, dev ]
-      fail-fast: false
-    runs-on: ubuntu-latest
-    steps:
-      # Check out current repository
-      - name: Fetch Sources
-        if: matrix.branch != 'main' || !github.event.release.prerelease
-        uses: actions/checkout@v2.3.5
-        with:
-          ref: refs/heads/eap
-
-      - name: Merge eap > ${{ matrix.branch }}
-        if: matrix.branch != 'main' || !github.event.release.prerelease
-        uses: tukasz/direct-merge-action@master
-        with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          source-branch: eap
-          target-branch: ${{ matrix.branch }}
-          commit-message: "🔀: Merge branch 'eap' into '${{ matrix.branch }}' [skip ci]"
