@@ -45,8 +45,12 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:1.5.2")
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.5.31")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.0")
+
     implementation("io.ktor:ktor-client-core:$ktor_version")
     implementation("io.ktor:ktor-client-java:$ktor_version")
+    implementation("org.kodein.db:kodein-db-jvm:0.8.1-beta")
+    implementation("org.kodein.db:kodein-db-serializer-kotlinx:0.8.1-beta")
+    implementation("org.kodein.db:kodein-leveldb-jni-jvm:0.8.1-beta")
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.1")
