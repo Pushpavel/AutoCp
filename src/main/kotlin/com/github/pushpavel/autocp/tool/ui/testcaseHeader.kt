@@ -1,5 +1,6 @@
 package com.github.pushpavel.autocp.tool.ui
 
+import com.github.pushpavel.autocp.database.models.Testcase
 import com.intellij.icons.AllIcons
 import com.intellij.openapi.actionSystem.*
 import com.intellij.openapi.project.DumbAwareAction
@@ -7,7 +8,6 @@ import com.intellij.ui.CollectionListModel
 import com.intellij.ui.components.JBLabel
 import com.intellij.ui.components.JBPanel
 import com.intellij.util.ui.JBFont
-import com.github.pushpavel.autocp.database.models.Testcase
 import java.awt.BorderLayout
 import javax.swing.BorderFactory
 import javax.swing.BoxLayout
@@ -42,7 +42,7 @@ fun testcaseHeader(
             .getInstance()
             .createActionToolbar(ActionPlaces.TOOLWINDOW_CONTENT, actionGroup, true).apply {
                 layoutPolicy = ActionToolbar.NOWRAP_LAYOUT_POLICY
-            }
+            }.apply { targetComponent = jbPanel }
             .component,
         BorderLayout.LINE_END
     )
