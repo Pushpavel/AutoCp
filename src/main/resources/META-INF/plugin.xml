@@ -7,7 +7,7 @@
     <resource-bundle>messages.autocp</resource-bundle>
 
     <actions>
-        <action class="com.github.pushpavel.autocp.config.actions.RunAutoCpAction">
+        <action id="RunAutoCp" class="com.github.pushpavel.autocp.config.actions.RunAutoCpAction">
             <keyboard-shortcut first-keystroke="alt X" keymap="$default"/>
         </action>
     </actions>
@@ -48,6 +48,8 @@
                 implementation="com.github.pushpavel.autocp.common.compat.v0_5_0_eap_1.AutoCpProjectConverterProvider"
                 id="AutoCp v0.5.0-eap.1"/>
         <postStartupActivity implementation="com.github.pushpavel.autocp.gather.base.ProblemGatheringBridge"/>
+
+        <executor implementation="com.github.pushpavel.autocp.core.runner.AutoCpExecutor"/>
     </extensions>
     <projectListeners>
         <listener class="com.github.pushpavel.autocp.extend.cmake.CMakeAddExecutable"
