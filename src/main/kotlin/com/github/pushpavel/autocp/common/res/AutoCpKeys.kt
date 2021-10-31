@@ -7,6 +7,10 @@ object AutoCpKeys {
     const val toolWindowSelectedTabIndexKey = "$pluginId.toolWindowSelectedTabIndex"
     const val autoCpFileVersionNumber = 1
 
+    // Ids
+    const val autoCpToolWindowId = "Testcases"
+    const val autoCpExecutorId = "TestcasesExecutor"
+
     // Command User Macros
     const val inputPathMacro = "@in"
     const val dirPathMacro = "@dir"
