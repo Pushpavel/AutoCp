@@ -3,11 +3,14 @@ package com.github.pushpavel.autocp.core.execution
 import com.github.pushpavel.autocp.build.Lang
 import com.github.pushpavel.autocp.common.helpers.pathString
 import com.github.pushpavel.autocp.database.models.SolutionFile
+import com.intellij.execution.process.ProcessOutput
 import com.intellij.openapi.project.Project
-import groovy.lang.Tuple
+import java.io.File
 import java.nio.file.Files
 
-fun buildSolutionExecutable(project: Project, solutionFile: SolutionFile, lang: Lang): Tuple<Any?> {
+data class BuildOutput(val executeCommand: String, val dir: File, val output: ProcessOutput?)
+
+fun buildSolutionExecutable(project: Project, solutionFile: SolutionFile, lang: Lang): BuildOutput {
     val tempDir = Files.createTempDirectory("AutoCp").toFile()
 
     val executeCommand = lang.constructExecuteCommand(project, solutionFile.pathString, tempDir.path.pathString)
@@ -16,5 +19,5 @@ fun buildSolutionExecutable(project: Project, solutionFile: SolutionFile, lang: 
         val buildCommand = lang.constructBuildCommand(project, solutionFile.pathString, tempDir.path.pathString)
         ExecutionUtil.execAndGetOutput(buildCommand, tempDir)
     }
-    return Tuple(executeCommand, tempDir, buildOutput)
+    return BuildOutput(executeCommand, tempDir, buildOutput)
 }
