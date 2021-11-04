@@ -1,6 +1,10 @@
 package com.github.pushpavel.autocp.common.ui.swing
 
-import java.awt.*
+import com.intellij.util.ui.AbstractLayoutManager
+import java.awt.Component
+import java.awt.Container
+import java.awt.Dimension
+import java.awt.Insets
 
 /**
  * Swing layout manager similar to FlowLayout but with following differences
@@ -12,21 +16,33 @@ class AutoLayout(
     private val mainAxis: MainAxis = MainAxis.HORIZONTAL,
     var mainGap: Int = 8,
     var crossGap: Int = 8
-) : LayoutManager {
+) : AbstractLayoutManager() {
 
     enum class MainAxis { HORIZONTAL, VERTICAL }
+    enum class Flag { PUSH_MAIN }
 
+    private val constraints = mutableMapOf<Component, Flag?>()
 
-    override fun addLayoutComponent(name: String?, comp: Component?) {
+    override fun addLayoutComponent(comp: Component, constraint: Any?) {
+        constraints[comp] = constraint as? Flag
     }
 
-    override fun removeLayoutComponent(comp: Component?) {
+    override fun removeLayoutComponent(comp: Component) {
+        constraints.remove(comp)
     }
 
-    override fun preferredLayoutSize(parent: Container) = calculateSize(parent) { it.preferredSize }
+    override fun preferredLayoutSize(parent: Container) = calculateSize(parent) { it.preferredSize ?: Dimension(0, 0) }
 
-    override fun minimumLayoutSize(parent: Container) = calculateSize(parent) { it.minimumSize }
+    override fun minimumLayoutSize(parent: Container) = calculateSize(parent) { it.minimumSize ?: Dimension(0, 0) }
 
+    override fun maximumLayoutSize(target: Container) = calculateSize(target) { it.maximumSize ?: Dimension(0, 0) }
+
+
+    override fun getLayoutAlignmentX(target: Container) = 0.5f
+
+    override fun getLayoutAlignmentY(target: Container) = 0.5f
+
+    override fun invalidateLayout(target: Container) {}
 
     override fun layoutContainer(parent: Container) {
         var main = 0
@@ -37,10 +53,13 @@ class AutoLayout(
         for (component in parent.components) {
             if (!component.isVisible) continue
             var mainWithGap = main + if (main != 0) mainGap else 0
+            val constraint = constraints[component]
+            val preferredMain = if (constraint == Flag.PUSH_MAIN) maxMain else component.preferredSize.main
+
             val (nextLine, end) = calculateMainAxisComponentEnd(
                 mainWithGap,
                 maxMain,
-                component.preferredSize.main,
+                preferredMain,
                 component.minimumSize.main
             )
 
