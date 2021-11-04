@@ -1,16 +1,17 @@
 package com.github.pushpavel.autocp.common.ui.swing
 
-import java.awt.Component
-import java.awt.Container
-import java.awt.Dimension
-import java.awt.LayoutManager
+import java.awt.*
 
 /**
  * Swing layout manager similar to FlowLayout but with following differences
  * - top-left alignment
  * - respects minimum sizes of children
+ * - flows in vertical or horizontal direction
  */
-class AutoLayout : LayoutManager {
+class AutoLayout(private val mainAxis: MainAxis = MainAxis.HORIZONTAL) : LayoutManager {
+
+    enum class MainAxis { HORIZONTAL, VERTICAL }
+
     override fun addLayoutComponent(name: String?, comp: Component?) {
     }
 
@@ -23,48 +24,62 @@ class AutoLayout : LayoutManager {
 
 
     override fun layoutContainer(parent: Container) {
-        var x = 0
-        var y = 0
-        var currMaxHeight = 0
-        val maxWidth = parent.width - parent.insets.left - parent.insets.right
+        var main = 0
+        var cross = 0
+        var currCrossMax = 0
+        val maxMain = parent.size.main - parent.insets.mainStart - parent.insets.mainEnd
 
         for (component in parent.components) {
             if (!component.isVisible) continue
-            val preferredSize = component.preferredSize
-            val minimumSize = component.minimumSize
-            var _x = x
-            var _y = y
-            var _width = preferredSize.width
-            val _height = preferredSize.height
+            val (nextLine, end) = calculateMainAxisComponentEnd(
+                main,
+                maxMain,
+                component.preferredSize.main,
+                component.minimumSize.main
+            )
 
-            if (x + preferredSize.width <= maxWidth) {
-                x += _width
-                currMaxHeight = maxOf(currMaxHeight, _height)
-            } else if (preferredSize.width <= maxWidth) {
-                y += currMaxHeight
-                x = 0
-                _y = y
-                _x = x
-                x += _width
-                currMaxHeight = _height
-            } else if (minimumSize.width <= maxWidth) {
-                y += currMaxHeight
-                x = 0
-                _y = y
-                _x = x
-                _width = maxWidth
-                x += _width
-                currMaxHeight = _height
-            } else {
-                y += currMaxHeight
-                x = 0
-                _y = y
-                _x = x
-                _width = minimumSize.width
-                x += _width
-                currMaxHeight = _height
+            if (nextLine) {
+                cross += currCrossMax
+                main = 0
+                currCrossMax = 0
             }
-            component.setBounds(parent.insets.left + _x, parent.insets.top + _y, _width, _height)
+
+            currCrossMax = maxOf(currCrossMax, component.preferredSize.cross)
+
+            val cMain = parent.insets.mainStart + main
+            val cMainLength = end - main
+
+            component.applyBounds(cMain, cross, cMainLength, component.preferredSize.cross)
+
+            // account for applied component size
+            main += cMainLength
+        }
+    }
+
+    private fun Component.applyBounds(mainStart: Int, crossStart: Int, mainLength: Int, crossLength: Int) {
+        if (mainAxis == MainAxis.HORIZONTAL)
+            setBounds(mainStart, crossStart, mainLength, crossLength)
+        else
+            setBounds(crossStart, mainStart, crossLength, mainLength)
+    }
+
+    /**
+     * Calculates whether to move next line and the end of the component in main axis
+     */
+    private fun calculateMainAxisComponentEnd(
+        main: Int,
+        maxMain: Int,
+        preferredMain: Int,
+        minimumMain: Int
+    ): Pair<Boolean, Int> {
+        return if (main + preferredMain <= maxMain) {
+            Pair(false, main + preferredMain)
+        } else if (preferredMain <= maxMain) {
+            Pair(true, preferredMain)
+        } else if (minimumMain <= maxMain) {
+            Pair(true, maxMain)
+        } else {
+            Pair(true, minimumMain)
         }
     }
 
@@ -97,4 +112,11 @@ class AutoLayout : LayoutManager {
         return dim
     }
 
+    // Normalize Dimensions to main and cross axis
+    private val Dimension.main get() = if (mainAxis == MainAxis.HORIZONTAL) width else height
+    private val Dimension.cross get() = if (mainAxis == MainAxis.HORIZONTAL) height else width
+    private val Insets.mainStart get() = if (mainAxis == MainAxis.HORIZONTAL) left else top
+    private val Insets.mainEnd get() = if (mainAxis == MainAxis.HORIZONTAL) right else bottom
+    private val Insets.crossStart get() = if (mainAxis == MainAxis.HORIZONTAL) top else left
+    private val Insets.crossEnd get() = if (mainAxis == MainAxis.HORIZONTAL) bottom else right
 }
