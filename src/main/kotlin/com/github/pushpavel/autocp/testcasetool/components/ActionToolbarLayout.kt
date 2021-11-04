@@ -12,13 +12,10 @@ import javax.swing.JComponent
 class ActionToolBarLayout(
     actionGroup: ActionGroup,
     actionPlace: String = ActionPlaces.TOOLWINDOW_TOOLBAR_BAR,
-) : JBPanel<JBPanel<*>>() {
+    horizontal: Boolean = false
+) : JBPanel<ActionToolBarLayout>(BorderLayout()) {
 
-    private val actionToolbar = ActionManager.getInstance().createActionToolbar(actionPlace, actionGroup, false)
-
-    init {
-        layout = BorderLayout()
-    }
+    private val actionToolbar = ActionManager.getInstance().createActionToolbar(actionPlace, actionGroup, horizontal)
 
     var content: JComponent? by layoutUpdater(null) {
         if (it != null) {
@@ -33,5 +30,7 @@ class ActionToolBarLayout(
         actionToolbar.targetComponent = content
     }
 
-
+    override fun invalidate() {
+        super.invalidate()
+    }
 }
