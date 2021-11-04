@@ -8,9 +8,14 @@ import java.awt.*
  * - respects minimum sizes of children
  * - flows in vertical or horizontal direction
  */
-class AutoLayout(private val mainAxis: MainAxis = MainAxis.HORIZONTAL) : LayoutManager {
+class AutoLayout(
+    private val mainAxis: MainAxis = MainAxis.HORIZONTAL,
+    var mainGap: Int = 8,
+    var crossGap: Int = 8
+) : LayoutManager {
 
     enum class MainAxis { HORIZONTAL, VERTICAL }
+
 
     override fun addLayoutComponent(name: String?, comp: Component?) {
     }
@@ -31,28 +36,28 @@ class AutoLayout(private val mainAxis: MainAxis = MainAxis.HORIZONTAL) : LayoutM
 
         for (component in parent.components) {
             if (!component.isVisible) continue
+            var mainWithGap = main + if (main != 0) mainGap else 0
             val (nextLine, end) = calculateMainAxisComponentEnd(
-                main,
+                mainWithGap,
                 maxMain,
                 component.preferredSize.main,
                 component.minimumSize.main
             )
 
             if (nextLine) {
-                cross += currCrossMax
-                main = 0
+                cross += currCrossMax + crossGap
+                mainWithGap = 0
                 currCrossMax = 0
             }
 
             currCrossMax = maxOf(currCrossMax, component.preferredSize.cross)
 
-            val cMain = parent.insets.mainStart + main
-            val cMainLength = end - main
-
+            val cMain = parent.insets.mainStart + mainWithGap
+            val cMainLength = end - mainWithGap
             component.applyBounds(cMain, cross, cMainLength, component.preferredSize.cross)
 
             // account for applied component size
-            main += cMainLength
+            main = mainWithGap + cMainLength
         }
     }
 
@@ -85,36 +90,43 @@ class AutoLayout(private val mainAxis: MainAxis = MainAxis.HORIZONTAL) : LayoutM
 
 
     private fun calculateSize(parent: Container, getChildSize: (Component) -> Dimension): Dimension {
-        var x = 0
-        var y = 0
-        var currMaxHeight = 0
-        val maxWidth = parent.width - parent.insets.left - parent.insets.right
+        var main = 0
+        var cross = 0
+        var currCrossMax = 0
+        val maxMain = parent.size.main - parent.insets.mainStart - parent.insets.mainEnd
+
 
         for (component in parent.components) {
             if (!component.isVisible) continue
             val d = getChildSize(component)
-            if (x + d.width > maxWidth) {
-                x = 0
-                y += currMaxHeight
-                currMaxHeight = 0
-            } else {
-                x += d.width
-                currMaxHeight = maxOf(currMaxHeight, d.height)
+            val mainWithGap = main + if (main != 0) mainGap else 0
+            val (nextLine, end) = calculateMainAxisComponentEnd(mainWithGap, maxMain, d.main, d.main)
+            if (nextLine) {
+                cross += currCrossMax + crossGap
+                currCrossMax = 0
             }
-        }
-        y += currMaxHeight
+            currCrossMax = maxOf(currCrossMax, d.cross)
 
-        val dim = Dimension(x, y)
+            main = end
+        }
+        cross += currCrossMax
+        val dim = Dimension(main, cross)
 
         // add insets of parent
-        dim.width += parent.insets.left + parent.insets.right
-        dim.height += parent.insets.top + parent.insets.bottom
+        dim.main += parent.insets.mainStart + parent.insets.mainEnd
+        dim.cross += parent.insets.crossStart + parent.insets.crossEnd
         return dim
     }
 
     // Normalize Dimensions to main and cross axis
-    private val Dimension.main get() = if (mainAxis == MainAxis.HORIZONTAL) width else height
-    private val Dimension.cross get() = if (mainAxis == MainAxis.HORIZONTAL) height else width
+    private var Dimension.main
+        get() = if (mainAxis == MainAxis.HORIZONTAL) width else height
+        set(value) = if (mainAxis == MainAxis.HORIZONTAL) width = value else height = value
+
+    private var Dimension.cross
+        get() = if (mainAxis == MainAxis.HORIZONTAL) height else width
+        set(value) = if (mainAxis == MainAxis.HORIZONTAL) height = value else width = value
+
     private val Insets.mainStart get() = if (mainAxis == MainAxis.HORIZONTAL) left else top
     private val Insets.mainEnd get() = if (mainAxis == MainAxis.HORIZONTAL) right else bottom
     private val Insets.crossStart get() = if (mainAxis == MainAxis.HORIZONTAL) top else left
