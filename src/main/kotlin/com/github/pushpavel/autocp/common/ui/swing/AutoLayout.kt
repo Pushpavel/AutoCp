@@ -1,84 +1,134 @@
 package com.github.pushpavel.autocp.common.ui.swing
 
-import com.intellij.util.ui.AbstractLayoutManager
-import java.awt.Component
-import java.awt.Container
-import java.awt.Dimension
-import java.awt.Insets
+import java.awt.*
 
 /**
  * Swing layout manager similar to FlowLayout but with following differences
  * - top-left alignment
  * - respects minimum sizes of children
  * - flows in vertical or horizontal direction
+ * - has more configuration options
  */
 class AutoLayout(
     private val mainAxis: MainAxis = MainAxis.HORIZONTAL,
     var mainGap: Int = 8,
-    var crossGap: Int = 8
-) : AbstractLayoutManager() {
+    var crossGap: Int = 8,
+    var autoFitMainLines: Boolean = false,
+    var uniformCrossLength: Boolean = true,
+) : LayoutManager {
 
     enum class MainAxis { HORIZONTAL, VERTICAL }
-    enum class Flag { PUSH_MAIN }
+    data class Placement(var offset: Int, var size: Int)
 
-    private val constraints = mutableMapOf<Component, Flag?>()
-
-    override fun addLayoutComponent(comp: Component, constraint: Any?) {
-        constraints[comp] = constraint as? Flag
-    }
-
-    override fun removeLayoutComponent(comp: Component) {
-        constraints.remove(comp)
-    }
+    override fun addLayoutComponent(name: String?, comp: Component?) {}
+    override fun removeLayoutComponent(comp: Component?) {}
 
     override fun preferredLayoutSize(parent: Container) = calculateSize(parent) { it.preferredSize ?: Dimension(0, 0) }
-
     override fun minimumLayoutSize(parent: Container) = calculateSize(parent) { it.minimumSize ?: Dimension(0, 0) }
 
-    override fun maximumLayoutSize(target: Container) = calculateSize(target) { it.maximumSize ?: Dimension(0, 0) }
-
-
-    override fun getLayoutAlignmentX(target: Container) = 0.5f
-
-    override fun getLayoutAlignmentY(target: Container) = 0.5f
-
-    override fun invalidateLayout(target: Container) {}
-
     override fun layoutContainer(parent: Container) {
-        var main = 0
-        var cross = 0
-        var currCrossMax = 0
         val maxMain = parent.size.main - parent.insets.mainStart - parent.insets.mainEnd
 
-        for (component in parent.components) {
-            if (!component.isVisible) continue
-            var mainWithGap = main + if (main != 0) mainGap else 0
-            val constraint = constraints[component]
-            val preferredMain = if (constraint == Flag.PUSH_MAIN) maxMain else component.preferredSize.main
+        val children = parent.components.filter { it.isVisible }
 
-            val (nextLine, end) = calculateMainAxisComponentEnd(
-                mainWithGap,
-                maxMain,
-                preferredMain,
-                component.minimumSize.main
-            )
+        var currLineStartIndex = 0
+        var currCross = 0
 
-            if (nextLine) {
-                cross += currCrossMax + crossGap
-                mainWithGap = 0
-                currCrossMax = 0
+        while (currLineStartIndex < children.size) {
+            val placements = calculateNextMainLine(maxMain, children, currLineStartIndex)
+
+            if (placements.isEmpty()) {
+                // could not fit the component even in one full line with its preferred length
+                // so fill one full line with this component respecting its minimum length
+                placements.add(Placement(0, maxOf(maxMain, children[currLineStartIndex].minimumSize?.main ?: 0)))
             }
 
-            currCrossMax = maxOf(currCrossMax, component.preferredSize.cross)
+            val maxCrossLengthOfLine =
+                calculateMaxPreferredCrossLengthOfLine(children, currLineStartIndex, placements.size)
 
-            val cMain = parent.insets.mainStart + mainWithGap
-            val cMainLength = end - mainWithGap
-            component.applyBounds(cMain, cross, cMainLength, component.preferredSize.cross)
+            if (autoFitMainLines)
+                autoFitPlacementsInMain(maxMain, placements)
 
-            // account for applied component size
-            main = mainWithGap + cMainLength
+            val uniformCrossLength = if (uniformCrossLength) maxCrossLengthOfLine else 0
+
+            placeNextMainLine(currCross, children, currLineStartIndex, placements, uniformCrossLength)
+            currLineStartIndex += placements.size
+            currCross += maxCrossLengthOfLine + crossGap
         }
     }
+
+    private fun calculateMaxPreferredCrossLengthOfLine(children: List<Component>, startIndex: Int, size: Int): Int {
+        var maxCross = 0
+        for (i in startIndex until startIndex + size) {
+            val child = children[i]
+            maxCross = maxOf(maxCross, child.preferredSize.cross)
+        }
+        return maxCross
+    }
+
+    /**
+     * Calculates list of component offset and length in the main axis for a new line
+     */
+    private fun calculateNextMainLine(
+        maxMain: Int,
+        children: List<Component>,
+        startIndex: Int,
+        getChildSize: (Component) -> Dimension = { it.preferredSize ?: Dimension(0, 0) }
+    ): MutableList<Placement> {
+        val placements = mutableListOf<Placement>()
+        var main = 0
+        for (i in startIndex until children.size) {
+            val component = children[i]
+
+            val gap = if (placements.isNotEmpty()) mainGap else 0
+            val mainLength = getChildSize(component).main
+
+            if (main + gap + mainLength <= maxMain) {
+                placements.add(Placement(main + gap, mainLength))
+                main += mainLength + gap
+            } else
+                break
+        }
+        return placements
+    }
+
+    /**
+     * places the components according to values in [placements] in the main axis
+     */
+    private fun placeNextMainLine(
+        currCross: Int,
+        children: List<Component>,
+        startIndex: Int,
+        placements: List<Placement>,
+        minCrossLength: Int = 0
+    ) {
+        for (i in placements.indices) {
+            val placement = placements[i]
+            val component = children[startIndex + i]
+            component.applyBounds(
+                placement.offset,
+                currCross,
+                placement.size,
+                maxOf(minCrossLength, component.preferredSize.cross)
+            )
+        }
+    }
+
+    private fun autoFitPlacementsInMain(maxMain: Int, placements: List<Placement>) {
+        val lastPlacement = placements[placements.lastIndex]
+        val end = lastPlacement.offset + lastPlacement.size
+        val remainder = maxMain - end
+        if (remainder <= 0)
+            return
+        val extraToAdd = remainder / placements.size
+        var extraSum = 0
+        for (placement in placements) {
+            placement.offset += extraSum
+            placement.size += extraToAdd
+            extraSum += extraToAdd
+        }
+    }
+
 
     private fun Component.applyBounds(mainStart: Int, crossStart: Int, mainLength: Int, crossLength: Int) {
         if (mainAxis == MainAxis.HORIZONTAL)
@@ -87,49 +137,41 @@ class AutoLayout(
             setBounds(crossStart, mainStart, crossLength, mainLength)
     }
 
-    /**
-     * Calculates whether to move next line and the end of the component in main axis
-     */
-    private fun calculateMainAxisComponentEnd(
-        main: Int,
-        maxMain: Int,
-        preferredMain: Int,
-        minimumMain: Int
-    ): Pair<Boolean, Int> {
-        return if (main + preferredMain <= maxMain) {
-            Pair(false, main + preferredMain)
-        } else if (preferredMain <= maxMain) {
-            Pair(true, preferredMain)
-        } else if (minimumMain <= maxMain) {
-            Pair(true, maxMain)
-        } else {
-            Pair(true, minimumMain)
-        }
-    }
-
-
     private fun calculateSize(parent: Container, getChildSize: (Component) -> Dimension): Dimension {
-        var main = 0
-        var cross = 0
-        var currCrossMax = 0
         val maxMain = parent.size.main - parent.insets.mainStart - parent.insets.mainEnd
+        val children = parent.components.filter { it.isVisible }
 
+        var currLineStartIndex = 0
+        var currCross = 0
+        var maxMainLineEnd = 0
 
-        for (component in parent.components) {
-            if (!component.isVisible) continue
-            val d = getChildSize(component)
-            val mainWithGap = main + if (main != 0) mainGap else 0
-            val (nextLine, end) = calculateMainAxisComponentEnd(mainWithGap, maxMain, d.main, d.main)
-            if (nextLine) {
-                cross += currCrossMax + crossGap
-                currCrossMax = 0
-            }
-            currCrossMax = maxOf(currCrossMax, d.cross)
+        while (currLineStartIndex < children.size) {
+            val placements = calculateNextMainLine(maxMain, children, currLineStartIndex, getChildSize)
 
-            main = end
+            if (placements.isEmpty())
+                placements.add(
+                    Placement(
+                        0,
+                        maxOf(maxMain, maxOf(maxMain, getChildSize(children[currLineStartIndex]).main))
+                    )
+                )
+
+            val maxCrossLengthOfLine =
+                calculateMaxPreferredCrossLengthOfLine(children, currLineStartIndex, placements.size)
+
+            currLineStartIndex += placements.size
+            currCross += maxCrossLengthOfLine + crossGap
+            val lastPlacement = placements.last()
+            maxMainLineEnd = maxOf(maxMainLineEnd, lastPlacement.offset + lastPlacement.size)
         }
-        cross += currCrossMax
-        val dim = Dimension(main, cross)
+
+        if (currCross > 0)
+            currCross -= crossGap
+
+        if (autoFitMainLines)
+            maxMainLineEnd = maxMain
+
+        val dim = Dimension(maxMainLineEnd, currCross)
 
         // add insets of parent
         dim.main += parent.insets.mainStart + parent.insets.mainEnd
