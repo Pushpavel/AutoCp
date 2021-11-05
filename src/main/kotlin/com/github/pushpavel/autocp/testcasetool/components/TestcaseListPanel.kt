@@ -12,9 +12,12 @@ import javax.swing.event.ListDataListener
 class TestcaseListPanel : JBPanel<TestcaseListPanel>(AutoLayout(autoFitMainLines = true)), ListDataListener,
     Disposable {
     var model: CollectionListModel<Testcase>? by setter(null) {
-        model?.removeListDataListener(this@TestcaseListPanel)
-        model = it
-        model?.addListDataListener(this@TestcaseListPanel)
+        value?.removeListDataListener(this@TestcaseListPanel)
+        if (it != null) {
+            value = it
+            intervalAdded(ListDataEvent(this, ListDataEvent.INTERVAL_ADDED, 0, it.items.size))
+            it.addListDataListener(this@TestcaseListPanel)
+        }
     }
 
     override fun intervalAdded(e: ListDataEvent) {
