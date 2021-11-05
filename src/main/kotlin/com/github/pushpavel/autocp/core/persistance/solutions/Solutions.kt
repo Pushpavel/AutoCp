@@ -12,6 +12,7 @@ class Solutions(project: Project) : MapWithEventFlow<String, Solution>() {
 
     fun onKey(key: String) = events.filter { it.keys.contains(key) }.map { it.map[key] }
 
-    // TODO: maintain consistency
+    fun put(value: Solution) = put(value.pathString, value)
+
     // TODO: import values from project
 }
