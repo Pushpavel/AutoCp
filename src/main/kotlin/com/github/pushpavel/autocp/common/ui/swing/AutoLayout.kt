@@ -23,8 +23,9 @@ class AutoLayout(
     override fun addLayoutComponent(name: String?, comp: Component?) {}
     override fun removeLayoutComponent(comp: Component?) {}
 
-    override fun preferredLayoutSize(parent: Container) = calculateSize(parent) { it.preferredSize ?: Dimension(0, 0) }
-    override fun minimumLayoutSize(parent: Container) = calculateSize(parent) { it.minimumSize ?: Dimension(0, 0) }
+    override fun preferredLayoutSize(parent: Container) = calculateSize(parent) { it.preferredSize }
+
+    override fun minimumLayoutSize(parent: Container) = calculateSize(parent) { it.minimumSize }
 
     override fun layoutContainer(parent: Container) {
         val maxMain = parent.size.main - parent.insets.mainStart - parent.insets.mainEnd
@@ -73,7 +74,7 @@ class AutoLayout(
         maxMain: Int,
         children: List<Component>,
         startIndex: Int,
-        getChildSize: (Component) -> Dimension = { it.preferredSize ?: Dimension(0, 0) }
+        getChildSize: (Component) -> Dimension? = { it.preferredSize }
     ): MutableList<Placement> {
         val placements = mutableListOf<Placement>()
         var main = 0
@@ -81,7 +82,7 @@ class AutoLayout(
             val component = children[i]
 
             val gap = if (placements.isNotEmpty()) mainGap else 0
-            val mainLength = getChildSize(component).main
+            val mainLength = (getChildSize(component) ?: Dimension(0, 0)).main
 
             if (main + gap + mainLength <= maxMain) {
                 placements.add(Placement(main + gap, mainLength))
@@ -137,7 +138,7 @@ class AutoLayout(
             setBounds(crossStart, mainStart, crossLength, mainLength)
     }
 
-    private fun calculateSize(parent: Container, getChildSize: (Component) -> Dimension): Dimension {
+    private fun calculateSize(parent: Container, getChildSize: (Component) -> Dimension?): Dimension {
         val maxMain = parent.size.main - parent.insets.mainStart - parent.insets.mainEnd
         val children = parent.components.filter { it.isVisible }
 
@@ -152,7 +153,10 @@ class AutoLayout(
                 placements.add(
                     Placement(
                         0,
-                        maxOf(maxMain, maxOf(maxMain, getChildSize(children[currLineStartIndex]).main))
+                        maxOf(
+                            maxMain,
+                            maxOf(maxMain, (getChildSize(children[currLineStartIndex]) ?: Dimension(0, 0)).main)
+                        )
                     )
                 )
 
@@ -171,11 +175,11 @@ class AutoLayout(
         if (autoFitMainLines)
             maxMainLineEnd = maxMain
 
-        val dim = Dimension(maxMainLineEnd, currCross)
+        val dim = Dimension(0, 0)
 
         // add insets of parent
-        dim.main += parent.insets.mainStart + parent.insets.mainEnd
-        dim.cross += parent.insets.crossStart + parent.insets.crossEnd
+        dim.main += maxMainLineEnd + parent.insets.mainStart + parent.insets.mainEnd
+        dim.cross += currCross + parent.insets.crossStart + parent.insets.crossEnd
         return dim
     }
 
