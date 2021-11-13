@@ -1,5 +1,6 @@
 package com.github.pushpavel.autocp.testcasetool.components
 
+import com.github.pushpavel.autocp.common.helpers.doDisposal
 import com.github.pushpavel.autocp.common.ui.helpers.setter
 import com.github.pushpavel.autocp.core.persistance.testcases.Testcase
 import com.intellij.openapi.Disposable
@@ -26,16 +27,27 @@ class TestcaseListPanel : JBPanel<TestcaseListPanel>(), ListDataListener, Dispos
 
     override fun intervalAdded(e: ListDataEvent) {
         for (i in e.index0..e.index1)
-            add(TestcaseContent())
+            model?.let { add(TestcaseContent(it)) }
+
         updateUI()
     }
 
     override fun intervalRemoved(e: ListDataEvent) {
-        for (i in e.index0..e.index1)
-            remove(i)
+        for (i in e.index0..e.index1) {
+            val component = getComponent(i) as TestcaseContent
+            component.doDisposal()
+            remove(component)
+        }
         updateUI()
     }
 
-    override fun contentsChanged(e: ListDataEvent?) {}
+    override fun contentsChanged(e: ListDataEvent) {
+        for (i in e.index0..e.index1) {
+            val testcase = model?.getElementAt(i) ?: continue
+            val component = getComponent(i) as TestcaseContent
+            component.update(i, testcase)
+        }
+    }
+
     override fun dispose() {}
 }
