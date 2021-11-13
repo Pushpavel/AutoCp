@@ -14,6 +14,7 @@ class AutoLayout(
     var mainGap: Int = 8,
     var crossGap: Int = 8,
     var autoFitMainLines: Boolean = false,
+    var autoFillMainLines: Boolean = false,
     var uniformCrossLength: Boolean = true,
 ) : LayoutManager {
 

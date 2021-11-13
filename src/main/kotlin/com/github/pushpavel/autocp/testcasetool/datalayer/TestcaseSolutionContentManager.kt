@@ -4,7 +4,7 @@ import com.github.pushpavel.autocp.build.settings.LangSettings
 import com.github.pushpavel.autocp.common.helpers.*
 import com.github.pushpavel.autocp.core.persistance.solutions.Solution
 import com.github.pushpavel.autocp.core.persistance.solutions.Solutions
-import com.github.pushpavel.autocp.testcasetool.components.TestcaseToolContentPanel
+import com.github.pushpavel.autocp.testcasetool.components.SolutionContentPanel
 import com.github.pushpavel.autocp.tool.ui.AssociateFilePanel
 import com.intellij.openapi.components.service
 import com.intellij.openapi.fileEditor.FileEditorManager
@@ -71,10 +71,12 @@ class TestcaseSolutionContentManager(private val project: Project, private val t
 
         val scope = defaultScope().cancelBy(fileScoped)
 
-        val contentPanel = TestcaseToolContentPanel(project, toolWindow, solutions[solutionKey]!!)
+        val contentPanel = SolutionContentPanel(project, toolWindow)
 
         // listen for changes in the solution
         scope.launch {
+            contentPanel.solution = solutions[solutionKey]
+
             solutions.onKey(solutionKey).collect {
                 if (it != null)
                     contentPanel.solution = it
@@ -82,6 +84,6 @@ class TestcaseSolutionContentManager(private val project: Project, private val t
                     contentScoped.doDisposal()
             }
         }
-        return contentPanel.testcaseListPanel
+        return contentPanel
     }
 }
