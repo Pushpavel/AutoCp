@@ -42,7 +42,7 @@ class TestcaseContent(private val model: CollectionListModel<Testcase>) : Border
     init {
         add(BorderLayoutPanel().apply {
             add(headerLabel)
-            headerActions.targetComponent = this
+            headerActions.setTargetComponent(this)
             add(headerActions.component, BorderLayout.LINE_END)
         }, BorderLayout.PAGE_START)
 

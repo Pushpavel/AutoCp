@@ -21,13 +21,13 @@ class ActionContainer(
         ActionPlaces.TOOLWINDOW_TOOLBAR_BAR,
         primaryActions,
         true
-    ).apply { targetComponent = content }
+    ).apply { setTargetComponent(content)}
 
     private val secondaryActionBar = ActionManager.getInstance().createActionToolbar(
         ActionPlaces.TOOLWINDOW_TOOLBAR_BAR,
         secondaryActions,
         false
-    ).apply { targetComponent = content }
+    ).apply { setTargetComponent(content) }
 
     var bottomAnchored: Boolean by setter(false) {
         primaryActionBar.setOrientation(if (!it) SwingConstants.HORIZONTAL else SwingConstants.VERTICAL)

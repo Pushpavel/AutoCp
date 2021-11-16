@@ -27,7 +27,7 @@ class ActionToolBarLayout(
     var toolBarConstraint: String by layoutUpdater(BorderLayout.LINE_START) {
         remove(actionToolbar.component)
         add(actionToolbar.component, it)
-        actionToolbar.targetComponent = content
+        actionToolbar.setTargetComponent(content)
     }
 
     override fun invalidate() {
