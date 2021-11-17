@@ -1,9 +1,8 @@
 package com.github.pushpavel.autocp.common.helpers
 
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
+import com.intellij.openapi.Disposable
+import com.intellij.openapi.util.Disposer
+import kotlinx.coroutines.*
 
 val defaultExceptionHandler = CoroutineExceptionHandler { _, t -> t.printStackTrace() }
 
@@ -17,4 +16,12 @@ fun defaultScope(): CoroutineScope {
 
 fun ioScope(): CoroutineScope {
     return CoroutineScope(Dispatchers.IO + SupervisorJob() + defaultExceptionHandler)
+}
+
+/**
+ * Cancels [CoroutineScope] on [parent] disposal.
+ */
+fun CoroutineScope.cancelBy(parent: Disposable): CoroutineScope {
+    Disposer.register(parent) { cancel() }
+    return this
 }

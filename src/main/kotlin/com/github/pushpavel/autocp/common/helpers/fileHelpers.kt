@@ -8,9 +8,9 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
 import com.github.pushpavel.autocp.common.res.AutoCpFiles
 import java.nio.file.*
+import java.util.stream.Collectors
 import kotlin.io.path.Path
 import kotlin.io.path.pathString
-import kotlin.streams.toList
 
 fun Project.onFileSelectionChange(action: FileEditorManager.(VirtualFile?) -> Unit) {
     val editorManager = FileEditorManager.getInstance(this)
@@ -40,7 +40,7 @@ fun listPathsInDirectoryInResources(relativePath: String): List<Path> {
     }
 
 
-    return Files.list(dirPath).toList()
+    return Files.list(dirPath).collect(Collectors.toList())
 }
 
 fun FileTemplate.constructFileNameWithExt(name: String): String {
