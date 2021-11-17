@@ -63,7 +63,7 @@ class TestcaseSolutionContentManager(private val project: Project, private val t
                 return null
             // ui to associate currently selected file as Solution
             return AssociateFilePanel(Path(solutionKey).name) {
-                solutions.put(Solution(solutionKey))
+                solutions.put(Solution(Path(solutionKey).name, solutionKey))
                 // refresh the toolWindow content
                 changeSolutionFile(currentFile)
             }.component
