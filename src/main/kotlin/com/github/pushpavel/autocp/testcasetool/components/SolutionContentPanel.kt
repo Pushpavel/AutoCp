@@ -15,21 +15,27 @@ import com.intellij.openapi.wm.ToolWindow
 import com.intellij.openapi.wm.ToolWindowAnchor
 import com.intellij.ui.AncestorListenerAdapter
 import com.intellij.ui.layout.LCFlags
+import com.intellij.ui.layout.applyToComponent
 import com.intellij.ui.layout.panel
 import com.intellij.util.ui.components.BorderLayoutPanel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import java.awt.BorderLayout
+import javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER
 import javax.swing.event.AncestorEvent
 
 class SolutionContentPanel(project: Project, val toolWindow: ToolWindow) : BorderLayoutPanel() {
 
     private val testcaseListPanel = TestcaseListPanel()
     private val testcaseListContainer = panel(LCFlags.fillX) {
-        row {
-            testcaseListPanel(growX)
+        blockRow {
+            scrollPane(
+                BorderLayoutPanel().apply {
+                    add(testcaseListPanel, BorderLayout.NORTH)
+                }
+            ).applyToComponent { horizontalScrollBarPolicy = HORIZONTAL_SCROLLBAR_NEVER }
         }
-        blockRow { }
-        row {
+        blockRow {
             button("New Testcase") {
                 // add new testcase to current model
                 testcaseListPanel.model?.let { model ->

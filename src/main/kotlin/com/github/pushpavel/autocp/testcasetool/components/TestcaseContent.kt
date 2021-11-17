@@ -46,7 +46,7 @@ class TestcaseContent(private val model: CollectionListModel<Testcase>) : Border
             add(headerActions.component, BorderLayout.LINE_END)
         }, BorderLayout.PAGE_START)
 
-        add(JBPanel<JBPanel<*>>(AutoLayout(autoFitMainLines = true, uniformCrossLength = true)).apply {
+        add(JBPanel<JBPanel<*>>(AutoLayout(autoFillMainLines = true, uniformCrossLength = true)).apply {
             add(inputEditor.component)
             add(outputEditor.component)
         })

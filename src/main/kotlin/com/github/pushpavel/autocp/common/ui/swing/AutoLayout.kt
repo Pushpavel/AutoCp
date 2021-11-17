@@ -48,7 +48,7 @@ class AutoLayout(
             val maxCrossLengthOfLine =
                 calculateMaxPreferredCrossLengthOfLine(children, currLineStartIndex, placements.size)
 
-            if (autoFitMainLines)
+            if (autoFitMainLines || autoFillMainLines)
                 autoFitPlacementsInMain(maxMain, placements)
 
             val uniformCrossLength = if (uniformCrossLength) maxCrossLengthOfLine else 0
@@ -126,7 +126,8 @@ class AutoLayout(
         var extraSum = 0
         for (placement in placements) {
             placement.offset += extraSum
-            placement.size += extraToAdd
+            if (autoFillMainLines)
+                placement.size += extraToAdd
             extraSum += extraToAdd
         }
     }
@@ -181,6 +182,7 @@ class AutoLayout(
         // add insets of parent
         dim.main += maxMainLineEnd + parent.insets.mainStart + parent.insets.mainEnd
         dim.cross += currCross + parent.insets.crossStart + parent.insets.crossEnd
+
         return dim
     }
 

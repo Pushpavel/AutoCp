@@ -31,7 +31,7 @@ class TestcaseListPanel : JBPanel<TestcaseListPanel>(), ListDataListener, Dispos
         for (i in e.index0..e.index1) {
             model?.let {
                 val content = TestcaseContent(it)
-                add(content)
+                add(content, i)
                 content.update(i, it.getElementAt(i))
                 Disposer.register(this, content)
             }
