@@ -4,6 +4,7 @@ import com.github.pushpavel.autocp.common.helpers.doDisposal
 import com.github.pushpavel.autocp.common.ui.helpers.setter
 import com.github.pushpavel.autocp.core.persistance.testcases.Testcase
 import com.intellij.openapi.Disposable
+import com.intellij.openapi.util.Disposer
 import com.intellij.ui.CollectionListModel
 import com.intellij.ui.components.JBPanel
 import javax.swing.BoxLayout
@@ -20,14 +21,21 @@ class TestcaseListPanel : JBPanel<TestcaseListPanel>(), ListDataListener, Dispos
         value?.removeListDataListener(this@TestcaseListPanel)
         if (it != null) {
             value = it
-            intervalAdded(ListDataEvent(this, ListDataEvent.INTERVAL_ADDED, 0, it.items.size))
+            if (!it.isEmpty)
+                intervalAdded(ListDataEvent(this, ListDataEvent.INTERVAL_ADDED, 0, it.items.size - 1))
             it.addListDataListener(this@TestcaseListPanel)
         }
     }
 
     override fun intervalAdded(e: ListDataEvent) {
-        for (i in e.index0..e.index1)
-            model?.let { add(TestcaseContent(it)) }
+        for (i in e.index0..e.index1) {
+            model?.let {
+                val content = TestcaseContent(it)
+                add(content)
+                content.update(i, it.getElementAt(i))
+                Disposer.register(this, content)
+            }
+        }
 
         updateUI()
     }
