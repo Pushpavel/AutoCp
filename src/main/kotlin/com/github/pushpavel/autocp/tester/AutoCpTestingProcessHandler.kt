@@ -26,21 +26,22 @@ class AutoCpTestingProcessHandler(val project: Project, private val config: Auto
 
     override suspend fun createTestingProcess(): TestcaseTreeTestingProcess? {
         try {
-            // get and validate SolutionFile from config
-            val solutionFile = getValidSolutionFile(config.project, config.name, config.solutionFilePath)
-
-            // validate lang
-            val extension = Path(solutionFile.pathString).extension
-            val lang = LangSettings.instance.langs[extension] ?: throw LangNotConfiguredErr(extension)
-
-            // Build Executable from Solution File and Lang
-            val processFactory = compileIntoProcessFactory(solutionFile, lang) ?: return null
-
-            // Build Test tree
-            val rootNode = solutionFileToTestNode(solutionFile, processFactory)
-
-            // create a TestingProcess from the Problem and Test Tree
-            return TestcaseTreeTestingProcess(rootNode, reporter)
+//            // get and validate SolutionFile from config
+//            val solutionFile = getValidSolutionFile(config.project, config.name, config.solutionFilePath)
+//
+//            // validate lang
+//            val extension = Path(solutionFile.pathString).extension
+//            val lang = LangSettings.instance.langs[extension] ?: throw LangNotConfiguredErr(extension)
+//
+//            // Build Executable from Solution File and Lang
+//            val processFactory = compileIntoProcessFactory(solutionFile, lang) ?: return null
+//
+//            // Build Test tree
+//            val rootNode = solutionFileToTestNode(solutionFile, processFactory)
+//
+//            // create a TestingProcess from the Problem and Test Tree
+//            return TestcaseTreeTestingProcess(rootNode, reporter)
+            return null
         } catch (err: Exception) {
             reportTestingStartErr(err)
             return null

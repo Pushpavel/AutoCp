@@ -1,6 +1,8 @@
 package com.github.pushpavel.autocp.config
 
 import com.github.pushpavel.autocp.common.res.R
+import com.github.pushpavel.autocp.core.runner.runtool.ProcessLikeHandler
+import com.github.pushpavel.autocp.core.runner.runtool.runAutoCpOnTestRunner
 import com.github.pushpavel.autocp.tester.AutoCpTestingProcessHandler
 import com.intellij.execution.DefaultExecutionResult
 import com.intellij.execution.ExecutionResult
@@ -16,7 +18,7 @@ class AutoCpRunState(val project: Project, private val config: AutoCpConfig) : R
 
     override fun execute(executor: Executor, runner: ProgramRunner<*>): ExecutionResult {
         // prepare testing process
-        val processHandler = AutoCpTestingProcessHandler(project, config)
+        val processHandler = ProcessLikeHandler { runAutoCpOnTestRunner(project, config) }
 
         // prepare console
         val properties = SMTRunnerConsoleProperties(config, R.strings.runConfigName, executor)
