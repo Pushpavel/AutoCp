@@ -1,21 +1,22 @@
 package com.github.pushpavel.autocp.core.runner.judge
 
-import com.github.pushpavel.autocp.core.execution.BuildOutput
+import com.github.pushpavel.autocp.core.execution.BuildSolutionErr
 import com.github.pushpavel.autocp.core.execution.ExecutionUtil
+import com.github.pushpavel.autocp.core.execution.buildSolutionExecutable
 import com.github.pushpavel.autocp.core.persistance.solutions.Solutions
 import com.github.pushpavel.autocp.core.persistance.testcases.Testcases
 import com.github.pushpavel.autocp.tester.utils.trimByLines
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
+import com.intellij.openapi.progress.ProgressIndicator
 import com.intellij.openapi.project.Project
-import com.intellij.util.messages.MessageBus
 import kotlinx.coroutines.*
 
 /**
  * Local Judge that executes the solution on the testcases and judges the output.
  */
 @Service
-class JudgingProcess(project: Project) {
+class JudgingProcess(val project: Project) {
 
     private val messageBus = project.messageBus
     private val solutions = project.service<Solutions>()
@@ -24,8 +25,13 @@ class JudgingProcess(project: Project) {
     /**
      * Executes the solution in [solutionPathString] on the testcases and returns the result.
      */
-    suspend fun execute(buildOutput: BuildOutput, solutionPathString: String): ResultGroupNode? {
+    suspend fun execute(
+        solutionPathString: String,
+        buildProgressIndicator: ProgressIndicator? = null
+    ): ResultGroupNode? {
         try {
+            val buildOutput = buildSolutionExecutable(project, solutionPathString, buildProgressIndicator)
+
             // gather solution and its testcases
             if (solutionPathString !in solutions)
                 throw JudgeErr.NoSolution(solutionPathString)
@@ -37,7 +43,7 @@ class JudgingProcess(project: Project) {
             if (testcaseList == null || testcaseList.isEmpty())
                 throw JudgeErr.NoTestcases(solution, solutionPathString)
 
-            messageBus.syncPublisher(JudgingProcessListener.TOPIC).onTestingStarted(solution, testcaseList)
+            messageBus.syncPublisher(JudgingProcessListener.TOPIC).onTestingStarted(solution, testcaseList, buildOutput)
 
             // construct Judge related data classes
             val testNodes = testcaseList.map { TestNode(buildOutput, it.input, it.output, solution.timeLimit) }
@@ -48,8 +54,14 @@ class JudgingProcess(project: Project) {
             messageBus.syncPublisher(JudgingProcessListener.TOPIC).onTestingFinished()
 
             return resultGroupNode
-        } catch (e: JudgeErr) {
-            messageBus.syncPublisher(JudgingProcessListener.TOPIC).onTestingNotStarted(e)
+        } catch (e: Exception) {
+            messageBus.syncPublisher(JudgingProcessListener.TOPIC).onTestingFailed(
+                when (e) {
+                    is BuildSolutionErr -> JudgeErr.BuildErr(e)
+                    is JudgeErr -> e
+                    else -> JudgeErr.UnknownErr(e)
+                }
+            )
             return null
         }
     }
