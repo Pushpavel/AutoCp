@@ -1,8 +1,8 @@
 package com.github.pushpavel.autocp.core.execution
 
+import com.github.pushpavel.autocp.build.Lang
 import com.github.pushpavel.autocp.build.settings.LangSettings
 import com.github.pushpavel.autocp.common.helpers.pathString
-import com.intellij.execution.process.ProcessOutput
 import com.intellij.openapi.progress.ProgressIndicator
 import com.intellij.openapi.project.Project
 import com.intellij.util.io.exists
@@ -12,19 +12,21 @@ import kotlin.io.path.Path
 import kotlin.io.path.extension
 import kotlin.io.path.pathString
 
-data class BuildOutput(val executeCommand: String, val dir: File, val output: ProcessOutput?)
+data class BuildOutput(
+    val lang: Lang,
+    val buildCommand: String?,
+    val executeCommand: String,
+    val dir: File,
+    val output: ExecutionUtil.Output?
+)
 
 sealed class BuildSolutionErr : Exception() {
     class InvalidPath(val solutionPathString: String) : BuildSolutionErr()
     class NoLang(val solutionPathString: String, val extension: String) : BuildSolutionErr()
-    class BuildFailure(val solutionPathString: String, val output: ProcessOutput) : BuildSolutionErr()
+    class BuildFailure(val buildOutput: BuildOutput, val output: ExecutionUtil.Output) : BuildSolutionErr()
 }
 
-fun buildSolutionExecutable(
-    project: Project,
-    solutionPathString: String,
-    buildProgressIndicator: ProgressIndicator? = null
-): BuildOutput {
+fun prepareSolutionExecutable(project: Project, solutionPathString: String): BuildOutput {
     // validate solutionPathString
     if (!Path(solutionPathString).exists())
         throw BuildSolutionErr.InvalidPath(solutionPathString)
@@ -37,14 +39,27 @@ fun buildSolutionExecutable(
     val tempDir = Files.createTempDirectory("AutoCp").toFile()
 
     val executeCommand = lang.constructExecuteCommand(project, path.pathString, tempDir.path.pathString)
+    val buildCommand = if (lang.buildCommand == null) null else lang.constructBuildCommand(
+        project,
+        path.pathString,
+        tempDir.path.pathString
+    )
 
-    val processOutput = if (lang.buildCommand == null) null else {
-        val buildCommand = lang.constructBuildCommand(project, path.pathString, tempDir.path.pathString)
-        ExecutionUtil.execAndGetOutput(buildCommand, tempDir, progressIndicator = buildProgressIndicator)
-    }
+    return BuildOutput(lang, buildCommand, executeCommand, tempDir, null)
+}
 
-    if ((processOutput?.exitCode ?: 1) != 0)
-        throw BuildSolutionErr.BuildFailure(solutionPathString, processOutput!!)
+fun buildSolutionExecutable(buildOutput: BuildOutput, buildProgressIndicator: ProgressIndicator?): BuildOutput {
+    if (buildOutput.buildCommand == null) return buildOutput
 
-    return BuildOutput(executeCommand, tempDir, processOutput)
+    val executionOutput = ExecutionUtil.execAndGetOutput(
+        buildOutput.buildCommand,
+        buildOutput.dir,
+        progressIndicator = buildProgressIndicator
+    )
+
+
+    if (executionOutput.processOutput.exitCode != 0)
+        throw BuildSolutionErr.BuildFailure(buildOutput, executionOutput)
+
+    return buildOutput.copy(output = executionOutput)
 }

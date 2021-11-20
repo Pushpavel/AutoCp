@@ -3,6 +3,7 @@ package com.github.pushpavel.autocp.core.runner.judge
 import com.github.pushpavel.autocp.core.execution.BuildSolutionErr
 import com.github.pushpavel.autocp.core.execution.ExecutionUtil
 import com.github.pushpavel.autocp.core.execution.buildSolutionExecutable
+import com.github.pushpavel.autocp.core.execution.prepareSolutionExecutable
 import com.github.pushpavel.autocp.core.persistance.solutions.Solutions
 import com.github.pushpavel.autocp.core.persistance.testcases.Testcases
 import com.github.pushpavel.autocp.tester.utils.trimByLines
@@ -30,8 +31,14 @@ class JudgingProcess(val project: Project) {
         buildProgressIndicator: ProgressIndicator? = null
     ): ResultGroupNode? {
         try {
-            val buildOutput = buildSolutionExecutable(project, solutionPathString, buildProgressIndicator)
+            var buildOutput = prepareSolutionExecutable(project, solutionPathString)
 
+            if (buildOutput.buildCommand != null) {
+                messageBus.syncPublisher(JudgingProcessListener.TOPIC)
+                    .onBuildingStarted(solutionPathString, buildOutput.lang, buildOutput.buildCommand!!)
+
+                buildOutput = buildSolutionExecutable(buildOutput, buildProgressIndicator)
+            }
             // gather solution and its testcases
             if (solutionPathString !in solutions)
                 throw JudgeErr.NoSolution(solutionPathString)
@@ -46,7 +53,15 @@ class JudgingProcess(val project: Project) {
             messageBus.syncPublisher(JudgingProcessListener.TOPIC).onTestingStarted(solution, testcaseList, buildOutput)
 
             // construct Judge related data classes
-            val testNodes = testcaseList.map { TestNode(buildOutput, it.input, it.output, solution.timeLimit) }
+            val testNodes = testcaseList.map {
+                TestNode(
+                    "Testcase #${it.num}",
+                    buildOutput,
+                    it.input,
+                    it.output,
+                    solution.timeLimit
+                )
+            }
             val testGroupNode = TestGroupNode(solution.displayName, testNodes)
 
             // execute
@@ -96,7 +111,7 @@ class JudgingProcess(val project: Project) {
      * Executes the [TestNode] and returns the result.
      */
     private suspend fun executeTestNode(data: TestNode): ResultNode {
-        val out = withContext(Dispatchers.IO) {
+        val output = withContext(Dispatchers.IO) {
             ExecutionUtil.execAndGetOutput(
                 data.buildOutput.executeCommand,
                 data.buildOutput.dir,
@@ -104,6 +119,7 @@ class JudgingProcess(val project: Project) {
                 data.timeLimit
             )
         }
+        val out = output.processOutput
 
         val verdict = when {
             out.isTimeout -> Verdict.TIME_LIMIT_EXCEEDED
@@ -113,6 +129,6 @@ class JudgingProcess(val project: Project) {
             else -> Verdict.WRONG_ANSWER
         }
 
-        return ResultNode(data, out, verdict)
+        return ResultNode(data, output, verdict)
     }
 }

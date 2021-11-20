@@ -1,9 +1,10 @@
 package com.github.pushpavel.autocp.core.runner.judge
 
 import com.github.pushpavel.autocp.core.execution.BuildOutput
-import com.intellij.execution.process.ProcessOutput
+import com.github.pushpavel.autocp.core.execution.ExecutionUtil
 
 data class TestNode(
+    val name: String,
     val buildOutput: BuildOutput,
     val input: String,
     val expectedOutput: String,
@@ -12,7 +13,7 @@ data class TestNode(
 
 data class ResultNode(
     val source: TestNode,
-    val output: ProcessOutput,
+    val output: ExecutionUtil.Output,
     val verdict: Verdict
 )
 

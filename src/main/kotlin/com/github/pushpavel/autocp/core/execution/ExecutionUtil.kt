@@ -7,15 +7,18 @@ import com.intellij.execution.process.ProcessEvent
 import com.intellij.execution.process.ProcessOutput
 import com.intellij.openapi.progress.ProgressIndicator
 import java.io.File
+import kotlin.system.measureTimeMillis
 
 object ExecutionUtil {
+    data class Output(val processOutput: ProcessOutput, val executionTime: Long)
+
     fun execAndGetOutput(
         command: String,
         workingDir: File? = null,
         stdin: String? = null,
         timeoutInMilliseconds: Int? = null,
         progressIndicator: ProgressIndicator? = null,
-    ): ProcessOutput {
+    ): Output {
         val commandLine = buildGeneralCommandLine(command, workingDir)
         val processHandler = CapturingProcessHandler(commandLine)
         if (stdin != null)
@@ -30,14 +33,18 @@ object ExecutionUtil {
             })
 
 
-        return when {
-            timeoutInMilliseconds != null && progressIndicator != null -> {
-                processHandler.runProcessWithProgressIndicator(progressIndicator, timeoutInMilliseconds)
+        val processOutput: ProcessOutput
+        val executionTime = measureTimeMillis {
+            processOutput = when {
+                timeoutInMilliseconds != null && progressIndicator != null -> {
+                    processHandler.runProcessWithProgressIndicator(progressIndicator, timeoutInMilliseconds)
+                }
+                progressIndicator != null -> processHandler.runProcessWithProgressIndicator(progressIndicator)
+                timeoutInMilliseconds != null -> processHandler.runProcess(timeoutInMilliseconds)
+                else -> processHandler.runProcess()
             }
-            progressIndicator != null -> processHandler.runProcessWithProgressIndicator(progressIndicator)
-            timeoutInMilliseconds != null -> processHandler.runProcess(timeoutInMilliseconds)
-            else -> processHandler.runProcess()
         }
+        return Output(processOutput, executionTime)
     }
 
     private fun buildGeneralCommandLine(command: String, workingDir: File?): GeneralCommandLine {

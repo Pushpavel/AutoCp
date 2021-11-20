@@ -1,5 +1,6 @@
 package com.github.pushpavel.autocp.core.runner.judge
 
+import com.github.pushpavel.autocp.build.Lang
 import com.github.pushpavel.autocp.core.execution.BuildOutput
 import com.github.pushpavel.autocp.core.persistance.solutions.Solution
 import com.github.pushpavel.autocp.core.persistance.testcases.Testcase
@@ -10,6 +11,7 @@ interface JudgingProcessListener {
         val TOPIC = Topic.create("JudgingProcessListener", JudgingProcessListener::class.java)
     }
 
+    fun onBuildingStarted(solutionPath: String, lang: Lang, buildCommand: String)
     fun onTestingStarted(solution: Solution, testcases: List<Testcase>, buildOutput: BuildOutput)
     fun onTestingFailed(err: JudgeErr)
     fun onTestingFinished()
