@@ -6,15 +6,16 @@ import com.github.pushpavel.autocp.gather.models.ProblemJson
 import com.intellij.openapi.application.ApplicationManager
 
 /**
- * Manages Batch of problems and notifies [ProblemGatheringListener]
+ * Builds batch of problems upon receiving ProblemJson objects.
+ * these objects are received from the [CompetitiveCompanionBridge].
  */
-object BatchProcessor {
+object ProblemBatchProcessor {
     private var currentBatch: BatchJson? = null
     private val ignoredBatches = mutableSetOf<BatchJson>()
     private val parsedProblems = mutableListOf<Problem>()
 
     private val subscriber by lazy {
-        ApplicationManager.getApplication().messageBus.syncPublisher(ProblemGatheringListener.TOPIC)
+        ApplicationManager.getApplication().messageBus.syncPublisher(ProblemBatchProcessorListener.TOPIC)
     }
 
     fun onJsonReceived(json: ProblemJson) {
@@ -36,6 +37,9 @@ object BatchProcessor {
         subscriber.onProblemGathered(parsedProblems.toList(), batch)
     }
 
+    /**
+     * Completes current batch and resets the processor.
+     */
     fun interruptBatch(e: Exception? = null) {
         if (currentBatch != null)
             subscriber.onBatchEnd(e, parsedProblems.toList(), currentBatch!!)

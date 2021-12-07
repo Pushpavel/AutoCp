@@ -22,9 +22,9 @@ import com.jetbrains.rd.util.Queue
 import kotlin.io.path.Path
 
 /**
- * Handles [showProblemGatheringDialog] , File Generation Delegation and clearing current Batch
+ * gathers problems as received from [ProblemBatchProcessor] in a queue and on confirmation generates files.
  */
-class ProblemGatheringPipeline(val project: Project) : ProblemGatheringListener {
+class ProblemGatheringPipeline(val project: Project) : ProblemBatchProcessorListener {
 
     private val log = Logger.getInstance(ProblemGatheringPipeline::class.java)
 
@@ -38,21 +38,22 @@ class ProblemGatheringPipeline(val project: Project) : ProblemGatheringListener 
     override fun onBatchStart(problem: Problem, batch: BatchJson) {
         runInEdt {
             log.debug("Showing Problem Gathering dialog...", batch, problem)
-            val confirm = showProblemGatheringDialog(project, problem.groupName)
+            val confirm = showFileGenerationDialog(project, problem.groupName)
             if (!confirm) {
                 log.debug("Cancelling batch", batch, problem)
-                BatchProcessor.interruptBatch(ProblemGatheringErr.Cancellation)
+                ProblemBatchProcessor.interruptBatch(ProblemGatheringErr.Cancellation)
                 return@runInEdt
             }
             fileGenerator =
                 fileGeneratorProvider.getSupportedFileGenerator(project.autoCpProject().defaultFileExtension)
 
+            // if all problems of the batch are already gathered, we should interrupt the batch.
             val preComplete = problemQueue.size == batch.size
 
             flushProblemQueue(batch)
 
             if (preComplete) {
-                BatchProcessor.interruptBatch()
+                ProblemBatchProcessor.interruptBatch()
                 flush = false
                 fileGenerator = null
             }
@@ -64,7 +65,7 @@ class ProblemGatheringPipeline(val project: Project) : ProblemGatheringListener 
         if (!flush) return
         flushProblemQueue(batch)
         if (problems.size == batch.size) {
-            BatchProcessor.interruptBatch()
+            ProblemBatchProcessor.interruptBatch()
             flush = false
             fileGenerator = null
         }

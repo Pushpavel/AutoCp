@@ -47,7 +47,7 @@
         <project.converterProvider
                 implementation="com.github.pushpavel.autocp.common.compat.v0_5_0_eap_1.AutoCpProjectConverterProvider"
                 id="AutoCp v0.5.0-eap.1"/>
-        <postStartupActivity implementation="com.github.pushpavel.autocp.gather.base.ProblemGatheringBridge"/>
+        <postStartupActivity implementation="com.github.pushpavel.autocp.gather.base.CompetitiveCompanionBridge"/>
         <toolWindow factoryClass="com.github.pushpavel.autocp.testcasetool.ToolFactory" id="Testcases"
                     icon="AutoCpIcons.logo13" anchor="bottom"/>
 
@@ -64,10 +64,10 @@
                   topic="com.github.pushpavel.autocp.gather.filegen.FileGenerationListener"/>
 
         <listener class="com.github.pushpavel.autocp.gather.base.ProblemGatheringPipeline"
-                  topic="com.github.pushpavel.autocp.gather.base.ProblemGatheringListener"/>
+                  topic="com.github.pushpavel.autocp.gather.base.ProblemBatchProcessorListener"/>
         <listener class="com.github.pushpavel.autocp.gather.ProblemGatheringProgressReporting"
-                  topic="com.github.pushpavel.autocp.gather.base.ProblemGatheringListener"/>
+                  topic="com.github.pushpavel.autocp.gather.base.ProblemBatchProcessorListener"/>
         <listener class="com.github.pushpavel.autocp.database.listeners.GatheredProblemAdder"
-                  topic="com.github.pushpavel.autocp.gather.base.ProblemGatheringListener"/>
+                  topic="com.github.pushpavel.autocp.gather.base.ProblemBatchProcessorListener"/>
     </projectListeners>
 </idea-plugin>

@@ -4,9 +4,12 @@ import com.github.pushpavel.autocp.database.models.Problem
 import com.github.pushpavel.autocp.gather.models.BatchJson
 import com.intellij.util.messages.Topic
 
-interface ProblemGatheringListener {
+/**
+ * Listener for [ProblemBatchProcessor] events.
+ */
+interface ProblemBatchProcessorListener {
     companion object {
-        val TOPIC = Topic.create("Problem Gathering Listener", ProblemGatheringListener::class.java)
+        val TOPIC = Topic.create("Problem Batch Processor Listener", ProblemBatchProcessorListener::class.java)
     }
 
     fun onBatchStart(problem: Problem, batch: BatchJson) {}

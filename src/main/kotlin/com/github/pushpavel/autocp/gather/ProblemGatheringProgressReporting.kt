@@ -1,9 +1,9 @@
 package com.github.pushpavel.autocp.gather
 
 import com.github.pushpavel.autocp.database.models.Problem
-import com.github.pushpavel.autocp.gather.base.BatchProcessor
+import com.github.pushpavel.autocp.gather.base.ProblemBatchProcessor
 import com.github.pushpavel.autocp.gather.base.ProblemGatheringErr
-import com.github.pushpavel.autocp.gather.base.ProblemGatheringListener
+import com.github.pushpavel.autocp.gather.base.ProblemBatchProcessorListener
 import com.github.pushpavel.autocp.gather.models.BatchJson
 import com.intellij.openapi.progress.ProgressIndicator
 import com.intellij.openapi.progress.ProgressManager
@@ -14,7 +14,7 @@ import kotlinx.coroutines.runBlocking
 
 class ProblemGatheringProgressReporting(
     project: Project
-) : Task.Backgroundable(project, "Gathering problems..."), ProblemGatheringListener {
+) : Task.Backgroundable(project, "Gathering problems..."), ProblemBatchProcessorListener {
 
     private var currentIndicator: ProgressIndicator? = null
     private var firstProblem: Problem? = null
@@ -53,7 +53,7 @@ class ProblemGatheringProgressReporting(
         }
 
         if (indicator.isCanceled && currentIndicator != null)
-            BatchProcessor.interruptBatch(ProblemGatheringErr.Cancellation)
+            ProblemBatchProcessor.interruptBatch(ProblemGatheringErr.Cancellation)
     }
 
     private fun showProgress(indicator: ProgressIndicator, problems: List<Problem>, count: Int) {
