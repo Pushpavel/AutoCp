@@ -9,5 +9,5 @@ import com.intellij.openapi.project.Project
  */
 interface StorageChannel {
     fun save(project: Project, data: Map<String, JsonObject>)
-    fun load(project: Project): Map<String, JsonObject>
+    fun load(project: Project, keys: List<String>): Map<String, JsonObject> = emptyMap()
 }

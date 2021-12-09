@@ -1,5 +1,7 @@
 package com.github.pushpavel.autocp.core.persistance.storage
 
+import com.github.pushpavel.autocp.core.persistance.solutions.Solutions
+import com.github.pushpavel.autocp.core.persistance.storage.channels.PropertiesComponentChannel
 import com.google.gson.JsonObject
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.diagnostic.Logger
@@ -17,16 +19,22 @@ class StorageManager(private val project: Project) {
     private val log = Logger.getInstance(StorageManager::class.java)
 
     private val data = mutableMapOf<String, JsonObject>()
-    private val channels = listOf<StorageChannel>()
+    private val channels = listOf<StorageChannel>(
+        PropertiesComponentChannel()
+    )
     private val processors = listOf<StorableProcessor>()
-    private val storables = listOf<Storable>()
+    private val storables = mapOf<String, Storable>(
+        "solutions" to Solutions()
+    )
 
     fun load() {
         data.clear()
 
+        val keys = storables.keys.toList()
+
         // load data from channels
         channels.forEach {
-            val channelData = it.load(project)
+            val channelData = it.load(project, keys)
             for ((key, value) in channelData) {
                 // apply channel data only if it contains more data than any other channel
                 if (key !in data || data.getValue(key).size() <= value.size())
@@ -40,9 +48,9 @@ class StorageManager(private val project: Project) {
         }?.also { log.error(it) }
 
         // apply data to storables
-        storables.forEachCatch {
-            if (it.id in data)
-                it.load(data.getValue(it.id))
+        storables.entries.forEachCatch { (key, value) ->
+            if (key in data)
+                value.load(data.getValue(key))
         }?.also { log.error(it) }
     }
 
@@ -50,8 +58,8 @@ class StorageManager(private val project: Project) {
         data.clear()
 
         // get data from storables
-        storables.forEachCatch {
-            data[it.id] = it.save()
+        storables.entries.forEachCatch { (key, value) ->
+            data[key] = value.save()
         }?.also { log.error(it) }
 
         // save data to channels

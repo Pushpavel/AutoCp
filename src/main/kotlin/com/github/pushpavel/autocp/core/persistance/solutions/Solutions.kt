@@ -10,12 +10,11 @@ import kotlinx.coroutines.flow.map
 
 
 @Service
-class Solutions(project: Project) : MapWithEventFlow<String, Solution>(), Storable {
+class Solutions : MapWithEventFlow<String, Solution>(), Storable {
 
     fun onKey(key: String) = events.filter { it.keys.contains(key) }.map { it.map[key] }
 
     fun put(value: Solution) = put(value.pathString, value)
-    override val id = "solutions"
 
     override fun load(data: JsonObject) {
         clear()
