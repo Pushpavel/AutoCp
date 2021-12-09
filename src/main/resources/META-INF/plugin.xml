@@ -13,6 +13,10 @@
     </actions>
     <extensions defaultExtensionNs="com.intellij">
 
+
+        <postStartupActivity
+                implementation="com.github.pushpavel.autocp.core.persistance.storage.StorageManagerLoader"/>
+
         <configurationType implementation="com.github.pushpavel.autocp.config.AutoCpConfigType"/>
         <runConfigurationProducer implementation="com.github.pushpavel.autocp.config.AutoCpConfigProducer"/>
         <notificationGroup id="autocp-notifications-group" key="notificationGroup" displayType="BALLOON"/>

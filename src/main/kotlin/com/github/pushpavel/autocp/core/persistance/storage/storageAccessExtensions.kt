@@ -2,8 +2,17 @@ package com.github.pushpavel.autocp.core.persistance.storage
 
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.startup.StartupActivity
 
-fun Project.loadStorageManager() = service<StorageManager>().also { it.load() }
+/**
+ * Loads [StorageManager] on project startup.
+ */
+class StorageManagerLoader : StartupActivity {
+    override fun runActivity(project: Project) {
+        project.service<StorageManager>().load()
+    }
+
+}
 
 fun Project.storageManager() = service<StorageManager>().also {
     if (!it.isLoaded)
