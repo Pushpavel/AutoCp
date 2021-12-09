@@ -4,6 +4,7 @@ import com.github.pushpavel.autocp.core.persistance.solutions.Solutions
 import com.github.pushpavel.autocp.core.persistance.storage.channels.PropertiesComponentChannel
 import com.google.gson.JsonObject
 import com.intellij.openapi.components.Service
+import com.intellij.openapi.components.service
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.project.Project
 import org.kodein.memory.util.forEachCatch
@@ -18,16 +19,23 @@ class StorageManager(private val project: Project) {
 
     private val log = Logger.getInstance(StorageManager::class.java)
 
-    private val data = mutableMapOf<String, JsonObject>()
+
     private val channels = listOf<StorageChannel>(
         PropertiesComponentChannel()
     )
     private val processors = listOf<StorableProcessor>()
-    private val storables = mapOf<String, Storable>(
+
+    val storables = mapOf<String, Storable>(
         "solutions" to Solutions()
     )
 
+    var isLoaded = false
+        private set
+
+    private val data = mutableMapOf<String, JsonObject>()
+
     fun load() {
+        if (isLoaded) return
         data.clear()
 
         val keys = storables.keys.toList()
@@ -52,6 +60,8 @@ class StorageManager(private val project: Project) {
             if (key in data)
                 value.load(data.getValue(key))
         }?.also { log.error(it) }
+
+        isLoaded = true
     }
 
     fun save() {

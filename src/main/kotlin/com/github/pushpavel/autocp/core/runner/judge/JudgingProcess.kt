@@ -5,6 +5,7 @@ import com.github.pushpavel.autocp.core.execution.ExecutionUtil
 import com.github.pushpavel.autocp.core.execution.buildSolutionExecutable
 import com.github.pushpavel.autocp.core.execution.prepareSolutionExecutable
 import com.github.pushpavel.autocp.core.persistance.solutions.Solutions
+import com.github.pushpavel.autocp.core.persistance.storage.storable
 import com.github.pushpavel.autocp.core.persistance.testcases.Testcases
 import com.github.pushpavel.autocp.tester.utils.trimByLines
 import com.intellij.openapi.components.Service
@@ -20,7 +21,7 @@ import kotlinx.coroutines.*
 class JudgingProcess(val project: Project) {
 
     private val messageBus = project.messageBus
-    private val solutions = project.service<Solutions>()
+    private val solutions = project.storable<Solutions>()
     private val testcases = project.service<Testcases>()
 
     /**

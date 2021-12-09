@@ -4,6 +4,7 @@ import com.github.pushpavel.autocp.build.settings.LangSettings
 import com.github.pushpavel.autocp.common.helpers.*
 import com.github.pushpavel.autocp.core.persistance.solutions.Solution
 import com.github.pushpavel.autocp.core.persistance.solutions.Solutions
+import com.github.pushpavel.autocp.core.persistance.storage.storable
 import com.github.pushpavel.autocp.testcasetool.components.SolutionContentPanel
 import com.github.pushpavel.autocp.tool.ui.AssociateFilePanel
 import com.intellij.openapi.components.service
@@ -22,7 +23,7 @@ class TestcaseSolutionContentManager(private val project: Project, private val t
     private val editorManager = FileEditorManager.getInstance(project)
     private val contentManager = toolWindow.contentManager
 
-    private val solutions = project.service<Solutions>()
+    private val solutions = project.storable<Solutions>()
 
     private var currentFile: VirtualFile? = null
     private val fileScoped by DisposableScope { currentFile = null }
