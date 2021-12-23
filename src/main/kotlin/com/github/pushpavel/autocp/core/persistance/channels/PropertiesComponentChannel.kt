@@ -1,8 +1,8 @@
-package com.github.pushpavel.autocp.core.persistance.storage.channels
+package com.github.pushpavel.autocp.core.persistance.channels
 
 import com.github.pushpavel.autocp.common.helpers.properties
 import com.github.pushpavel.autocp.common.res.R
-import com.github.pushpavel.autocp.core.persistance.storage.StorageChannel
+import com.github.pushpavel.autocp.core.persistance.StorageChannel
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import com.intellij.openapi.project.Project

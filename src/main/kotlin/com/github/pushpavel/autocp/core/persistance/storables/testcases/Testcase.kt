@@ -1,4 +1,4 @@
-package com.github.pushpavel.autocp.core.persistance.testcases
+package com.github.pushpavel.autocp.core.persistance.storables.testcases
 
 import com.google.gson.JsonObject
 

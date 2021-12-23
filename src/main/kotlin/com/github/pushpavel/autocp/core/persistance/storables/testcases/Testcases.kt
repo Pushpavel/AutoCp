@@ -1,7 +1,7 @@
-package com.github.pushpavel.autocp.core.persistance.testcases
+package com.github.pushpavel.autocp.core.persistance.storables.testcases
 
-import com.github.pushpavel.autocp.core.persistance.base.MapWithEventFlow
-import com.github.pushpavel.autocp.core.persistance.storage.Storable
+import com.github.pushpavel.autocp.core.persistance.storables.base.MapWithEventFlow
+import com.github.pushpavel.autocp.core.persistance.Storable
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.intellij.openapi.components.Service

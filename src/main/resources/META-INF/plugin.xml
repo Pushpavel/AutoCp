@@ -15,10 +15,10 @@
 
 
         <postStartupActivity
-                implementation="com.github.pushpavel.autocp.core.persistance.storage.StorageManagerLoader"/>
+                implementation="com.github.pushpavel.autocp.core.persistance.StorageManagerLoader"/>
 
         <fileDocumentManagerListener
-                implementation="com.github.pushpavel.autocp.core.persistance.storage.StorageManagerSaver"/>
+                implementation="com.github.pushpavel.autocp.core.persistance.StorageManagerSaver"/>
 
         <configurationType implementation="com.github.pushpavel.autocp.config.AutoCpConfigType"/>
         <runConfigurationProducer implementation="com.github.pushpavel.autocp.config.AutoCpConfigProducer"/>

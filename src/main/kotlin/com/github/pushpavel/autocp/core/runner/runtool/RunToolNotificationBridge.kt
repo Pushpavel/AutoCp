@@ -4,8 +4,8 @@ import com.github.pushpavel.autocp.build.Lang
 import com.github.pushpavel.autocp.common.res.R
 import com.github.pushpavel.autocp.core.execution.BuildOutput
 import com.github.pushpavel.autocp.core.execution.BuildSolutionErr
-import com.github.pushpavel.autocp.core.persistance.solutions.Solution
-import com.github.pushpavel.autocp.core.persistance.testcases.Testcase
+import com.github.pushpavel.autocp.core.persistance.storables.solutions.Solution
+import com.github.pushpavel.autocp.core.persistance.storables.testcases.Testcase
 import com.github.pushpavel.autocp.core.runner.judge.*
 import com.intellij.execution.process.ProcessHandler
 import com.intellij.execution.process.ProcessOutputTypes

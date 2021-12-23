@@ -1,8 +1,8 @@
-package com.github.pushpavel.autocp.core.persistance.storage
+package com.github.pushpavel.autocp.core.persistance
 
-import com.github.pushpavel.autocp.core.persistance.solutions.Solutions
-import com.github.pushpavel.autocp.core.persistance.storage.channels.PropertiesComponentChannel
-import com.github.pushpavel.autocp.core.persistance.testcases.Testcases
+import com.github.pushpavel.autocp.core.persistance.storables.solutions.Solutions
+import com.github.pushpavel.autocp.core.persistance.channels.PropertiesComponentChannel
+import com.github.pushpavel.autocp.core.persistance.storables.testcases.Testcases
 import com.google.gson.JsonObject
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.diagnostic.Logger

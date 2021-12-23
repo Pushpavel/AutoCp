@@ -2,12 +2,11 @@ package com.github.pushpavel.autocp.testcasetool.datalayer
 
 import com.github.pushpavel.autocp.build.settings.LangSettings
 import com.github.pushpavel.autocp.common.helpers.*
-import com.github.pushpavel.autocp.core.persistance.solutions.Solution
-import com.github.pushpavel.autocp.core.persistance.solutions.Solutions
-import com.github.pushpavel.autocp.core.persistance.storage.storable
+import com.github.pushpavel.autocp.core.persistance.storables.solutions.Solution
+import com.github.pushpavel.autocp.core.persistance.storables.solutions.Solutions
+import com.github.pushpavel.autocp.core.persistance.storable
 import com.github.pushpavel.autocp.testcasetool.components.SolutionContentPanel
 import com.github.pushpavel.autocp.tool.ui.AssociateFilePanel
-import com.intellij.openapi.components.service
 import com.intellij.openapi.fileEditor.FileEditorManager
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Disposer

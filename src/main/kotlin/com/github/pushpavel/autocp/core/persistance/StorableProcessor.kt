@@ -1,4 +1,4 @@
-package com.github.pushpavel.autocp.core.persistance.storage
+package com.github.pushpavel.autocp.core.persistance
 
 import com.google.gson.JsonObject
 import com.intellij.openapi.project.Project

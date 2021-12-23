@@ -1,4 +1,4 @@
-package com.github.pushpavel.autocp.core.persistance.storage
+package com.github.pushpavel.autocp.core.persistance
 
 import com.intellij.openapi.components.service
 import com.intellij.openapi.fileEditor.FileDocumentManagerListener

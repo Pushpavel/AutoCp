@@ -1,7 +1,7 @@
-package com.github.pushpavel.autocp.core.persistance.solutions
+package com.github.pushpavel.autocp.core.persistance.storables.solutions
 
-import com.github.pushpavel.autocp.core.persistance.base.MapWithEventFlow
-import com.github.pushpavel.autocp.core.persistance.storage.Storable
+import com.github.pushpavel.autocp.core.persistance.storables.base.MapWithEventFlow
+import com.github.pushpavel.autocp.core.persistance.Storable
 import com.google.gson.JsonObject
 import com.intellij.openapi.components.Service
 import kotlinx.coroutines.flow.filter

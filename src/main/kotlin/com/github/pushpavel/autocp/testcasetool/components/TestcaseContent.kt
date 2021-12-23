@@ -1,7 +1,7 @@
 package com.github.pushpavel.autocp.testcasetool.components
 
 import com.github.pushpavel.autocp.common.ui.swing.AutoLayout
-import com.github.pushpavel.autocp.core.persistance.testcases.Testcase
+import com.github.pushpavel.autocp.core.persistance.storables.testcases.Testcase
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.actionSystem.ActionManager
 import com.intellij.openapi.actionSystem.ActionPlaces

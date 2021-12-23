@@ -1,7 +1,7 @@
 package com.github.pushpavel.autocp.core.runner.judge
 
 import com.github.pushpavel.autocp.core.execution.BuildSolutionErr
-import com.github.pushpavel.autocp.core.persistance.solutions.Solution
+import com.github.pushpavel.autocp.core.persistance.storables.solutions.Solution
 
 sealed class JudgeErr : Exception() {
     data class NoSolution(val solutionPathString: String) : JudgeErr()

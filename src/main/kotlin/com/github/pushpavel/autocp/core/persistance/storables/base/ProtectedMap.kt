@@ -1,4 +1,4 @@
-package com.github.pushpavel.autocp.core.persistance.base
+package com.github.pushpavel.autocp.core.persistance.storables.base
 
 abstract class ProtectedMap<K, V> : Map<K, V> {
     protected val map = mutableMapOf<K, V>()

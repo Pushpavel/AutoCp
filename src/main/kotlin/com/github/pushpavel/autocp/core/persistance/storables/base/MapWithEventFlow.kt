@@ -1,4 +1,4 @@
-package com.github.pushpavel.autocp.core.persistance.base
+package com.github.pushpavel.autocp.core.persistance.storables.base
 
 import kotlinx.coroutines.flow.MutableSharedFlow
 

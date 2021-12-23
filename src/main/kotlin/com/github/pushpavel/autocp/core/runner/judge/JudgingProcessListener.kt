@@ -2,8 +2,8 @@ package com.github.pushpavel.autocp.core.runner.judge
 
 import com.github.pushpavel.autocp.build.Lang
 import com.github.pushpavel.autocp.core.execution.BuildOutput
-import com.github.pushpavel.autocp.core.persistance.solutions.Solution
-import com.github.pushpavel.autocp.core.persistance.testcases.Testcase
+import com.github.pushpavel.autocp.core.persistance.storables.solutions.Solution
+import com.github.pushpavel.autocp.core.persistance.storables.testcases.Testcase
 import com.intellij.util.messages.Topic
 
 interface JudgingProcessListener {

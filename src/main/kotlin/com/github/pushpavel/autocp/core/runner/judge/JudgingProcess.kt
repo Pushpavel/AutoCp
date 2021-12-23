@@ -4,9 +4,9 @@ import com.github.pushpavel.autocp.core.execution.BuildSolutionErr
 import com.github.pushpavel.autocp.core.execution.ExecutionUtil
 import com.github.pushpavel.autocp.core.execution.buildSolutionExecutable
 import com.github.pushpavel.autocp.core.execution.prepareSolutionExecutable
-import com.github.pushpavel.autocp.core.persistance.solutions.Solutions
-import com.github.pushpavel.autocp.core.persistance.storage.storable
-import com.github.pushpavel.autocp.core.persistance.testcases.Testcases
+import com.github.pushpavel.autocp.core.persistance.storables.solutions.Solutions
+import com.github.pushpavel.autocp.core.persistance.storable
+import com.github.pushpavel.autocp.core.persistance.storables.testcases.Testcases
 import com.github.pushpavel.autocp.tester.utils.trimByLines
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.progress.ProgressIndicator

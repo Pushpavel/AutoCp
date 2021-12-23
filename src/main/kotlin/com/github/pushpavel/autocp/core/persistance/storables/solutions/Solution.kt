@@ -1,4 +1,4 @@
-package com.github.pushpavel.autocp.core.persistance.solutions
+package com.github.pushpavel.autocp.core.persistance.storables.solutions
 
 import com.google.gson.JsonObject
 
