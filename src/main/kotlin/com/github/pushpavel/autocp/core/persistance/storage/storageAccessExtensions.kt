@@ -27,8 +27,9 @@ class StorageManagerSaver : FileDocumentManagerListener {
 }
 
 fun Project.storageManager() = service<StorageManager>().also {
-    if (!it.isLoaded)
-        throw IllegalStateException("Storage manager is not yet loaded, but is requested")
+    it.load()
+//    if (!it.isLoaded)
+//        throw IllegalStateException("Storage manager is not yet loaded, but is requested")
 }
 
 inline fun <reified T : Storable> Project.storable(): T {

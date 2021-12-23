@@ -52,8 +52,8 @@ class TestcaseListPanel : JBPanel<TestcaseListPanel>(), ListDataListener, Dispos
     override fun contentsChanged(e: ListDataEvent) {
         for (i in e.index0..e.index1) {
             val testcase = model?.getElementAt(i) ?: continue
-            val component = getComponent(i) as TestcaseContent
-            component.update(i, testcase)
+            val component = getComponent(i) as TestcaseContent?
+            component?.update(i, testcase)
         }
     }
 

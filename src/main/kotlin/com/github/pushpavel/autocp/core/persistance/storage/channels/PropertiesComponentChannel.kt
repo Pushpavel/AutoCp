@@ -19,7 +19,7 @@ class PropertiesComponentChannel : StorageChannel {
 
         for (key in keys) {
             val value = properties.getValue(R.keys.pluginId + key)
-            if (value != null) map[R.keys.pluginId + key] = JsonParser.parseString(value).asJsonObject
+            if (value != null) map[key] = JsonParser.parseString(value).asJsonObject
         }
 
         return map
