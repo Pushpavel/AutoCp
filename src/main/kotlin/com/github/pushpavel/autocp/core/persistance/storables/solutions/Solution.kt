@@ -6,12 +6,15 @@ data class Solution(
     val displayName: String,
     val pathString: String,
     val timeLimit: Int = 1000,
+    val groupName: String?
 ) {
     fun toJson(): JsonObject {
         val json = JsonObject()
         json.addProperty("displayName", displayName)
         json.addProperty("pathString", pathString)
         json.addProperty("timeLimit", timeLimit)
+        if (groupName != null)
+            json.addProperty("groupName", groupName)
         return json
     }
 
@@ -20,7 +23,8 @@ data class Solution(
             return Solution(
                 displayName = json.get("displayName").asString,
                 pathString = json.get("pathString").asString,
-                timeLimit = json.get("timeLimit").asInt
+                timeLimit = json.get("timeLimit").asInt,
+                groupName = json.get("groupName")?.asString
             )
         }
     }
