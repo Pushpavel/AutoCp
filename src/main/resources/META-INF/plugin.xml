@@ -67,7 +67,7 @@
                   topic="com.github.pushpavel.autocp.gather.filegen.FileGenerationListener"/>
         <listener class="com.github.pushpavel.autocp.common.analytics.listeners.ProblemGatherListener"
                   topic="com.github.pushpavel.autocp.gather.filegen.FileGenerationListener"/>
-        <listener class="com.github.pushpavel.autocp.database.listeners.GeneratedSolutionFileAdder"
+        <listener class="com.github.pushpavel.autocp.core.persistance.storables.solutions.GeneratedSolutionAdder"
                   topic="com.github.pushpavel.autocp.gather.filegen.FileGenerationListener"/>
 
         <listener class="com.github.pushpavel.autocp.gather.base.ProblemGatheringPipeline"
