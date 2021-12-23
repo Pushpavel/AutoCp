@@ -2,9 +2,9 @@ package com.github.pushpavel.autocp.core.persistance.storage
 
 import com.github.pushpavel.autocp.core.persistance.solutions.Solutions
 import com.github.pushpavel.autocp.core.persistance.storage.channels.PropertiesComponentChannel
+import com.github.pushpavel.autocp.core.persistance.testcases.Testcases
 import com.google.gson.JsonObject
 import com.intellij.openapi.components.Service
-import com.intellij.openapi.components.service
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.project.Project
 import org.kodein.memory.util.forEachCatch
@@ -26,7 +26,8 @@ class StorageManager(private val project: Project) {
     private val processors = listOf<StorableProcessor>()
 
     val storables = mapOf<String, Storable>(
-        "solutions" to Solutions()
+        "solutions" to Solutions(),
+        "testcases" to Testcases()
     )
 
     var isLoaded = false

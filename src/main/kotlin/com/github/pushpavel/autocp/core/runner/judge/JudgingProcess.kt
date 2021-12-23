@@ -9,7 +9,6 @@ import com.github.pushpavel.autocp.core.persistance.storage.storable
 import com.github.pushpavel.autocp.core.persistance.testcases.Testcases
 import com.github.pushpavel.autocp.tester.utils.trimByLines
 import com.intellij.openapi.components.Service
-import com.intellij.openapi.components.service
 import com.intellij.openapi.progress.ProgressIndicator
 import com.intellij.openapi.project.Project
 import kotlinx.coroutines.*
@@ -22,7 +21,7 @@ class JudgingProcess(val project: Project) {
 
     private val messageBus = project.messageBus
     private val solutions = project.storable<Solutions>()
-    private val testcases = project.service<Testcases>()
+    private val testcases = project.storable<Testcases>()
 
     /**
      * Executes the solution in [solutionPathString] on the testcases and returns the result.

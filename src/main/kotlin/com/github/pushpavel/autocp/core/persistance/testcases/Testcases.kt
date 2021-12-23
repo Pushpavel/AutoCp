@@ -1,13 +1,15 @@
 package com.github.pushpavel.autocp.core.persistance.testcases
 
 import com.github.pushpavel.autocp.core.persistance.base.MapWithEventFlow
+import com.github.pushpavel.autocp.core.persistance.storage.Storable
+import com.google.gson.JsonArray
+import com.google.gson.JsonObject
 import com.intellij.openapi.components.Service
-import com.intellij.openapi.project.Project
 import com.intellij.ui.CollectionListModel
 import kotlinx.coroutines.flow.*
 
 @Service
-class Testcases(project: Project) : MapWithEventFlow<String, CollectionListModel<Testcase>>() {
+class Testcases : MapWithEventFlow<String, CollectionListModel<Testcase>>(), Storable {
 
     fun onSolutionKey(solutionPathString: String): Flow<CollectionListModel<Testcase>?> {
         val currentValue = getOrPut(solutionPathString)
@@ -18,6 +20,25 @@ class Testcases(project: Project) : MapWithEventFlow<String, CollectionListModel
 
     fun getOrPut(solutionPathString: String): CollectionListModel<Testcase> {
         return this[solutionPathString] ?: CollectionListModel<Testcase>().also { put(solutionPathString, it) }
+    }
+
+    override fun load(data: JsonObject) {
+        clear()
+        data.entrySet().forEach {
+            put(it.key, CollectionListModel(
+                it.value.asJsonArray.map { json -> Testcase.fromJson(json.asJsonObject) }
+            ))
+        }
+    }
+
+    override fun save(): JsonObject {
+        val json = JsonObject()
+        forEach { (key, value) ->
+            val array = JsonArray()
+            value.items.forEach { array.add(it.toJson()) }
+            json.add(key, array)
+        }
+        return json
     }
 
     // TODO: maintain consistency

@@ -4,7 +4,6 @@ import com.github.pushpavel.autocp.core.persistance.base.MapWithEventFlow
 import com.github.pushpavel.autocp.core.persistance.storage.Storable
 import com.google.gson.JsonObject
 import com.intellij.openapi.components.Service
-import com.intellij.openapi.project.Project
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 
@@ -18,7 +17,9 @@ class Solutions : MapWithEventFlow<String, Solution>(), Storable {
 
     override fun load(data: JsonObject) {
         clear()
-        data.entrySet().forEach { map[it.key] = Solution.fromJson(it.value.asJsonObject) }
+        data.entrySet().forEach {
+            put(it.key, Solution.fromJson(it.value.asJsonObject))
+        }
     }
 
     override fun save(): JsonObject {
