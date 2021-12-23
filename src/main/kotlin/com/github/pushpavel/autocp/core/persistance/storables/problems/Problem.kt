@@ -3,8 +3,10 @@ package com.github.pushpavel.autocp.core.persistance.storables.problems
 import com.github.pushpavel.autocp.core.persistance.storables.testcases.Testcase
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
+import kotlinx.serialization.Serializable
 
 
+@Serializable // TODO: remove Serializable after refactoring
 data class Problem(
     val name: String,
     val groupName: String,

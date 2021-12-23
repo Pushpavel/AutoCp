@@ -1,7 +1,7 @@
 package com.github.pushpavel.autocp.gather.base
 
 import com.github.pushpavel.autocp.common.errors.NoReachErr
-import com.github.pushpavel.autocp.database.models.Problem
+import com.github.pushpavel.autocp.core.persistance.storables.problems.Problem
 import com.github.pushpavel.autocp.gather.filegen.FileGenerationListener
 import com.github.pushpavel.autocp.gather.filegen.FileGenerator
 import com.github.pushpavel.autocp.gather.filegen.FileGeneratorProvider

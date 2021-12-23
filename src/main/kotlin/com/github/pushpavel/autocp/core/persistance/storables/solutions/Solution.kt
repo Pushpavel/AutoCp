@@ -6,7 +6,7 @@ data class Solution(
     val displayName: String,
     val pathString: String,
     val timeLimit: Int = 1000,
-    val groupName: String?
+    val groupName: String? = null
 ) {
     fun toJson(): JsonObject {
         val json = JsonObject()

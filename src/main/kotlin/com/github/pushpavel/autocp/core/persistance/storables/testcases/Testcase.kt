@@ -1,7 +1,9 @@
 package com.github.pushpavel.autocp.core.persistance.storables.testcases
 
 import com.google.gson.JsonObject
+import kotlinx.serialization.Serializable
 
+@Serializable // TODO: remove Serializable after refactoring
 data class Testcase(
     val num: Int,
     val input: String,

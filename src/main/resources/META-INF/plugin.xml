@@ -74,7 +74,7 @@
                   topic="com.github.pushpavel.autocp.gather.base.ProblemBatchProcessorListener"/>
         <listener class="com.github.pushpavel.autocp.gather.ProblemGatheringProgressReporting"
                   topic="com.github.pushpavel.autocp.gather.base.ProblemBatchProcessorListener"/>
-        <listener class="com.github.pushpavel.autocp.database.listeners.GatheredProblemAdder"
+        <listener class="com.github.pushpavel.autocp.core.persistance.storables.problems.GatheredProblemAdder"
                   topic="com.github.pushpavel.autocp.gather.base.ProblemBatchProcessorListener"/>
     </projectListeners>
 </idea-plugin>

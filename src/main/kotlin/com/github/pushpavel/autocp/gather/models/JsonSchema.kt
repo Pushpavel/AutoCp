@@ -1,7 +1,7 @@
 package com.github.pushpavel.autocp.gather.models
 
-import com.github.pushpavel.autocp.database.models.Problem
-import com.github.pushpavel.autocp.database.models.Testcase
+import com.github.pushpavel.autocp.core.persistance.storables.problems.Problem
+import com.github.pushpavel.autocp.core.persistance.storables.testcases.Testcase
 import kotlinx.serialization.Serializable
 
 /**
@@ -23,7 +23,7 @@ data class ProblemJson(
 
         // naming testcases
         val testcases = tests.mapIndexed { index, testJson ->
-            testJson.toTestcase("Sample Testcase #${index + 1}")
+            testJson.toTestcase(index + 1)
         }
 
         return Problem(name, group, url, testcases, memoryLimit, timeLimit)
@@ -48,5 +48,5 @@ data class TestJson(
     val input: String,
     val output: String,
 ) {
-    fun toTestcase(name: String) = Testcase(name, input, output)
+    fun toTestcase(num: Int) = Testcase(num, input, output)
 }
