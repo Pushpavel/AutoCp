@@ -1,7 +1,9 @@
 package com.github.pushpavel.autocp.core.persistance.storage
 
 import com.intellij.openapi.components.service
+import com.intellij.openapi.fileEditor.FileDocumentManagerListener
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.project.ProjectManager
 import com.intellij.openapi.startup.StartupActivity
 
 /**
@@ -11,7 +13,17 @@ class StorageManagerLoader : StartupActivity {
     override fun runActivity(project: Project) {
         project.service<StorageManager>().load()
     }
+}
 
+/**
+ * Listens to file changes and saves [StorageManager] on file save.
+ */
+class StorageManagerSaver : FileDocumentManagerListener {
+    override fun beforeAllDocumentsSaving() {
+        ProjectManager.getInstanceIfCreated()?.openProjects?.forEach { project ->
+            project.service<StorageManager>().save()
+        }
+    }
 }
 
 fun Project.storageManager() = service<StorageManager>().also {
