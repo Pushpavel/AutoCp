@@ -13,7 +13,10 @@ var extension = ""
 var rootDir = ""
 var dontAskBeforeFileGeneration = false
 
-fun showProblemGatheringDialog(project: Project, groupName: String): Boolean {
+/**
+ * UI for confirmation of file generation.
+ */
+fun showFileGenerationDialog(project: Project, groupName: String): Boolean {
     val projectSettings = project.autoCpProject()
     val generalSettings = AutoCpGeneralSettings.instance
 

@@ -1,6 +1,6 @@
 package com.github.pushpavel.autocp.database
 
-import com.github.pushpavel.autocp.database.models.Problem
+import com.github.pushpavel.autocp.core.persistance.storables.problems.Problem
 import com.github.pushpavel.autocp.database.models.SolutionFile
 import kotlinx.coroutines.flow.MutableStateFlow
 

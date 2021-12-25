@@ -1,8 +1,9 @@
 package com.github.pushpavel.autocp.gather.filegen
 
 import com.github.pushpavel.autocp.common.res.R
-import com.github.pushpavel.autocp.database.models.Problem
+import com.github.pushpavel.autocp.core.persistance.storables.problems.Problem
 import com.github.pushpavel.autocp.gather.models.BatchJson
+
 import com.intellij.util.IncorrectOperationException
 
 class FileGenerationIssueHandler : FileGenerationListener {

@@ -5,7 +5,6 @@ import com.github.pushpavel.autocp.common.ui.swing.TileCellRenderer
 import com.intellij.openapi.fileTypes.FileTypeManager
 import com.intellij.openapi.fileTypes.LanguageFileType
 import com.intellij.openapi.project.Project
-import java.nio.file.Paths
 import kotlin.io.path.Path
 import kotlin.io.path.pathString
 
@@ -27,9 +26,7 @@ data class Lang(
     }
 
     private fun constructCommand(project: Project, command: String, inputPath: String, dirPath: String): String {
-        val relPath = Path(inputPath)
-        val path = Paths.get(Path(project.basePath!!).pathString, relPath.pathString)
-
+        val path = Path(inputPath)
         return command.replace(R.keys.inputPathMacro, "\"${path.pathString}\"")
             .replace(R.keys.dirUnquotedPathMacro, dirPath)
             .replace(R.keys.dirPathMacro, "\"$dirPath\"")

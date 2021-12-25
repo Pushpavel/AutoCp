@@ -1,7 +1,7 @@
 package com.github.pushpavel.autocp.gather.filegen
 
 import com.github.pushpavel.autocp.common.helpers.pathString
-import com.github.pushpavel.autocp.database.models.Problem
+import com.github.pushpavel.autocp.core.persistance.storables.problems.Problem
 import com.github.pushpavel.autocp.gather.models.BatchJson
 import com.github.pushpavel.autocp.gather.models.GenerateFileErr
 import com.intellij.openapi.application.runReadAction

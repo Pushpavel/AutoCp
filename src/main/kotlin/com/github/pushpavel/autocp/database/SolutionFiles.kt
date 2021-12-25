@@ -1,8 +1,9 @@
 package com.github.pushpavel.autocp.database
 
 import com.github.pushpavel.autocp.common.errors.InternalErr
-import com.github.pushpavel.autocp.database.models.Problem
+import com.github.pushpavel.autocp.core.persistance.storables.problems.Problem
 import com.github.pushpavel.autocp.database.models.SolutionFile
+import com.github.pushpavel.autocp.database.models.Testcase
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
@@ -56,7 +57,7 @@ class SolutionFiles(val project: Project) {
             SolutionFile(
                 path.pathString,
                 linkedProblemId,
-                problem.sampleTestcases.toList(),
+                problem.sampleTestcases.toList().map { Testcase("Sample Testcase #${it.num}", it.input, it.output) },
                 problem.timeLimit
             )
         } else

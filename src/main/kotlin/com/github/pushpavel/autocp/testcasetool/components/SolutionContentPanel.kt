@@ -4,11 +4,11 @@ import com.github.pushpavel.autocp.common.helpers.DisposableScope
 import com.github.pushpavel.autocp.common.helpers.doDisposal
 import com.github.pushpavel.autocp.common.helpers.mainScope
 import com.github.pushpavel.autocp.common.ui.helpers.setter
-import com.github.pushpavel.autocp.core.persistance.solutions.Solution
-import com.github.pushpavel.autocp.core.persistance.testcases.Testcase
-import com.github.pushpavel.autocp.core.persistance.testcases.Testcases
+import com.github.pushpavel.autocp.core.persistance.storables.solutions.Solution
+import com.github.pushpavel.autocp.core.persistance.storable
+import com.github.pushpavel.autocp.core.persistance.storables.testcases.Testcase
+import com.github.pushpavel.autocp.core.persistance.storables.testcases.Testcases
 import com.github.pushpavel.autocp.testcasetool.actions.actionGroup
-import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Disposer
 import com.intellij.openapi.wm.ToolWindow
@@ -46,7 +46,7 @@ class SolutionContentPanel(project: Project, val toolWindow: ToolWindow) : Borde
             }
         }
     }
-    private val testcases = project.service<Testcases>()
+    private val testcases = project.storable<Testcases>()
 
     private val scope = mainScope()
     private val solutionScoped by DisposableScope()

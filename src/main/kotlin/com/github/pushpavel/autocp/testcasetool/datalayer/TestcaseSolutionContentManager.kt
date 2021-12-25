@@ -2,11 +2,11 @@ package com.github.pushpavel.autocp.testcasetool.datalayer
 
 import com.github.pushpavel.autocp.build.settings.LangSettings
 import com.github.pushpavel.autocp.common.helpers.*
-import com.github.pushpavel.autocp.core.persistance.solutions.Solution
-import com.github.pushpavel.autocp.core.persistance.solutions.Solutions
+import com.github.pushpavel.autocp.core.persistance.storables.solutions.Solution
+import com.github.pushpavel.autocp.core.persistance.storables.solutions.Solutions
+import com.github.pushpavel.autocp.core.persistance.storable
 import com.github.pushpavel.autocp.testcasetool.components.SolutionContentPanel
 import com.github.pushpavel.autocp.tool.ui.AssociateFilePanel
-import com.intellij.openapi.components.service
 import com.intellij.openapi.fileEditor.FileEditorManager
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Disposer
@@ -22,7 +22,7 @@ class TestcaseSolutionContentManager(private val project: Project, private val t
     private val editorManager = FileEditorManager.getInstance(project)
     private val contentManager = toolWindow.contentManager
 
-    private val solutions = project.service<Solutions>()
+    private val solutions = project.storable<Solutions>()
 
     private var currentFile: VirtualFile? = null
     private val fileScoped by DisposableScope { currentFile = null }
@@ -63,7 +63,7 @@ class TestcaseSolutionContentManager(private val project: Project, private val t
                 return null
             // ui to associate currently selected file as Solution
             return AssociateFilePanel(Path(solutionKey).name) {
-                solutions.put(Solution(solutionKey))
+                solutions.put(Solution(Path(solutionKey).name, solutionKey))
                 // refresh the toolWindow content
                 changeSolutionFile(currentFile)
             }.component

@@ -31,6 +31,7 @@ class RunAutoCpAction : AnAction("Run with AutoCp", "Run the currently focused f
             else
                 ExecutionUtil.restart(runContentDescriptor)
         } catch (e: IllegalStateException) {
+            // todo: show error silently
             R.notify.noConfigInContext()
         }
     }

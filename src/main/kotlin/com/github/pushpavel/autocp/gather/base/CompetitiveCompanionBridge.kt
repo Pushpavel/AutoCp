@@ -15,9 +15,10 @@ import kotlinx.serialization.json.Json
 import java.net.SocketTimeoutException
 
 /**
- * Bridge between Competitive Companion extension and [BatchProcessor]
+ * Bridge between Competitive Companion extension and [ProblemBatchProcessor]
+ * Runs a local server on IDE start listening for problems parsed from competitive companion
  */
-class ProblemGatheringBridge : StartupActivity, DumbAware {
+class CompetitiveCompanionBridge : StartupActivity, DumbAware {
     private val scope = ioScope()
     private val serializer = Json { ignoreUnknownKeys = true }
 
@@ -25,10 +26,12 @@ class ProblemGatheringBridge : StartupActivity, DumbAware {
         // initialize server
         scope.launch {
             try {
+                // start server
                 val serverSocket = openServerSocketAsync(
                     R.others.competitiveCompanionPorts
                 ).await() ?: throw ProblemGatheringErr.AllPortsTakenErr(R.others.competitiveCompanionPorts)
 
+                // listen for messages and notify BatchProcessor
                 serverSocket.use {
                     while (true) {
                         try {
@@ -38,15 +41,15 @@ class ProblemGatheringBridge : StartupActivity, DumbAware {
                                 ).await() ?: return@coroutineScope
 
                                 val json = serializer.decodeFromString<ProblemJson>(message)
-                                BatchProcessor.onJsonReceived(json)
+                                ProblemBatchProcessor.onJsonReceived(json)
                             }
                         } catch (e: SocketTimeoutException) {
-                            BatchProcessor.interruptBatch(ProblemGatheringErr.TimeoutErr)
+                            ProblemBatchProcessor.interruptBatch(ProblemGatheringErr.TimeoutErr)
                         } catch (e: SerializationException) {
-                            BatchProcessor.interruptBatch(ProblemGatheringErr.JsonErr)
+                            ProblemBatchProcessor.interruptBatch(ProblemGatheringErr.JsonErr)
                         }
 
-                        while (BatchProcessor.isCurrentBatchBlocking()) delay(100)
+                        while (ProblemBatchProcessor.isCurrentBatchBlocking()) delay(100)
                     }
                 }
             } catch (e: ProblemGatheringErr) {
@@ -54,7 +57,7 @@ class ProblemGatheringBridge : StartupActivity, DumbAware {
             } catch (e: Exception) {
                 R.notify.problemGatheringUncaught(e)
             } finally {
-                BatchProcessor.interruptBatch()
+                ProblemBatchProcessor.interruptBatch()
             }
         }
     }

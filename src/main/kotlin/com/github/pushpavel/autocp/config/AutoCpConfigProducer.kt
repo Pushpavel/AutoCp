@@ -1,7 +1,8 @@
 package com.github.pushpavel.autocp.config
 
 import com.github.pushpavel.autocp.common.helpers.pathString
-import com.github.pushpavel.autocp.database.SolutionFiles
+import com.github.pushpavel.autocp.core.persistance.storable
+import com.github.pushpavel.autocp.core.persistance.storables.solutions.Solutions
 import com.intellij.execution.actions.ConfigurationContext
 import com.intellij.execution.actions.LazyRunConfigurationProducer
 import com.intellij.openapi.util.Ref
@@ -22,16 +23,15 @@ class AutoCpConfigProducer : LazyRunConfigurationProducer<AutoCpConfig>() {
     ): Boolean {
         val file = context.location?.virtualFile
         val solutionPath = file?.pathString ?: return false
-        val solutionFiles = SolutionFiles.getInstance(context.project)
+        val solutions = context.project.storable<Solutions>()
 
-        if (solutionPath !in solutionFiles)
+        if (solutionPath !in solutions)
             return false
 
         configuration.solutionFilePath = solutionPath
 
         val suggestedName = configuration.suggestedName()
-        if (suggestedName != null)
-            configuration.name = suggestedName
+        configuration.name = suggestedName
 
         return true
     }

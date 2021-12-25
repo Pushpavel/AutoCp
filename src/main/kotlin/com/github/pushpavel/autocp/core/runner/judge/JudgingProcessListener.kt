@@ -1,0 +1,24 @@
+package com.github.pushpavel.autocp.core.runner.judge
+
+import com.github.pushpavel.autocp.build.Lang
+import com.github.pushpavel.autocp.core.execution.BuildOutput
+import com.github.pushpavel.autocp.core.persistance.storables.solutions.Solution
+import com.github.pushpavel.autocp.core.persistance.storables.testcases.Testcase
+import com.intellij.util.messages.Topic
+
+interface JudgingProcessListener {
+    companion object {
+        val TOPIC = Topic.create("JudgingProcessListener", JudgingProcessListener::class.java)
+    }
+
+    fun onBuildingStarted(solutionPath: String, lang: Lang, buildCommand: String)
+    fun onTestingStarted(solution: Solution, testcases: List<Testcase>, buildOutput: BuildOutput)
+    fun onTestingFailed(err: JudgeErr)
+    fun onTestingFinished()
+    fun onTestNodeStarted(testNode: TestNode)
+    fun onTestNodeStdOut(testNode: TestNode, value: String)
+    fun onTestNodeStdErr(testNode: TestNode, value: String)
+    fun onTestNodeFinished(result: ResultNode)
+    fun onTestGroupStarted(tests: TestGroupNode)
+    fun onTestGroupFinished(results: ResultGroupNode)
+}

@@ -1,10 +1,11 @@
 package com.github.pushpavel.autocp.testcasetool.components
 
 import com.github.pushpavel.autocp.common.ui.swing.AutoLayout
-import com.github.pushpavel.autocp.core.persistance.testcases.Testcase
+import com.github.pushpavel.autocp.core.persistance.storables.testcases.Testcase
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.actionSystem.ActionManager
 import com.intellij.openapi.actionSystem.ActionPlaces
+import com.intellij.openapi.application.runWriteAction
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.editor.EditorFactory
 import com.intellij.openapi.editor.event.DocumentEvent
@@ -33,10 +34,12 @@ class TestcaseContent(private val model: CollectionListModel<Testcase>) : Border
     fun update(index: Int, testcase: Testcase) {
         headerLabel.text = "Testcase #${testcase.num}"
         currentIndex = index
-        if (testcase.input != inputDoc.text)
-            inputDoc.setText(testcase.input)
-        if (testcase.output != outputDoc.text)
-            outputDoc.setText(testcase.output)
+        runWriteAction {
+            if (testcase.input != inputDoc.text)
+                inputDoc.setText(testcase.input)
+            if (testcase.output != outputDoc.text)
+                outputDoc.setText(testcase.output)
+        }
     }
 
     init {

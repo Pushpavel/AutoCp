@@ -1,14 +1,16 @@
 package com.github.pushpavel.autocp.config.validators
 
-import com.github.pushpavel.autocp.database.SolutionFiles
-import com.github.pushpavel.autocp.database.models.SolutionFile
+import com.github.pushpavel.autocp.core.persistance.storables.solutions.Solution
+import com.github.pushpavel.autocp.core.persistance.storables.solutions.Solutions
+import com.github.pushpavel.autocp.core.persistance.storable
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.LocalFileSystem
 import com.intellij.openapi.vfs.VirtualFile
 import kotlin.io.path.Path
 import kotlin.io.path.pathString
 
-fun getValidSolutionFile(project: Project, configName: String, path: String): SolutionFile {
+// todo: rename to getValidSolution
+fun getValidSolutionFile(project: Project, configName: String, path: String): Solution {
     if (path.isBlank())
         throw SolutionFilePathErr.BlankPathErr(configName)
 
@@ -25,10 +27,10 @@ fun getValidSolutionFile(project: Project, configName: String, path: String): So
     if (file?.exists() != true)
         throw SolutionFilePathErr.FileDoesNotExist(configName, pathString)
 
-    val solutionFiles = SolutionFiles.getInstance(project)
+    val solutions = project.storable<Solutions>()
 
-    if (pathString !in solutionFiles)
+    if (pathString !in solutions)
         throw SolutionFilePathErr.FileNotRegistered(configName, pathString)
 
-    return solutionFiles[pathString]!!
+    return solutions[pathString]!!
 }

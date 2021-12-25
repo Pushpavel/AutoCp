@@ -7,11 +7,18 @@
     <resource-bundle>messages.autocp</resource-bundle>
 
     <actions>
-        <action class="com.github.pushpavel.autocp.config.actions.RunAutoCpAction">
+        <action id="RunAutoCp" class="com.github.pushpavel.autocp.config.actions.RunAutoCpAction">
             <keyboard-shortcut first-keystroke="alt X" keymap="$default"/>
         </action>
     </actions>
     <extensions defaultExtensionNs="com.intellij">
+
+
+        <postStartupActivity
+                implementation="com.github.pushpavel.autocp.core.persistance.StorageManagerLoader"/>
+
+        <fileDocumentManagerListener
+                implementation="com.github.pushpavel.autocp.core.persistance.StorageManagerSaver"/>
 
         <configurationType implementation="com.github.pushpavel.autocp.config.AutoCpConfigType"/>
         <runConfigurationProducer implementation="com.github.pushpavel.autocp.config.AutoCpConfigProducer"/>
@@ -47,9 +54,11 @@
         <project.converterProvider
                 implementation="com.github.pushpavel.autocp.common.compat.v0_5_0_eap_1.AutoCpProjectConverterProvider"
                 id="AutoCp v0.5.0-eap.1"/>
-        <postStartupActivity implementation="com.github.pushpavel.autocp.gather.base.ProblemGatheringBridge"/>
+        <postStartupActivity implementation="com.github.pushpavel.autocp.gather.base.CompetitiveCompanionBridge"/>
         <toolWindow factoryClass="com.github.pushpavel.autocp.testcasetool.ToolFactory" id="Testcases"
                     icon="AutoCpIcons.logo13" anchor="bottom"/>
+
+        <executor implementation="com.github.pushpavel.autocp.core.runner.AutoCpExecutor"/>
     </extensions>
     <projectListeners>
         <listener class="com.github.pushpavel.autocp.extend.cmake.CMakeAddExecutable"
@@ -58,14 +67,14 @@
                   topic="com.github.pushpavel.autocp.gather.filegen.FileGenerationListener"/>
         <listener class="com.github.pushpavel.autocp.common.analytics.listeners.ProblemGatherListener"
                   topic="com.github.pushpavel.autocp.gather.filegen.FileGenerationListener"/>
-        <listener class="com.github.pushpavel.autocp.database.listeners.GeneratedSolutionFileAdder"
+        <listener class="com.github.pushpavel.autocp.core.persistance.storables.solutions.GeneratedSolutionAdder"
                   topic="com.github.pushpavel.autocp.gather.filegen.FileGenerationListener"/>
 
         <listener class="com.github.pushpavel.autocp.gather.base.ProblemGatheringPipeline"
-                  topic="com.github.pushpavel.autocp.gather.base.ProblemGatheringListener"/>
+                  topic="com.github.pushpavel.autocp.gather.base.ProblemBatchProcessorListener"/>
         <listener class="com.github.pushpavel.autocp.gather.ProblemGatheringProgressReporting"
-                  topic="com.github.pushpavel.autocp.gather.base.ProblemGatheringListener"/>
-        <listener class="com.github.pushpavel.autocp.database.listeners.GatheredProblemAdder"
-                  topic="com.github.pushpavel.autocp.gather.base.ProblemGatheringListener"/>
+                  topic="com.github.pushpavel.autocp.gather.base.ProblemBatchProcessorListener"/>
+        <listener class="com.github.pushpavel.autocp.core.persistance.storables.problems.GatheredProblemAdder"
+                  topic="com.github.pushpavel.autocp.gather.base.ProblemBatchProcessorListener"/>
     </projectListeners>
 </idea-plugin>
