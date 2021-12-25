@@ -21,18 +21,47 @@ class TestcaseContent(private val model: CollectionListModel<Testcase>) : Border
     private val inputDoc = editorFactory.createDocument("")
     private val outputDoc = editorFactory.createDocument("")
     private val headerLabel = JBLabel("Testcase #")
-
+    private lateinit var body: JBPanel<JBPanel<*>>
     private val headerActions = ActionManager.getInstance().createActionToolbar(
         ActionPlaces.TOOLWINDOW_CONTENT,
         DefaultActionGroup().apply {
             val deleteAction = object :
-                AnAction("Delete Testcase", "Deletes the Testcase in Testcase viewer", AllIcons.General.Remove) {
+                AnAction("Delete Testcase", "Deletes the Testcase in Testcase viewer", AllIcons.Actions.GC) {
                 override fun actionPerformed(e: AnActionEvent) {
                     if (currentIndex != -1)
                         model.remove(currentIndex)
                 }
             }
+
+
+            val expandAction: AnAction?
+            var collapseAction: AnAction? = null
+
+            expandAction = object :
+                AnAction("Expand Testcase", "Expands the Testcase in Testcase viewer", AllIcons.General.Add) {
+                override fun actionPerformed(e: AnActionEvent) {
+                    add(body)
+                    add(collapseAction!!)
+                    remove(this)
+                    updateUI()
+                }
+            }
+
+            collapseAction = object : AnAction(
+                "Collapse Testcase",
+                "Collapses the Testcase in Testcase viewer",
+                AllIcons.General.HideToolWindow
+            ) {
+                override fun actionPerformed(e: AnActionEvent) {
+                    remove(body)
+                    add(expandAction)
+                    remove(this)
+                    updateUI()
+                }
+            }
+
             add(deleteAction)
+            add(collapseAction)
         },
         true
     )
@@ -60,11 +89,6 @@ class TestcaseContent(private val model: CollectionListModel<Testcase>) : Border
             add(headerActions.component, BorderLayout.LINE_END)
         }, BorderLayout.PAGE_START)
 
-        add(JBPanel<JBPanel<*>>(AutoLayout(autoFillMainLines = true, uniformCrossLength = true)).apply {
-            add(inputEditor.component)
-            add(outputEditor.component)
-        })
-
         val docListener = object : DocumentListener {
             override fun documentChanged(event: DocumentEvent) {
                 if (currentIndex != -1) {
@@ -73,6 +97,13 @@ class TestcaseContent(private val model: CollectionListModel<Testcase>) : Border
                 }
             }
         }
+
+        body = JBPanel<JBPanel<*>>(AutoLayout(autoFillMainLines = true, uniformCrossLength = true)).apply {
+            add(inputEditor.component)
+            add(outputEditor.component)
+        }
+
+        add(body)
 
         inputDoc.addDocumentListener(docListener)
         outputDoc.addDocumentListener(docListener)
