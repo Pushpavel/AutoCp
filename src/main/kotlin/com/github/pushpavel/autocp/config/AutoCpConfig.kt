@@ -1,7 +1,7 @@
 package com.github.pushpavel.autocp.config
 
-import com.github.pushpavel.autocp.database.SolutionFiles
-import com.github.pushpavel.autocp.database.autoCp
+import com.github.pushpavel.autocp.core.persistance.storable
+import com.github.pushpavel.autocp.core.persistance.storables.solutions.Solutions
 import com.intellij.execution.Executor
 import com.intellij.execution.configurations.ConfigurationFactory
 import com.intellij.execution.configurations.LocatableConfigurationBase
@@ -21,7 +21,7 @@ class AutoCpConfig(project: Project, factory: ConfigurationFactory, name: String
 
     var solutionFilePath: String = ""
 
-    private val solutionFiles = SolutionFiles.getInstance(project)
+    private val solutionFiles = project.storable<Solutions>()
 
     /**
      * Returns [RunProfileState] that defines the execution of this Run Configuration
@@ -38,20 +38,8 @@ class AutoCpConfig(project: Project, factory: ConfigurationFactory, name: String
     /**
      * Suggests Name for Run configurations created from Context (by right-clicking and run)
      */
-    override fun suggestedName(): String? {
-        if (solutionFilePath.isEmpty())
-            return null
-
-        if (solutionFilePath in solutionFiles) {
-            val id = solutionFiles[solutionFilePath]!!.linkedProblemId
-            if (id != null) {
-                val name = project.autoCp().problems[id.first]?.get(id.second)?.name
-                if (name != null)
-                    return name
-            }
-        }
-
-        return Path(solutionFilePath).nameWithoutExtension
+    override fun suggestedName(): String {
+        return solutionFiles[solutionFilePath]?.displayName ?: Path(solutionFilePath).nameWithoutExtension
     }
 
     override fun writeExternal(element: Element) {

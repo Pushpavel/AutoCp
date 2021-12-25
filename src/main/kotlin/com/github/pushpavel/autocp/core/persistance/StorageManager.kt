@@ -26,8 +26,8 @@ class StorageManager(private val project: Project) {
     private val processors = listOf<StorableProcessor>()
 
     val storables = mapOf<String, Storable>(
-        "solutions" to Solutions(),
-        "testcases" to Testcases()
+        "solutions" to Solutions(project),
+        "testcases" to Testcases(project)
     )
 
     var isLoaded = false

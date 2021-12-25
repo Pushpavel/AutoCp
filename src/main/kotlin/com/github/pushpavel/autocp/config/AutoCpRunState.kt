@@ -13,7 +13,6 @@ import com.intellij.execution.configurations.RunProfileState
 import com.intellij.execution.runners.ProgramRunner
 import com.intellij.execution.testframework.sm.SMTestRunnerConnectionUtil
 import com.intellij.execution.testframework.sm.runner.SMTRunnerConsoleProperties
-import com.intellij.openapi.Disposable
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 
@@ -23,11 +22,11 @@ class AutoCpRunState(val project: Project, private val config: AutoCpConfig) : R
     override fun execute(executor: Executor, runner: ProgramRunner<*>): ExecutionResult {
         // prepare testing process
         val processHandler = ProcessLikeHandler {
-            val parentDisposable = Disposable {}
             val listener = RunToolNotificationBridge(this)
-            project.messageBus.connect(parentDisposable).subscribe(JudgingProcessListener.TOPIC, listener)
+            val conn = project.messageBus.connect()
+            conn.subscribe(JudgingProcessListener.TOPIC, listener)
             project.service<JudgingProcess>().execute(config.solutionFilePath)
-            parentDisposable.doDisposal()
+            conn.doDisposal()
         }
 
         // prepare console
