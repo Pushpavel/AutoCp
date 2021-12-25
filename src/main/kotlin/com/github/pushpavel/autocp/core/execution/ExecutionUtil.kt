@@ -6,6 +6,7 @@ import com.intellij.execution.process.ProcessAdapter
 import com.intellij.execution.process.ProcessEvent
 import com.intellij.execution.process.ProcessOutput
 import com.intellij.openapi.progress.ProgressIndicator
+import com.intellij.openapi.util.Key
 import java.io.File
 import kotlin.system.measureTimeMillis
 
@@ -18,6 +19,7 @@ object ExecutionUtil {
         stdin: String? = null,
         timeoutInMilliseconds: Int? = null,
         progressIndicator: ProgressIndicator? = null,
+        onTextAvailable: ((event: ProcessEvent, outputType: Key<*>) -> Unit)? = null
     ): Output {
         val commandLine = buildGeneralCommandLine(command, workingDir)
         val processHandler = CapturingProcessHandler(commandLine)
@@ -29,9 +31,10 @@ object ExecutionUtil {
                     }
                 }
 
-                // TODO: use onTextAvailable to get output and possibly display to user in realtime
+                override fun onTextAvailable(event: ProcessEvent, outputType: Key<*>) {
+                    onTextAvailable?.invoke(event, outputType)
+                }
             })
-
 
         val processOutput: ProcessOutput
         val executionTime = measureTimeMillis {

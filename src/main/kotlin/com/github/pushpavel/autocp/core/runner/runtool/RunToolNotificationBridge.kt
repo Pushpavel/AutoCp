@@ -92,10 +92,15 @@ class RunToolNotificationBridge(private val processHandler: ProcessHandler) : Ju
         testStdOut(testNode.name, "---- [${testNode.name}] ----\n")
     }
 
-    override fun onTestNodeFinished(result: ResultNode) {
-        testStdOut(result.source.name, result.output.processOutput.stdout)
-        testStdErr(result.source.name, result.output.processOutput.stderr)
+    override fun onTestNodeStdOut(testNode: TestNode, value: String) {
+        testStdOut(testNode.name, value)
+    }
 
+    override fun onTestNodeStdErr(testNode: TestNode, value: String) {
+        testStdErr(testNode.name, value)
+    }
+
+    override fun onTestNodeFinished(result: ResultNode) {
         if (result.verdict != Verdict.CORRECT_ANSWER) {
             var msg = ServiceMessageBuilder.testFailed(result.source.name)
                 .addAttribute("flowId", result.source.name)

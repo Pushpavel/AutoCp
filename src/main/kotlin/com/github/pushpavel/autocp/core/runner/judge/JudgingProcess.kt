@@ -4,13 +4,16 @@ import com.github.pushpavel.autocp.core.execution.BuildSolutionErr
 import com.github.pushpavel.autocp.core.execution.ExecutionUtil
 import com.github.pushpavel.autocp.core.execution.buildSolutionExecutable
 import com.github.pushpavel.autocp.core.execution.prepareSolutionExecutable
-import com.github.pushpavel.autocp.core.persistance.storables.solutions.Solutions
 import com.github.pushpavel.autocp.core.persistance.storable
+import com.github.pushpavel.autocp.core.persistance.storables.solutions.Solutions
 import com.github.pushpavel.autocp.core.persistance.storables.testcases.Testcases
 import com.github.pushpavel.autocp.tester.utils.trimByLines
+import com.intellij.execution.process.ProcessEvent
+import com.intellij.execution.process.ProcessOutputType
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.progress.ProgressIndicator
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.util.Key
 import kotlinx.coroutines.*
 
 /**
@@ -93,7 +96,15 @@ class JudgingProcess(val project: Project) {
         for (test in tests) {
             deferredResults += async {
                 messageBus.syncPublisher(JudgingProcessListener.TOPIC).onTestNodeStarted(test)
-                val result = executeTestNode(test)
+                val result = executeTestNode(test) { event, outputType ->
+                    when (outputType) {
+                        ProcessOutputType.STDOUT -> messageBus.syncPublisher(JudgingProcessListener.TOPIC)
+                            .onTestNodeStdOut(test, event.text)
+                        ProcessOutputType.STDERR -> messageBus.syncPublisher(JudgingProcessListener.TOPIC)
+                            .onTestNodeStdErr(test, event.text)
+                        else -> {}
+                    }
+                }
                 messageBus.syncPublisher(JudgingProcessListener.TOPIC).onTestNodeFinished(result)
                 result
             }
@@ -111,13 +122,17 @@ class JudgingProcess(val project: Project) {
     /**
      * Executes the [TestNode] and returns the result.
      */
-    private suspend fun executeTestNode(data: TestNode): ResultNode {
+    private suspend fun executeTestNode(
+        data: TestNode,
+        onTextAvailable: ((event: ProcessEvent, outputType: Key<*>) -> Unit)? = null
+    ): ResultNode {
         val output = withContext(Dispatchers.IO) {
             ExecutionUtil.execAndGetOutput(
                 data.buildOutput.executeCommand,
                 data.buildOutput.dir,
                 data.input,
-                data.timeLimit
+                data.timeLimit,
+                onTextAvailable = onTextAvailable
             )
         }
         val out = output.processOutput

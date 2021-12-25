@@ -16,6 +16,8 @@ interface JudgingProcessListener {
     fun onTestingFailed(err: JudgeErr)
     fun onTestingFinished()
     fun onTestNodeStarted(testNode: TestNode)
+    fun onTestNodeStdOut(testNode: TestNode, value: String)
+    fun onTestNodeStdErr(testNode: TestNode, value: String)
     fun onTestNodeFinished(result: ResultNode)
     fun onTestGroupStarted(tests: TestGroupNode)
     fun onTestGroupFinished(results: ResultGroupNode)
