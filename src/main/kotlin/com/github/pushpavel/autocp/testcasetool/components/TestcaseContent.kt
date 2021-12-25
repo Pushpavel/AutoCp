@@ -2,9 +2,9 @@ package com.github.pushpavel.autocp.testcasetool.components
 
 import com.github.pushpavel.autocp.common.ui.swing.AutoLayout
 import com.github.pushpavel.autocp.core.persistance.storables.testcases.Testcase
+import com.intellij.icons.AllIcons
 import com.intellij.openapi.Disposable
-import com.intellij.openapi.actionSystem.ActionManager
-import com.intellij.openapi.actionSystem.ActionPlaces
+import com.intellij.openapi.actionSystem.*
 import com.intellij.openapi.application.runWriteAction
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.editor.EditorFactory
@@ -21,11 +21,22 @@ class TestcaseContent(private val model: CollectionListModel<Testcase>) : Border
     private val inputDoc = editorFactory.createDocument("")
     private val outputDoc = editorFactory.createDocument("")
     private val headerLabel = JBLabel("Testcase #")
+
     private val headerActions = ActionManager.getInstance().createActionToolbar(
         ActionPlaces.TOOLWINDOW_CONTENT,
-        testcaseActionGroup() /* TODO: use actual actions */,
+        DefaultActionGroup().apply {
+            val deleteAction = object :
+                AnAction("Delete Testcase", "Deletes the Testcase in Testcase viewer", AllIcons.General.Remove) {
+                override fun actionPerformed(e: AnActionEvent) {
+                    if (currentIndex != -1)
+                        model.remove(currentIndex)
+                }
+            }
+            add(deleteAction)
+        },
         true
     )
+
     private var currentIndex = -1
 
     private var inputEditor = editorFactory.createEditor(inputDoc).apply { customizeEditor() }
