@@ -10,7 +10,6 @@ import com.github.pushpavel.autocp.core.runner.judge.*
 import com.intellij.execution.process.ProcessHandler
 import com.intellij.execution.process.ProcessOutputTypes
 import com.intellij.execution.testframework.sm.ServiceMessageBuilder
-import com.intellij.openapi.util.Key
 import kotlin.io.path.Path
 import kotlin.io.path.name
 
@@ -23,7 +22,6 @@ class RunToolNotificationBridge(private val processHandler: ProcessHandler) : Ju
     override fun onTestingStarted(solution: Solution, testcases: List<Testcase>, buildOutput: BuildOutput) {
         if (buildOutput.buildCommand != null)
             stdout("DONE!\n")
-        stdout("Testing \"${solution.displayName}\" ...\n")
         ServiceMessageBuilder.testsStarted().apply()
     }
 
@@ -78,29 +76,43 @@ class RunToolNotificationBridge(private val processHandler: ProcessHandler) : Ju
     }
 
 
-    override fun onTestNodeStarted(testNode: TestNode) {
-        ServiceMessageBuilder.testStarted(testNode.name).apply()
-    }
-
-    override fun onTestNodeFinished(result: ResultNode) {
-        ServiceMessageBuilder.testStdOut(result.source.name).addAttribute("out", result.output.processOutput.stdout)
-            .apply()
-        ServiceMessageBuilder.testStdErr(result.source.name).addAttribute("out", result.output.processOutput.stderr)
-            .apply()
-        if (result.verdict != Verdict.CORRECT_ANSWER)
-            ServiceMessageBuilder.testFailed(result.source.name).apply() //TODO: add attributes
-
-        ServiceMessageBuilder.testFinished(result.source.name)
-            .addAttribute("duration", result.output.executionTime.toString()).apply()
-
-    }
-
     override fun onTestGroupStarted(tests: TestGroupNode) {
         ServiceMessageBuilder.testSuiteStarted(tests.name).apply()
+        for (testNode in tests.testNodes)
+            ServiceMessageBuilder.testStarted(testNode.name)
+                .addAttribute("flowId", testNode.name)
+                .apply()
     }
 
     override fun onTestGroupFinished(results: ResultGroupNode) {
         ServiceMessageBuilder.testSuiteFinished(results.testGroupNode.name).apply()
+    }
+
+    override fun onTestNodeStarted(testNode: TestNode) {
+        testStdOut(testNode.name, "---- [${testNode.name}] ----\n")
+    }
+
+    override fun onTestNodeFinished(result: ResultNode) {
+        testStdOut(result.source.name, result.output.processOutput.stdout)
+        testStdErr(result.source.name, result.output.processOutput.stderr)
+
+        if (result.verdict != Verdict.CORRECT_ANSWER) {
+            var msg = ServiceMessageBuilder.testFailed(result.source.name)
+                .addAttribute("flowId", result.source.name)
+                .addAttribute("message", R.strings.verdictOneLine(result.verdict))
+            if (result.verdict == Verdict.WRONG_ANSWER) {
+                msg = msg.addAttribute("type", "comparisonFailure")
+                    .addAttribute("expected", result.source.expectedOutput)
+                    .addAttribute("actual", result.output.processOutput.stdout)
+            }
+            msg.apply()
+        } else
+            testStdOut(result.source.name, R.strings.verdictOneLine(result.verdict))
+
+        ServiceMessageBuilder
+            .testFinished(result.source.name)
+            .addAttribute("flowId", result.source.name)
+            .addAttribute("duration", result.output.executionTime.toString()).apply()
     }
 
     override fun onTestingFinished() = stdout("Testing DONE!\n")
@@ -109,6 +121,22 @@ class RunToolNotificationBridge(private val processHandler: ProcessHandler) : Ju
 
     private fun ServiceMessageBuilder.apply() {
         processHandler.notifyTextAvailable(this.toString() + "\n", ProcessOutputTypes.STDOUT)
+    }
+
+    private fun testStdOut(name: String, value: String) {
+        ServiceMessageBuilder
+            .testStdOut(name)
+            .addAttribute("flowId", name)
+            .addAttribute("out", value)
+            .apply()
+    }
+
+    private fun testStdErr(name: String, value: String) {
+        ServiceMessageBuilder
+            .testStdErr(name)
+            .addAttribute("flowId", name)
+            .addAttribute("out", value)
+            .apply()
     }
 
     private fun stdout(value: String) {

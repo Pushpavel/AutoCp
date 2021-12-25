@@ -115,6 +115,14 @@ object AutoCpStrings {
         is Verdict.RuntimeErr -> "[-] FAILURE: RUNTIME ERROR"
         is Verdict.InternalErr -> "[+/-] UNKNOWN: COULD NOT JUDGE"
     }
+
+    // Testing Verdict Strings
+    fun verdictOneLine(verdict: com.github.pushpavel.autocp.core.runner.judge.Verdict) = when (verdict) {
+        com.github.pushpavel.autocp.core.runner.judge.Verdict.CORRECT_ANSWER -> "[+] SUCCESS: CORRECT ANSWER"
+        com.github.pushpavel.autocp.core.runner.judge.Verdict.WRONG_ANSWER -> "[-] FAILURE: WRONG ANSWER"
+        com.github.pushpavel.autocp.core.runner.judge.Verdict.TIME_LIMIT_EXCEEDED -> "[-] FAILURE: TIME LIMIT EXCEEDED"
+        com.github.pushpavel.autocp.core.runner.judge.Verdict.RUNTIME_ERROR -> "[-] FAILURE: RUNTIME ERROR"
+        com.github.pushpavel.autocp.core.runner.judge.Verdict.CANCELLED -> "[+/-] CANCELLED"
+    }
 }
 
-fun String.success(): String = "$this Successful"

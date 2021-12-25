@@ -90,13 +90,14 @@ class JudgingProcess(val project: Project) {
 
         messageBus.syncPublisher(JudgingProcessListener.TOPIC).onTestGroupStarted(data)
 
-        for (test in tests)
+        for (test in tests) {
             deferredResults += async {
                 messageBus.syncPublisher(JudgingProcessListener.TOPIC).onTestNodeStarted(test)
                 val result = executeTestNode(test)
                 messageBus.syncPublisher(JudgingProcessListener.TOPIC).onTestNodeFinished(result)
                 result
             }
+        }
 
         val results = awaitAll(*deferredResults.toTypedArray())
 
