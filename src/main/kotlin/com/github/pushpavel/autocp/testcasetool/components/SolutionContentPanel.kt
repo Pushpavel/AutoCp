@@ -9,7 +9,7 @@ import com.github.pushpavel.autocp.core.persistance.storable
 import com.github.pushpavel.autocp.core.persistance.storables.solutions.Solution
 import com.github.pushpavel.autocp.core.persistance.storables.testcases.Testcase
 import com.github.pushpavel.autocp.core.persistance.storables.testcases.Testcases
-import com.github.pushpavel.autocp.testcasetool.actions.actionGroup
+import com.github.pushpavel.autocp.testcasetool.datalayer.testcaseToolActionGroup
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Disposer
 import com.intellij.openapi.wm.ToolWindow
@@ -42,19 +42,21 @@ class SolutionContentPanel(project: Project, val toolWindow: ToolWindow) : Borde
             }
         }
         row {
-
             button("New Testcase") {
                 // add new testcase to current model
                 testcaseListPanel.model?.let { model ->
                     // get max value of num in testcases + 1
-                    val maxNum = (model.items.map { it.num }.maxOrNull() ?: 0) + 1
+                    val maxNum = (model.items.maxOfOrNull { it.num } ?: 0) + 1
                     model.add(Testcase(maxNum, "input", "output"))
                 }
             }
-            JBLabel().apply {
-                icon = R.icons.clock
-                text = "1000ms"
-            }()
+            cell {
+                JBLabel().apply {
+                    icon = R.icons.clock
+                    text = "1000ms" // TODO: get actual value
+                }()
+            }
+            label("").constraints(growX)
         }
         // Workaround to display small gap
         row {
@@ -80,7 +82,7 @@ class SolutionContentPanel(project: Project, val toolWindow: ToolWindow) : Borde
     }
 
     init {
-        val actionContainer = ActionContainer(actionGroup(), testcaseActionGroup(), testcaseListContainer)
+        val actionContainer = ActionContainer(testcaseToolActionGroup(testcaseListPanel), testcaseListContainer)
         add(actionContainer)
 
         addAncestorListener(object : AncestorListenerAdapter() {

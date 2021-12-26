@@ -14,7 +14,6 @@ import javax.swing.SwingConstants
 
 class ActionContainer(
     primaryActions: ActionGroup,
-    secondaryActions: ActionGroup,
     val content: JComponent
 ) : BorderLayoutPanel() {
 
@@ -31,12 +30,6 @@ class ActionContainer(
         setTargetComponent(content)
     }
 
-    private val secondaryActionBar = ActionManager.getInstance().createActionToolbar(
-        ActionPlaces.TOOLWINDOW_TOOLBAR_BAR,
-        secondaryActions,
-        false
-    ).apply { setTargetComponent(content) }
-
     var bottomAnchored: Boolean by setter(false) {
         primaryActionBar.setOrientation(if (!it) SwingConstants.HORIZONTAL else SwingConstants.VERTICAL)
         primaryActionBar.component.border = JBUI.Borders.customLine(
@@ -46,10 +39,6 @@ class ActionContainer(
 
         remove(primaryActionBar.component)
         add(primaryActionBar.component, if (!it) BorderLayout.PAGE_START else BorderLayout.LINE_START)
-
-        secondaryActionBar.setOrientation(SwingConstants.HORIZONTAL)
-//        innerPanel.remove(secondaryActionBar.component)
-//        innerPanel.add(secondaryActionBar.component, BorderLayout.PAGE_START)
 
         add(innerPanel, BorderLayout.CENTER)
     }
