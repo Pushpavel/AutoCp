@@ -28,8 +28,11 @@ class TestcaseContent(private val model: CollectionListModel<Testcase>) : Border
             val deleteAction = object :
                 AnAction("Delete Testcase", "Deletes the Testcase in Testcase viewer", AllIcons.Actions.GC) {
                 override fun actionPerformed(e: AnActionEvent) {
-                    if (currentIndex != -1)
-                        model.remove(currentIndex)
+                    if (testcaseNum != -1) {
+                        val index = model.items.indexOfFirst { it.num == testcaseNum }
+                        if (index != -1)
+                            model.remove(index)
+                    }
                 }
             }
 
@@ -66,14 +69,14 @@ class TestcaseContent(private val model: CollectionListModel<Testcase>) : Border
         true
     )
 
-    private var currentIndex = -1
+    private var testcaseNum = -1
 
     private var inputEditor = editorFactory.createEditor(inputDoc).apply { customizeEditor() }
     private var outputEditor = editorFactory.createEditor(outputDoc).apply { customizeEditor() }
 
-    fun update(index: Int, testcase: Testcase) {
+    fun update(testcase: Testcase) {
         headerLabel.text = "Testcase #${testcase.num}"
-        currentIndex = index
+        testcaseNum = testcase.num
         runWriteAction {
             if (testcase.input != inputDoc.text)
                 inputDoc.setText(testcase.input)
@@ -91,9 +94,12 @@ class TestcaseContent(private val model: CollectionListModel<Testcase>) : Border
 
         val docListener = object : DocumentListener {
             override fun documentChanged(event: DocumentEvent) {
-                if (currentIndex != -1) {
-                    val testcase = model.getElementAt(currentIndex)
-                    model.setElementAt(testcase.copy(input = inputDoc.text, output = outputDoc.text), currentIndex)
+                if (testcaseNum != -1) {
+                    val index = model.items.indexOfFirst { it.num == testcaseNum }
+                    if (index != -1) {
+                        val testcase = model.getElementAt(index)
+                        model.setElementAt(testcase.copy(input = inputDoc.text, output = outputDoc.text), index)
+                    }
                 }
             }
         }
@@ -124,7 +130,7 @@ class TestcaseContent(private val model: CollectionListModel<Testcase>) : Border
     override fun dispose() {
         editorFactory.releaseEditor(inputEditor)
         editorFactory.releaseEditor(outputEditor)
-        currentIndex = -1
+        testcaseNum = -1
     }
 
 }

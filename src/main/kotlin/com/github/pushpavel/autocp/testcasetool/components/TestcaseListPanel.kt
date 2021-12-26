@@ -32,7 +32,7 @@ class TestcaseListPanel : JBPanel<TestcaseListPanel>(), ListDataListener, Dispos
             model?.let {
                 val content = TestcaseContent(it)
                 add(content, i)
-                content.update(i, it.getElementAt(i))
+                content.update(it.getElementAt(i))
                 Disposer.register(this, content)
             }
         }
@@ -42,7 +42,7 @@ class TestcaseListPanel : JBPanel<TestcaseListPanel>(), ListDataListener, Dispos
 
     override fun intervalRemoved(e: ListDataEvent) {
         for (i in e.index0..e.index1) {
-            val component = getComponent(i) as TestcaseContent
+            val component = getComponent(e.index0) as TestcaseContent
             component.doDisposal()
             remove(component)
         }
@@ -53,7 +53,7 @@ class TestcaseListPanel : JBPanel<TestcaseListPanel>(), ListDataListener, Dispos
         for (i in e.index0..e.index1) {
             val testcase = model?.getElementAt(i) ?: continue
             val component = getComponent(i) as TestcaseContent?
-            component?.update(i, testcase)
+            component?.update(testcase)
         }
     }
 
