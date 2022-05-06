@@ -3,6 +3,8 @@
 
 ## [Unreleased]
 
+- Allows support for 2022 IDE versions.
+
 ## v0.7.3
 
 - Fixes [#51](https://github.com/Pushpavel/AutoCp/issues/49) - ```.autocp``` file not created causing loss of testcases

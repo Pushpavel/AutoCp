@@ -129,6 +129,7 @@ tasks {
     }
 
     runPluginVerifier {
+        ideVersions.set(properties("pluginVerifierIdeVersions").split(',').map(String::trim).filter(String::isNotEmpty))
         val failLevel = FailureLevel.ALL.clone()
         failLevel.remove(FailureLevel.EXPERIMENTAL_API_USAGES)
         failLevel.remove(FailureLevel.DEPRECATED_API_USAGES)
