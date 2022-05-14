@@ -93,10 +93,6 @@ changelog {
 
 tasks {
 
-    buildSearchableOptions {
-        enabled = false
-    }
-
     test {
         useJUnitPlatform()
     }
