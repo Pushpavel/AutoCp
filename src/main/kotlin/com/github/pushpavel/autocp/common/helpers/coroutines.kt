@@ -4,11 +4,12 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.swing.Swing
 
 val defaultExceptionHandler = CoroutineExceptionHandler { _, t -> t.printStackTrace() }
 
 fun mainScope(): CoroutineScope {
-    return CoroutineScope(Dispatchers.Main + SupervisorJob() + defaultExceptionHandler)
+    return CoroutineScope(Dispatchers.Swing + SupervisorJob() + defaultExceptionHandler)
 }
 
 fun defaultScope(): CoroutineScope {
