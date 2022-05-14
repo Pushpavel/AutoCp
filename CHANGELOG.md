@@ -3,6 +3,7 @@
 
 ## [Unreleased]
 
+## v0.7.4
 - Allows support for 2022 IDE versions.
 
 ## v0.7.3
