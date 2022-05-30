@@ -15,6 +15,7 @@ import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiDirectory
 import com.intellij.psi.PsiManager
 import com.intellij.util.IncorrectOperationException
+import java.nio.file.InvalidPathException
 import java.nio.file.Paths
 import kotlin.io.path.Path
 import kotlin.io.path.pathString
@@ -39,12 +40,38 @@ open class DefaultFileGenerator(val project: Project) : FileGenerator {
     open fun getParentPsiDir(rootPsiDir: PsiDirectory, problem: Problem, extension: String) = rootPsiDir
 
     open fun getFileNameWithExtension(parentPsiDir: PsiDirectory, problem: Problem, extension: String): String {
-        val fileName = problem.name
-            .replace(' ', '_')
-            .replace('-', '_')
-            .replace("[^\\p{L}\\p{N}_]".toRegex(), "")
+        val fileName = getValidFileName(problem.name)
 
         return "$fileName.$extension"
+    }
+
+    protected fun getValidFileName(fileName: String): String {
+        val specialCharacterFiltering: (String) -> String = { it.replace("[<>:;,?\"*|/]".toRegex(), "").trim() }
+        val unicodeWhiteListConversion: (String) -> String = { it.replace("[^\\p{L}\\p{N} \\-_]".toRegex(), "").trim() }
+        val defaultConversion: (String) -> String = { it.replace(' ', '_')
+                    .replace('-', '_')
+                    .replace("[^0-9a-zA-Z_]".toRegex(), "")
+        }
+
+        return try {
+            convertFileNameAndValidate(specialCharacterFiltering, fileName)
+        } catch (e: InvalidPathException) {
+            try {
+                convertFileNameAndValidate(unicodeWhiteListConversion, fileName)
+            } catch (e: InvalidPathException) {
+                convertFileNameAndValidate(defaultConversion, fileName)
+            }
+        }
+    }
+    private fun convertFileNameAndValidate(convertFunc: (String) -> String, fileName: String): String {
+        val convertedName = convertFunc.invoke(fileName)
+        validateFileName(convertedName)
+        return convertedName
+    }
+
+    private fun validateFileName(fileName: String): Boolean {
+        Paths.get(fileName)
+        return true
     }
 
     override fun generateFile(extension: String, problem: Problem, batch: BatchJson): VirtualFile? {
