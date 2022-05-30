@@ -24,10 +24,7 @@ class JavaFileGenerator(project: Project) : DefaultFileGenerator(project) {
     override fun isSupported(extension: String) = extension == "java"
 
     override fun getParentPsiDir(rootPsiDir: PsiDirectory, problem: Problem, extension: String): PsiDirectory {
-        val packageName = problem.name
-            .replace(' ', '_')
-            .replace('-', '_')
-            .replace("[^0-9a-zA-Z_]".toRegex(), "")
+        val packageName = getValidFileName(problem.name)
         val parentPath = Paths.get(rootPsiDir.virtualFile.path, packageName)
         val parentDir = VfsUtil.createDirectories(parentPath.pathString)
         return runReadAction { PsiManager.getInstance(project).findDirectory(parentDir)!! }
