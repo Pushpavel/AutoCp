@@ -44,7 +44,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:1.5.2")
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.5.31")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.0")
     implementation("io.ktor:ktor-client-core:$ktor_version")
     implementation("io.ktor:ktor-client-java:$ktor_version")
 
