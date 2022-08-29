@@ -2,6 +2,7 @@
 > All notable changes to this project will be documented in this page.
 
 ## [Unreleased]
+- Supports 2022.2 IDE versions.
 
 ## v0.7.4
 - Allows support for 2022 IDE versions.
