@@ -1,8 +1,6 @@
 package com.github.pushpavel.autocp.config
 
 import com.github.pushpavel.autocp.common.helpers.pathString
-import com.github.pushpavel.autocp.common.ui.dsl.startValidating
-import com.github.pushpavel.autocp.common.ui.dsl.withValidation
 import com.github.pushpavel.autocp.common.ui.helpers.isError
 import com.github.pushpavel.autocp.config.validators.SolutionFilePathErr
 import com.github.pushpavel.autocp.config.validators.getValidSolutionFile
@@ -11,8 +9,9 @@ import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.DialogPanel
 import com.intellij.openapi.ui.ValidationInfo
+import com.intellij.ui.dsl.builder.bindText
+import com.intellij.ui.dsl.builder.panel
 import com.intellij.ui.layout.ValidationInfoBuilder
-import com.intellij.ui.layout.panel
 
 /**
  * UI Editor of [AutoCpConfig] Run Configuration
@@ -26,12 +25,11 @@ class ConfigEditor(val project: Project, val config: AutoCpConfig) : SettingsEdi
 
     override fun createEditor() = panel {
         row("Solution File:") {
-            textFieldWithBrowseButton(::solutionFilePath, "Select Solution File")
-                .withValidation { validateSolutionFilePath(it.text) }
+            textFieldWithBrowseButton("Select Solution File").bindText(::solutionFilePath)
+                .validation { validateSolutionFilePath(it.text) }
         }
     }.also {
         editor = it
-        it.startValidating(this)
     }
 
 

@@ -18,7 +18,10 @@ class RunAutoCpAction : AnAction("Run with AutoCp", "Run the currently focused f
     override fun actionPerformed(e: AnActionEvent) {
         try {
             val configProducer = RunConfigurationProducer.getInstance(AutoCpConfigProducer::class.java)
-            val configurationContext = ConfigurationContext.getFromContext(e.dataContext)
+            val configurationContext = ConfigurationContext.getFromContext(
+                e.dataContext,
+                "context aware place" /*fixme: I don't know what I am doing*/
+            )
             val configurationFromContext = configProducer.createConfigurationFromContext(configurationContext)
 
             val runnerAndConfigurationSettings =
