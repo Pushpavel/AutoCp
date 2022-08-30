@@ -10,7 +10,7 @@ import com.intellij.openapi.components.Service
 import com.intellij.openapi.extensions.PluginId
 import com.intellij.openapi.util.SystemInfo
 import io.ktor.client.*
-import io.ktor.client.features.observer.*
+import io.ktor.client.plugins.observer.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
@@ -25,15 +25,15 @@ class GoogleAnalytics {
     private val httpClient = HttpClient {
         expectSuccess = false
         ResponseObserver { response ->
-            println("HTTP status: ${response.status.value}\n${response.readText()}")
+            println("HTTP status: ${response.status.value}\n${response.bodyAsText()}")
         }
     }
 
     fun sendEvent(event: Event) {
         scope.launch {
-            httpClient.post<String>("${R.keys.analyticsEndPoint}?measurement_id=${R.keys.analyticsMeasurementId}&api_secret=${R.keys.analyticsApiSecret}") {
+            httpClient.post("${R.keys.analyticsEndPoint}?measurement_id=${R.keys.analyticsMeasurementId}&api_secret=${R.keys.analyticsApiSecret}") {
                 contentType(ContentType.Application.Json)
-                body = buildJsonObject {
+                setBody(buildJsonObject {
                     put("client_id", PropertiesComponent.getInstance().analyticsClientId)
                     putJsonObject("user_properties") {
                         putJsonObject("os") {
@@ -53,7 +53,7 @@ class GoogleAnalytics {
                     putJsonArray("events") {
                         addJsonObject { event.buildJsonObj(this) }
                     }
-                }.toString().also { println(it) }.encodeToByteArray()
+                }.toString().also { println(it) }.encodeToByteArray())
             }
         }
     }
