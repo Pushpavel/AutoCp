@@ -2,9 +2,12 @@
 > All notable changes to this project will be documented in this page.
 
 ## [Unreleased]
+
 - Supports 2022.2 IDE versions.
+- [#87](https://github.com/Pushpavel/AutoCp/pull/87) - filename support non-ascii letters
 
 ## v0.7.4
+
 - Allows support for 2022 IDE versions.
 
 ## v0.7.3
