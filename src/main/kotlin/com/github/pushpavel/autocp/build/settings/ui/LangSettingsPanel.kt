@@ -10,8 +10,9 @@ import com.intellij.ui.OnePixelSplitter
 import com.intellij.ui.SingleSelectionModel
 import com.intellij.ui.ToolbarDecorator
 import com.intellij.ui.components.JBList
-import com.intellij.ui.layout.LCFlags
-import com.intellij.ui.layout.panel
+import com.intellij.ui.dsl.builder.bindText
+import com.intellij.ui.dsl.builder.columns
+import com.intellij.ui.dsl.builder.panel
 import javax.swing.BorderFactory
 
 class LangSettingsPanel : OnePixelSplitter(false, 0.3F), DslCallbacks {
@@ -70,9 +71,9 @@ class LangSettingsPanel : OnePixelSplitter(false, 0.3F), DslCallbacks {
                 init()
             }
 
-            override fun createCenterPanel() = panel(LCFlags.fill) {
+            override fun createCenterPanel() = panel {
                 row("File Extension") {
-                    textField(::extension, 2).withValidationOnInput {
+                    textField().bindText(::extension).columns(2).validationOnInput {
                         run { if (it.text.isBlank()) error("Should not be empty") else null }.also {
                             isOKActionEnabled = it == null
                         }
@@ -87,7 +88,7 @@ class LangSettingsPanel : OnePixelSplitter(false, 0.3F), DslCallbacks {
                 sideList.selectedIndex = index
             else {
                 extension = extension.trim().replace(".", "")
-                langListModel.add(Lang(extension, null, "",  false))
+                langListModel.add(Lang(extension, null, "", false))
                 sideList.selectedIndex = langListModel.items.size - 1
             }
         }

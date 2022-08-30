@@ -6,16 +6,13 @@ import com.github.pushpavel.autocp.common.helpers.mainScope
 import com.github.pushpavel.autocp.common.res.R
 import com.github.pushpavel.autocp.common.ui.swing.editableList.EditableListView
 import com.github.pushpavel.autocp.database.SolutionFiles
-import com.github.pushpavel.autocp.database.autoCp
 import com.github.pushpavel.autocp.database.models.Testcase
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Disposer
 import com.intellij.ui.CollectionListModel
+import com.intellij.ui.dsl.builder.panel
 import com.intellij.ui.layout.ComponentPredicate
-import com.intellij.ui.layout.LCFlags
-import com.intellij.ui.layout.applyToComponent
-import com.intellij.ui.layout.panel
 import com.intellij.util.ui.JBUI
 import com.intellij.util.ui.components.BorderLayoutPanel
 import kotlinx.coroutines.cancel
@@ -55,7 +52,7 @@ class TestcaseListPanel(project: Project, private val pathString: String) : Disp
         )
 
         component = BorderLayoutPanel().apply {
-            add(panel(LCFlags.fill) {
+            add(panel {
                 row {
                     label("Constraints:")
                     label("").applyToComponent {
@@ -66,7 +63,7 @@ class TestcaseListPanel(project: Project, private val pathString: String) : Disp
                             }
                         }
                     }
-                    placeholder().constraints(pushX)
+                    placeholder()
 
                     button("Reset Sample Testcases") {
                         val file = solutionFiles[pathString]

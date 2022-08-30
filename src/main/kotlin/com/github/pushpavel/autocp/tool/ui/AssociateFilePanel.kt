@@ -2,44 +2,36 @@ package com.github.pushpavel.autocp.tool.ui
 
 import com.intellij.openapi.fileTypes.FileTypeManager
 import com.intellij.openapi.ui.DialogPanel
-import com.intellij.ui.layout.LCFlags
-import com.intellij.ui.layout.applyToComponent
-import com.intellij.ui.layout.panel
 import com.intellij.util.ui.components.BorderLayoutPanel
 import com.github.pushpavel.autocp.common.ui.layouts.html
 import com.github.pushpavel.autocp.common.ui.layouts.tag
+import com.intellij.ui.dsl.builder.panel
+import com.intellij.ui.dsl.gridLayout.HorizontalAlign
+import com.intellij.ui.dsl.gridLayout.VerticalAlign
 import java.awt.BorderLayout
 
 class AssociateFilePanel(fileName: String, val enableCallback: () -> Unit) {
 
     private val header: DialogPanel = panel {
-        row {
-            placeholder().constraints(growX, pushX)
-            cell {
+        indent {
+            row {
                 label("").applyToComponent {
                     icon = FileTypeManager.getInstance()
                         .getFileTypeByFileName(fileName).icon
                 }
-                label(html { tag("h2", fileName) }).component
+                label(html { tag("h2", fileName) })
             }
-            placeholder().constraints(growX, pushX)
         }
     }
 
     val component = BorderLayoutPanel().apply {
-        add(panel(LCFlags.fill) {
-            row { placeholder().constraints(growY, pushY) }
+        add(panel {
             row {
-                placeholder().constraints(growX, pushX)
-                header()
-                placeholder().constraints(growX, pushX)
+                cell(header).horizontalAlign(HorizontalAlign.CENTER).verticalAlign(VerticalAlign.CENTER)
             }
             row {
-                placeholder().constraints(growX, pushX)
-                button("Enable") { enableCallback() }
-                placeholder().constraints(growX, pushX)
+                button("Enable") { enableCallback() }.horizontalAlign(HorizontalAlign.CENTER).verticalAlign(VerticalAlign.CENTER)
             }
-            row { placeholder().constraints(growY, pushY) }
         }, BorderLayout.CENTER)
     }
 }

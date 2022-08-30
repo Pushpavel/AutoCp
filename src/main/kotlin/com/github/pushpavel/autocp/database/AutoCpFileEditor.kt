@@ -7,8 +7,7 @@ import com.intellij.openapi.fileEditor.FileEditorProvider
 import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
-import com.intellij.ui.layout.applyToComponent
-import com.intellij.ui.layout.panel
+import com.intellij.ui.dsl.builder.panel
 import javax.swing.JComponent
 
 class AutoCpFileEditorProvider : FileEditorProvider, DumbAware {
@@ -19,9 +18,7 @@ class AutoCpFileEditorProvider : FileEditorProvider, DumbAware {
     override fun createEditor(project: Project, file: VirtualFile): FileEditor {
         return object : FileEditorBase() {
             override fun getComponent() = panel {
-                blockRow { }
-                row {
-                    subRowIndent = 1
+                indent {
                     row {
                         label("AutoCp Storage File").applyToComponent {
                             font = font.deriveFont(32F)
@@ -32,9 +29,8 @@ class AutoCpFileEditorProvider : FileEditorProvider, DumbAware {
                     }
                     row {
                         label(
-                            "You should not edit this file. If you did AutoCp plugin would exhibit undesired behaviour",
-                            bold = true
-                        )
+                            "You should not edit this file. If you did AutoCp plugin would exhibit undesired behaviour"
+                        ).bold()
                     }
                 }
             }

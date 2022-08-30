@@ -5,7 +5,7 @@ import com.intellij.openapi.util.Disposer
 import com.intellij.ui.CollectionListModel
 import com.intellij.ui.components.JBPanelWithEmptyText
 import com.intellij.ui.components.JBScrollPane
-import com.intellij.ui.layout.panel
+import com.intellij.ui.dsl.builder.panel
 import com.intellij.util.ui.JBUI
 import java.awt.Component
 import java.awt.GridBagConstraints
@@ -43,7 +43,6 @@ class EditableListView<T>(
 
         // Create Button
         listPanel.add(panel {
-            blockRow { }
             row {
                 button(createButtonText) {
                     val item = itemFactory()

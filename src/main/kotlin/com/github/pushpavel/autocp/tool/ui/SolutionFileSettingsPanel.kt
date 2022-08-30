@@ -2,7 +2,6 @@ package com.github.pushpavel.autocp.tool.ui
 
 import com.github.pushpavel.autocp.common.helpers.mainScope
 import com.github.pushpavel.autocp.common.res.R
-import com.github.pushpavel.autocp.common.ui.dsl.intTextFieldCompat
 import com.github.pushpavel.autocp.common.ui.helpers.allowOnlyPositiveIntegers
 import com.github.pushpavel.autocp.common.ui.helpers.onChange
 import com.github.pushpavel.autocp.common.ui.layouts.html
@@ -13,9 +12,9 @@ import com.intellij.openapi.Disposable
 import com.intellij.openapi.fileTypes.FileTypeManager
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.DialogPanel
-import com.intellij.ui.layout.applyToComponent
-import com.intellij.ui.layout.panel
-import com.intellij.ui.layout.toBinding
+import com.intellij.ui.dsl.builder.BottomGap
+import com.intellij.ui.dsl.builder.bindIntText
+import com.intellij.ui.dsl.builder.panel
 import com.intellij.util.ui.components.BorderLayoutPanel
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.collect
@@ -37,9 +36,8 @@ class SolutionFileSettingsPanel(project: Project, pathString: String, refreshCal
     private val scope = mainScope()
 
     private val header: DialogPanel = panel {
-        row {
-            placeholder().constraints(growX, pushX)
-            cell {
+        indent {
+            row {
                 val icon = label("").component
                 val title = label(html { tag("h2", "...") }).component
 
@@ -54,25 +52,28 @@ class SolutionFileSettingsPanel(project: Project, pathString: String, refreshCal
                     }
                 }
             }
-            placeholder().constraints(growX, pushX)
         }
     }
 
 
     private val body: DialogPanel = panel {
-        row {
+        indent {
+
             row { label("Constraints:") }
             row {
-                cell {
-                    label("").applyToComponent { icon = R.icons.clock }
-                    intTextFieldCompat((::timeLimit).toBinding()).applyToComponent {
-                        allowOnlyPositiveIntegers()
-                        document.onChange { apply() }
+                panel {
+                    row {
+
+                        label("").applyToComponent { icon = R.icons.clock }
+
+                        intTextField().bindIntText(::timeLimit).applyToComponent {
+                            allowOnlyPositiveIntegers()
+                            document.onChange { apply() }
+                        }
+                        label("ms")
                     }
-                    label("ms")
                 }
-                placeholder().constraints(growX, pushX)
-            }.largeGapAfter()
+            }.bottomGap(BottomGap.MEDIUM)
             row {
                 button("Remove All Testcases") {
                     solutionFile?.pathString?.let { it1 -> solutionFiles.remove(it1) }

@@ -10,8 +10,8 @@ import com.intellij.openapi.editor.EditorFactory
 import com.intellij.openapi.editor.ex.EditorEx
 import com.intellij.openapi.ui.DialogPanel
 import com.intellij.ui.CollectionListModel
-import com.intellij.ui.layout.CCFlags
-import com.intellij.ui.layout.panel
+import com.intellij.ui.dsl.builder.panel
+import com.intellij.ui.dsl.gridLayout.HorizontalAlign
 import javax.swing.BorderFactory
 
 class LangPanel(val model: CollectionListModel<Lang>) : DslCallbacks, Disposable {
@@ -28,17 +28,17 @@ class LangPanel(val model: CollectionListModel<Lang>) : DslCallbacks, Disposable
 
     val component: DialogPanel = panel {
         row("Build Command") {
-            buildCommandEditor
-                .component(CCFlags.growX)
+            cell(buildCommandEditor.component).horizontalAlign(HorizontalAlign.FILL)
                 .comment(R.strings.buildCommandComment)
         }
 
         row("Execute Command") {
-            executeCommandEditor
-                .component(CCFlags.growX)
+            cell(executeCommandEditor.component).horizontalAlign(HorizontalAlign.FILL)
                 .comment(R.strings.executeCommandComment)
         }
-        commentRow(R.strings.commandTemplateDesc)
+        row {
+            comment(R.strings.commandTemplateDesc)
+        }
     }.withBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4))
 
 
