@@ -89,9 +89,8 @@ intellij {
 // Read more: https://github.com/JetBrains/gradle-changelog-plugin
 changelog {
     version.set(properties("pluginVersion"))
-    header.set(version)
+    header.set(provider { version.get() })
     groups.set(emptyList())
-    path.set("CHANGELOG.md")
     headerParserRegex.set(Regex("""v[0-9]+\.[0-9]+\.[0-9]+(-eap\.[1-9]+)?"""))
 }
 

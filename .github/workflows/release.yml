@@ -61,20 +61,21 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: gh release upload ${{ github.event.release.tag_name }} ./build/distributions/*
 
+      # fixme: disabled changelog update as changelog gradle plugin removes random versions in the process
       # Push changelog update
-      - name: Push changelog update
-        if: ${{ steps.properties.outputs.changelog != ''}}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          VERSION="${{ github.event.release.tag_name }}"
-
-          git config user.email "action@github.com"
-          git config user.name "GitHub Action"
-
-          git fetch
-          git checkout main
-          git add CHANGELOG.md
-
-          git commit -am "📝: patch CHANGELOG.md for $VERSION [skip ci]"
-          git push origin main
+#      - name: Push changelog update
+#        if: ${{ steps.properties.outputs.changelog != ''}}
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#        run: |
+#          VERSION="${{ github.event.release.tag_name }}"
+#
+#          git config user.email "action@github.com"
+#          git config user.name "GitHub Action"
+#
+#          git fetch
+#          git checkout main
+#          git add CHANGELOG.md
+#
+#          git commit -am "📝: patch CHANGELOG.md for $VERSION [skip ci]"
+#          git push origin main
