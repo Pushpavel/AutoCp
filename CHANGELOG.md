@@ -2,7 +2,8 @@
 > All notable changes to this project will be documented in this page.
 
 ## [Unreleased]
-- Fix file name issues with CMakeLists.txt
+- Fix file name issues with CMakeLists.txt file.
+- Fix crashes in settings.
 
 ## v0.7.5
 

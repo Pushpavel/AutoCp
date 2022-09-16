@@ -9,11 +9,10 @@ import com.intellij.openapi.editor.event.DocumentListener
 import com.intellij.openapi.ui.DialogPanel
 import com.intellij.ui.CollectionListModel
 import com.intellij.ui.components.JBLabel
-import com.intellij.ui.layout.CCFlags
-import com.intellij.ui.layout.LCFlags
-import com.intellij.ui.layout.panel
 import com.github.pushpavel.autocp.database.models.Testcase
 import com.github.pushpavel.autocp.common.ui.swing.editableList.ListItemView
+import com.intellij.ui.dsl.builder.panel
+import com.intellij.ui.dsl.gridLayout.HorizontalAlign
 import javax.swing.BorderFactory
 
 class TestcasePanel(val model: CollectionListModel<Testcase>) : ListItemView<Testcase> {
@@ -28,12 +27,11 @@ class TestcasePanel(val model: CollectionListModel<Testcase>) : ListItemView<Tes
     private val inputEditor = editorFactory.createEditor(inputDoc).apply { customizeEditor() }
     private val outputEditor = editorFactory.createEditor(outputDoc).apply { customizeEditor() }
 
-    override val component: DialogPanel = panel(LCFlags.fillX) {
+    override val component: DialogPanel = panel {
         row {
             inputEditor.headerComponent = testcaseHeader(model, titleLabel, ::testcaseIndex)
             outputEditor.headerComponent = inputEditor.component
-            outputEditor.component(CCFlags.growX)
-
+            cell(outputEditor.component).horizontalAlign(HorizontalAlign.FILL)
         }
     }.withBorder(BorderFactory.createEmptyBorder(0, 4, 0, 4))
 

@@ -42,6 +42,7 @@ fun testcaseHeader(
             .getInstance()
             .createActionToolbar(ActionPlaces.TOOLWINDOW_CONTENT, actionGroup, true).apply {
                 layoutPolicy = ActionToolbar.NOWRAP_LAYOUT_POLICY
+                targetComponent = jbPanel
             }
             .component,
         BorderLayout.LINE_END

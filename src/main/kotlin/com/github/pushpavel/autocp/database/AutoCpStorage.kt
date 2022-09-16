@@ -27,10 +27,12 @@ import kotlin.io.path.pathString
 class AutoCpStorage(val project: Project) {
 
     val database by lazy {
-        val converter = AutoCpFileConversion(project)
-        converter.convert()
+        if(!project.isDefault){
+            val converter = AutoCpFileConversion(project)
+            converter.convert()
+        }
 
-        val path = Paths.get(project.basePath!!, ".autocp")
+        val path = Paths.get(if (project.isDefault)  "notexists" else project.basePath!!, ".autocp")
 
         val db = if (path.exists()) {
             runReadAction { Json.decodeFromString(path.readText()) }
@@ -55,7 +57,8 @@ class AutoCpStorageSaver : FileDocumentManagerListener {
 
     override fun beforeAllDocumentsSaving() {
         ProjectManager.getInstanceIfCreated()?.openProjects?.forEach { project ->
-
+            if(project.isDefault)
+                return
             val path = Paths.get(Path(project.basePath!!).pathString, ".autocp")
             var virtualFile = VfsUtil.findFile(path, true)
             val db = project.service<AutoCpStorage>().serializableDatabase
