@@ -2,6 +2,9 @@
 > All notable changes to this project will be documented in this page.
 
 ## [Unreleased]
+- "Run with AutoCp" as a context menu option.
+
+## v0.7.6
 - Fix file name issues with CMakeLists.txt file.
 - Fix crashes in settings.
 
