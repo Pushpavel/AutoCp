@@ -46,12 +46,6 @@ open class DefaultFileGenerator(val project: Project) : FileGenerator {
     }
 
     protected fun getValidFileName(fileName: String): String {
-        val specialCharacterFiltering: (String) -> String = { it.replace("[<>:;,?\"*|/]".toRegex(), "").trim() }
-        val unicodeWhiteListConversion: (String) -> String = { it.replace("[^\\p{L}\\p{N} \\-_]".toRegex(), "").trim() }
-        val defaultConversion: (String) -> String = { it.replace(' ', '_')
-                    .replace('-', '_')
-                    .replace("[^0-9a-zA-Z_]".toRegex(), "")
-        }
 
         return try {
             convertFileNameAndValidate(specialCharacterFiltering, fileName)
@@ -105,5 +99,14 @@ open class DefaultFileGenerator(val project: Project) : FileGenerator {
         )
 
         return psiFile?.virtualFile
+    }
+
+    companion object{
+        val specialCharacterFiltering: (String) -> String = { it.replace("[<>:;,?\"*|/]".toRegex(), "").trim() }
+        val unicodeWhiteListConversion: (String) -> String = { it.replace("[^\\p{L}\\p{N} \\-_]".toRegex(), "").trim() }
+        val defaultConversion: (String) -> String = { it.replace(' ', '_')
+            .replace('-', '_')
+            .replace("[^0-9a-zA-Z_]".toRegex(), "")
+        }
     }
 }
