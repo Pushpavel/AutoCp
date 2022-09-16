@@ -27,9 +27,10 @@ class TwoStepProcessFactory(private val workingDir: File, private val commandLis
             lang: Lang
         ): Pair<TwoStepProcessFactory, ProcessRunner.CapturedResults?> {
             val tempDir = withContext(Dispatchers.IO) {
-                @Suppress("BlockingMethodInNonBlockingContext")
                 Files.createTempDirectory("AutoCp")
             }.toFile()
+
+            tempDir.mkdirs()
 
             val executeCommand = lang.constructExecuteCommand(project, solutionFile.pathString, tempDir.path.pathString)
             val executeCommandList = splitCommandString(executeCommand)
