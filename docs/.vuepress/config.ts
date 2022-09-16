@@ -17,7 +17,7 @@ export default defineUserConfig<DefaultThemeOptions>({
         logo: "/assets/logo.svg",
         navbar: [{text: "Guide", link: "/guide/"}, {
             text: "Changelog",
-            link: "https://github.com/Pushpavel/AutoCp/blob/dev/CHANGELOG.md"
+            link: "https://github.com/Pushpavel/AutoCp/blob/main/CHANGELOG.md"
         }],
         repoLink: "https://github.com/Pushpavel/AutoCp",
         marketplaceLink: "https://plugins.jetbrains.com/plugin/17061-autocp",

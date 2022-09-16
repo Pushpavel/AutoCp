@@ -10,7 +10,7 @@ export const sidebarConfig: SidebarConfig = {
                 '/guide/usage.md',
                 '/guide/file-templates.md',
                 '/guide/commands.md',
-                {text: 'Contributing', link: "https://github.com/Pushpavel/AutoCp/blob/dev/CONTRIBUTING.md"}
+                {text: 'Contributing', link: "https://github.com/Pushpavel/AutoCp/blob/main/CONTRIBUTING.md"}
             ]
         }
     ]

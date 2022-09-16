@@ -3,12 +3,12 @@
   <iframe height="64" width="288" style="border: none" srcdoc='
     <html>
     <head>
-        <script src="//plugins.jetbrains.com/assets/scripts/mp-widget.js"></script>
-        <script>
-          MarketplaceWidget.setupMarketplaceWidget("install", 17061, "#installBtn");
-        </script>
     </head>
     <body>
+        <script src="//plugins.jetbrains.com/assets/scripts/mp-widget.js"></script>
+        <script>
+          setTimeout(()=> MarketplaceWidget.setupMarketplaceWidget("install", 17061, "#installBtn"),500);
+        </script>
         <div id="installBtn" style="display:flex;justify-content:center;"></div>
     </body>
     </html>

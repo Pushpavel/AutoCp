@@ -21,13 +21,24 @@ tab > ```AutoCp Templates```
 A list of predefined variables provided by autocp is available below. When you use these variables in templates, they
 expand into corresponding values later in the editor.
 
-| Variable                    | Description                                                                   |
-| --------------------------- | ----------------------------------------------------------------------------- |
-| ```${PROBLEM_GROUP_NAME}``` | Contest or category name of the problem for which this file template is used  |
-| ```${PROBLEM_NAME}```       | Name of the Problem for which this file template is used                      |
-| ```${ONLINE_JUDGE_NAME}```  | Name of your online judge for (for example, CodeChef, Codeforces, and so on). |
-|                             |[...more IDE defined variables](https://www.jetbrains.com/help/clion/settings-file-and-code-templates.html#:~:text=%24%7BCALL_SUPER%7D,Current%20year)|
+| Variable                    | Description                                                                                                                                            |
+|-----------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ```${PROBLEM_GROUP_NAME}``` | Contest or category name of the problem for which this file template is used                                                                           |
+| ```${PROBLEM_NAME}```       | Name of the Problem for which this file template is used                                                                                               |
+| ```${ONLINE_JUDGE_NAME}```  | Name of your online judge for (for example, CodeChef, Codeforces, and so on).                                                                          |
+|                             | [...more IDE defined variables](https://www.jetbrains.com/help/clion/settings-file-and-code-templates.html#:~:text=%24%7BCALL_SUPER%7D,Current%20year) |
 
 __C++ file template__
 
-@[code velocity](../../src/main/resources/fileTemplates/j2ee/CP_TEMPLATE_CPP.cpp.ft)
+```velocity
+//  ${PROBLEM_NAME}
+
+#[[#include]]#<bits/stdc++.h>
+
+using namespace std;
+
+int main() {
+    $END
+    return 0;
+}
+```
