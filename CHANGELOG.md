@@ -3,6 +3,7 @@
 
 ## [Unreleased]
 - "Run with AutoCp" as a context menu option.
+- Fixes [#104](https://github.com/Pushpavel/AutoCp/issues/104) - name conflicts in java.
 
 ## v0.7.6
 - Fix file name issues with CMakeLists.txt file.
