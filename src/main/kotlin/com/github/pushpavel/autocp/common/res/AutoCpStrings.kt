@@ -55,15 +55,14 @@ object AutoCpStrings {
     const val addToCMakeMsg = "Add generated solution files to CMakeLists.txt"
 
     // Build Configuration Dialog strings
-    const val commandTemplateDesc = "<html>" +
+    const val commandTemplateDesc = "" +
             "The executable in these commands are run in an isolated temporary directory. But not the command itself.<br>" +
             "So, relative path to executable won't work and should use <b>\$dir</b> to build absolute path.<br>" +
             "Make sure you wrap this absolute path with double quotes.<br><br>" +
             "Macros:<br>" +
             "<b>${R.keys.inputPathMacro}</b> : absolute path to a solution file with quotes.<br>" +
             "<b>${R.keys.dirUnquotedPathMacro}</b> : absolute path to the isolated temp directory without quotes.<br>" +
-            "<b>${R.keys.dirPathMacro}</b> : \"<b>\$dir</b>\"" +
-            "</html>"
+            "<b>${R.keys.dirPathMacro}</b> : \"<b>\$dir</b>\""
 
     const val buildCommandComment = "Run once before testing begins, usually should compile or generate an executable"
     const val executeCommandComment = "" +
