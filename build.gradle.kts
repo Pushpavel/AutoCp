@@ -19,13 +19,13 @@ plugins {
     // Java support
     id("java")
     // Kotlin support
-    id("org.jetbrains.kotlin.jvm") version "1.7.10"
+    id("org.jetbrains.kotlin.jvm") version "1.7.20"
     // Gradle IntelliJ Plugin
-    id("org.jetbrains.intellij") version "1.7.0"
+    id("org.jetbrains.intellij") version "1.9.0"
     // Gradle Changelog Plugin
     id("org.jetbrains.changelog") version "1.3.1"
 
-    kotlin("plugin.serialization") version "1.7.10"
+    kotlin("plugin.serialization") version "1.7.20"
 }
 
 group = properties("pluginGroup")
@@ -40,30 +40,23 @@ repositories {
 // Set the JVM language level used to compile sources and generate files - Java 11 is required since 2020.3
 kotlin {
     jvmToolchain {
-        languageVersion.set(JavaLanguageVersion.of(11))
+        languageVersion.set(JavaLanguageVersion.of(17))
     }
 }
 
 dependencies {
-    val ktor_version = "2.1.0"
+    val ktor_version = "2.1.2"
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:1.6.4")
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.7.10")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
     implementation("io.ktor:ktor-client-core:$ktor_version")
     implementation("io.ktor:ktor-client-java:$ktor_version")
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.0")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.0")
-    testImplementation("io.mockk:mockk:1.12.7")
-}
-
-configurations {
-    all {
-        // Allows using project dependencies instead of IDE dependencies during compilation and test running
-        resolutionStrategy.sortArtifacts(ResolutionStrategy.SortOrder.DEPENDENCY_FIRST)
-    }
+    testImplementation("io.mockk:mockk:1.13.2")
 }
 
 buildscript {
