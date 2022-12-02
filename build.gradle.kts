@@ -21,7 +21,7 @@ plugins {
     // Kotlin support
     id("org.jetbrains.kotlin.jvm") version "1.7.20"
     // Gradle IntelliJ Plugin
-    id("org.jetbrains.intellij") version "1.9.0"
+    id("org.jetbrains.intellij") version "1.10.0"
     // Gradle Changelog Plugin
     id("org.jetbrains.changelog") version "1.3.1"
 
@@ -39,9 +39,7 @@ repositories {
 
 // Set the JVM language level used to compile sources and generate files - Java 11 is required since 2020.3
 kotlin {
-    jvmToolchain {
-        languageVersion.set(JavaLanguageVersion.of(17))
-    }
+    jvmToolchain(17)
 }
 
 dependencies {
@@ -135,31 +133,5 @@ tasks {
             channels.set(listOf("eap"))
         else
             channels.set(listOf("default", "eap"))
-    }
-
-    runIde {
-        // workaround for https://stackoverflow.com/questions/60027717/intellij-idea-vm-options
-        jvmArgs(
-            "-XX:+UnlockDiagnosticVMOptions",
-            "--illegal-access=deny",
-            "--add-opens=java.desktop/sun.awt=ALL-UNNAMED",
-            "--add-opens=java.desktop/java.awt=ALL-UNNAMED",
-            "--add-opens=java.base/java.lang=ALL-UNNAMED",
-            "--add-opens=java.desktop/javax.swing=ALL-UNNAMED",
-            "--add-opens=java.desktop/javax.swing.plaf.basic=ALL-UNNAMED",
-            "--add-opens=java.desktop/sun.font=ALL-UNNAMED",
-            "--add-opens=java.desktop/sun.swing=ALL-UNNAMED",
-
-            "--add-opens=java.desktop/java.awt.event=ALL-UNNAMED",
-            "--add-opens=java.base/java.util=ALL-UNNAMED",
-            "--add-opens=java.desktop/sun.awt.windows=ALL-UNNAMED",
-            "--add-opens=java.desktop/javax.swing.text.html=ALL-UNNAMED",
-            "--add-opens=java.base/sun.nio.ch=ALL-UNNAMED",
-
-            "--add-exports",
-            "java.base/jdk.internal.vm=ALL-UNNAMED",
-            "--add-exports",
-            "java.desktop/sun.java2d=ALL-UNNAMED"
-        )
     }
 }

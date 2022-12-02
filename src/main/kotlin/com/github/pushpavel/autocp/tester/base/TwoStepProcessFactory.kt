@@ -41,7 +41,8 @@ class TwoStepProcessFactory(private val workingDir: File, private val commandLis
                 val buildCommandList = splitCommandString(buildCommand)
 
                 try {
-                    val buildProcess = GeneralCommandLine(buildCommandList).withWorkDirectory(tempDir).createProcess()
+                    val cmd = GeneralCommandLine(buildCommandList)
+                    val buildProcess = cmd.withWorkDirectory(tempDir).createProcess()
                     result = ProcessRunner.run(buildProcess)
                 } catch (e: Exception) {
                     throw BuildErr(e, buildCommand)

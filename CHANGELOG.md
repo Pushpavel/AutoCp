@@ -3,6 +3,9 @@
 
 ## [Unreleased]
 
+## v0.7.8
+
+- Supports 2023 IDE versions
 - Fixes [#105](https://github.com/Pushpavel/AutoCp/issues/105) - IDE Error when opening settings
 
 ## v0.7.7
