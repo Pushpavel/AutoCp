@@ -3,6 +3,10 @@
 
 ## [Unreleased]
 
+## v0.7.9
+
+- Fixes [#109](https://github.com/Pushpavel/AutoCp/issues/109) - Rust filename unsupported errors
+
 ## v0.7.8
 
 - Supports 2022.3 IDE versions
