@@ -7,9 +7,7 @@ import com.intellij.execution.actions.RunConfigurationProducer
 import com.intellij.execution.executors.DefaultRunExecutor
 import com.intellij.execution.impl.ExecutionManagerImpl
 import com.intellij.execution.runners.ExecutionUtil
-import com.intellij.openapi.actionSystem.AnAction
-import com.intellij.openapi.actionSystem.AnActionEvent
-import com.intellij.openapi.actionSystem.CommonDataKeys
+import com.intellij.openapi.actionSystem.*
 import com.intellij.openapi.project.DumbAware
 
 
@@ -42,5 +40,7 @@ class RunAutoCpAction : AnAction("Run with AutoCp", "Run the currently focused f
         e.presentation.isEnabled = e.project != null && e.getData(CommonDataKeys.VIRTUAL_FILE) != null
     }
 
-
+    override fun getActionUpdateThread(): ActionUpdateThread {
+        return ActionUpdateThread.BGT
+    }
 }
