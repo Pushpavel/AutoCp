@@ -39,8 +39,4 @@ class RunAutoCpAction : AnAction("Run with AutoCp", "Run the currently focused f
     override fun update(e: AnActionEvent) {
         e.presentation.isEnabled = e.project != null && e.getData(CommonDataKeys.VIRTUAL_FILE) != null
     }
-
-    override fun getActionUpdateThread(): ActionUpdateThread {
-        return ActionUpdateThread.BGT
-    }
 }
