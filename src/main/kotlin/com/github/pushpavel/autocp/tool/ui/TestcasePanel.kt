@@ -11,8 +11,8 @@ import com.intellij.ui.CollectionListModel
 import com.intellij.ui.components.JBLabel
 import com.github.pushpavel.autocp.database.models.Testcase
 import com.github.pushpavel.autocp.common.ui.swing.editableList.ListItemView
+import com.intellij.ui.dsl.builder.AlignX
 import com.intellij.ui.dsl.builder.panel
-import com.intellij.ui.dsl.gridLayout.HorizontalAlign
 import javax.swing.BorderFactory
 
 class TestcasePanel(val model: CollectionListModel<Testcase>) : ListItemView<Testcase> {
@@ -31,7 +31,7 @@ class TestcasePanel(val model: CollectionListModel<Testcase>) : ListItemView<Tes
         row {
             inputEditor.headerComponent = testcaseHeader(model, titleLabel, ::testcaseIndex)
             outputEditor.headerComponent = inputEditor.component
-            cell(outputEditor.component).horizontalAlign(HorizontalAlign.FILL)
+            cell(outputEditor.component).align(AlignX.FILL)
         }
     }.withBorder(BorderFactory.createEmptyBorder(0, 4, 0, 4))
 
