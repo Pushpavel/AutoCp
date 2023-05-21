@@ -3,7 +3,10 @@ package com.github.pushpavel.autocp.settings.projectSettings
 import com.github.pushpavel.autocp.settings.projectSettings.cmake.cmakeProjectSection
 import com.intellij.openapi.options.BoundConfigurable
 import com.intellij.openapi.project.Project
-import com.intellij.ui.layout.panel
+import com.intellij.ui.dsl.builder.bindSelected
+import com.intellij.ui.dsl.builder.bindText
+import com.intellij.ui.dsl.builder.columns
+import com.intellij.ui.dsl.builder.panel
 
 class AutoCpProjectSettingsConfigurable(val project: Project) : BoundConfigurable("Project") {
     private val projectSettings = project.autoCpProject()
@@ -11,15 +14,15 @@ class AutoCpProjectSettingsConfigurable(val project: Project) : BoundConfigurabl
     var askEveryTime = projectSettings.askBeforeFileGeneration
 
     override fun createPanel() = panel {
-        titledRow("Solution File Generation") {
+        group("Solution File Generation") {
             row("File Extension") {
-                textField(::extension, 2)
+                textField().bindText(::extension).columns(2)
                     .onReset { extension = projectSettings.defaultFileExtension }
                     .onIsModified { extension != projectSettings.defaultFileExtension }
                     .onApply {
                         if (extension.isNotBlank())
                             projectSettings.defaultFileExtension = extension.trim().replace(".", "")
-                    }.withValidationOnInput {
+                    }.validationOnInput {
                         if (it.text.isNotBlank())
                             null
                         else
@@ -27,7 +30,7 @@ class AutoCpProjectSettingsConfigurable(val project: Project) : BoundConfigurabl
                     }
             }
             row {
-                checkBox("Ask every time before generating files", ::askEveryTime)
+                checkBox("Ask every time before generating files").bindSelected(::askEveryTime)
                     .onReset { askEveryTime = projectSettings.askBeforeFileGeneration }
                     .onIsModified { askEveryTime != projectSettings.askBeforeFileGeneration }
                     .onApply { projectSettings.askBeforeFileGeneration = askEveryTime }

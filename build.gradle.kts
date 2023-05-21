@@ -21,7 +21,7 @@ plugins {
     // Kotlin support
     id("org.jetbrains.kotlin.jvm") version "1.7.20"
     // Gradle IntelliJ Plugin
-    id("org.jetbrains.intellij") version "1.11.0-SNAPSHOT"
+    id("org.jetbrains.intellij") version "1.13.3"
     // Gradle Changelog Plugin
     id("org.jetbrains.changelog") version "1.3.1"
 
@@ -103,7 +103,6 @@ tasks {
         pluginId.set(properties("pluginGroup"))
         version.set(properties("pluginVersion"))
         sinceBuild.set(properties("pluginSinceBuild"))
-        untilBuild.set(properties("pluginUntilBuild"))
         pluginDescription.set(pluginDescriptionFromMd)
 
         // Get the latest available change notes from CHANGELOG.md

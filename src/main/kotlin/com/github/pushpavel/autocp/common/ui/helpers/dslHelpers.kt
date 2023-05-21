@@ -8,17 +8,17 @@ import com.intellij.ui.layout.ComponentPredicate
 fun ValidationInfo?.isError(): Boolean {
     return this?.warning == false
 }
-
-fun CellBuilder<JBCheckBox>.isSelected(): ComponentPredicate {
-    return object : ComponentPredicate() {
-
-        override fun addListener(listener: (Boolean) -> Unit) {
-            component.addActionListener {
-                listener(component.isSelected)
-            }
-        }
-
-        override fun invoke() = component.isSelected
-
-    }
-}
+//
+//fun CellBuilder<JBCheckBox>.isSelected(): ComponentPredicate {
+//    return object : ComponentPredicate() {
+//
+//        override fun addListener(listener: (Boolean) -> Unit) {
+//            component.addActionListener {
+//                listener(component.isSelected)
+//            }
+//        }
+//
+//        override fun invoke() = component.isSelected
+//
+//    }
+//}

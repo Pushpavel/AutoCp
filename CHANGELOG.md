@@ -3,6 +3,10 @@
 
 ## [Unreleased]
 
+## v0.7.10
+- Migrates to Kotlin UI DSL 2
+- Supports future IDE versions
+
 ## v0.7.9
 
 - Fixes [#109](https://github.com/Pushpavel/AutoCp/issues/109) - Rust filename unsupported errors
