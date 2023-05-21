@@ -6,8 +6,10 @@ import com.github.pushpavel.autocp.settings.generalSettings.FileGenerationRootRo
 import com.github.pushpavel.autocp.settings.projectSettings.autoCpProject
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.DialogWrapper
-import com.intellij.ui.layout.LCFlags
-import com.intellij.ui.layout.panel
+import com.intellij.ui.dsl.builder.bindSelected
+import com.intellij.ui.dsl.builder.bindText
+import com.intellij.ui.dsl.builder.columns
+import com.intellij.ui.dsl.builder.panel
 
 var extension = ""
 var rootDir = ""
@@ -28,17 +30,17 @@ fun showProblemGatheringDialog(project: Project, groupName: String): Boolean {
             init()
         }
 
-        override fun createCenterPanel() = panel(LCFlags.fill) {
+        override fun createCenterPanel() = panel() {
             row {}.comment(R.strings.problemGatheringDialogMsg)
             row("File Extension") {
-                textField(::extension, 2)
+                textField().bindText(::extension).columns(2)
                     .focused()
                     .onReset { extension = projectSettings.defaultFileExtension }
                     .onIsModified { extension != projectSettings.defaultFileExtension }
                     .onApply {
                         if (extension.isNotBlank())
                             projectSettings.defaultFileExtension = extension.trim().replace(".", "")
-                    }.withValidationOnInput {
+                    }.validationOnInput {
                         if (it.text.isNotBlank())
                             null
                         else
@@ -48,7 +50,7 @@ fun showProblemGatheringDialog(project: Project, groupName: String): Boolean {
             FileGenerationRootRow().placeUI(this)
 
             row {
-                checkBox("Don't ask again", ::dontAskBeforeFileGeneration)
+                checkBox("Don't ask again").bindSelected(::dontAskBeforeFileGeneration)
                     .onReset { dontAskBeforeFileGeneration = !projectSettings.askBeforeFileGeneration }
                     .onIsModified { dontAskBeforeFileGeneration == projectSettings.askBeforeFileGeneration }
                     .onApply { projectSettings.askBeforeFileGeneration = !dontAskBeforeFileGeneration }

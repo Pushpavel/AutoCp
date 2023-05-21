@@ -1,8 +1,10 @@
 package com.github.pushpavel.autocp.settings.generalSettings
 
 import com.github.pushpavel.autocp.common.res.R
-import com.intellij.ui.layout.Row
-import com.intellij.ui.layout.RowBuilder
+import com.intellij.ui.dsl.builder.Panel
+import com.intellij.ui.dsl.builder.Row
+import com.intellij.ui.dsl.builder.bindText
+import com.intellij.ui.dsl.gridLayout.builders.RowBuilder
 import java.nio.file.InvalidPathException
 import kotlin.io.path.Path
 import kotlin.io.path.extension
@@ -12,9 +14,9 @@ class FileGenerationRootRow {
     val generalSettings = AutoCpGeneralSettings.instance
     var rootDir = generalSettings.fileGenerationRoot
 
-    fun placeUI(l: RowBuilder): Row {
+    fun placeUI(l: Panel): Row {
         return l.row("File Generation Root") {
-            textField(::rootDir)
+            textField().bindText(::rootDir)
                 .onReset { rootDir = generalSettings.fileGenerationRoot }
                 .onIsModified { rootDir != generalSettings.fileGenerationRoot }
                 .onApply {
@@ -25,7 +27,7 @@ class FileGenerationRootRow {
                     } catch (e: InvalidPathException) {
                         // ignored
                     }
-                }.withValidationOnInput {
+                }.validationOnInput{
                     try {
                         val p = Path(it.text)
                         when {

@@ -26,7 +26,7 @@ class ConfigEditor(val project: Project, val config: AutoCpConfig) : SettingsEdi
     override fun createEditor() = panel {
         row("Solution File:") {
             textFieldWithBrowseButton("Select Solution File").bindText(::solutionFilePath)
-                .validation { validateSolutionFilePath(it.text) }
+                .validationInfo { validateSolutionFilePath(it.text) }
         }
     }.also {
         editor = it
