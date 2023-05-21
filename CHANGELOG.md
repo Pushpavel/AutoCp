@@ -5,7 +5,7 @@
 
 ## v0.7.10
 - Migrates to Kotlin UI DSL 2
-- Supports future IDE versions
+- Supports future IDE versions from 2023.1
 
 ## v0.7.9
 
