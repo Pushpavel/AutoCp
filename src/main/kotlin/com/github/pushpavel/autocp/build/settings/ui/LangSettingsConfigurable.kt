@@ -4,8 +4,8 @@ import com.github.pushpavel.autocp.build.settings.LangSettings
 import com.github.pushpavel.autocp.common.helpers.isItemsEqual
 import com.github.pushpavel.autocp.common.ui.dsl.registerDslCallbacks
 import com.intellij.openapi.options.BoundConfigurable
+import com.intellij.ui.dsl.builder.AlignY
 import com.intellij.ui.dsl.builder.panel
-import com.intellij.ui.dsl.gridLayout.VerticalAlign
 import com.jetbrains.rd.util.firstOrNull
 
 class LangSettingsConfigurable : BoundConfigurable("Languages") {
@@ -32,7 +32,7 @@ class LangSettingsConfigurable : BoundConfigurable("Languages") {
                         settings.updateLangs(langListModel.items.associateBy { it.extension })
                     }
                 }
-            }.verticalAlign(VerticalAlign.FILL)
+            }.align(AlignY.FILL)
         }
     }
 }

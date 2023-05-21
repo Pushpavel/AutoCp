@@ -5,9 +5,9 @@ import com.intellij.openapi.ui.DialogPanel
 import com.intellij.util.ui.components.BorderLayoutPanel
 import com.github.pushpavel.autocp.common.ui.layouts.html
 import com.github.pushpavel.autocp.common.ui.layouts.tag
+import com.intellij.ui.dsl.builder.AlignX
+import com.intellij.ui.dsl.builder.AlignY
 import com.intellij.ui.dsl.builder.panel
-import com.intellij.ui.dsl.gridLayout.HorizontalAlign
-import com.intellij.ui.dsl.gridLayout.VerticalAlign
 import java.awt.BorderLayout
 
 class AssociateFilePanel(fileName: String, val enableCallback: () -> Unit) {
@@ -27,10 +27,10 @@ class AssociateFilePanel(fileName: String, val enableCallback: () -> Unit) {
     val component = BorderLayoutPanel().apply {
         add(panel {
             row {
-                cell(header).horizontalAlign(HorizontalAlign.CENTER).verticalAlign(VerticalAlign.CENTER)
+                cell(header).align(AlignX.CENTER).align(AlignY.CENTER)
             }
             row {
-                button("Enable") { enableCallback() }.horizontalAlign(HorizontalAlign.CENTER).verticalAlign(VerticalAlign.CENTER)
+                button("Enable") { enableCallback() }.align(AlignX.CENTER).align(AlignY.CENTER)
             }
         }, BorderLayout.CENTER)
     }
