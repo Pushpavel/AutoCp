@@ -1,3 +1,4 @@
+
 <!--suppress HtmlDeprecatedAttribute -->
 <div  align="center">
 
@@ -12,6 +13,9 @@ An Open Source Competitive Programming Plugin for Intellij-Based IDEs
 [![Downloads](https://img.shields.io/jetbrains/plugin/d/17061.svg)](https://plugins.jetbrains.com/plugin/17061-autocp)
 
 </div>
+
+### This project is not actively maintained.
+**However, I will do my best to review any pull requests submitted. Feel free to submit pull requests for bug fixes or improvements. I appreciate any contributions. If you have any questions or need assistance, you can open an issue, and I'll do my best to provide guidance or clarification. There are still open issues to be dealt with and again pull requests are appreciated.**
 
 [Plugin Homepage](https://plugins.jetbrains.com/plugin/17061-autocp)
 <!-- Plugin description -->
