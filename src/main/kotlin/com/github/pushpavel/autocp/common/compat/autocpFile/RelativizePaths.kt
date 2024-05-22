@@ -5,7 +5,7 @@ import com.github.pushpavel.autocp.common.res.R
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import com.intellij.openapi.project.Project
-import com.intellij.util.io.readText
+import kotlin.io.path.readText
 import com.intellij.util.io.write
 import java.nio.file.Path
 import kotlin.io.path.Path

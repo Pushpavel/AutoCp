@@ -12,7 +12,7 @@ import java.nio.file.Path
 import kotlin.io.path.Path
 import kotlin.io.path.pathString
 
-@Service
+@Service(Service.Level.PROJECT)
 class SolutionFiles(val project: Project) {
     private val db = project.autoCp()
     private val solutionFiles get() = db.solutionFilesFlow.value
