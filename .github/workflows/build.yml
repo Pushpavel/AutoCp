@@ -73,12 +73,12 @@ jobs:
       - name: Fetch Sources
         uses: actions/checkout@v2.3.5
 
-      # Setup Java 17.0.11 environment for the next steps
+      # Setup Java 17 environment for the next steps
       - name: Setup Java
         uses: actions/setup-java@v2
         with:
           distribution: corretto
-          java-version: 17.0.11
+          java-version: 17
           cache: gradle
 
       # Run tests
@@ -104,12 +104,12 @@ jobs:
       - name: Fetch Sources
         uses: actions/checkout@v2.3.5
 
-      # Setup Java 17.0.11 environment for the next steps
+      # Setup Java 17 environment for the next steps
       - name: Setup Java
         uses: actions/setup-java@v2
         with:
           distribution: corretto
-          java-version: 17.0.11
+          java-version: 17
           cache: gradle
 
       # Set environment variables
@@ -155,12 +155,12 @@ jobs:
       - name: Fetch Sources
         uses: actions/checkout@v2.3.4
 
-      # Setup Java 17.0.11 environment for the next steps
+      # Setup Java 17 environment for the next steps
       - name: Setup Java
         uses: actions/setup-java@v2
         with:
           distribution: corretto
-          java-version: 17.0.11
+          java-version: 17
           cache: gradle
 
       # insert Analytics secrets
