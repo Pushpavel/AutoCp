@@ -3,7 +3,7 @@ package com.github.pushpavel.autocp.common.compat.autocpFile
 import com.github.pushpavel.autocp.common.compat.base.AutoCpFileConverter
 import com.google.gson.JsonParser
 import com.intellij.util.io.delete
-import com.intellij.util.io.readText
+import kotlin.io.path.readText
 import java.nio.file.Path
 
 /**

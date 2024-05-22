@@ -12,18 +12,17 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.project.ProjectManager
 import com.intellij.openapi.vfs.VfsUtil
 import com.intellij.psi.PsiManager
-import com.intellij.util.io.readText
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.nio.file.Paths
 import kotlin.io.path.Path
 import kotlin.io.path.exists
 import kotlin.io.path.pathString
+import kotlin.io.path.readText
 
 
-@Service
+@Service(Service.Level.PROJECT)
 class AutoCpStorage(val project: Project) {
 
     val database by lazy {

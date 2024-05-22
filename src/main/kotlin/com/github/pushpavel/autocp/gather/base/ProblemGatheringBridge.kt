@@ -5,23 +5,22 @@ import com.github.pushpavel.autocp.common.res.R
 import com.github.pushpavel.autocp.gather.models.ProblemJson
 import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.startup.StartupActivity
+import com.intellij.openapi.startup.ProjectActivity
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.serialization.SerializationException
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import java.net.SocketTimeoutException
 
 /**
  * Bridge between Competitive Companion extension and [BatchProcessor]
  */
-class ProblemGatheringBridge : StartupActivity, DumbAware {
+class ProblemGatheringBridge : ProjectActivity, DumbAware {
     private val scope = ioScope()
     private val serializer = Json { ignoreUnknownKeys = true }
 
-    override fun runActivity(project: Project) {
+    fun runActivity(project: Project) {
         // initialize server
         scope.launch {
             try {
@@ -58,4 +57,6 @@ class ProblemGatheringBridge : StartupActivity, DumbAware {
             }
         }
     }
+
+    override suspend fun execute(project: Project) = runActivity(project)
 }
