@@ -15,7 +15,7 @@ class AutoCpFileType : FileType {
 
     override fun isBinary() = false
 
-    override fun getCharset(file: VirtualFile, content: ByteArray?): String? {
+    override fun getCharset(file: VirtualFile, content: ByteArray): String? {
         return null
     }
 }

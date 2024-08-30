@@ -46,7 +46,7 @@ object AutoCpStrings {
         OpenFileOnGather.ALL -> "All"
     }
 
-    const val fileGenerationRootComment = "Relative to project root<br><br>" +
+    val fileGenerationRootComment = "Relative to project root<br><br>" +
             "Macros:<br>" +
             "<b>${R.keys.groupNameMacro}</b> : name of the contest or category name"
 
@@ -55,7 +55,7 @@ object AutoCpStrings {
     const val addToCMakeMsg = "Add generated solution files to CMakeLists.txt"
 
     // Build Configuration Dialog strings
-    const val commandTemplateDesc = "" +
+    val commandTemplateDesc = "" +
             "The executable in these commands are run in an isolated temporary directory. But not the command itself.<br>" +
             "So, relative path to executable won't work and should use <b>\$dir</b> to build absolute path.<br>" +
             "Make sure you wrap this absolute path with double quotes.<br><br>" +
