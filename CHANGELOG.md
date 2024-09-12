@@ -2,6 +2,9 @@
 > All notable changes to this project will be documented in this page.
 
 ## [Unreleased]
+- Supports IDE versions from 2024.2
+
+## v0.7.20
 - Supports IDE versions from 2024.1
 
 ## v0.7.10
