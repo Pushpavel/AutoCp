@@ -94,47 +94,53 @@ jobs:
           path: ${{ github.workspace }}/build/reports/tests
 
   # Verify plugin using IntelliJ Plugin Verifier tool only on pull_requests as it takes a long time
+  # Run plugin structure verification along with IntelliJ Plugin Verifier
   verify:
-    name: Verify
+    name: Verify plugin
     if: needs.properties.outputs.shouldVerify == 'true'
     needs: [ properties, gradleValidation ]
     runs-on: ubuntu-latest
     steps:
-      # Check out current repository
-      - name: Fetch Sources
-        uses: actions/checkout@v2.3.5
 
-      # Setup Java 17 environment for the next steps
+      # Free GitHub Actions Environment Disk Space
+      - name: Maximize Build Space
+        uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: false
+          large-packages: false
+
+      # Check out the current repository
+      - name: Fetch Sources
+        uses: actions/checkout@v4
+
+      # Set up Java environment for the next steps
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
-          distribution: corretto
+          distribution: zulu
           java-version: 17
-          cache: gradle
 
-      # Set environment variables
-      - name: Export Properties
-        id: properties
-        shell: bash
-        run: |
-          echo "::set-output name=pluginVerifierHomeDir::~/.pluginVerifier"
-          ./gradlew listProductsReleases # prepare list of IDEs for Plugin Verifier
+      # Setup Gradle
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-home-cache-cleanup: true
 
       # Cache Plugin Verifier IDEs
       - name: Setup Plugin Verifier IDEs Cache
-        uses: actions/cache@v2.1.6
+        uses: actions/cache@v4
         with:
-          path: ${{ steps.properties.outputs.pluginVerifierHomeDir }}/ides
+          path: ${{ needs.build.outputs.pluginVerifierHomeDir }}/ides
           key: plugin-verifier-${{ hashFiles('build/listProductsReleases.txt') }}
 
       # Run Verify Plugin task and IntelliJ Plugin Verifier tool
       - name: Run Plugin Verification tasks
-        run: ./gradlew runPluginVerifier -Pplugin.verifier.home.dir=${{ steps.properties.outputs.pluginVerifierHomeDir }}
+        run: ./gradlew verifyPlugin -Dplugin.verifier.home.dir=${{ needs.build.outputs.pluginVerifierHomeDir }}
 
       # Collect Plugin Verifier Result
       - name: Collect Plugin Verifier Result
         if: ${{ always() }}
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: pluginVerifier-result
           path: ${{ github.workspace }}/build/reports/pluginVerifier
