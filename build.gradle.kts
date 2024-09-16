@@ -82,11 +82,6 @@ intellijPlatform {
         }
 
         val changelog = project.changelog // local variable for configuration cache compatibility
-        // https://github.com/JetBrains/gradle-changelog-plugin/blob/bad5117d3be0b1e77dd0f4fc8d043bde80f2efac/src/main/kotlin/org/jetbrains/changelog/ChangelogPluginConstants.kt#L40
-        val SEM_VER_REGEX_V_PREFIX =
-            """^v((0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)${'$'}""".toRegex() // ktlint-disable max-line-length
-        changelog.headerParserRegex.set(SEM_VER_REGEX_V_PREFIX)
-
         // Get the latest available change notes from the changelog file
         changeNotes = providers.gradleProperty("pluginVersion").map { pluginVersion ->
             with(changelog) {
@@ -105,11 +100,11 @@ intellijPlatform {
         }
     }
 
-    signing {
-        certificateChain = providers.environmentVariable("CERTIFICATE_CHAIN")
-        privateKey = providers.environmentVariable("PRIVATE_KEY")
-        password = providers.environmentVariable("PRIVATE_KEY_PASSWORD")
-    }
+//    signing {
+//        certificateChain = providers.environmentVariable("CERTIFICATE_CHAIN")
+//        privateKey = providers.environmentVariable("PRIVATE_KEY")
+//        password = providers.environmentVariable("PRIVATE_KEY_PASSWORD")
+//    }
 
     publishing {
         token = providers.environmentVariable("PUBLISH_TOKEN")
