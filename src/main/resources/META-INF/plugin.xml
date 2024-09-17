@@ -1,4 +1,5 @@
 <idea-plugin>
+    <id>com.github.pushpavel.autocp</id>
     <name>AutoCp</name>
     <vendor email="jpushpavel@gmail.com" url="https://pushpavel.github.io/AutoCp/">Pushpavel Janakiraman</vendor>
     <!-- Product and plugin compatibility requirements -->
