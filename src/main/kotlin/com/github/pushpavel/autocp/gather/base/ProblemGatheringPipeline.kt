@@ -6,6 +6,7 @@ import com.github.pushpavel.autocp.gather.filegen.FileGenerationListener
 import com.github.pushpavel.autocp.gather.filegen.FileGenerator
 import com.github.pushpavel.autocp.gather.filegen.FileGeneratorProvider
 import com.github.pushpavel.autocp.gather.models.BatchJson
+import com.github.pushpavel.autocp.gather.models.FileGenerationDto
 import com.github.pushpavel.autocp.gather.models.GenerateFileErr
 import com.github.pushpavel.autocp.settings.generalSettings.AutoCpGeneralSettings
 import com.github.pushpavel.autocp.settings.generalSettings.OpenFileOnGather
@@ -33,14 +34,29 @@ class ProblemGatheringPipeline(val project: Project) : ProblemGatheringListener 
     private val problemQueue = Queue<Problem>()
     private val fileGeneratorProvider = FileGeneratorProvider(project)
     private var currentBatch: BatchJson? = null
+    private var dtos: MutableList<FileGenerationDto>? = null;
     private val subscriber by lazy { project.messageBus.syncPublisher(FileGenerationListener.TOPIC) }
 
     override fun onBatchStart(problem: Problem, batch: BatchJson) {
+    }
+
+    override fun onProblemGathered(problems: List<Problem>, batch: BatchJson) {
+        problemQueue.add(problems.last())
+        if (problems.size == batch.size) {
+            BatchProcessor.interruptBatch()
+            flush = false
+            fileGenerator = null
+        }
+    }
+
+    override fun onBatchEnd(e: Exception?, problems: List<Problem>, batch: BatchJson) {
+        if (problems.isEmpty())
+            return;
         runInEdt {
-            log.debug("Showing Problem Gathering dialog...", batch, problem)
-            val confirm = showProblemGatheringDialog(project, problem.groupName)
-            if (!confirm) {
-                log.debug("Cancelling batch", batch, problem)
+            log.debug("Showing Problem Gathering dialog...", batch, problems)
+            dtos = showProblemGatheringDialog(project, problems)?.toMutableList()
+            if (dtos == null) {
+                log.debug("Cancelling batch", batch, problems)
                 BatchProcessor.interruptBatch(ProblemGatheringErr.Cancellation)
                 return@runInEdt
             }
@@ -50,31 +66,17 @@ class ProblemGatheringPipeline(val project: Project) : ProblemGatheringListener 
             val preComplete = problemQueue.size == batch.size
 
             flushProblemQueue(batch)
-
-            if (preComplete) {
-                BatchProcessor.interruptBatch()
-                flush = false
-                fileGenerator = null
-            }
-        }
-    }
-
-    override fun onProblemGathered(problems: List<Problem>, batch: BatchJson) {
-        problemQueue.add(problems.last())
-        if (!flush) return
-        flushProblemQueue(batch)
-        if (problems.size == batch.size) {
-            BatchProcessor.interruptBatch()
-            flush = false
-            fileGenerator = null
         }
     }
 
     private fun flushProblemQueue(batch: BatchJson) {
+        if (dtos == null)
+            return
         val extension = project.autoCpProject().defaultFileExtension
         flush = true
         while (problemQueue.isNotEmpty()) {
             val problem = problemQueue.remove()
+            val dto = dtos!!.removeAt(0);
             val openFile = when (AutoCpGeneralSettings.instance.openFilesOnGather) {
                 OpenFileOnGather.NONE -> false
                 OpenFileOnGather.ONLY_FIRST -> currentBatch != batch
@@ -86,7 +88,7 @@ class ProblemGatheringPipeline(val project: Project) : ProblemGatheringListener 
 
             DumbService.getInstance(project).smartInvokeLater({
                 try {
-                    val file = fileGen.generateFile(extension, problem, batch)
+                    val file = fileGen.generateFile(extension, dto, problem, batch)
                     ProjectView.getInstance(project).refresh()
 
                     if (file != null)

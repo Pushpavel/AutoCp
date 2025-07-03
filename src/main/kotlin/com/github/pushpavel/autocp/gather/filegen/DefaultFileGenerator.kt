@@ -5,6 +5,7 @@ import com.github.pushpavel.autocp.common.res.R
 import com.github.pushpavel.autocp.database.models.Problem
 import com.github.pushpavel.autocp.gather.FileTemplates
 import com.github.pushpavel.autocp.gather.models.BatchJson
+import com.github.pushpavel.autocp.gather.models.FileGenerationDto
 import com.github.pushpavel.autocp.gather.models.GenerateFileErr
 import com.github.pushpavel.autocp.settings.generalSettings.AutoCpGeneralSettings
 import com.intellij.ide.fileTemplates.FileTemplate
@@ -39,10 +40,10 @@ open class DefaultFileGenerator(val project: Project) : FileGenerator {
 
     open fun getParentPsiDir(rootPsiDir: PsiDirectory, problem: Problem, extension: String) = rootPsiDir
 
-    open fun getFileNameWithExtension(parentPsiDir: PsiDirectory, problem: Problem, extension: String): String {
-        val fileName = getValidFileName(problem.name)
+    open fun getFileNameWithExtension(parentPsiDir: PsiDirectory, fileName: String, extension: String): String {
+        val newFileName = getValidFileName(fileName)
 
-        return "$fileName.$extension"
+        return "$newFileName.$extension"
     }
 
     protected fun getValidFileName(fileName: String): String {
@@ -68,11 +69,11 @@ open class DefaultFileGenerator(val project: Project) : FileGenerator {
         return true
     }
 
-    override fun generateFile(extension: String, problem: Problem, batch: BatchJson): VirtualFile? {
+    override fun generateFile(extension: String, dto: FileGenerationDto, problem: Problem, batch: BatchJson): VirtualFile? {
         val rootPsiDir = getRootPsiDir(problem.groupName)
         val fileTemplate = getFileTemplate(extension)
         val parentPsiDir = getParentPsiDir(rootPsiDir, problem, extension)
-        val fileName = getFileNameWithExtension(parentPsiDir, problem, extension)
+        val fileName = getFileNameWithExtension(parentPsiDir, dto.fileName, extension)
 
         try {
             parentPsiDir.checkCreateFile(fileName)
