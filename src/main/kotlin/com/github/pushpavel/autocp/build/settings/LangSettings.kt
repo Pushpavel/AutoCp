@@ -28,7 +28,9 @@ class LangSettings : PersistentStateComponent<SerializableLangSettings> {
     }
 
     companion object {
-        val instance = service<LangSettings>()
+        val instance: LangSettings get() {
+            return ApplicationManager.getApplication().getService(LangSettings::class.java)
+        }
     }
 }
 
