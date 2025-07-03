@@ -3,6 +3,7 @@ package com.github.pushpavel.autocp.gather.filegen
 import com.github.pushpavel.autocp.common.helpers.pathString
 import com.github.pushpavel.autocp.database.models.Problem
 import com.github.pushpavel.autocp.gather.models.BatchJson
+import com.github.pushpavel.autocp.gather.models.FileGenerationDto
 import com.github.pushpavel.autocp.gather.models.GenerateFileErr
 import com.intellij.openapi.application.runReadAction
 import com.intellij.openapi.application.runWriteAction
@@ -30,15 +31,15 @@ class JavaFileGenerator(project: Project) : DefaultFileGenerator(project) {
         return runReadAction { PsiManager.getInstance(project).findDirectory(parentDir)!! }
     }
 
-    override fun getFileNameWithExtension(parentPsiDir: PsiDirectory, problem: Problem, extension: String): String {
+    override fun getFileNameWithExtension(parentPsiDir: PsiDirectory, fileName: String, extension: String): String {
         return "Main.java"
     }
 
-    override fun generateFile(extension: String, problem: Problem, batch: BatchJson): VirtualFile? {
+    override fun generateFile(extension: String, dto: FileGenerationDto, problem: Problem, batch: BatchJson): VirtualFile? {
         var file: VirtualFile? = null
 
         try {
-            file = super.generateFile(extension, problem, batch)
+            file = super.generateFile(extension, dto, problem, batch)
         } catch (e: GenerateFileErr.FileAlreadyExistsErr) {
             file = VfsUtil.findFile(Path(e.filePath), true)
             throw e
