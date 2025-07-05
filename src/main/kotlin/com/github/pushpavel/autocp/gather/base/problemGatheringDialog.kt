@@ -5,18 +5,22 @@ import com.github.pushpavel.autocp.database.models.Problem
 import com.github.pushpavel.autocp.gather.filegen.DefaultFileGenerator
 import com.github.pushpavel.autocp.gather.models.FileGenerationDto
 import com.github.pushpavel.autocp.settings.generalSettings.AutoCpGeneralSettings
-import com.github.pushpavel.autocp.settings.generalSettings.FileGenerationRootRow
 import com.github.pushpavel.autocp.settings.projectSettings.autoCpProject
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.DialogWrapper
-import com.intellij.ui.dsl.builder.bindSelected
-import com.intellij.ui.dsl.builder.bindText
-import com.intellij.ui.dsl.builder.columns
-import com.intellij.ui.dsl.builder.panel
+import com.intellij.ui.components.JBTextField
+import com.intellij.ui.dsl.builder.*
+import java.nio.file.InvalidPathException
+import javax.swing.JCheckBox
+import kotlin.io.path.Path
+import kotlin.io.path.extension
+import kotlin.io.path.pathString
 
 var extension = ""
 var rootDir = ""
 var dontAskBeforeFileGeneration = false
+var template: String? = ""
+var saveRootDir = true
 var problemNames = mutableListOf<String>()
 
 fun showProblemGatheringDialog(project: Project, problems: List<Problem>): List<FileGenerationDto>? {
@@ -24,8 +28,9 @@ fun showProblemGatheringDialog(project: Project, problems: List<Problem>): List<
     val generalSettings = AutoCpGeneralSettings.instance
 
     extension = projectSettings.defaultFileExtension
-    rootDir = generalSettings.fileGenerationRoot
     dontAskBeforeFileGeneration = !projectSettings.askBeforeFileGeneration
+    template = problems.firstOrNull()?.getOnlineJudge()
+    rootDir = projectSettings.fileGenerationRoot.getOrDefault(template, generalSettings.fileGenerationRoot)
     problemNames = MutableList(problems.size) { problems[it].getDefaultName() }
 
     val dialog = object : DialogWrapper(project, false) {
@@ -36,7 +41,33 @@ fun showProblemGatheringDialog(project: Project, problems: List<Problem>): List<
         }
 
         override fun createCenterPanel() = panel() {
+            lateinit var saveRootCheckbox: Cell<JCheckBox>
+            lateinit var rootDirInput: Cell<JBTextField>
             row {}.comment(R.strings.problemGatheringDialogMsg)
+            row("Template name") {
+                val comboBox = comboBox(projectSettings.fileGenerationRoot.keys)
+                    .columns(20)
+                    .applyToComponent {
+                        isEditable = true
+                        selectedItem = template
+                    }
+
+                comboBox.onReset {
+                    comboBox.component.selectedItem = template
+                }.onIsModified {
+                    template != problems.firstOrNull()?.getOnlineJudge()
+                }.onApply {
+                    template = (comboBox.component.editor.item as? String)?.trim().orEmpty()
+                }.validationOnInput {
+                    template = (comboBox.component.editor.item as? String)?.trim().orEmpty()
+                    saveRootCheckbox.component.text = ("Save file generation root as default for $template")
+                    if (projectSettings.fileGenerationRoot.containsKey(template)) {
+                        rootDir = projectSettings.fileGenerationRoot[template]!!
+                        rootDirInput.component.text = rootDir
+                    }
+                    null
+                }
+            }
             row("File Extension") {
                 textField().bindText(::extension).columns(2)
                     .focused()
@@ -52,7 +83,39 @@ fun showProblemGatheringDialog(project: Project, problems: List<Problem>): List<
                             error("Should not be empty")
                     }
             }
-            FileGenerationRootRow().placeUI(this)
+            row("File generation root") {
+                rootDirInput = textField().bindText(::rootDir)
+                    .onReset { rootDir = projectSettings.fileGenerationRoot.getOrDefault(template, generalSettings.fileGenerationRoot) }
+                    .onIsModified { rootDir != projectSettings.fileGenerationRoot.get(template) }
+                    .onApply {
+                        if (!saveRootDir)
+                            return@onApply
+                        try {
+                            projectSettings.fileGenerationRoot[template?: ""] = if (rootDir.isNotBlank())
+                                Path(rootDir).pathString
+                            else ""
+                        } catch (e: InvalidPathException) {
+                            // ignored
+                        }
+                    }
+                    .validationOnInput{
+                        try {
+                            val p = Path(it.text)
+                            when {
+                                p.isAbsolute -> error("Should not be an absolute path")
+                                p.extension != "" -> error("Should correspond to a directory")
+                                else -> null
+                            }
+                        } catch (e: InvalidPathException) {
+                            error(e.localizedMessage)
+                        }
+                    }
+                    .comment(R.strings.fileGenerationRootComment)
+            }
+
+            row {
+                saveRootCheckbox = checkBox("Save file generation root as default for $template").bindSelected(::saveRootDir)
+            }
 
             row {
                 checkBox("Don't ask again").bindSelected(::dontAskBeforeFileGeneration)
@@ -73,7 +136,9 @@ fun showProblemGatheringDialog(project: Project, problems: List<Problem>): List<
     if (!confirmed)
         return null;
 
-    return List(problemNames.size) { FileGenerationDto(problemNames[it], generalSettings.fileGenerationRoot) }
+    return List(problemNames.size) { FileGenerationDto(problemNames[it], rootDir, template) }
 }
 
 fun Problem.getDefaultName() = DefaultFileGenerator.defaultConversion(name)
+
+fun Problem.getOnlineJudge() = groupName.split("-")[0].trim();

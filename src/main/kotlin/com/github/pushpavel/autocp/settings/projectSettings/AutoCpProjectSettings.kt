@@ -13,11 +13,13 @@ class AutoCpProjectSettings : PersistentStateComponent<AutoCpProjectSettings> {
 
     var defaultFileExtension = defaultFileExtensionBasedOnIDE
     var askBeforeFileGeneration = true
+    var fileGenerationRoot = mutableMapOf<String, String>()
 
     override fun getState() = this
     override fun loadState(state: AutoCpProjectSettings) {
         defaultFileExtension = state.defaultFileExtension
         askBeforeFileGeneration = state.askBeforeFileGeneration
+        fileGenerationRoot = state.fileGenerationRoot
     }
 }
 
