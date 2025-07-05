@@ -18,11 +18,14 @@ object AutoCpKeys {
 
     // Other Macros
     const val groupNameMacro = "\$groupName"
+    const val usacoYearMacro = "\$USACO_YEAR"
+    const val usacoDivMacro = "\$USACO_DIV"
 
     // File Template Pre-defined variables
     const val problemNameVar = "PROBLEM_NAME"
     const val groupNameVar = "PROBLEM_GROUP_NAME"
     const val onlineJudgeVar = "ONLINE_JUDGE_NAME"
+    const val urlVar = "PROBLEM_URL"
 
     // File template keys
     const val fileTemplateName = "CP_TEMPLATE"
