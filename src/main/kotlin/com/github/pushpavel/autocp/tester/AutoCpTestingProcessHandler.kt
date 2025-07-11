@@ -67,12 +67,12 @@ class AutoCpTestingProcessHandler(val project: Project, private val config: Auto
 
     private fun solutionFileToTestNode(solutionFile: SolutionFile, processFactory: ProcessFactory): TestNode {
         val leafNodes = solutionFile.testcases.map {
-            TestNode.Leaf(it.name, it.input, it.output, processFactory)
+            TestNode.Leaf(it.name, it.input, it.output ?: "", processFactory)
         }
 
         return TestNode.Group(
             Path(solutionFile.pathString).nameWithoutExtension,
-            solutionFile.timeLimit,
+            solutionFile.judgeSettings.timeLimit,
             leafNodes,
             processFactory
         )

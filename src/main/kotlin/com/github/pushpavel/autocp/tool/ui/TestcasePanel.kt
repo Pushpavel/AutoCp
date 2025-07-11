@@ -43,14 +43,14 @@ class TestcasePanel(val model: CollectionListModel<Testcase>) : ListItemView<Tes
             if (item.input != inputDoc.text)
                 inputDoc.setText(item.input)
             if (item.output != outputDoc.text)
-                outputDoc.setText(item.output)
+                outputDoc.setText(item.output ?: "")
         }
         testcase = item
     }
 
     init {
         inputDoc.updateModelOnChange { copy(input = it) }
-        outputDoc.updateModelOnChange { copy(output = it) }
+        outputDoc.updateModelOnChange { copy(output = it.ifEmpty { null }) }
     }
 
     private fun Editor.customizeEditor() {

@@ -1,6 +1,7 @@
 package com.github.pushpavel.autocp.database
 
 import com.github.pushpavel.autocp.common.errors.InternalErr
+import com.github.pushpavel.autocp.database.models.JudgeSettings
 import com.github.pushpavel.autocp.database.models.Problem
 import com.github.pushpavel.autocp.database.models.SolutionFile
 import com.intellij.openapi.components.Service
@@ -57,7 +58,12 @@ class SolutionFiles(val project: Project) {
                 path.pathString,
                 linkedProblemId,
                 problem.sampleTestcases.toList(),
-                problem.timeLimit
+                judgeSettings = JudgeSettings(
+                    timeLimit = problem.timeLimit,
+                    memoryLimit = problem.memoryLimit,
+                    inputFile = problem.inputFile,
+                    outputFile = problem.outputFile
+                )
             )
         } else
             SolutionFile(

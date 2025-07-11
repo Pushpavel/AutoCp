@@ -9,5 +9,5 @@ import kotlinx.serialization.Serializable
 data class Testcase(
     val name: String,
     val input: String,
-    val output: String,
+    val output: String?,
 )

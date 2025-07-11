@@ -1,5 +1,6 @@
 package com.github.pushpavel.autocp.gather.models
 
+import com.github.pushpavel.autocp.database.models.JudgeSettings
 import com.github.pushpavel.autocp.database.models.Problem
 import com.github.pushpavel.autocp.database.models.Testcase
 import kotlinx.serialization.Serializable
@@ -15,6 +16,8 @@ data class ProblemJson(
     val url: String,
     val memoryLimit: Long,
     val timeLimit: Long,
+    val input: InputOutputFormat,
+    val output: InputOutputFormat,
     val tests: ArrayList<TestJson>,
     val batch: BatchJson
 ) {
@@ -26,7 +29,7 @@ data class ProblemJson(
             testJson.toTestcase("Sample Testcase #${index + 1}")
         }
 
-        return Problem(name, group, url, testcases, memoryLimit, timeLimit)
+        return Problem(name, group, url, testcases, memoryLimit, timeLimit, input.fileName, output.fileName)
     }
 
 }
@@ -50,3 +53,9 @@ data class TestJson(
 ) {
     fun toTestcase(name: String) = Testcase(name, input, output)
 }
+
+@Serializable
+data class InputOutputFormat(
+    val fileName: String? = null,
+    val type: String,
+)

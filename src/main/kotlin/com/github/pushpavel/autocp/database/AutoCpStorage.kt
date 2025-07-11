@@ -6,6 +6,7 @@ import com.intellij.openapi.application.runReadAction
 import com.intellij.openapi.application.runWriteAction
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
+import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.fileEditor.FileDocumentManager
 import com.intellij.openapi.fileEditor.FileDocumentManagerListener
 import com.intellij.openapi.project.Project
@@ -25,6 +26,8 @@ import kotlin.io.path.readText
 @Service(Service.Level.PROJECT)
 class AutoCpStorage(val project: Project) {
 
+    val log = Logger.getInstance(AutoCpStorage::class.java)
+
     val database by lazy {
         if(!project.isDefault){
             val converter = AutoCpFileConversion(project)
@@ -33,10 +36,17 @@ class AutoCpStorage(val project: Project) {
 
         val path = Paths.get(if (project.isDefault)  "notexists" else project.basePath!!, ".autocp")
 
-        val db = if (path.exists()) {
-            runReadAction { Json.decodeFromString(path.readText()) }
-        } else
+        val db = try {
+            if (path.exists()) {
+                Migrations.migrateDB(runReadAction {
+                    Json.parseToJsonElement(path.readText())
+                })
+            } else
+                AutoCpDB(R.keys.autoCpFileVersionNumber)
+        } catch (e: Exception) {
+            log.warn(e)
             AutoCpDB(R.keys.autoCpFileVersionNumber)
+        }
 
         AutoCpDatabase(MutableStateFlow(db.problems), MutableStateFlow(db.solutionFiles))
     }
