@@ -59,7 +59,7 @@ class TestcaseListPanel(project: Project, private val pathString: String) : Disp
                         icon = R.icons.clock
                         scope.launch {
                             flow.collect {
-                                text = "${it.timeLimit}ms"
+                                text = "${it.judgeSettings.timeLimit}ms"
                             }
                         }
                     }

@@ -10,4 +10,6 @@ data class Problem(
     val sampleTestcases: List<Testcase>,
     val memoryLimit: Long,
     val timeLimit: Long,
+    val inputFile: String?,
+    val outputFile: String?,
 )

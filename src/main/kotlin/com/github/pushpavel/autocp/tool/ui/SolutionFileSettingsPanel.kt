@@ -99,7 +99,7 @@ class SolutionFileSettingsPanel(project: Project, pathString: String, refreshCal
             header.apply()
             body.apply()
 
-            solutionFile = it.copy(timeLimit = timeLimit.toLong())
+            solutionFile = it.copy(judgeSettings = it.judgeSettings.copy(timeLimit = timeLimit.toLong()))
 
             solutionFiles.update(solutionFile!!)
         }
@@ -109,7 +109,7 @@ class SolutionFileSettingsPanel(project: Project, pathString: String, refreshCal
         resetting = true
         this.solutionFile = solutionFile
 
-        timeLimit = solutionFile?.timeLimit?.toInt() ?: 0
+        timeLimit = solutionFile?.judgeSettings?.timeLimit?.toInt() ?: 0
 
         header.reset()
         body.reset()
