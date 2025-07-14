@@ -7,7 +7,8 @@ import com.github.pushpavel.autocp.common.helpers.properties
 import com.github.pushpavel.autocp.common.helpers.toolWindowSelectedTabIndex
 import com.github.pushpavel.autocp.database.SolutionFiles
 import com.github.pushpavel.autocp.tool.ui.AssociateFilePanel
-import com.github.pushpavel.autocp.tool.ui.SolutionFileSettingsPanel
+import com.github.pushpavel.autocp.tool.ui.GeneratorPanel
+import com.github.pushpavel.autocp.tool.ui.JudgeSettingsPanel
 import com.github.pushpavel.autocp.tool.ui.TestcaseListPanel
 import com.intellij.openapi.fileEditor.FileEditorManager
 import com.intellij.openapi.project.DumbAware
@@ -65,19 +66,23 @@ class ToolFactory : ToolWindowFactory, DumbAware {
             }
 
             val ui = TestcaseListPanel(project, file.pathString)
-            val settingsPanel = SolutionFileSettingsPanel(project, file.pathString) { callback(file) }
+            val settingsPanel = JudgeSettingsPanel(project, file.pathString) { callback(file) }
+            val generatorPanel = GeneratorPanel(project, file.pathString)
 
             val content = contentManager.factory.createContent(ui.component, file.presentableName, false)
-            val settingsContent = contentManager.factory.createContent(settingsPanel.component, "Settings", false)
+            val settingsContent = contentManager.factory.createContent(settingsPanel.component, "Judge", false)
+            val generatorContent = contentManager.factory.createContent(generatorPanel.component, "Generator", false)
 
             Disposer.register(content, ui)
             Disposer.register(settingsContent, settingsPanel)
+            Disposer.register(generatorContent, generatorPanel)
 
             val selectedIndex = project.properties.toolWindowSelectedTabIndex
 
             val contents = listOf(
                 content,
-                settingsContent
+                settingsContent,
+                generatorContent,
             )
 
             contentManager.addContent(contents[selectedIndex])

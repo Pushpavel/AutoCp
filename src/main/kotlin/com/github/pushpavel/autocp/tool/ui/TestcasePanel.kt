@@ -53,22 +53,13 @@ class TestcasePanel(val model: CollectionListModel<Testcase>) : ListItemView<Tes
         outputDoc.updateModelOnChange { copy(output = it.ifEmpty { null }) }
     }
 
-    private fun Editor.customizeEditor() {
-        settings.apply {
-            additionalLinesCount = 1
-            isLineMarkerAreaShown = false
-        }
-    }
-
     private fun Document.updateModelOnChange(predicate: Testcase.(String) -> Testcase) {
-        addDocumentListener(object : DocumentListener {
-            override fun documentChanged(event: DocumentEvent) {
-                if (testcase == null) return
-                val index = testcaseIndex() ?: return
-                val updatedTestcase = model.items[index].predicate(event.document.text)
-                model.setElementAt(updatedTestcase, index)
-            }
-        }, this@TestcasePanel)
+        onChanged(this@TestcasePanel) { text ->
+            if (testcase == null) return@onChanged
+            val index = testcaseIndex() ?: return@onChanged
+            val updatedTestcase = model.items[index].predicate(text)
+            model.setElementAt(updatedTestcase, index)
+        }
     }
 
     private fun testcaseIndex(): Int? {
