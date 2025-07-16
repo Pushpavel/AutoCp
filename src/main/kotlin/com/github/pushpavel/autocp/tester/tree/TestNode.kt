@@ -1,6 +1,9 @@
 package com.github.pushpavel.autocp.tester.tree
 
-import com.github.pushpavel.autocp.tester.base.ProcessFactory
+import com.github.pushpavel.autocp.database.models.JudgeSettings
+import com.github.pushpavel.autocp.database.models.Testcase
+import com.github.pushpavel.autocp.tester.base.Judge
+import com.github.pushpavel.autocp.tester.base.ProcessRunner
 
 /**
  * Tree Data-structure for defining the Test Tree
@@ -9,19 +12,17 @@ import com.github.pushpavel.autocp.tester.base.ProcessFactory
  */
 sealed interface TestNode {
     val name: String
-    val processFactory: ProcessFactory?
 
     data class Leaf(
         override val name: String,
-        val input: String,
-        val expectedOutput: String,
-        override val processFactory: ProcessFactory,
+        val testcase: Testcase,
     ) : TestNode
 
     data class Group(
         override val name: String,
-        val timeLimit: Long,
-        val children: List<TestNode>,
-        override val processFactory: ProcessFactory?
+        val children: Sequence<TestNode>,
+        val settings: JudgeSettings,
+        val participant: ProcessRunner,
+        val judge: Judge?
     ) : TestNode
 }

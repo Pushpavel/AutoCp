@@ -16,7 +16,7 @@ class AutoCpRunState(val project: Project, private val config: AutoCpConfig) : R
 
     override fun execute(executor: Executor, runner: ProgramRunner<*>): ExecutionResult {
         // prepare testing process
-        val processHandler = AutoCpTestingProcessHandler(project, config)
+        val processHandler = AutoCpTestingProcessHandler(project, config, false)
 
         // prepare console
         val properties = SMTRunnerConsoleProperties(config, R.strings.runConfigName, executor)

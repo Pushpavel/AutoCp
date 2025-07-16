@@ -2,7 +2,9 @@ package com.github.pushpavel.autocp.tester.base
 
 import com.github.pushpavel.autocp.build.Lang
 import com.github.pushpavel.autocp.common.helpers.pathString
+import com.github.pushpavel.autocp.database.models.Program
 import com.github.pushpavel.autocp.database.models.SolutionFile
+import com.github.pushpavel.autocp.tester.utils.createFile
 import com.github.pushpavel.autocp.tester.utils.splitCommandString
 import com.intellij.execution.configurations.GeneralCommandLine
 import com.intellij.openapi.project.Project
@@ -21,35 +23,52 @@ class TwoStepProcessFactory(private val workingDir: File, private val commandLis
     }
 
     companion object {
-        suspend fun from(
+        suspend fun fromSolutionFile(
             project: Project,
             solutionFile: SolutionFile,
-            lang: Lang
+            lang: Lang,
+            workingDir: File
         ): Pair<TwoStepProcessFactory, ProcessRunner.CapturedResults?> {
-            val tempDir = withContext(Dispatchers.IO) {
-                Files.createTempDirectory("AutoCp")
-            }.toFile()
+            workingDir.mkdirs()
+            return fromPathString(project, lang, solutionFile.pathString, workingDir)
+        }
 
-            tempDir.mkdirs()
+        suspend fun fromProgram(
+            project: Project,
+            program: Program,
+            fileName: String,
+            workingDir: File
+        ): Pair<TwoStepProcessFactory, ProcessRunner.CapturedResults?> {
+            workingDir.mkdirs()
 
-            val executeCommand = lang.constructExecuteCommand(project, solutionFile.pathString, tempDir.path.pathString)
+            val extension = program.languageExtension
+            val file = createFile(workingDir, "$fileName.$extension", program.code ?: "")
+            return fromPathString(project, program.lang, file.path.pathString, workingDir)
+        }
+
+        private suspend fun fromPathString(
+            project: Project,
+            lang: Lang,
+            pathString: String,
+            workingDir: File
+        ): Pair<TwoStepProcessFactory, ProcessRunner.CapturedResults?> {
+            val executeCommand = lang.constructExecuteCommand(project, pathString, workingDir.path.pathString)
             val executeCommandList = splitCommandString(executeCommand)
 
             var result: ProcessRunner.CapturedResults? = null
             if (lang.buildCommand != null) {
-                val buildCommand = lang.constructBuildCommand(project, solutionFile.pathString, tempDir.path.pathString)
+                val buildCommand = lang.constructBuildCommand(project, pathString, workingDir.path.pathString)
                 val buildCommandList = splitCommandString(buildCommand)
 
                 try {
-                    val cmd = GeneralCommandLine(buildCommandList)
-                    val buildProcess = cmd.withWorkDirectory(tempDir).createProcess()
-                    result = ProcessRunner.run(buildProcess)
+                    val factory = TwoStepProcessFactory(workingDir, buildCommandList)
+                    result = ProcessRunner(factory, workingDir).run()
                 } catch (e: Exception) {
                     throw BuildErr(e, buildCommand)
                 }
             }
 
-            return Pair(TwoStepProcessFactory(tempDir, executeCommandList), result)
+            return Pair(TwoStepProcessFactory(workingDir, executeCommandList), result)
         }
     }
 }

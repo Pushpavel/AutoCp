@@ -1,5 +1,8 @@
 package com.github.pushpavel.autocp.database.models
 
+import com.github.pushpavel.autocp.build.Lang
+import com.github.pushpavel.autocp.build.settings.LangNotConfiguredErr
+import com.github.pushpavel.autocp.build.settings.LangSettings
 import com.github.pushpavel.autocp.database.autoCp
 import com.intellij.openapi.project.Project
 import kotlinx.serialization.Serializable
@@ -45,4 +48,7 @@ data class JudgeSettings (
 data class Program (
     val code: String? = null,
     val languageExtension: String = "cpp"
-)
+) {
+
+    val lang get() = LangSettings.instance.langs[languageExtension] ?: throw LangNotConfiguredErr(languageExtension)
+}
