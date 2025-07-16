@@ -20,7 +20,9 @@ class TreeTestingProcessReporter(private val processHandler: ProcessHandler) : T
         testStarted(node.name).apply()
         testStdOut(node.name).addAttribute(
             "out",
-            "${"___".repeat(5)}[ ${node.name} ]${"___".repeat(5)}\n"
+            "${"___".repeat(5)}[ ${node.name} INPUT ]${"___".repeat(5)}\n" +
+            node.testcase.input + '\n' +
+            "${"___".repeat(5)}[ ${node.name} OUTPUT]${"___".repeat(5)}\n"
         ).apply()
     }
 
@@ -29,7 +31,8 @@ class TreeTestingProcessReporter(private val processHandler: ProcessHandler) : T
         if (node.verdict is com.github.pushpavel.autocp.tester.errors.Verdict.CorrectAnswer) {
             testStdOut(nodeName).addAttribute(
                 "out",
-                node.verdict.output + '\n' + R.strings.verdictOneLine(node.verdict) + '\n'
+                node.verdict.output + '\n' + R.strings.verdictOneLine(node.verdict) + '\n' +
+                (node.verdict.comment?.trim()?.let { "judge's comment: $it\n" } ?: "")
             ).apply()
 
             testFinished(nodeName)
@@ -44,7 +47,10 @@ class TreeTestingProcessReporter(private val processHandler: ProcessHandler) : T
                 testStdOut(nodeName).addAttribute("out", node.verdict.actualOutput + '\n').apply()
 
                 testFailed(nodeName)
-                    .addAttribute("message", R.strings.verdictOneLine(node.verdict))
+                    .addAttribute("message",
+                        R.strings.verdictOneLine(node.verdict) + '\n' +
+                        (node.verdict.comment?.trim()?.let { "judge's comment: $it\n" } ?: "")
+                    )
                     .addAttribute("type", "comparisonFailure")
                     .addAttribute("actual", node.verdict.actualOutput)
                     .addAttribute("expected", node.verdict.expectedOutput)
@@ -116,7 +122,7 @@ class TreeTestingProcessReporter(private val processHandler: ProcessHandler) : T
         when {
             result.isSuccess -> {
                 val r = result.getOrThrow()
-                val msg = R.strings.compileSuccessMsg(r.output, r.executionTime)
+                val msg = R.strings.compileSuccessMsg(r.outputs["stdout"] ?: "", r.executionTime)
                 processHandler.notifyTextAvailable(msg + "\n", ProcessOutputTypes.STDOUT)
             }
             result.isFailure -> {
