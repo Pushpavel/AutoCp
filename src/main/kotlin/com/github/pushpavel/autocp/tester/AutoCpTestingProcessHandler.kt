@@ -138,6 +138,7 @@ class AutoCpTestingProcessHandler(val project: Project, private val config: Auto
                     "Static testcases",
                     staticTestcases,
                     solutionFile.judgeSettings,
+                    solutionFile.generator.haltOnFailing,
                     participant,
                     judge
                 ),
@@ -145,6 +146,7 @@ class AutoCpTestingProcessHandler(val project: Project, private val config: Auto
                     "Stress testing",
                     generatingTestcases(),
                     solutionFile.judgeSettings,
+                    solutionFile.generator.haltOnFailing,
                     participant,
                     judge
                 )
@@ -155,6 +157,7 @@ class AutoCpTestingProcessHandler(val project: Project, private val config: Auto
             Path(solutionFile.pathString).nameWithoutExtension,
             leafNodes,
             solutionFile.judgeSettings,
+            solutionFile.generator.haltOnFailing,
             participant,
             judge
         )

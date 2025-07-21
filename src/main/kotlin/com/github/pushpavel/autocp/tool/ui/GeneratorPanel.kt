@@ -62,6 +62,14 @@ class GeneratorPanel(project: Project, pathString: String): Disposable {
                 }
             }
             row {
+                checkBox("Stop on first failing testcase").bindSelected(
+                    MutableProperty(
+                        getter = { generator?.haltOnFailing ?: true },
+                        setter = { generator = generator?.copy(haltOnFailing = it) }
+                    )
+                ).onChanged { apply() }
+            }
+            row {
                 generatorEditor.headerComponent = programEditorHeader("Generator program code", generatorExtension)
                 cell(generatorEditor.component).align(AlignX.FILL)
             }

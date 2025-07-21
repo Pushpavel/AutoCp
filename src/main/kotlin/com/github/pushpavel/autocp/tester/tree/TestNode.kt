@@ -22,6 +22,7 @@ sealed interface TestNode {
         override val name: String,
         val children: Sequence<TestNode>,
         val settings: JudgeSettings,
+        val haltOnFailing: Boolean,
         val participant: ProcessRunner,
         val judge: Judge?
     ) : TestNode
