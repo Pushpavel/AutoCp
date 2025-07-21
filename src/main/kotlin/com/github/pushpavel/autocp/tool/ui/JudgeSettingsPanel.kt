@@ -110,7 +110,9 @@ class JudgeSettingsPanel(project: Project, pathString: String, refreshCallback: 
                 }
                 row {
                     judgeEditor.headerComponent = programEditorHeader("Judge program code", judgeExtension)
-                    cell(judgeEditor.component).align(AlignX.FILL)
+                    cell(judgeEditor.component)
+                        .align(AlignX.FILL)
+                        .comment(R.strings.judgeComment)
                 }
             } }.bottomGap(BottomGap.MEDIUM)
             row {

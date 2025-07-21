@@ -2,6 +2,7 @@ package com.github.pushpavel.autocp.tool.ui
 
 import com.github.pushpavel.autocp.build.settings.LangSettings
 import com.github.pushpavel.autocp.common.helpers.mainScope
+import com.github.pushpavel.autocp.common.res.R
 import com.github.pushpavel.autocp.common.ui.helpers.allowOnlyPositiveIntegers
 import com.github.pushpavel.autocp.common.ui.helpers.onChange
 import com.github.pushpavel.autocp.database.SolutionFiles
@@ -71,11 +72,15 @@ class GeneratorPanel(project: Project, pathString: String): Disposable {
             }
             row {
                 generatorEditor.headerComponent = programEditorHeader("Generator program code", generatorExtension)
-                cell(generatorEditor.component).align(AlignX.FILL)
+                cell(generatorEditor.component)
+                    .align(AlignX.FILL)
+                    .comment(R.strings.generatorComment)
             }
             row {
                 correctEditor.headerComponent = programEditorHeader("Solution program code", correctExtension)
-                cell(correctEditor.component).align(AlignX.FILL)
+                cell(correctEditor.component)
+                    .align(AlignX.FILL)
+                    .comment(R.strings.correctComment)
             }
             row {
                 checkBox("Run static testcases as well").bindSelected(

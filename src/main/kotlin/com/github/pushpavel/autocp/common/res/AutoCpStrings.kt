@@ -58,6 +58,29 @@ object AutoCpStrings {
     // Project Settings CMake
     const val addToCMakeMsg = "Add generated solution files to CMakeLists.txt"
 
+    // Settings panels strings
+    const val judgeComment = "" +
+            "The judge program can be used to evaluate the participant's program performance instead of comparing its output to some correct output.<br>" +
+            "You can access the following files:<br>" +
+            "<b>input.txt</b> which contains the test input<br>" +
+            "<b>correct.txt</b> which contains the solution's program output (if solution's program provided)<br>" +
+            "<b>answer.txt</b> which contains the participant's program output (if problem is not interactive)<br>" +
+            "If the problem is interactive, use stdin and stdout with flushing o communicate with the participant's program.<br>" +
+            "You can provide a comment by writing output to <b>comment.txt</b><br>" +
+            "The judge program should terminate with one of the following exit codes:<br>" +
+            "<b>0</b> - CORRECT ANSWER<br>" +
+            "<b>1</b> - WRONG ANSWER"
+    const val generatorComment = "" +
+            "The generator program is used to generate the input for a testcase.<br>" +
+            "The stdin will contain exactly one number: the index of the stress testcase.<br>" +
+            "This could be used for a Random's seed to make the generated testcases deterministic.<br>" +
+            "The testcase input is taken by the stdout of the generator program."
+    const val correctComment = "" +
+            "The solution program should be a program that always answers correctly but might need to much time for bigger inputs. " +
+            "(Hence, your generator's testcase inputs should not be to big for the solutions program not to need forever.)<br>" +
+            "It reads the testcase input from and answers by printing to the files specified in the Generator tab.</b>"
+
+
     // Build Configuration Dialog strings
     val commandTemplateDesc = "" +
             "The executable in these commands are run in an isolated temporary directory. But not the command itself.<br>" +
