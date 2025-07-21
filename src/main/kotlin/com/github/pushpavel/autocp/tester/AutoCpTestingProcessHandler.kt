@@ -111,7 +111,7 @@ class AutoCpTestingProcessHandler(val project: Project, private val config: Auto
                     var testInput: String
                     var correctOutput: String?
                     runBlocking {
-                        val generatorResult = generator.run()
+                        val generatorResult = generator.setInput(i.toString() + '\n', null).run()
                         if (generatorResult.exitCode != 0)
                             throw TestGenerationErr.GeneratorFailed()
                         testInput = generatorResult.outputs["stdout"] ?: ""
