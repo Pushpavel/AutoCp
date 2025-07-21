@@ -8,7 +8,7 @@ import com.intellij.openapi.util.IconLoader
 /**
  * Provides an option "Run with AutoCp" in context menu
  */
-class AutoCpExecutor : Executor() {
+open class AutoCpExecutor : Executor() {
     override fun getToolWindowId() = R.keys.autoCpToolWindowId
     override fun getToolWindowIcon() = R.icons.logo16
 

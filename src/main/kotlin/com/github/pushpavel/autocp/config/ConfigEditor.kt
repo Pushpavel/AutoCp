@@ -16,7 +16,7 @@ import com.intellij.ui.layout.ValidationInfoBuilder
 /**
  * UI Editor of [AutoCpConfig] Run Configuration
  */
-class ConfigEditor(val project: Project, val config: AutoCpConfig) : SettingsEditor<AutoCpConfig>(), DumbAware {
+open class ConfigEditor(val project: Project, val config: AutoCpConfig) : SettingsEditor<AutoCpConfig>(), DumbAware {
     @Suppress("MemberVisibilityCanBePrivate")
     var solutionFilePath = ""
 

@@ -15,6 +15,10 @@ object AutoCpStrings {
     const val runConfigId = "AutoCp"
     const val runConfigDescription = "Test your Competitive Programming solution with AutoCp"
 
+    const val runStressConfigName = "AutoCp Stress Testing"
+    const val runStressConfigId = "AutoCpStress"
+    const val runStressConfigDescription = "Test your Competitive Programming solution against many auto-generated input data"
+    const val stressConfigNamePrefix = "Stress Testing "
 
     // File Issue notes
     const val fileIssue = "please file an <a herf=\"https://github.com/Pushpavel/AutoCp/issues/new/choose\">issue</a>"

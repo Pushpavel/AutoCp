@@ -10,6 +10,7 @@ object AutoCpKeys {
     // Ids
     const val autoCpToolWindowId = "Testcases"
     const val autoCpExecutorId = "TestcasesExecutor"
+    const val autoCpStressExecutorId = "StressTestcasesExecutor"
 
     // Command User Macros
     const val inputPathMacro = "@in"
