@@ -30,6 +30,7 @@ data class Generator (
     val correctProgram: Program = Program(),
 
     val useStaticTestcases: Boolean = false,
+    val haltOnFailing: Boolean = true
 )
 
 @Serializable

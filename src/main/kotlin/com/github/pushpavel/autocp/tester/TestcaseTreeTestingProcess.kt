@@ -64,7 +64,7 @@ class TestcaseTreeTestingProcess(rootTestNode: TestNode, reporter: Listener, pri
         val it = node.children.iterator()
         while (it.hasNext()) {
             children.add(processNode(it.next(), node))
-            if (isStress && !isSuccess(children.last()))
+            if (node.haltOnFailing && isStress && !isSuccess(children.last()))
                 break;
         }
 
