@@ -12,7 +12,7 @@ import com.intellij.execution.testframework.sm.runner.SMTRunnerConsoleProperties
 import com.intellij.openapi.project.Project
 
 
-class AutoCpRunState(val project: Project, private val config: AutoCpConfig) : RunProfileState {
+open class AutoCpRunState(val project: Project, protected val config: AutoCpConfig) : RunProfileState {
 
     override fun execute(executor: Executor, runner: ProgramRunner<*>): ExecutionResult {
         // prepare testing process
