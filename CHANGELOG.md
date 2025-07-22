@@ -2,12 +2,23 @@
 > All notable changes to this project will be documented in this page.
 
 ## [Unreleased]
+
+- [#138](https://github.com/Pushpavel/AutoCp/pull/138) - Implements stress testing.
+- [#138](https://github.com/Pushpavel/AutoCp/pull/138) - Supports interactive problems 
+- [#138](https://github.com/Pushpavel/AutoCp/pull/138) - Supports file I/O based on host websites.
+- [#137](https://github.com/Pushpavel/AutoCp/pull/137) - Enhances the file creation dialog with an input field for filenames and an option to save the default generation folder, which is scoped per-project and per-host. 
+- [#136](https://github.com/Pushpavel/AutoCp/pull/136) - Fixes lang settings service initialization bug
+
+## 0.7.30
+
 - Supports IDE versions from 2024.2
 
 ## 0.7.20
+
 - Supports IDE versions from 2024.1
 
 ## 0.7.10
+
 - Migrates to Kotlin UI DSL 2
 - Supports future IDE versions from 2023.1
 
