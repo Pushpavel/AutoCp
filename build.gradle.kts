@@ -32,17 +32,20 @@ repositories {
 
 // Dependencies are managed with Gradle version catalog - read more: https://docs.gradle.org/current/userguide/platforms.html#sub:version-catalog
 dependencies {
+    testImplementation(libs.junit)
+    testImplementation(libs.opentest4j)
+
     val ktor_version = "2.1.2"
 
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:1.8.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:1.10.2")
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.9.0")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
     implementation("io.ktor:ktor-client-core:$ktor_version")
     implementation("io.ktor:ktor-client-java:$ktor_version")
 
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.0")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.0")
-    testImplementation("io.mockk:mockk:1.13.2")
+//    testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.0")
+//    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.0")
+//    testImplementation("io.mockk:mockk:1.13.2")
 
     // IntelliJ Platform Gradle Plugin Dependencies Extension - read more: https://plugins.jetbrains.com/docs/intellij/tools-intellij-platform-gradle-plugin-dependencies-extension.html
     intellijPlatform {
@@ -54,9 +57,9 @@ dependencies {
         // Plugin Dependencies. Uses `platformPlugins` property from the gradle.properties file for plugin from JetBrains Marketplace.
         plugins(providers.gradleProperty("platformPlugins").map { it.split(',') })
 
-        instrumentationTools()
-        pluginVerifier()
-        zipSigner()
+//        instrumentationTools()
+//        pluginVerifier()
+//        zipSigner()
         testFramework(TestFrameworkType.Platform)
     }
 }
@@ -66,6 +69,7 @@ intellijPlatform {
     buildSearchableOptions.set(false)
 
     pluginConfiguration {
+        name = providers.gradleProperty("pluginName")
         version = providers.gradleProperty("pluginVersion")
 
         // Extract the <!-- Plugin description --> section from README.md and provide for the plugin's manifest
@@ -96,15 +100,15 @@ intellijPlatform {
 
         ideaVersion {
             sinceBuild = providers.gradleProperty("pluginSinceBuild")
-            untilBuild = providers.gradleProperty("pluginUntilBuild")
+//            untilBuild = providers.gradleProperty("pluginUntilBuild")
         }
     }
 
-//    signing {
-//        certificateChain = providers.environmentVariable("CERTIFICATE_CHAIN")
-//        privateKey = providers.environmentVariable("PRIVATE_KEY")
-//        password = providers.environmentVariable("PRIVATE_KEY_PASSWORD")
-//    }
+    signing {
+        certificateChain = providers.environmentVariable("CERTIFICATE_CHAIN")
+        privateKey = providers.environmentVariable("PRIVATE_KEY")
+        password = providers.environmentVariable("PRIVATE_KEY_PASSWORD")
+    }
 
     publishing {
         token = providers.environmentVariable("PUBLISH_TOKEN")
@@ -147,9 +151,9 @@ tasks {
         dependsOn(patchChangelog)
     }
 
-    test {
-        useJUnitPlatform()
-    }
+//    test {
+//        useJUnitPlatform()
+//    }
 
 }
 

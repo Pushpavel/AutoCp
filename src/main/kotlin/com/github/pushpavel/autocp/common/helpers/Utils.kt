@@ -19,11 +19,3 @@ fun <T> Collection<T>.isItemsEqual(other: Collection<T>): Boolean {
 
     return true
 }
-
-suspend inline fun <T> T.catchAndLog(crossinline action: suspend T.() -> Unit) {
-    try {
-        action()
-    } catch (e: Exception) {
-        e.printStackTrace()
-    }
-}

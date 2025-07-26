@@ -40,7 +40,7 @@ class CMakeAddExecutable(val project: Project) : FileGenerationListener {
 
         if (!settings.addToCMakeLists) return
 
-        invokeLater(ModalityState.NON_MODAL) {
+        invokeLater(ModalityState.nonModal()) {
 
             val cmakeFile = VfsUtil.findFile(cmakePath, true)
                 ?: return@invokeLater

@@ -1,9 +1,6 @@
 package com.github.pushpavel.autocp.common.ui.helpers
 
 import com.intellij.openapi.ui.ValidationInfo
-import com.intellij.ui.components.JBCheckBox
-import com.intellij.ui.layout.CellBuilder
-import com.intellij.ui.layout.ComponentPredicate
 
 fun ValidationInfo?.isError(): Boolean {
     return this?.warning == false
