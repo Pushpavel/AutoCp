@@ -5,7 +5,7 @@ on:
     branches: [docs]
 jobs:
   deploy:
-    name: Publish to Github Pages
+    name: Publish to GitHub Pages
     runs-on: ubuntu-latest
 
     steps:
@@ -37,7 +37,7 @@ jobs:
           # deploy the default output dir of VuePress
           build_dir: docs/.vuepress/dist
           jekyll: false
-          commit_message: "🚀: deploy to github pages"
+          commit_message: "🚀: deploy to GitHub pages"
           allow_empty_commit: false
           keep_history: true
         env:
