@@ -28,18 +28,23 @@ Open Testcase viewer
 
 ## Judging Solution
 
-<img width="2938" height="1910" alt="QQ_1761970828751" src="https://github.com/user-attachments/assets/888238f4-0b7b-4a1e-a2d3-fce9a6765f2a" />
+<img alt="QQ_1761970828751" src="https://github.com/user-attachments/assets/888238f4-0b7b-4a1e-a2d3-fce9a6765f2a" />
 
-<img width="2938" height="1910" alt="QQ_1761970875988" src="https://github.com/user-attachments/assets/be01d870-e96c-4db4-819f-3f77af365ab4" />
+<img alt="QQ_1761970875988" src="https://github.com/user-attachments/assets/be01d870-e96c-4db4-819f-3f77af365ab4" />
 
-<img width="2938" height="1910" alt="QQ_1761970986602" src="https://github.com/user-attachments/assets/1bb09fc5-8f76-470a-a737-46754ee6aea8" />
+<img alt="QQ_1761970986602" src="https://github.com/user-attachments/assets/1bb09fc5-8f76-470a-a737-46754ee6aea8" />
 
-<img width="2938" height="1910" alt="QQ_1761971017219" src="https://github.com/user-attachments/assets/adf3ddc4-6481-493a-a874-455d3660d007" />
+<img alt="QQ_1761971017219" src="https://github.com/user-attachments/assets/adf3ddc4-6481-493a-a874-455d3660d007" />
 
-<img width="2938" height="1910" alt="QQ_1761971115668" src="https://github.com/user-attachments/assets/acdfcc0a-ab59-4d01-9a73-35434c92d058" />
+<img alt="QQ_1761971115668" src="https://github.com/user-attachments/assets/acdfcc0a-ab59-4d01-9a73-35434c92d058" />
 
 
 Open your solution file and run by right-clicking on it (<kbd>Alt</kbd> + <kbd>X</kbd>).
 
-<img width="2938" height="1910" alt="QQ_1761971228131" src="https://github.com/user-attachments/assets/a7d2f39b-2683-4f23-b657-fd3ce1157ec1" />
+<img alt="QQ_1761971228131" src="https://github.com/user-attachments/assets/a7d2f39b-2683-4f23-b657-fd3ce1157ec1" />
 
+Of course, you can also run it with C/C++ file, you can just choose the source file and the clion will automatically give the name same as the file to the run configuration.
+
+<img alt="QQ_1762574662918" src="https://github.com/user-attachments/assets/69d7ce09-f2bd-4b36-9eb7-156a730a0433" />
+
+<img alt="QQ_1762575088837" src="https://github.com/user-attachments/assets/80740e12-89f1-4034-b79b-7368a22a0dbc" />
