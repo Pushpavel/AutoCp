@@ -2,6 +2,7 @@ package com.github.pushpavel.autocp.config
 
 import com.github.pushpavel.autocp.common.helpers.pathString
 import com.github.pushpavel.autocp.database.SolutionFiles
+import com.intellij.execution.ExecutionTargetManager
 import com.intellij.execution.actions.ConfigurationContext
 import com.intellij.execution.actions.LazyRunConfigurationProducer
 import com.intellij.openapi.diagnostic.Logger
@@ -42,11 +43,26 @@ class AutoCpConfigProducer : LazyRunConfigurationProducer<AutoCpConfig>() {
         if (suggestedName != null)
             configuration.name = suggestedName
 
-        // 新增：记录配置详情
+        // Log configuration details
         log.warn("AutoCp: Configuration created successfully")
         log.warn("AutoCp: Config name = ${configuration.name}")
         log.warn("AutoCp: Config type = ${configuration.type.displayName}")
         log.warn("AutoCp: Config factory = ${configuration.factory}")
+        log.warn("AutoCp: Config ID = ${configuration.id}")
+        log.warn("AutoCp: Config class = ${configuration.javaClass.name}")
+        
+        // Test if canRunOn is called here
+        try {
+            val targetManager = ExecutionTargetManager.getInstance(context.project)
+            val activeTarget = targetManager.activeTarget
+            log.warn("AutoCp: Current active ExecutionTarget = ${activeTarget.displayName} (id=${activeTarget.id})")
+            log.warn("AutoCp: Active target class = ${activeTarget.javaClass.name}")
+            log.warn("AutoCp: Testing canRunOn with active target...")
+            val canRun = configuration.canRunOn(activeTarget)
+            log.warn("AutoCp: canRunOn(activeTarget) returned: $canRun")
+        } catch (e: Exception) {
+            log.error("AutoCp: Error testing canRunOn", e)
+        }
 
         log.info("AutoCp: Returning TRUE")
         return true
