@@ -38,6 +38,10 @@ class AutoCpConfigProducer : LazyRunConfigurationProducer<AutoCpConfig>() {
         }
 
         configuration.solutionFilePath = solutionPath
+        
+        // CRITICAL FIX: Enable parallel execution for configurations created from context
+        // This allows multiple Alt+X presses to create multiple running instances
+        configuration.isAllowRunningInParallel = true
 
         val suggestedName = configuration.suggestedName()
         if (suggestedName != null)
@@ -50,6 +54,7 @@ class AutoCpConfigProducer : LazyRunConfigurationProducer<AutoCpConfig>() {
         log.warn("AutoCp: Config factory = ${configuration.factory}")
         log.warn("AutoCp: Config ID = ${configuration.id}")
         log.warn("AutoCp: Config class = ${configuration.javaClass.name}")
+        log.warn("AutoCp: Config.isAllowRunningInParallel = ${configuration.isAllowRunningInParallel}")
         
         // Test if canRunOn is called here
         try {
