@@ -33,6 +33,10 @@ open class AutoCpConfig(project: Project, factory: ConfigurationFactory, name: S
 
     init {
         LOG.warn("AutoCp Debug: AutoCpConfig instance created, name='$name', factory='${factory.id}'")
+        // Allow multiple AutoCp test runs to execute in parallel
+        // This enables users to press Alt+X multiple times to run the same file concurrently
+        isAllowRunningInParallel = true
+        LOG.warn("AutoCp Debug: isAllowRunningInParallel set to true")
     }
 
     var solutionFilePath: String = ""
@@ -170,6 +174,6 @@ open class AutoCpConfig(project: Project, factory: ConfigurationFactory, name: S
     override fun getDefaultLanguageRuntimeType(): LanguageRuntimeType<*>? {
         LOG.warn("AutoCp Debug: getDefaultLanguageRuntimeType() called, returning null")
         return null
-     }
+    }
 
 }
