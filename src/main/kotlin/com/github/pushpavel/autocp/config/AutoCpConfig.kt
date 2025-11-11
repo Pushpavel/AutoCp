@@ -12,12 +12,17 @@ import com.intellij.util.xmlb.XmlSerializer
 import org.jdom.Element
 import kotlin.io.path.Path
 import kotlin.io.path.nameWithoutExtension
+import com.intellij.openapi.diagnostic.Logger
+import com.intellij.execution.ExecutionTarget
 
 /**
  * Implementation Class for a Custom Run Configuration that can also be created from context (by right-clicking and run)
  */
 open class AutoCpConfig(project: Project, factory: ConfigurationFactory, name: String) :
     LocatableConfigurationBase<RunProfileState>(project, factory, name) {
+    companion object {
+        private val LOG = Logger.getInstance(AutoCpConfig::class.java)
+    }
 
     var solutionFilePath: String = ""
 
@@ -26,7 +31,31 @@ open class AutoCpConfig(project: Project, factory: ConfigurationFactory, name: S
     /**
      * Returns [RunProfileState] that defines the execution of this Run Configuration
      */
-    override fun getState(executor: Executor, environment: ExecutionEnvironment) = AutoCpRunState(project, this)
+    override fun getState(executor: Executor, environment: ExecutionEnvironment) : RunProfileState {
+        LOG.warn("AutoCp Debug: getState() called")
+        LOG.warn("AutoCp Debug: Executor = ${executor.id}")
+        LOG.warn("AutoCp Debug: Solution file path = $solutionFilePath")
+        LOG.warn("AutoCp Debug: Config name = $name")
+        return AutoCpRunState(project, this)
+    }
+
+    override fun checkConfiguration() {
+        LOG.warn("AutoCp Debug: checkConfiguration() called")
+        LOG.warn("AutoCp Debug: Solution file path = $solutionFilePath")
+        try {
+            super.checkConfiguration()
+            LOG.warn("AutoCp Debug: checkConfiguration() passed")
+        } catch (e: Exception) {
+            LOG.warn("AutoCp Debug: checkConfiguration() failed: ${e.message}")
+            throw e
+        }
+    }
+
+    override fun canRunOn(target: ExecutionTarget): Boolean {
+        LOG.warn("AutoCp Debug: canRunOn(target) called with: ${target.displayName}")
+        // 支持所有执行目标
+        return true
+    }
 
 
     /**

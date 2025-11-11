@@ -19,8 +19,8 @@
 
         <configurationType implementation="com.github.pushpavel.autocp.config.AutoCpConfigType"/>
         <configurationType implementation="com.github.pushpavel.autocp.config.stress.AutoCpStressConfigType"/>
-        <runConfigurationProducer implementation="com.github.pushpavel.autocp.config.AutoCpConfigProducer" order="LAST"/>
-        <runConfigurationProducer implementation="com.github.pushpavel.autocp.config.stress.AutoCpStressConfigProducer" order="LAST"/>
+        <runConfigurationProducer implementation="com.github.pushpavel.autocp.config.AutoCpConfigProducer"/>
+        <runConfigurationProducer implementation="com.github.pushpavel.autocp.config.stress.AutoCpStressConfigProducer"/>
         <notificationGroup id="autocp-notifications-group" key="notificationGroup" displayType="BALLOON"/>
 
         <!--    Settings   -->
@@ -57,6 +57,8 @@
 
         <executor implementation="com.github.pushpavel.autocp.core.runner.AutoCpExecutor"/>
         <executor implementation="com.github.pushpavel.autocp.core.runner.AutoCpStressExecutor"/>
+
+        <programRunner implementation="com.github.pushpavel.autocp.config.AutoCpProgramRunner"/>
     </extensions>
     <projectListeners>
         <listener class="com.github.pushpavel.autocp.extend.cmake.CMakeAddExecutable"
