@@ -59,6 +59,7 @@
         <executor implementation="com.github.pushpavel.autocp.core.runner.AutoCpStressExecutor"/>
 
         <programRunner implementation="com.github.pushpavel.autocp.config.AutoCpProgramRunner"/>
+        <executionTargetProvider implementation="com.github.pushpavel.autocp.config.AutoCpExecutionTargetProvider"/>
     </extensions>
     <projectListeners>
         <listener class="com.github.pushpavel.autocp.extend.cmake.CMakeAddExecutable"
