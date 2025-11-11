@@ -13,7 +13,6 @@ import com.github.pushpavel.autocp.database.models.Testcase
 import com.github.pushpavel.autocp.tester.base.*
 import com.github.pushpavel.autocp.tester.errors.TestGenerationErr
 import com.github.pushpavel.autocp.tester.tree.TestNode
-import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.project.Project
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
@@ -28,25 +27,16 @@ import kotlin.io.path.nameWithoutExtension
  * [TestingProcessHandler] implementation that creates a [TestcaseTreeTestingProcess] for execution
  */
 class AutoCpTestingProcessHandler(val project: Project, private val config: AutoCpConfig, private val isStress: Boolean) : TestingProcessHandler() {
-    companion object {
-        private val LOG = Logger.getInstance(AutoCpTestingProcessHandler::class.java)
-    }
     private val reporter = TreeTestingProcessReporter(this)
 
     override suspend fun createTestingProcess(): TestcaseTreeTestingProcess? {
-        LOG.warn("AutoCp Debug: createTestingProcess() called")
-        LOG.warn("AutoCp Debug: Config name = ${config.name}")
-        LOG.warn("AutoCp Debug: Solution file path = ${config.solutionFilePath}")
         try {
             // get and validate SolutionFile from config
-            LOG.warn("AutoCp Debug: About to call getValidSolutionFile")
             val solutionFile = getValidSolutionFile(config.project, config.name, config.solutionFilePath)
 
             // validate lang
             val extension = Path(solutionFile.pathString).extension
-            LOG.warn("AutoCp Debug: File extension = $extension")
             val lang = LangSettings.instance.langs[extension] ?: throw LangNotConfiguredErr(extension)
-            LOG.warn("AutoCp Debug: Language validated successfully")
 
             val tempDir = withContext(Dispatchers.IO) {
                 Files.createTempDirectory("AutoCp")
@@ -61,7 +51,6 @@ class AutoCpTestingProcessHandler(val project: Project, private val config: Auto
             // create a TestingProcess from the Problem and Test Tree
             return TestcaseTreeTestingProcess(rootNode, reporter, isStress)
         } catch (err: Exception) {
-            LOG.warn("AutoCp Debug: Exception in createTestingProcess: ${err.javaClass.simpleName}: ${err.message}")
             reportTestingStartErr(err)
             return null
         }
