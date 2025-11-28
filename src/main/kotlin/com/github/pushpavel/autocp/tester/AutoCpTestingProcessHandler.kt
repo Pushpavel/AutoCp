@@ -13,7 +13,10 @@ import com.github.pushpavel.autocp.database.models.Testcase
 import com.github.pushpavel.autocp.tester.base.*
 import com.github.pushpavel.autocp.tester.errors.TestGenerationErr
 import com.github.pushpavel.autocp.tester.tree.TestNode
+import com.intellij.openapi.application.ApplicationManager
+import com.intellij.openapi.fileEditor.FileDocumentManager
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.vfs.LocalFileSystem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
@@ -31,6 +34,18 @@ class AutoCpTestingProcessHandler(val project: Project, private val config: Auto
 
     override suspend fun createTestingProcess(): TestcaseTreeTestingProcess? {
         try {
+            // Save the current solution file before compilation to ensure latest changes are compiled
+            ApplicationManager.getApplication().invokeAndWait {
+                val virtualFile = LocalFileSystem.getInstance().findFileByPath(config.solutionFilePath)
+                if (virtualFile != null) {
+                    val document = FileDocumentManager.getInstance().getDocument(virtualFile)
+                    if (document != null) {
+                        FileDocumentManager.getInstance().saveDocument(document)
+                        virtualFile.refresh(false, false)
+                    }
+                }
+            }
+            
             // get and validate SolutionFile from config
             val solutionFile = getValidSolutionFile(config.project, config.name, config.solutionFilePath)
 
