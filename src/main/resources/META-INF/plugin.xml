@@ -53,7 +53,8 @@
         <project.converterProvider
                 implementation="com.github.pushpavel.autocp.common.compat.v0_5_0_eap_1.AutoCpProjectConverterProvider"
                 id="AutoCp v0.5.0-eap.1"/>
-        <postStartupActivity implementation="com.github.pushpavel.autocp.gather.base.ProblemGatheringBridge"/>
+        <applicationService serviceImplementation="com.github.pushpavel.autocp.gather.base.ProblemGatheringBridge"/>
+        <postStartupActivity implementation="com.github.pushpavel.autocp.gather.base.ProblemGatheringBridgeStarter"/>
 
         <executor implementation="com.github.pushpavel.autocp.core.runner.AutoCpExecutor"/>
         <executor implementation="com.github.pushpavel.autocp.core.runner.AutoCpStressExecutor"/>
