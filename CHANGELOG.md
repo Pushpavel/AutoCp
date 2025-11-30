@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 - Fix: Cannot run 'filename' in 'debug'  (Allow AutoCp run configurations to execute with CMake build targets) by @znzryb in https://github.com/Pushpavel/AutoCp/pull/150
+- Fix: Prevent multiple progress bars when receiving Competitive Companion messages by @znzryb in https://github.com/Pushpavel/AutoCp/pull/151
 
 ## [0.8.0] - 2025-07-26
 
