@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- Fix: Cannot run 'filename' in 'debug'  (Allow AutoCp run configurations to execute with CMake build targets) by @znzryb in https://github.com/Pushpavel/AutoCp/pull/150
+
 ## [0.8.0] - 2025-07-26
 
 - [#138](https://github.com/Pushpavel/AutoCp/pull/138) - Implements stress testing.
