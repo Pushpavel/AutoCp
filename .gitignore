@@ -12,3 +12,6 @@ docs
 
 # ignore other extension related
 competitive-companion
+
+# ignore MacOS related files
+*.DS_Store
