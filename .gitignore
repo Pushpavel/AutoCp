@@ -9,3 +9,9 @@ src/main/resources/messages/secrets.properties
 # these file/folders are to be tracked in docs related branches
 docs
 .nojekyll
+
+# ignore other extension related
+competitive-companion
+
+# ignore MacOS related files
+*.DS_Store

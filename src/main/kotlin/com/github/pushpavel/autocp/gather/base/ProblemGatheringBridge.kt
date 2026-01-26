@@ -11,10 +11,13 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.startup.ProjectActivity
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.TimeoutCancellationException
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeout
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import java.net.SocketTimeoutException
@@ -50,22 +53,37 @@ class ProblemGatheringBridge : Disposable {
         // initialize server
         serverJob = scope.launch {
             try {
-                val serverSocket = openServerSocketAsync(
+                val serverSockets = openServerSocketsAsync(
                     R.others.competitiveCompanionPorts
                 ).await() ?: throw ProblemGatheringErr.AllPortsTakenErr(R.others.competitiveCompanionPorts)
 
-                serverSocket.use {
+                val messages = Channel<String>(Channel.RENDEZVOUS)
+                try {
+                    serverSockets.forEach { socket ->
+                        // keep accept responsive to cancellation
+                        socket.soTimeout = 1000
+                        launch {
+                            while (isActive) {
+                                try {
+                                    val message = listenForMessageAsync(socket, 1000).await() ?: continue
+                                    messages.send(message)
+                                } catch (_: SocketTimeoutException) {
+                                    // keep looping
+                                }
+                            }
+                        }
+                    }
+
                     while (isActive) {
                         try {
                             coroutineScope {
-                                val message = listenForMessageAsync(
-                                    serverSocket, R.others.problemGatheringTimeoutMillis
-                                ).await() ?: return@coroutineScope
-
+                                val message = withTimeout(R.others.problemGatheringTimeoutMillis.toLong()) {
+                                    messages.receive()
+                                }
                                 val json = serializer.decodeFromString<ProblemJson>(message)
                                 BatchProcessor.onJsonReceived(json)
                             }
-                        } catch (e: SocketTimeoutException) {
+                        } catch (_: TimeoutCancellationException) {
                             BatchProcessor.interruptBatch(ProblemGatheringErr.TimeoutErr)
                         } catch (e: SerializationException) {
                             BatchProcessor.interruptBatch(ProblemGatheringErr.JsonErr)
@@ -73,6 +91,9 @@ class ProblemGatheringBridge : Disposable {
 
                         while (BatchProcessor.isCurrentBatchBlocking()) delay(100)
                     }
+                } finally {
+                    messages.close()
+                    serverSockets.forEach { kotlin.runCatching { it.close() } }
                 }
             } catch (e: ProblemGatheringErr) {
                 R.notify.problemGatheringErr(e)
