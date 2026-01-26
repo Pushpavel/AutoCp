@@ -10,7 +10,6 @@ import java.io.BufferedInputStream
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
 import java.io.InputStreamReader
-import java.io.OutputStreamWriter
 import java.net.InetAddress
 import java.net.ServerSocket
 import java.net.SocketException
@@ -79,15 +78,6 @@ fun CoroutineScope.listenForMessageAsync(serverSocket: ServerSocket, timeout: In
 
             val inputStream = BufferedInputStream(it.getInputStream())
             val body = readHttpBody(inputStream)
-
-            // Competitive Companion doesn't need the response body, but responding avoids clients
-            // keeping the connection open (which would make our old "read-until-EOF" logic hang).
-            runCatching {
-                OutputStreamWriter(it.getOutputStream(), Charsets.US_ASCII).use { writer ->
-                    writer.write("HTTP/1.1 200 OK\r\nConnection: close\r\nContent-Length: 0\r\n\r\n")
-                    writer.flush()
-                }
-            }
 
             if (!body.isNullOrEmpty()) return@async body
         }
