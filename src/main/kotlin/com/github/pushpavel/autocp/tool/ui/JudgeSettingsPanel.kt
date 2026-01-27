@@ -10,6 +10,7 @@ import com.github.pushpavel.autocp.database.models.JudgeSettings
 import com.github.pushpavel.autocp.database.models.SolutionFile
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.application.runUndoTransparentWriteAction
+import com.intellij.openapi.application.runWriteAction
 import com.intellij.openapi.editor.EditorFactory
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.ComboBox
@@ -166,8 +167,10 @@ class JudgeSettingsPanel(project: Project, pathString: String, refreshCallback: 
         header.reset()
         body.reset()
         judgeExtension.selectedItem = settings?.judgeProgram?.languageExtension
-        runUndoTransparentWriteAction {
-            judgeDoc.setText(settings?.judgeProgram?.code ?: "")
+        runWriteAction {
+            runUndoTransparentWriteAction {
+                judgeDoc.setText(settings?.judgeProgram?.code ?: "")
+            }
         }
         resetting = false
     }
