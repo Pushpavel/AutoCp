@@ -11,6 +11,7 @@ import com.intellij.ui.CollectionListModel
 import com.intellij.ui.components.JBLabel
 import com.github.pushpavel.autocp.database.models.Testcase
 import com.github.pushpavel.autocp.common.ui.swing.editableList.ListItemView
+import com.intellij.openapi.application.runWriteAction
 import com.intellij.ui.dsl.builder.AlignX
 import com.intellij.ui.dsl.builder.panel
 import javax.swing.BorderFactory
@@ -37,13 +38,15 @@ class TestcasePanel(val model: CollectionListModel<Testcase>) : ListItemView<Tes
 
 
     override fun contentChanged(item: Testcase) {
-        runUndoTransparentWriteAction {
-            titleLabel.text = item.name
+        runWriteAction {
+            runUndoTransparentWriteAction {
+                titleLabel.text = item.name
 
-            if (item.input != inputDoc.text)
-                inputDoc.setText(item.input)
-            if (item.output != outputDoc.text)
-                outputDoc.setText(item.output ?: "")
+                if (item.input != inputDoc.text)
+                    inputDoc.setText(item.input)
+                if (item.output != outputDoc.text)
+                    outputDoc.setText(item.output ?: "")
+            }
         }
         testcase = item
     }

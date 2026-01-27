@@ -10,6 +10,7 @@ import com.github.pushpavel.autocp.database.models.Generator
 import com.github.pushpavel.autocp.database.models.SolutionFile
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.application.runUndoTransparentWriteAction
+import com.intellij.openapi.application.runWriteAction
 import com.intellij.openapi.editor.EditorFactory
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.ComboBox
@@ -144,9 +145,11 @@ class GeneratorPanel(project: Project, pathString: String): Disposable {
         body.reset()
         generatorExtension.selectedItem = generator?.generatorProgram?.languageExtension
         correctExtension.selectedItem = generator?.correctProgram?.languageExtension
-        runUndoTransparentWriteAction {
-            generatorDoc.setText(generator?.generatorProgram?.code ?: "")
-            correctDoc.setText(generator?.correctProgram?.code ?: "")
+        runWriteAction {
+            runUndoTransparentWriteAction {
+                generatorDoc.setText(generator?.generatorProgram?.code ?: "")
+                correctDoc.setText(generator?.correctProgram?.code ?: "")
+            }
         }
         resetting = false
     }
