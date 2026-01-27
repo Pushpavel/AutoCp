@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [0.9.0] - 2025-11-30
+
 - Fix: Cannot run 'filename' in 'debug'  (Allow AutoCp run configurations to execute with CMake build targets) by @znzryb in https://github.com/Pushpavel/AutoCp/pull/150
 - Fix: Prevent multiple progress bars when receiving Competitive Companion messages by @znzryb in https://github.com/Pushpavel/AutoCp/pull/151
 
@@ -175,7 +177,8 @@
 
 - Initial Release 🎉🎉😀
 
-[Unreleased]: https://github.com/Pushpavel/AutoCp/compare/v0.8.0...HEAD
+[Unreleased]: https://github.com/Pushpavel/AutoCp/compare/v0.9.0...HEAD
+[0.9.0]: https://github.com/Pushpavel/AutoCp/compare/v0.8.0...v0.9.0
 [0.8.0]: https://github.com/Pushpavel/AutoCp/compare/v0.7.30...v0.8.0
 [0.7.30]: https://github.com/Pushpavel/AutoCp/compare/v0.7.20...v0.7.30
 [0.7.20]: https://github.com/Pushpavel/AutoCp/compare/v0.7.10...v0.7.20
