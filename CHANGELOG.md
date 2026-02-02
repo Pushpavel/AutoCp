@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+- Wrap Editor changes in write actions by @jthuermann in https://github.com/Pushpavel/AutoCp/pull/157
+- Fix: make Competitive Companion listener robust on IPv4/IPv6 localhost by @znzryb in https://github.com/Pushpavel/AutoCp/pull/156
+
 ## [0.9.0] - 2025-11-30
 
 - Fix: Cannot run 'filename' in 'debug'  (Allow AutoCp run configurations to execute with CMake build targets) by @znzryb in https://github.com/Pushpavel/AutoCp/pull/150
