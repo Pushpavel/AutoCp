@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [0.9.1] - 2026-02-03
+
 - Wrap Editor changes in write actions by @jthuermann in https://github.com/Pushpavel/AutoCp/pull/157
 - Fix: make Competitive Companion listener robust on IPv4/IPv6 localhost by @znzryb in https://github.com/Pushpavel/AutoCp/pull/156
 
@@ -180,7 +182,8 @@
 
 - Initial Release 🎉🎉😀
 
-[Unreleased]: https://github.com/Pushpavel/AutoCp/compare/v0.9.0...HEAD
+[Unreleased]: https://github.com/Pushpavel/AutoCp/compare/v0.9.1...HEAD
+[0.9.1]: https://github.com/Pushpavel/AutoCp/compare/v0.9.0...v0.9.1
 [0.9.0]: https://github.com/Pushpavel/AutoCp/compare/v0.8.0...v0.9.0
 [0.8.0]: https://github.com/Pushpavel/AutoCp/compare/v0.7.30...v0.8.0
 [0.7.30]: https://github.com/Pushpavel/AutoCp/compare/v0.7.20...v0.7.30
