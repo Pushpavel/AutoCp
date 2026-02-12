@@ -57,6 +57,7 @@ class ProblemGatheringPipeline(val project: Project) : ProblemGatheringListener 
             dtos = showProblemGatheringDialog(project, problems)?.toMutableList()
             if (dtos == null) {
                 log.debug("Cancelling batch", batch, problems)
+                problemQueue.clear()
                 BatchProcessor.interruptBatch(ProblemGatheringErr.Cancellation)
                 return@runInEdt
             }
