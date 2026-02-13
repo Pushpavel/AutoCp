@@ -2,7 +2,6 @@ package com.github.pushpavel.autocp.gather.base
 
 import com.github.pushpavel.autocp.common.res.R
 import com.github.pushpavel.autocp.database.models.Problem
-import com.github.pushpavel.autocp.gather.filegen.DefaultFileGenerator
 import com.github.pushpavel.autocp.gather.models.FileGenerationDto
 import com.github.pushpavel.autocp.settings.generalSettings.AutoCpGeneralSettings
 import com.github.pushpavel.autocp.settings.projectSettings.autoCpProject
@@ -31,7 +30,7 @@ fun showProblemGatheringDialog(project: Project, problems: List<Problem>): List<
     dontAskBeforeFileGeneration = !projectSettings.askBeforeFileGeneration
     template = problems.firstOrNull()?.getOnlineJudge()
     rootDir = projectSettings.fileGenerationRoot.getOrDefault(template, generalSettings.fileGenerationRoot)
-    problemNames = MutableList(problems.size) { problems[it].getDefaultName() }
+    problemNames = MutableList(problems.size) { problems[it].name }
 
     val dialog = object : DialogWrapper(project, false) {
         init {
@@ -126,7 +125,7 @@ fun showProblemGatheringDialog(project: Project, problems: List<Problem>): List<
             problems.forEachIndexed() { index, problem ->
                 row(problem.name) {
                     textField().bindText({ problemNames[index] }, { problemNames[index] = it })
-                        .onIsModified { problemNames[index] != problem.getDefaultName() }
+                        .onIsModified { problemNames[index] != problem.name }
                 }
             }
         }
@@ -138,7 +137,5 @@ fun showProblemGatheringDialog(project: Project, problems: List<Problem>): List<
 
     return List(problemNames.size) { FileGenerationDto(problemNames[it], rootDir, template) }
 }
-
-fun Problem.getDefaultName() = DefaultFileGenerator.defaultConversion(name)
 
 fun Problem.getOnlineJudge() = groupName.split("-")[0].trim();
