@@ -44,7 +44,7 @@ open class DefaultFileGenerator(val project: Project) : FileGenerator {
         return "$newFileName.$extension"
     }
 
-    internal fun getValidFileName(fileName: String): String {
+    protected fun getValidFileName(fileName: String): String {
 
         val name = try {
             convertFileNameAndValidate(specialCharacterFiltering, fileName)
