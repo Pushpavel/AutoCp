@@ -24,8 +24,12 @@ import kotlin.io.path.pathString
 class JavaFileGenerator(project: Project) : DefaultFileGenerator(project) {
     override fun isSupported(extension: String) = extension == "java"
 
+    override fun getValidFileName(fileName: String): String {
+        return convertFileNameAndValidate(defaultConversion, fileName)
+    }
+
     override fun getParentPsiDir(rootPsiDir: PsiDirectory, problem: Problem, extension: String): PsiDirectory {
-        val packageName = defaultConversion(problem.name)
+        val packageName = getValidFileName(problem.name)
         val parentPath = Paths.get(rootPsiDir.virtualFile.path, packageName)
         val parentDir = VfsUtil.createDirectories(parentPath.pathString)
         return runReadAction { PsiManager.getInstance(project).findDirectory(parentDir)!! }
