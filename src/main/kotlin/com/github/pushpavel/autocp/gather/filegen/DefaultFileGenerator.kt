@@ -46,7 +46,7 @@ open class DefaultFileGenerator(val project: Project) : FileGenerator {
 
     internal fun getValidFileName(fileName: String): String {
 
-        return try {
+        val name = try {
             convertFileNameAndValidate(specialCharacterFiltering, fileName)
         } catch (e: InvalidPathException) {
             try {
@@ -55,6 +55,7 @@ open class DefaultFileGenerator(val project: Project) : FileGenerator {
                 convertFileNameAndValidate(defaultConversion, fileName)
             }
         }
+        return name.replace(' ', '_')
     }
     private fun convertFileNameAndValidate(convertFunc: (String) -> String, fileName: String): String {
         val convertedName = convertFunc.invoke(fileName)
