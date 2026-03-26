@@ -7,19 +7,30 @@ import com.github.pushpavel.autocp.common.res.R
 import com.github.pushpavel.autocp.common.ui.swing.editableList.EditableListView
 import com.github.pushpavel.autocp.database.SolutionFiles
 import com.github.pushpavel.autocp.database.models.Testcase
+import com.intellij.icons.AllIcons
 import com.intellij.openapi.Disposable
+import com.intellij.openapi.actionSystem.ActionManager
+import com.intellij.openapi.actionSystem.ActionPlaces
+import com.intellij.openapi.actionSystem.ActionUpdateThread
+import com.intellij.openapi.actionSystem.AnActionEvent
+import com.intellij.openapi.actionSystem.DefaultActionGroup
+import com.intellij.openapi.project.DumbAwareAction
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Disposer
 import com.intellij.ui.CollectionListModel
 import com.intellij.ui.dsl.builder.panel
-import com.intellij.ui.layout.ComponentPredicate
 import com.intellij.util.ui.JBUI
 import com.intellij.util.ui.components.BorderLayoutPanel
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import java.awt.BorderLayout
+import java.awt.Toolkit
+import java.awt.datatransfer.DataFlavor
+import java.awt.datatransfer.StringSelection
 import javax.swing.JComponent
 import javax.swing.event.ListDataEvent
 import javax.swing.event.ListDataListener
@@ -51,6 +62,48 @@ class TestcaseListPanel(project: Project, private val pathString: String) : Disp
             "New Testcase"
         )
 
+        val copyAllAction = object : DumbAwareAction("Copy All Testcases", null, AllIcons.Actions.Copy) {
+            override fun actionPerformed(e: AnActionEvent) {
+                val json = Json.encodeToString(testcaseListModel.items.toList())
+                Toolkit.getDefaultToolkit().systemClipboard.setContents(StringSelection(json), null)
+            }
+        }
+
+        val pasteAction = object : DumbAwareAction("Paste Testcase(s)", null, AllIcons.Actions.Download) {
+            override fun actionPerformed(e: AnActionEvent) {
+                val text = runCatching {
+                    Toolkit.getDefaultToolkit().systemClipboard.getData(DataFlavor.stringFlavor) as? String
+                }.getOrNull() ?: return
+                val list = runCatching { Json.decodeFromString<List<Testcase>>(text) }.getOrNull()
+                    ?: runCatching { listOf(Json.decodeFromString<Testcase>(text)) }.getOrNull()
+                    ?: return
+                list.forEach { testcaseListModel.add(it.copy(name = testcaseNameEnforcer.buildUniqueName(it.name))) }
+            }
+        }
+
+        val resetAction = object : DumbAwareAction("Reset Sample Testcases", null, AllIcons.Actions.Refresh) {
+            override fun actionPerformed(e: AnActionEvent) {
+                val file = solutionFiles[pathString]
+                val problem = file?.getLinkedProblem(project)
+                if (file == null || problem == null) return
+                val testcases = file.testcases.filter { !it.name.contains("Sample Testcase") }.toMutableList()
+                testcases.addAll(0, problem.sampleTestcases)
+                solutionFiles.update(file.copy(testcases = testcases))
+            }
+
+            override fun update(e: AnActionEvent) {
+                e.presentation.isVisible = solutionFiles[pathString]?.getLinkedProblem(project) != null
+            }
+
+            override fun getActionUpdateThread() = ActionUpdateThread.EDT
+        }
+
+        val popupGroup = DefaultActionGroup(copyAllAction, pasteAction, resetAction).apply {
+            isPopup = true
+            templatePresentation.text = "Testcase Actions"
+            templatePresentation.icon = AllIcons.General.GearPlain
+        }
+
         component = BorderLayoutPanel().apply {
             add(panel {
                 row {
@@ -65,21 +118,12 @@ class TestcaseListPanel(project: Project, private val pathString: String) : Disp
                     }
                     placeholder()
 
-                    button("Reset Sample Testcases") {
-                        val file = solutionFiles[pathString]
-                        val problem = file?.getLinkedProblem(project)
-                        if (file == null || problem == null) return@button
-                        val testcases = file.testcases.filter { !it.name.contains("Sample Testcase") }.toMutableList()
-                        testcases.addAll(0, problem.sampleTestcases)
-                        val updatedFile = file.copy(testcases = testcases)
-                        solutionFiles.update(updatedFile)
-                    }.visibleIf(object : ComponentPredicate() {
-                        override fun invoke() = solutionFiles[pathString]?.getLinkedProblem(project) != null
-
-                        override fun addListener(listener: (Boolean) -> Unit) {
-                            scope.launch { flow.collect { listener(invoke()) } }
-                        }
-                    })
+                    cell(
+                        ActionManager.getInstance()
+                            .createActionToolbar(ActionPlaces.TOOLWINDOW_CONTENT, popupGroup, true)
+                            .apply { targetComponent = null }
+                            .component
+                    )
                 }
             }.apply {
                 border = JBUI.Borders.empty(8, 8, 0, 8)
