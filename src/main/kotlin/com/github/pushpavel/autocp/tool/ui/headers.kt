@@ -19,7 +19,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import java.awt.BorderLayout
+import java.awt.Toolkit
+import java.awt.datatransfer.StringSelection
 import javax.swing.BorderFactory
 import javax.swing.BoxLayout
 import javax.swing.JComboBox
@@ -47,7 +51,7 @@ fun testcaseHeader(
 
 
     val actionGroup = DefaultActionGroup(
-        listOf(TestcaseDeleteAction(model, testcaseIndex))
+        listOf(TestcaseCopyAction(model, testcaseIndex), TestcaseDeleteAction(model, testcaseIndex))
     )
 
     jbPanel.add(
@@ -65,6 +69,18 @@ fun testcaseHeader(
     return jbPanel
 }
 
+
+class TestcaseCopyAction(val model: CollectionListModel<Testcase>, val testcaseIndex: () -> Int?) : DumbAwareAction(
+    "Copy Testcase",
+    "Copy this testcase to clipboard",
+    AllIcons.Actions.Copy
+) {
+    override fun actionPerformed(e: AnActionEvent) {
+        val idx = testcaseIndex() ?: return
+        val json = Json.encodeToString(model.items[idx])
+        Toolkit.getDefaultToolkit().systemClipboard.setContents(StringSelection(json), null)
+    }
+}
 
 class TestcaseDeleteAction(val model: CollectionListModel<Testcase>, val testcaseIndex: () -> Int?) : DumbAwareAction(
     "Delete Testcase",
