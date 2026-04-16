@@ -1,7 +1,7 @@
 # Changelog
 
 ## [Unreleased]
-
+- feat: add the function of pasting or copying one testcase or all testcases by @znzryb in https://github.com/Pushpavel/AutoCp/pull/166
 - fix: clear problemQueue on cancel to prevent stale data on next parse by @znzryb in https://github.com/Pushpavel/AutoCp/pull/161
 - fix: Unicode characters stripped from generated file names by @JoonHyuk0331 in https://github.com/Pushpavel/AutoCp/pull/163
 - fix: use defaultConversion for Java package name to filter illegal characters by @znzryb in https://github.com/Pushpavel/AutoCp/pull/162
