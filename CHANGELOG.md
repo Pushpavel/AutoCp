@@ -1,6 +1,9 @@
 # Changelog
 
 ## [Unreleased]
+
+## [0.9.2] - 2026-04-16
+
 - feat: add the function of pasting or copying one testcase or all testcases by @znzryb in https://github.com/Pushpavel/AutoCp/pull/166
 - fix: clear problemQueue on cancel to prevent stale data on next parse by @znzryb in https://github.com/Pushpavel/AutoCp/pull/161
 - fix: Unicode characters stripped from generated file names by @JoonHyuk0331 in https://github.com/Pushpavel/AutoCp/pull/163
@@ -186,7 +189,8 @@
 
 - Initial Release 🎉🎉😀
 
-[Unreleased]: https://github.com/Pushpavel/AutoCp/compare/v0.9.1...HEAD
+[Unreleased]: https://github.com/Pushpavel/AutoCp/compare/v0.9.2...HEAD
+[0.9.2]: https://github.com/Pushpavel/AutoCp/compare/v0.9.1...v0.9.2
 [0.9.1]: https://github.com/Pushpavel/AutoCp/compare/v0.9.0...v0.9.1
 [0.9.0]: https://github.com/Pushpavel/AutoCp/compare/v0.8.0...v0.9.0
 [0.8.0]: https://github.com/Pushpavel/AutoCp/compare/v0.7.30...v0.8.0
