@@ -14,4 +14,4 @@ docs
 competitive-companion
 
 # ignore MacOS related files
-*.DS_Store
+*.DS_Store.kotlin/
