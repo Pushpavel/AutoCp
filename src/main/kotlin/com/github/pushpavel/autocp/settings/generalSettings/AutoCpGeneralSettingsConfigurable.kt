@@ -5,6 +5,7 @@ import com.github.pushpavel.autocp.common.res.R
 import com.github.pushpavel.autocp.common.ui.dsl.simpleComboBoxView
 import com.github.pushpavel.autocp.common.ui.swing.TileCellRenderer
 import com.intellij.openapi.options.BoundConfigurable
+import com.intellij.ui.dsl.builder.bindSelected
 import com.intellij.ui.dsl.builder.panel
 
 class AutoCpGeneralSettingsConfigurable : BoundConfigurable("AutoCp") {
@@ -20,6 +21,11 @@ class AutoCpGeneralSettingsConfigurable : BoundConfigurable("AutoCp") {
                     { generalSettings.openFilesOnGather = it!! },
                     TileCellRenderer { text = it.presentable() }
                 )
+            }
+            row {
+                checkBox(R.strings.onlyActiveWindowText)
+                    .bindSelected(generalSettings::onlyActiveWindow)
+                    .comment(R.strings.onlyActiveWindowComment)
             }
             FileGenerationRootRow().placeUI(this)
         }

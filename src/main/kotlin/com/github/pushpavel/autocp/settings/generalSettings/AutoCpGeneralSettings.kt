@@ -14,12 +14,14 @@ import com.intellij.openapi.components.*
 class AutoCpGeneralSettings : PersistentStateComponent<AutoCpGeneralSettings> {
     var openFilesOnGather = OpenFileOnGather.ONLY_FIRST
     var fileGenerationRoot = "\$groupName"
+    var onlyActiveWindow = true
 
     override fun getState() = this
 
     override fun loadState(state: AutoCpGeneralSettings) {
         openFilesOnGather = state.openFilesOnGather
         fileGenerationRoot = state.fileGenerationRoot
+        onlyActiveWindow = state.onlyActiveWindow
     }
 
     companion object {
