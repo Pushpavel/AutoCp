@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- feat: only show problem gathering popup in the focused IDE window by @znzryb in https://github.com/Pushpavel/AutoCp/pull/168
+
 ## [0.9.2] - 2026-04-16
 
 - feat: add the function of pasting or copying one testcase or all testcases by @znzryb in https://github.com/Pushpavel/AutoCp/pull/166
