@@ -15,3 +15,6 @@ competitive-companion
 
 # ignore MacOS related files
 *.DS_Store
+
+# ignore Kotlin compiler cache
+.kotlin/
