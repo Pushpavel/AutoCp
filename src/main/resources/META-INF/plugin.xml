@@ -62,6 +62,10 @@
         <programRunner implementation="com.github.pushpavel.autocp.config.AutoCpProgramRunner"/>
         <executionTargetProvider implementation="com.github.pushpavel.autocp.config.AutoCpExecutionTargetProvider"/>
     </extensions>
+    <applicationListeners>
+        <listener class="com.github.pushpavel.autocp.database.AutoCpExternalReloader"
+                  topic="com.intellij.openapi.vfs.newvfs.BulkFileListener"/>
+    </applicationListeners>
     <projectListeners>
         <listener class="com.github.pushpavel.autocp.extend.cmake.CMakeAddExecutable"
                   topic="com.github.pushpavel.autocp.gather.filegen.FileGenerationListener"/>
