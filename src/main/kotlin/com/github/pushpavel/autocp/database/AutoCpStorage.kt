@@ -111,6 +111,10 @@ class AutoCpStorageSaver : FileDocumentManagerListener {
                     R.notify.couldNotWriteToAutoCpFile()
                     return@runReadAction
                 }
+                if (db == DEFAULT_AUTO_CP_DB && document.text.isNotBlank()) {
+                    project.service<AutoCpStorage>().reloadFromDisk()
+                    return@runReadAction
+                }
                 val newText = Json.encodeToString(db)
                 if (document.text == newText) return@runReadAction
                 runWriteAction {
