@@ -52,7 +52,16 @@ class ProcessRunner(private val factory: ProcessFactory, private val workingDir:
                 val deferredOutput = readOutputAsync(process)
                 val executionTime = monitorProcess(process, timeLimit)
                 val exitCode = process.exitValue()
-                val stdout = deferredOutput.awaitAsResult().getOrNull()
+                val outputPair = deferredOutput.awaitAsResult().getOrNull()
+                val stdout = outputPair?.first ?: ""
+                val stderr = outputPair?.second ?: ""
+
+                if (exitCode != 0) {
+                    val errMsg = if (stderr.isEmpty())
+                        "Process exited with code $exitCode but produced no error output. (This often happens if compiler dependencies like MSYS2 are missing from the system PATH)."
+                    else stderr
+                    throw ProcessRunnerErr.RuntimeErr(stdout, errMsg)
+                }
 
                 val out = mutableMapOf<String, String?>()
                 for (output in outputs) {
@@ -145,9 +154,7 @@ class ProcessRunner(private val factory: ProcessFactory, private val workingDir:
         val error = async { process.errorStream.bufferedReader().readText() }
 
         awaitAll(output, error).let {
-            if (it[1].isNotEmpty())
-                throw ProcessRunnerErr.RuntimeErr(it[0], it[1])
-            it[0]
+            Pair(it[0], it[1])
         }
     }
 
