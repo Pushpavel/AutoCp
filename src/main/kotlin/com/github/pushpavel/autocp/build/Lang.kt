@@ -35,6 +35,8 @@ data class Lang(
         return command.replace(R.keys.inputPathMacro, "\"${path.pathString}\"")
             .replace(R.keys.dirUnquotedPathMacro, dirPath)
             .replace(R.keys.dirPathMacro, "\"$dirPath\"")
+            .replace(R.keys.projectDirMacro, project.basePath ?: "")
+            .replace(R.keys.fileNameWithoutExtensionMacro, path.toFile().nameWithoutExtension)
     }
 
     companion object {

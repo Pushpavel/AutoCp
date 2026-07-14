@@ -91,7 +91,9 @@ object AutoCpStrings {
             "Macros:<br>" +
             "<b>${R.keys.inputPathMacro}</b> : absolute path to a solution file with quotes.<br>" +
             "<b>${R.keys.dirUnquotedPathMacro}</b> : absolute path to the isolated temp directory without quotes.<br>" +
-            "<b>${R.keys.dirPathMacro}</b> : \"<b>\$dir</b>\""
+            "<b>${R.keys.dirPathMacro}</b> : \"<b>\$dir</b>\"<br>" +
+            "<b>${R.keys.projectDirMacro}</b> : absolute path to the project root directory.<br>" +
+            "<b>${R.keys.fileNameWithoutExtensionMacro}</b> : source file name without its extension."
 
     const val buildCommandComment = "Run once before testing begins, usually should compile or generate an executable"
     const val executeCommandComment = "" +

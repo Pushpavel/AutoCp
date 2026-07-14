@@ -16,6 +16,8 @@ object AutoCpKeys {
     const val inputPathMacro = "@in"
     const val dirPathMacro = "@dir"
     const val dirUnquotedPathMacro = "\$dir"
+    const val projectDirMacro = "@projectDir"
+    const val fileNameWithoutExtensionMacro = "@name"
 
     // Other Macros
     const val groupNameMacro = "\$groupName"
