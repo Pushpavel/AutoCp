@@ -28,7 +28,7 @@ class GoogleAnalytics {
     // CIOEngineContainer, which implements the platform copy of the interface,
     // not ours — ServiceConfigurationError: "... not a subtype".
     private val httpClient by lazy {
-        HttpClient(Java) {
+        HttpClient(Java.create()) {
             expectSuccess = false
             ResponseObserver { response ->
                 println("HTTP status: ${response.status.value}\n${response.bodyAsText()}")
