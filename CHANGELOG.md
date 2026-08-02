@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [0.10.1] - 2026-08-02
+
 - feat: add a setting to stop stderr output from failing a testcase by @znzryb in https://github.com/Pushpavel/AutoCp/pull/178
 
 ## [0.10.0] - 2026-07-12
@@ -204,7 +206,8 @@
 
 - Initial Release 🎉🎉😀
 
-[Unreleased]: https://github.com/Pushpavel/AutoCp/compare/v0.10.0...HEAD
+[Unreleased]: https://github.com/Pushpavel/AutoCp/compare/v0.10.1...HEAD
+[0.10.1]: https://github.com/Pushpavel/AutoCp/compare/v0.10.0...v0.10.1
 [0.10.0]: https://github.com/Pushpavel/AutoCp/compare/v0.9.3...v0.10.0
 [0.9.3]: https://github.com/Pushpavel/AutoCp/compare/v0.9.2...v0.9.3
 [0.9.2]: https://github.com/Pushpavel/AutoCp/compare/v0.9.1...v0.9.2
