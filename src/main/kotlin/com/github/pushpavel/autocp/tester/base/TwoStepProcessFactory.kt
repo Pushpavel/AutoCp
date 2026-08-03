@@ -4,6 +4,7 @@ import com.github.pushpavel.autocp.build.Lang
 import com.github.pushpavel.autocp.common.helpers.pathString
 import com.github.pushpavel.autocp.database.models.Program
 import com.github.pushpavel.autocp.database.models.SolutionFile
+import com.github.pushpavel.autocp.tester.errors.ProcessRunnerErr
 import com.github.pushpavel.autocp.tester.utils.createFile
 import com.github.pushpavel.autocp.tester.utils.splitCommandString
 import com.intellij.execution.configurations.GeneralCommandLine
@@ -63,6 +64,15 @@ class TwoStepProcessFactory(private val workingDir: File, private val commandLis
                 try {
                     val factory = TwoStepProcessFactory(workingDir, buildCommandList)
                     result = ProcessRunner(factory, workingDir).run()
+                    val log = result["stdout"]?.trim().orEmpty()
+                    if (result.exitCode != 0) {
+                        throw ProcessRunnerErr.RuntimeErr(
+                            log,
+                            "Compilation failed with exit code ${result.exitCode}" +
+                                if (log.isEmpty()) "\nNo output was produced by the build command."
+                                else "\n\n$log"
+                        )
+                    }
                 } catch (e: Exception) {
                     throw BuildErr(e, buildCommand)
                 }

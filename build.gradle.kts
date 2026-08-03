@@ -51,7 +51,7 @@ dependencies {
     testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.11.4")
     // real Socket.IO client used to verify SubmitServer speaks the cph-ng router protocol
     testImplementation("io.socket:socket.io-client:2.1.2")
-//    testImplementation("io.mockk:mockk:1.13.2")
+    testImplementation("org.mockito:mockito-core:5.11.0")
 
     // IntelliJ Platform Gradle Plugin Dependencies Extension - read more: https://plugins.jetbrains.com/docs/intellij/tools-intellij-platform-gradle-plugin-dependencies-extension.html
     intellijPlatform {
